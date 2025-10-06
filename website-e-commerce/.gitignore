@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 .vs/
 obj/
 bin/
+=======
+# Visual Studio cache
+.vs/
+>>>>>>> main

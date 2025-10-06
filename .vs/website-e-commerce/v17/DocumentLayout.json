@@ -1,6 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\Code\\website-e-commerce\\",
+<<<<<<< HEAD
   "Documents": [
     {
       "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|d:\\code\\website-e-commerce\\website-e-commerce\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
@@ -15,10 +16,14 @@
       "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     }
   ],
+=======
+  "Documents": [],
+>>>>>>> main
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
+<<<<<<< HEAD
       "DocumentGroups": [
         {
           "DockedWidth": 315,
@@ -65,6 +70,9 @@
           ]
         }
       ]
+=======
+      "DocumentGroups": []
+>>>>>>> main
     }
   ]
 }
