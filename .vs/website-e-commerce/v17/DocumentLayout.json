@@ -1,29 +1,20 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\Code\\website-e-commerce\\",
-<<<<<<< HEAD
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|d:\\code\\website-e-commerce\\website-e-commerce\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|d:\\code\\website-e-commerce\\website-e-commerce\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|d:\\code\\website-e-commerce\\website-e-commerce\\views\\contact\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\views\\contact\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|d:\\code\\website-e-commerce\\website-e-commerce\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     }
   ],
-=======
-  "Documents": [],
->>>>>>> main
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-<<<<<<< HEAD
       "DocumentGroups": [
         {
           "DockedWidth": 315,
@@ -32,27 +23,15 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": ".gitignore",
-              "DocumentMoniker": "D:\\Code\\website-e-commerce\\website-e-commerce\\.gitignore",
-              "RelativeDocumentMoniker": "website-e-commerce\\.gitignore",
-              "ToolTip": "D:\\Code\\website-e-commerce\\website-e-commerce\\.gitignore",
-              "RelativeToolTip": "website-e-commerce\\.gitignore",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-10-06T13:41:21.805Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "site.css",
               "DocumentMoniker": "D:\\Code\\website-e-commerce\\website-e-commerce\\wwwroot\\css\\site.css",
               "RelativeDocumentMoniker": "website-e-commerce\\wwwroot\\css\\site.css",
               "ToolTip": "D:\\Code\\website-e-commerce\\website-e-commerce\\wwwroot\\css\\site.css",
               "RelativeToolTip": "website-e-commerce\\wwwroot\\css\\site.css",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAAACUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAJADAAAAAAAAAAAAAJQDAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-10-06T13:24:15.954Z"
+              "WhenOpened": "2025-10-06T14:13:32.807Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -62,7 +41,7 @@
               "RelativeDocumentMoniker": "website-e-commerce\\Views\\Contact\\Index.cshtml",
               "ToolTip": "D:\\Code\\website-e-commerce\\website-e-commerce\\Views\\Contact\\Index.cshtml",
               "RelativeToolTip": "website-e-commerce\\Views\\Contact\\Index.cshtml",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAAAEEAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAAsAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-10-06T13:03:57.681Z",
               "EditorCaption": ""
@@ -70,9 +49,6 @@
           ]
         }
       ]
-=======
-      "DocumentGroups": []
->>>>>>> main
     }
   ]
 }
