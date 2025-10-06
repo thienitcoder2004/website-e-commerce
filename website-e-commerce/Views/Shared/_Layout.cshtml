@@ -3,45 +3,277 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - website_e_commerce</title>
-    <script type="importmap"></script>
+    <title>Gear 5</title>
+    <!-- Icon chuẩn (favicon) -->
+    <link rel="icon" type="image/png" href="/images/logo-wb.png">
+    <!-- Icon cho Apple (iOS, iPadOS) -->
+    <link rel="apple-touch-icon" href="/images/logo-wb.png">
+    <!-- Icon cho các thiết bị Android -->
+    <link rel="shortcut icon" href="/images/logo-wb.png" type="image/x-icon">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/website_e_commerce.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+          integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">website_e_commerce</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="banner-top d-none d-md-block" style="background: #d62828">
+        <picture>
+            <source media="(max-width: 567px)" srcset="//bizweb.dktcdn.net/thumb/large/100/558/309/themes/999496/assets/banner_top.jpg?1758009184577">
+            <img alt="Banner top" width="1920" height="60" src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/banner_top.jpg?1758009184577">
+        </picture>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <!-- Header -->
+    <header class="header">
+        <div class="header_main">
+            <div class="container header_top">
+                <img class="logo" src="~/images/logo-wb.png" alt="Alternate Text" />
+                <div class="header_menu">
+                    <a href="#" class="header_btn_category">
+                        <i class="fa-solid fa-bars"></i>
+                        Danh mục
+                    </a>
+
+                    <div class="search_smart">
+                        <form action="/" method="get" class="header_search_form input-group" role="search">
+                            <input type="text" name="query" required="" class="input-group-field auto-search search-auto form-control" placeholder="Bạn cần tìm gì..." autocomplete="off">
+                            <button type="submit" class="icon-fallback-text" aria-label="Tìm kiếm" title="Tìm kiếm">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.6725 16.6412L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Thanh tiện ích -->
+                    <div class="topbar_utility">
+                        <div class="utility_item">
+                            <i class="fas fa-headset"></i>
+                            <span>Hotline<br>1900.5301</span>
+                        </div>
+                        <div class="utility_item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Hệ thống<br>Showroom</span>
+                        </div>
+                        <div class="utility_item">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>Tra cứu<br>đơn hàng</span>
+                        </div>
+                        <div class="utility_item">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Giỏ hàng</span>
+                        </div>
+                        <div class="utility_item">
+                            <i class="fas fa-user"></i>
+                            <span>Đăng nhập</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- main -->
+    <main class="main">
+        @RenderBody()
+    </main>
+
+    <!-- policy -->
+    <section class="section_policy py-10">
         <div class="container">
-            &copy; 2025 - website_e_commerce - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <div class="col-7 col-sm-5 col-lg-3 col-xl-3 col-fix margin-0">
+                    <div class="section_policy_item">
+                        <div class="icon">
+                            <img src="~/images/img-policy-1.png" alt="image-policy" width="50" height="50" />
+                        </div>
+                        <div class="text">
+                            <span class="title">Giao hàng toàn quốc</span>
+                            <span class="des">Giao hàng trước trả tiền sau COD</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-7 col-sm-5 col-lg-3 col-xl-3 col-fix margin-0">
+                    <div class="section_policy_item">
+                        <div class="icon">
+                            <img src="~/images/img-policy-2.png" alt="image-policy" width="50" height="50" />
+                        </div>
+                        <div class="text">
+                            <span class="title">Đổi trả dễ dàng</span>
+                            <span class="des">Đổi mới trong 15 ngày đầu</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-7 col-sm-5 col-lg-3 col-xl-3 col-fix margin-0">
+                    <div class="section_policy_item">
+                        <div class="icon">
+                            <img src="~/images/img-policy-3.png" alt="image-policy" width="50" height="50" />
+                        </div>
+                        <div class="text">
+                            <span class="title">Thanh toán tiện lợi </span>
+                            <span class="des">Trả tiền mặt, chuyển khoản, trả góp 0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-7 col-sm-5 col-lg-3 col-xl-3 col-fix margin-0">
+                    <div class="section_policy_item">
+                        <div class="icon">
+                            <img src="~/images/img-policy-4.png" alt="image-policy" width="50" height="50" />
+                        </div>
+                        <div class="text">
+                            <span class="title">Hỗ trợ nhiệt tình</span>
+                            <span class="des">Tư vấn tổng đài miễn phí 24/7</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer class="footer">
+        <div class="top-footer">
+            <div class="container">
+                <div class="cus-regis-content">
+                    <div class="icon">
+                        <img width="50" height="50" class="lazyload loaded" src="~/images/email.png" data-src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/email.png?1758009184577" alt="mail chimp" data-was-processed="true">
+                        <span>
+                            <b>Nhận tin khuyến mãi</b>
+                            <br />
+                            Bạn vui lòng để lại Email để nhận thông tin
+                            khuyến mãi từ Euro
+                        </span>
+                    </div>
+                    <form id="mc-form" class="newsletter-form" data-toggle="validator" novalidate="true">
+                        <input aria-label="Địa chỉ Email" type="email" class="form-control" placeholder="Nhập email nhận tin khuyến mãi" name="EMAIL" required="" autocomplete="off">
+                        <button class="btn btn-default" type="submit" aria-label="Đăng ký nhận tin" name="subscribe">
+                            <i class="fa-brands fa-pushed"></i>
+                        </button>
+                        <div class="mailchimp-alerts " style="margin-top: 5px;">
+                            <div class="mailchimp-submitting"></div>
+                            <div class="mailchimp-success"></div>
+                            <div class="mailchimp-error"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="mid-footer">
+            <div class="container">
+                <div class="row row-fix">
+                    <div class="col-12 col-md-12 col-lg-3 col-xl-20 link-list col-footer footer-click col-fix">
+                        <h4 class="title-menu title-menu2">
+                            Euro Gear
+                        </h4>
+                        <div class="content-ft">
+                            Euro cam kết đẩy mạnh dịch vụ <br /> chăm sóc khách hàng đồng thời <br /> đưa đến tay khách hàng cuối <br /> cùng giá sản phẩm là tốt nhất, <br /> Hiện đại hoá doanh nghiệp theo <br /> hướng 4.0. Cam kết không xảy ra <br /> việc thuốc hay dụ khách hàng <br /> mua sản phẩm đắt đỏ hơn giá <br /> thị trường.
+                        </div>
+                        <div class="group-address">
+                            <ul>
+                                <li>
+                                    <b>Địa chỉ: </b><span>
+                                        70 Lữ Gia, Phường 15, Quận 11, TP.HCM
+                                    </span>
+                                </li>
+                                <li>
+                                    <b>Điện thoại: </b><a title="1900 6750" href="tel:19006750">1900 6750</a>
+                                </li>
+                                <li>
+                                    <b>Email: </b><a title="support@sapo.vn" href="mailto:support@sapo.vn">support@sapo.vn</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-3 col-xl-20 link-list col-footer footer-click col-fix">
+                        <h4 class="title-menu title-menu2">
+                            Chính sách
+                        </h4>
+
+                        <ul class="list-menu hidden-mobile">
+                            <li><a href="/chinh-sach-thanh-vien" title="Chính sách thành viên">Chính sách thành viên</a></li>
+                            <li><a href="/chinh-sach-thanh-toan" title="Chính sách thanh toán">Chính sách thanh toán</a></li>
+                            <li><a href="/chinh-sach-bao-hanh-va-bao-tri" title="Chính sách bảo hành và bảo trì">Chính sách bảo hành và bảo trì</a></li>
+                            <li><a href="/chinh-sach-van-chuyen-vao-giao-nhan" title="Chính sách vận chuyển vào giao nhận">Chính sách vận chuyển vào giao nhận</a></li>
+                            <li><a href="/bao-mat-thong-tin-ca-nhan" title="Bảo mật thông tin cá nhân">Bảo mật thông tin cá nhân</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-3 col-xl-20 link-list col-footer footer-click col-fix">
+                        <h4 class="title-menu title-menu2">
+                            Hướng dẫn
+                        </h4>
+                        <ul class="list-menu hidden-mobile">
+                            <li><a href="/huong-dan-mua-hang" title="Hướng dẫn mua hàng">Hướng dẫn mua hàng</a></li>
+                            <li><a href="/huong-dan-thanh-toan" title="Hướng dẫn thanh toán">Hướng dẫn thanh toán</a></li>
+                            <li><a href="/huong-dan-giao-nhan" title="Hướng dẫn giao nhận">Hướng dẫn giao nhận</a></li>
+                            <li><a href="/dieu-khoan-dich-vu" title="Điều khoản dịch vụ">Điều khoản dịch vụ</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-3 col-xl-20 link-list col-footer footer-click col-fix">
+                        <h4 class="title-menu title-menu2">
+                            Hỗ trợ
+                        </h4>
+                        <ul class="list-menu hidden-mobile">
+                            <li><a href="/san-pham-yeu-thich" title="Sản phẩm yêu thích">Sản phẩm yêu thích</a></li>
+                            <li><a href="/so-sanh-san-pham" title="So sánh sản phẩm">So sánh sản phẩm</a></li>
+                            <li><a href="/tra-cuu-bao-hanh" title="Tra cứu bảo hành">Tra cứu bảo hành</a></li>
+                            <li><a href="/he-thong-cua-hang" title="Hệ thống cửa hàng">Hệ thống cửa hàng</a></li>
+                            <li><a href="/lien-he" title="Liên hệ">Liên hệ</a></li>
+                            <li><a href="/cau-hoi-thuong-gap" title="Câu hỏi thường gặp">Câu hỏi thường gặp</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-3 col-xl-20 link-list col-footer footer-click col-fix">
+                        <h4 class="title-menu title-menu2">
+                            Mạng xã hội
+                        </h4>
+                        <ul class="social">
+                            <li><a href="#" title="Facebook"><img width="32" height="32" title="Facebook" class="lazyload loaded" src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/facebook.png?1758009184577" data-src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/facebook.png?1758009184577" data-was-processed="true"></a></li>
+                            <li><a href="#" title="Youtube"><img width="32" height="32" title="Youtube" class="lazyload loaded" src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/youtube.png?1758009184577" data-src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/youtube.png?1758009184577" data-was-processed="true"></a></li>
+                            <li><a href="#" title="twitter"><img width="32" height="32" title="twitter" class="lazyload loaded" src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/twitter.png?1758009184577" data-src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/twitter.png?1758009184577" data-was-processed="true"></a></li>
+                            <li><a href="#" title="pinterest"><img width="32" height="32" title="pinterest" class="lazyload loaded" src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/pinterest.png?1758009184577" data-src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/pinterest.png?1758009184577" data-was-processed="true"></a></li>
+                            <li><a href="#" title="instagram"><img width="32" height="32" title="instagram" class="lazyload loaded" src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/instagram.png?1758009184577" data-src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/instagram.png?1758009184577" data-was-processed="true"></a></li>
+                        </ul>
+                        <h4 class="title-menu title-menu2" style="margin-top: 20px;">
+                            Liên kết sàn
+                        </h4>
+                        <ul class="social" style="margin-bottom: 20px;">
+                            <li><a href="#" title="Shopee"><img width="32" height="32" title="Shopee" class="lazyload loaded" src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/shopee.png?1758009184577" data-src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/shopee.png?1758009184577" data-was-processed="true"></a></li>
+                            <li><a href="#" title="Lazada"><img width="32" height="32" title="Lazada" class="lazyload loaded" src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/laz.png?1758009184577" data-src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/laz.png?1758009184577" data-was-processed="true"></a></li>
+                            <li><a href="#" title="Tiki"><img width="32" height="32" title="Tiki" class="lazyload loaded" src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/tiki.png?1758009184577" data-src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/tiki.png?1758009184577" data-was-processed="true"></a></li>
+                            <li><a href="#" title="Sendo"><img width="32" height="32" title="Sendo" class="lazyload loaded" src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/sendo.png?1758009184577" data-src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/sendo.png?1758009184577" data-was-processed="true"></a></li>
+                            <li><a href="#" title="tiktok"><img width="32" height="32" title="Sendo" class="lazyload loaded" src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/tiktok.png?1758009184577" data-src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/tiktok.png?1758009184577" data-was-processed="true"></a></li>
+                        </ul>
+                        <h4 class="title-menu title-menu2" style="margin-top: 20px;">
+                            Zalo Mini Apps
+                        </h4>
+                        <a href="https://apps.sapo.vn/aimini" target="_blank" title="Quét QR để mua hàng nhanh chóng">
+                            <img style="display: block;   width: 240px;    margin-bottom: 5px;" width="300" height="200" class="lazyload loaded" src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/qr.png?1758009184577" data-src="//bizweb.dktcdn.net/100/558/309/themes/999496/assets/qr.png?1758009184577" alt="Zalo Mini Apps" data-was-processed="true">
+                            <span class="text-black">Quét QR để mua hàng nhanh chóng</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="copyright" class="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-lg-12">
+                        <span class="copy-right">Bản quyền thuộc về <b>Dola theme</b>.</span>
+                        <span class="opacity1">
+                            Cung cấp bởi
+                            <a href="https://www.sapo.vn/?utm_campaign=cpn:kho_theme-plm:footer&amp;utm_source=Tu_nhien&amp;utm_medium=referral&amp;utm_content=fm:text_link-km:-sz:&amp;utm_term=&amp;campaign=kho_theme-sapo" rel="noopener" title="Sapo" target="_blank">Gear 5</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
