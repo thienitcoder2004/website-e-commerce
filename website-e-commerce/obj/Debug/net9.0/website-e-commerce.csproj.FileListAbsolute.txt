@@ -223,9 +223,7 @@ D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\a3ygkw
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\nezrqnk58p-muycvpuwrr.gz
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\v0zgfp0y55-87fc7y1x7t.gz
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\yfc7ypekbg-mlv21k5csn.gz
-D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\14cyci5ory-3d5ixyv4cd.gz
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\s6v799ii7a-61n19gt1b8.gz
-D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\9g2gpr4m4z-xtxxf3hu2r.gz
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\s2j6r4pgyy-bqjiyaj88i.gz
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\5kjcdqbfbf-c2jlpeoesf.gz
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\ecfsaljjc1-erw9l3u2r3.gz
@@ -298,3 +296,5 @@ D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\refint\website-e-
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\website-e-commerce.pdb
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\website-e-commerce.genruntimeconfig.cache
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\ref\website-e-commerce.dll
+D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\9g2gpr4m4z-ds4bo0sh4k.gz
+D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\14cyci5ory-9ggg5oocrz.gz

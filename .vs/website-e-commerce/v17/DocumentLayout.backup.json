@@ -3,8 +3,12 @@
   "WorkspaceRootPath": "D:\\Code\\website-e-commerce\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|d:\\code\\website-e-commerce\\website-e-commerce\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|d:\\code\\website-e-commerce\\website-e-commerce\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|d:\\code\\website-e-commerce\\website-e-commerce\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,19 +18,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 315,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "site.css",
+              "DocumentMoniker": "D:\\Code\\website-e-commerce\\website-e-commerce\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "website-e-commerce\\wwwroot\\css\\site.css",
+              "ToolTip": "D:\\Code\\website-e-commerce\\website-e-commerce\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "website-e-commerce\\wwwroot\\css\\site.css",
+              "ViewState": "AgIAAGMDAAAAAAAAAAAAAO0CAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-09-26T05:34:46.813Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": ".gitignore",
-              "DocumentMoniker": "D:\\Code\\website-e-commerce\\website-e-commerce\\.gitignore",
-              "RelativeDocumentMoniker": "website-e-commerce\\.gitignore",
-              "ToolTip": "D:\\Code\\website-e-commerce\\website-e-commerce\\.gitignore",
-              "RelativeToolTip": "website-e-commerce\\.gitignore",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-09-25T17:15:07.233Z",
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\Code\\website-e-commerce\\website-e-commerce\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "website-e-commerce\\Views\\Home\\Index.cshtml",
+              "ToolTip": "D:\\Code\\website-e-commerce\\website-e-commerce\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "website-e-commerce\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAOUDAAAAAAAAAAAQwO4DAABWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-02T06:58:14.835Z",
               "EditorCaption": ""
             }
           ]

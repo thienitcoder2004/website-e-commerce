@@ -12,6 +12,7 @@
     <Folder Include="Libraries\" />
     <Folder Include="Repositories\" />
     <Folder Include="Services\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <ItemGroup>
