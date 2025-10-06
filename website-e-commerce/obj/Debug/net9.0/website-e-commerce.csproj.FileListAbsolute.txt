@@ -287,7 +287,6 @@ D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\refint\website-e-
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\website-e-commerce.pdb
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\website-e-commerce.genruntimeconfig.cache
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\ref\website-e-commerce.dll
-D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\14cyci5ory-9ggg5oocrz.gz
 D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\9g2gpr4m4z-ftmewa6s5z.gz
 D:\Code\website-e-commerce\website-e-commerce\bin\Debug\net9.0\Microsoft.AspNetCore.Razor.Language.dll
 D:\Code\website-e-commerce\website-e-commerce\bin\Debug\net9.0\Microsoft.Build.dll
@@ -406,3 +405,4 @@ D:\Code\website-e-commerce\website-e-commerce\bin\Debug\net9.0\ru\Microsoft.Code
 D:\Code\website-e-commerce\website-e-commerce\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Scripting.resources.dll
 D:\Code\website-e-commerce\website-e-commerce\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Scripting.resources.dll
 D:\Code\website-e-commerce\website-e-commerce\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Scripting.resources.dll
+D:\Code\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\14cyci5ory-9ggg5oocrz.gz
