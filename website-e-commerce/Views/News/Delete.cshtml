@@ -1,0 +1,32 @@
+﻿@model website_e_commerce.Models.News
+@{
+    ViewData["Title"] = "Xóa bài viết";
+}
+
+<div class="container mt-5">
+    <div class="card border-danger shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0 fw-bold">⚠️ Xác nhận xóa bài viết</h4>
+        </div>
+
+        <div class="card-body">
+            <p class="fs-5">Bạn có chắc muốn xóa bài viết sau?</p>
+
+            <div class="border rounded p-3 bg-light">
+                <h5 class="fw-bold text-danger">@Model.Title</h5>
+                <p class="mb-1"><strong>Tác giả:</strong> @Model.Author</p>
+                <p class="mb-1"><strong>Ngày đăng:</strong> @Model.PublishedDate.ToString("dd/MM/yyyy")</p>
+                <p><strong>Tóm tắt:</strong> @Model.Summary</p>
+            </div>
+
+            <form asp-action="Delete" method="post" class="mt-4">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="d-flex justify-content-end">
+                    <a asp-action="Index" class="btn btn-secondary me-2">Hủy</a>
+                    <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

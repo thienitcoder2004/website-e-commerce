@@ -16,6 +16,7 @@ namespace website_e_commerce.Models
         public DbSet<News> News { get; set; }
         public DbSet<Reviews> Reviews { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

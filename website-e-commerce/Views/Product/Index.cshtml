@@ -1,27 +1,55 @@
-﻿@model IEnumerable<website_e_commerce.Models.Product>
-<h2>Products</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in Model)
-        {
+﻿@model List<website_e_commerce.Models.News>
+@{
+    ViewData["Title"] = "Danh sách bài viết";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold text-primary">📰 Danh sách bài viết</h2>
+        <a asp-action="Add" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Thêm bài viết
+        </a>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info">@TempData["Message"]</div>
+    }
+
+    <table class="table table-hover shadow-sm">
+        <thead class="table-dark">
             <tr>
-                <td>@product.Name</td>
-                <td>@product.Price</td>
-                <td>@product.Description</td>
-                <td>
-                    <a asp-action="Display" asp-route-id="@product.Id">View</a> |
-                    <a asp-action="Update" asp-route-id="@product.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@product.Id">Delete</a>
-                </td>
+                <th>Tiêu đề</th>
+                <th>Tác giả</th>
+                <th>Ngày đăng</th>
+                <th>Trạng thái</th>
+                <th class="text-center">Thao tác</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Author</td>
+                    <td>@item.PublishedDate.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @if (item.IsPublished)
+                        {
+                            <span class="badge bg-success">Đã xuất bản</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Nháp</span>
+                        }
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">Xem</a>
+                        <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-warning btn-sm me-1">Sửa</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
