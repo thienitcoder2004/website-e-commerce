@@ -1,0 +1,116 @@
+﻿@model IEnumerable<website_e_commerce.Models.News>
+
+@{
+    ViewData["Title"] = "Danh sách tin tức";
+}
+
+<style>
+    .news-card {
+        transition: all 0.3s ease;
+        border-radius: 16px;
+        overflow: hidden;
+        background-color: #fff;
+        border: 1px solid #eee;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    }
+
+        .news-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-card img {
+            height: 220px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+    .news-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #222;
+        transition: color 0.2s;
+    }
+
+        .news-title:hover {
+            color: #0d6efd;
+        }
+
+    .news-meta {
+        font-size: 0.9rem;
+        color: #777;
+        margin-bottom: 10px;
+    }
+
+    .news-summary {
+        color: #555;
+        font-size: 0.95rem;
+        min-height: 70px;
+    }
+
+    .btn-group-sm .btn {
+        font-size: 0.85rem;
+        padding: 4px 10px;
+        border-radius: 8px;
+    }
+
+    .add-button {
+        background-color: #198754;
+        color: #fff;
+        border-radius: 8px;
+        padding: 8px 14px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+        .add-button:hover {
+            background-color: #157347;
+        }
+</style>
+
+<section class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-primary">📰 Danh sách tin tức</h3>
+        <a href="/News/Add" class="add-button">
+            ➕ Thêm tin mới
+        </a>
+    </div>
+
+    <div class="row g-4">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4">
+                    <div class="news-card h-100">
+                        <img src="@item.ImageUrl" alt="@item.Title" />
+                        <div class="p-3 d-flex flex-column">
+                            <a href="/News/Detail/@item.Id" class="news-title">@item.Title</a>
+                            <p class="news-meta">
+                                📅 @item.PublishedDate.ToString("dd/MM/yyyy") — ✍️ <i>@item.Author</i>
+                            </p>
+                            <p class="news-summary flex-grow-1">@item.Summary</p>
+
+                            <div class="btn-group-sm mt-3 d-flex justify-content-between">
+                                <a href="/News/Detail/@item.Id" class="btn btn-outline-primary">👁️ Xem</a>
+                                <a href="/News/Update/@item.Id" class="btn btn-outline-warning text-dark">✏️ Sửa</a>
+                                <a href="/News/Delete/@item.Id"
+                                   class="btn btn-outline-danger"
+                                   onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này không?');">
+                                    🗑️ Xóa
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center text-muted">
+                <p>Không có tin tức nào để hiển thị.</p>
+            </div>
+        }
+    </div>
+</section>

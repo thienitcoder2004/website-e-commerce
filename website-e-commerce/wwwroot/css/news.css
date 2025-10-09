@@ -1,0 +1,133 @@
+﻿/* ========== GIAO DIỆN CHI TIẾT TIN TỨC (NEWS DETAIL) ========== */
+.container {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1f1f1f;
+    background-color: #fff;
+}
+
+/* ----- TIÊU ĐỀ BÀI VIẾT ----- */
+h1, h2 {
+    font-weight: 700;
+    color: #0b2e7a;
+    line-height: 1.3;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+/* ----- THÔNG TIN META (Tác giả, ngày đăng) ----- */
+.text-muted small {
+    font-size: 0.95rem;
+    color: #6c757d;
+}
+
+/* ----- HÌNH ẢNH BÀI VIẾT ----- */
+img.img-fluid {
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+    img.img-fluid:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+/* ----- NỘI DUNG BÀI VIẾT ----- */
+.fs-5 {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #2a2a2a;
+}
+
+    .fs-5 p {
+        margin-bottom: 1rem;
+    }
+
+/* ----- NÚT ĐIỀU HƯỚNG ----- */
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* ----- TIN LIÊN QUAN ----- */
+.related-title {
+    background: linear-gradient(90deg, #0059ff, #ff6600);
+    color: #fff;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-bottom: 20px;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.related-news .card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+    .related-news .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+    }
+
+.related-news img {
+    border-radius: 12px 12px 0 0;
+    object-fit: cover;
+    height: 180px;
+}
+
+.related-news .card-body {
+    padding: 16px;
+    background-color: #fafafa;
+    transition: background-color 0.3s ease;
+}
+
+    .related-news .card-body:hover {
+        background-color: #f2f6ff;
+    }
+
+/* ----- TÊN BÀI LIÊN QUAN ----- */
+.related-news .card-title {
+    font-size: 1rem;
+    color: #0b2e7a;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+/* ----- RESPONSIVE ----- */
+@media (max-width: 992px) {
+    .related-news .col-md-4 {
+        width: 50%;
+    }
+}
+
+@media (max-width: 576px) {
+    .related-news .col-md-4 {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .fs-5 {
+        font-size: 1rem;
+    }
+}

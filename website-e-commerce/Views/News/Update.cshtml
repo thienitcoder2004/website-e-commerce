@@ -1,0 +1,68 @@
+﻿@model website_e_commerce.Models.News
+@{
+    ViewData["Title"] = "Cập nhật bài viết";
+}
+
+<div class="container mt-4">
+    <h2 class="fw-bold text-warning mb-3">✏️ Cập nhật bài viết</h2>
+
+    <form asp-action="Update" method="post" class="card shadow-sm p-4">
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="Title" class="form-label fw-semibold"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Author" class="form-label fw-semibold"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Summary" class="form-label fw-semibold"></label>
+            <textarea asp-for="Summary" class="form-control" rows="2"></textarea>
+            <span asp-validation-for="Summary" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ImageUrl" class="form-label fw-semibold"></label>
+            <input asp-for="ImageUrl" class="form-control" />
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Content" class="form-label fw-semibold"></label>
+            <textarea asp-for="Content" class="form-control" rows="6"></textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="IsPublished" class="form-check-input" type="checkbox" />
+            <label asp-for="IsPublished" class="form-check-label fw-semibold"></label>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="text-muted">
+                <small>
+                    Lần chỉnh sửa gần nhất:
+                    @(Model.UpdatedDate?.ToString("dd/MM/yyyy HH:mm") ?? "Chưa có")
+                </small>
+            </div>
+            <div>
+                <a asp-action="Index" class="btn btn-secondary me-2">Hủy</a>
+                <button type="submit" class="btn btn-warning text-white">Cập nhật</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
