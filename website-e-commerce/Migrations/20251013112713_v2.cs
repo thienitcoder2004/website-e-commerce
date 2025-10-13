@@ -5,7 +5,7 @@
 namespace website_e_commerce.Migrations
 {
     /// <inheritdoc />
-    public partial class AddNewsTable : Migration
+    public partial class v2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

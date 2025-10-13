@@ -12,8 +12,8 @@ using website_e_commerce.Models;
 namespace website_e_commerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251009055935_UpdateNewsModel")]
-    partial class UpdateNewsModel
+    [Migration("20251013112713_v2")]
+    partial class v2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,9 +52,14 @@ namespace website_e_commerce.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Category")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
@@ -67,10 +72,19 @@ namespace website_e_commerce.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Summary")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ViewCount")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -89,13 +103,12 @@ namespace website_e_commerce.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DiscountPercent")
+                        .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.PrimitiveCollection<string>("ImageUrls")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -103,7 +116,10 @@ namespace website_e_commerce.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("NewPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OldPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -187,7 +203,7 @@ namespace website_e_commerce.Migrations
             modelBuilder.Entity("website_e_commerce.Models.ProductImage", b =>
                 {
                     b.HasOne("website_e_commerce.Models.Product", "Product")
-                        .WithMany("Images")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -213,8 +229,6 @@ namespace website_e_commerce.Migrations
 
             modelBuilder.Entity("website_e_commerce.Models.Product", b =>
                 {
-                    b.Navigation("Images");
-
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

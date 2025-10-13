@@ -1,55 +1,52 @@
-﻿@model List<website_e_commerce.Models.News>
+﻿@model IEnumerable<website_e_commerce.Models.Product>
+
 @{
-    ViewData["Title"] = "Danh sách bài viết";
+    ViewData["Title"] = "Danh sách sản phẩm";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="fw-bold text-primary">📰 Danh sách bài viết</h2>
-        <a asp-action="Add" class="btn btn-success">
-            <i class="bi bi-plus-circle"></i> Thêm bài viết
-        </a>
-    </div>
-
-    @if (TempData["Message"] != null)
-    {
-        <div class="alert alert-info">@TempData["Message"]</div>
-    }
-
-    <table class="table table-hover shadow-sm">
-        <thead class="table-dark">
-            <tr>
-                <th>Tiêu đề</th>
-                <th>Tác giả</th>
-                <th>Ngày đăng</th>
-                <th>Trạng thái</th>
-                <th class="text-center">Thao tác</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
+<section class="container mt-5">
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var product in Model)
             {
-                <tr>
-                    <td>@item.Title</td>
-                    <td>@item.Author</td>
-                    <td>@item.PublishedDate.ToString("dd/MM/yyyy")</td>
-                    <td>
-                        @if (item.IsPublished)
-                        {
-                            <span class="badge bg-success">Đã xuất bản</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">Nháp</span>
-                        }
-                    </td>
-                    <td class="text-center">
-                        <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">Xem</a>
-                        <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-warning btn-sm me-1">Sửa</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Xóa</a>
-                    </td>
-                </tr>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="product-card position-relative p-3 shadow-sm rounded-4 text-center">
+
+                        <div class="discount-badge position-absolute top-0 start-0 bg-danger text-white px-2 py-1 rounded-end">
+                            Giảm @product.DiscountPercent%
+                        </div>
+
+                        <img src="@(product.ImageUrl ?? "~/images/product/default.png")"
+                             alt="@product.Name"
+                             class="img-fluid mb-2 rounded"
+                             style="max-height: 220px; object-fit: contain;" />
+
+                        <div class="product-name fw-bold mt-2 mb-1 text-truncate" title="@product.Name">
+                            @product.Name
+                        </div>
+
+                        <div class="old-price text-muted text-decoration-line-through">
+                            @String.Format("{0:N0}đ", product.OldPrice)
+                        </div>
+
+                        <div class="new-price text-danger fw-semibold mb-2">
+                            @String.Format("{0:N0}đ", product.NewPrice)
+                        </div>
+
+                        <a href="@Url.Action("Details", "Product", new { id = product.Id })"
+                           class="buy-btn btn btn-primary rounded-pill px-3 py-1">
+                            <i class="fa-solid fa-cart-shopping"></i> Xem chi tiết
+                        </a>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
-</div>
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <p>Không có sản phẩm nào.</p>
+            </div>
+        }
+    </div>
+</section>

@@ -1,35 +1,56 @@
 ﻿@model website_e_commerce.Models.Product
-@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Thêm sản phẩm";
+}
 
-<h1>Add Product</h1>
-<form asp-action="Add" enctype="multipart/form-data">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
+<div class="container mt-4">
+    <h3 class="mb-3 text-primary">🛒 Thêm sản phẩm mới</h3>
+    <form asp-action="Add" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="form-group">
-        <label asp-for="Price"></label>
-        <input asp-for="Price" class="form-control" />
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
+        <div class="mb-3">
+            <label asp-for="OldPrice" class="form-label"></label>
+            <input asp-for="OldPrice" class="form-control" />
+            <span asp-validation-for="OldPrice" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="ImageUrl">Image</label>
-        <input type="file" asp-for="ImageUrl" class="form-control" />
-    </div>
+        <div class="mb-3">
+            <label asp-for="NewPrice" class="form-label"></label>
+            <input asp-for="NewPrice" class="form-control" />
+            <span asp-validation-for="NewPrice" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="CategoryId">Category</label>
-        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control"></select>
-    </div>
-    <button type="submit" class="btn btn-primary">Add</button>
-</form>
+        <div class="mb-3">
+            <label asp-for="DiscountPercent" class="form-label"></label>
+            <input asp-for="DiscountPercent" class="form-control" />
+            <span asp-validation-for="DiscountPercent" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label">Danh mục</label>
+            <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
+                <option value="">-- Chọn danh mục --</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ImageUrl" class="form-label">Ảnh sản phẩm</label>
+            <input asp-for="ImageUrl" type="file" name="imageUrl" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-success">💾 Lưu</button>
+        <a asp-action="Index" class="btn btn-secondary">⬅ Trở lại</a>
+    </form>
+</div>

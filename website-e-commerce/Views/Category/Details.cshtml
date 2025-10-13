@@ -1,0 +1,14 @@
+﻿@model website_e_commerce.Models.Category
+
+@{
+    ViewData["Title"] = "Chi tiết danh mục";
+}
+
+<h2>Chi tiết danh mục</h2>
+
+<div class="card p-3">
+    <p><strong>Mã danh mục:</strong> @Model.Id</p>
+    <p><strong>Tên danh mục:</strong> @Model.Name</p>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Quay lại</a>

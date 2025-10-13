@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Dowload\\Phạm huy thanh hải\\ĐỒ_ÁN_CHUYÊN_NGÀNH\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj": {}
+    "D:\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj": {}
   },
   "projects": {
-    "C:\\Dowload\\Phạm huy thanh hải\\ĐỒ_ÁN_CHUYÊN_NGÀNH\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj": {
+    "D:\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Dowload\\Phạm huy thanh hải\\ĐỒ_ÁN_CHUYÊN_NGÀNH\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj",
+        "projectUniqueName": "D:\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj",
         "projectName": "website-e-commerce",
-        "projectPath": "C:\\Dowload\\Phạm huy thanh hải\\ĐỒ_ÁN_CHUYÊN_NGÀNH\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj",
-        "packagesPath": "C:\\Users\\thanh hai\\.nuget\\packages\\",
-        "outputPath": "C:\\Dowload\\Phạm huy thanh hải\\ĐỒ_ÁN_CHUYÊN_NGÀNH\\website-e-commerce\\website-e-commerce\\obj\\",
+        "projectPath": "D:\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj",
+        "packagesPath": "C:\\Users\\thien\\.nuget\\packages\\",
+        "outputPath": "D:\\website-e-commerce\\website-e-commerce\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\thanh hai\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\thien\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -50,6 +50,10 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
             "Microsoft.AspNetCore.Identity.UI": {
               "target": "Package",
               "version": "[9.0.8, )"
