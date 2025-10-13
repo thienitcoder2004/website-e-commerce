@@ -1,43 +1,45 @@
 ﻿using website_e_commerce.Models;
+
 namespace website_e_commerce.Repositories
 {
     public class MockProductRepository : IProductRepository
     {
-        private readonly List<Product> _products;
-        public MockProductRepository()
+        private readonly ApplicationDbContext _context;
+
+        public MockProductRepository(ApplicationDbContext context)
         {
-            _products = new List<Product> {
-new Product { Id = 1, Name = "Laptop", Price = 1000,
-Description = "A high-end laptop"},
-};
+            _context = context;
         }
+
         public IEnumerable<Product> GetAll()
         {
-            return _products;
+            return _context.Products.ToList();
         }
-        public Product GetById(int id)
+
+        public Product? GetById(int id)
         {
-            return _products.FirstOrDefault(p => p.Id == id);
+            return _context.Products.FirstOrDefault(p => p.Id == id);
         }
+
         public void Add(Product product)
         {
-            product.Id = _products.Max(p => p.Id) + 1;
-            _products.Add(product);
+            _context.Products.Add(product);
+            _context.SaveChanges();
         }
+
         public void Update(Product product)
         {
-            var index = _products.FindIndex(p => p.Id == product.Id);
-            if (index != -1)
-            {
-                _products[index] = product;
-            }
+            _context.Products.Update(product);
+            _context.SaveChanges();
         }
+
         public void Delete(int id)
         {
-            var product = _products.FirstOrDefault(p => p.Id == id);
+            var product = _context.Products.Find(id);
             if (product != null)
             {
-                _products.Remove(product);
+                _context.Products.Remove(product);
+                _context.SaveChanges();
             }
         }
     }
