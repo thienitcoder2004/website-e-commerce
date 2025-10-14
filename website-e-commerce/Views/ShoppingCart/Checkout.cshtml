@@ -1,0 +1,27 @@
+﻿@model website_e_commerce.Models.ShoppingCart
+
+@{
+    ViewData["Title"] = "Thanh toán";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">💳 Thanh toán</h2>
+
+    <form asp-action="Checkout" method="post" class="w-75 mx-auto">
+        <div class="mb-3">
+            <label class="form-label fw-bold">Địa chỉ giao hàng</label>
+            <input type="text" name="shippingAddress" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Ghi chú</label>
+            <textarea name="notes" class="form-control" rows="3"></textarea>
+        </div>
+
+        <h4 class="text-end">Tổng tiền: <span class="text-danger">@String.Format("{0:N0} đ", Model.GetTotal())</span></h4>
+
+        <div class="text-end mt-4">
+            <button type="submit" class="btn btn-primary px-4">Xác nhận thanh toán</button>
+        </div>
+    </form>
+</div>
