@@ -31,7 +31,9 @@
     <header class="header">
         <div class="header_main">
             <div class="container header_top">
-                <img class="logo" src="~/images/logo-wb.png" alt="Alternate Text" />
+                <a href="/">
+                    <img class="logo" src="~/images/logo-wb.png" alt="Alternate Text" />
+                </a>
                 <div class="header_menu">
                     <a href="#" class="header_btn_category">
                         <i class="fa-solid fa-bars"></i>
@@ -67,7 +69,7 @@
                         </div>
                         <div class="utility_item">
                             <i class="fas fa-user"></i>
-                            <span>Đăng nhập</span>
+                            <partial name="_LoginPartial"></partial>
                         </div>
                     </div>
                 </div>
@@ -279,7 +281,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> 
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/news.js" asp-append-version="true"></script>
 </body>
 </html>

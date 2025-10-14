@@ -2,7 +2,7 @@
     --bg-color-orange: #ff7e00;
     --bg-color-red: #d70018;
     --bg-hover-red: #f8f8f8;
-    --text-gray: #666666;
+    --text-gray: #dadada;
     --text-white: #ffffff;
     --text-black: #000000;
     --text-blue: #1435c3;
@@ -264,7 +264,7 @@ a {
 }
 
 #bannerCarousel .carousel-item img {
-    height: 500px; 
+    height: 500px;
     object-fit: cover;
 }
 
@@ -272,7 +272,7 @@ a {
 .section_category .title-index,
 .section-product-category .title-index,
 .news-section .title-index,
-.section-product-pc .title-index{
+.section-product-pc .title-index {
     font-size: 22px;
     font-weight: 700;
     text-transform: uppercase;
@@ -284,7 +284,7 @@ a {
     .section_category .title-index .title-name,
     .section-product-category .title-index .title-name,
     .news-section .title-index .title-name,
-    .section-product-pc .title-index .title-name{
+    .section-product-pc .title-index .title-name {
         padding: 14px 28px 14px 40px;
         background: var(--bg-color-orange);
         color: var(--text-white);
@@ -295,7 +295,7 @@ a {
         .section_category .title-index .title-name:before,
         .section-product-category .title-index .title-name:before,
         .news-section .title-index .title-name:before,
-        .section-product-pc .title-index .title-name:before{
+        .section-product-pc .title-index .title-name:before {
             content: "";
             width: 30px;
             height: 100%;
@@ -906,15 +906,113 @@ a {
     .footer #copyright {
         padding: 10px 0;
         font-size: 14px;
-        color: #fff;
+        color: var(--text-white);
         text-align: center;
         background: var(--bg-color-orange);
     }
 
-/*-------------------------------------------------- Page Contact ----------------------------------------------*/
+/*-------------------------------------------------- Page Login / Register -------------------------------------------*/
+.section-login .bread-cumb {
+    background: var(--text-gray);
+    margin-bottom: 20px;
+    height: 54px;
+}
 
+.section-login .breadcrumb {
+    margin: 0;
+    font-size: 14px;
+    padding: 15px 0px;
+    border-radius: 0;
+    font-weight: 400;
+    line-height: 24px;
+    width: 100%;
+    text-align: left;
+}
 
-/*---------------------------------------------- Responsive ------------------------------------------------*/
+    .section-login .breadcrumb li .mr-lr {
+        padding: 0px 3px;
+        color: var(--text-black);
+    }
+
+    .section-login .breadcrumb li a:hover, .breadcrumb li.active, .breadcrumb li strong {
+        color: var(--bg-color-orange);
+        font-weight: 400;
+        text-decoration: none;
+    }
+
+.section-form-login,
+.section-form-register{
+    width: 500px;
+    margin: 60px auto;
+    background: var(--text-white);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+    .section-form-login .tabs,
+    .section-form-register .tabs {
+        display: flex;
+        justify-content: space-around;
+        border-bottom: 2px solid #eee;
+    }
+
+    .section-form-login .tab,
+    .section-form-register .tab {
+        width: 50%;
+        text-align: center;
+        padding: 12px 0;
+        font-weight: 600;
+        color: #666;
+        text-decoration: none;
+    }
+
+        .section-form-login .tab.active,
+        .section-form-register .tab.active {
+            color: #ff8000;
+            border-bottom: 2px solid #ff8000;
+        }
+
+    .section-form-login .form-box,
+    .section-form-register .form-box {
+        padding: 25px;
+    }
+
+        .section-form-login .form-box h2,
+        .section-form-register .form-box h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+    .section-form-login .form-control,
+    .section-form-register .form-control {
+        width: 100%;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+    }
+
+    .section-form-login button,
+    .section-form-register button {
+        width: 100%;
+        background-color: #ff8000;
+        border: none;
+        color: white;
+        font-weight: bold;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .section-form-login a,
+    .section-form-register a {
+        color: #666;
+        text-decoration: none;
+    }
+
+/*-------------------------------------------------- Page Contact -----------------------------------------*/
+
+/*---------------------------------------------- Responsive -----------------------------------------------*/
 @media (min-width: 1200px) {
     .col-xl-20 {
         -ms-flex: 0 0 20% !important;
