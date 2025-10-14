@@ -125,6 +125,8 @@ namespace website_e_commerce.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
+                // ✅ Thêm các trường mới
                 user.Ho = Input.Ho;
                 user.Ten = Input.Ten;
                 user.PhoneNumber = Input.SoDienThoai;
@@ -138,7 +140,7 @@ namespace website_e_commerce.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("Người dùng đã tạo tài khoản mới thành công.");
 
-                    // Tạo các role nếu chưa có
+                    // ✅ Đảm bảo các Role có tồn tại
                     if (!await _roleManager.RoleExistsAsync(SD.Role_Admin))
                     {
                         await _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin));
@@ -146,7 +148,7 @@ namespace website_e_commerce.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(SD.Role_Customer));
                     }
 
-                    // Nếu không chọn Role → mặc định là Customer
+                    // ✅ Nếu không chọn role, mặc định là Customer
                     string selectedRole = string.IsNullOrEmpty(Input.Role) ? SD.Role_Customer : Input.Role;
                     await _userManager.AddToRoleAsync(user, selectedRole);
 

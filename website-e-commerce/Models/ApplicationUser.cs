@@ -17,5 +17,6 @@ namespace website_e_commerce.Models
         [Phone(ErrorMessage = "Số điện thoại không hợp lệ")]
         [StringLength(15)]
         public override string PhoneNumber { get; set; }
+        public string HoTen => $"{Ho} {Ten}";
     }
 }

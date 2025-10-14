@@ -6,6 +6,10 @@ namespace website_e_commerce.Repositories
     {
         IEnumerable<Product> GetAll();
         Product? GetById(int id);
+
+        Task<Product?> GetByIdAsync(int id);
+        Task<IEnumerable<Product>> GetAllAsync();
+
         void Add(Product product);
         void Update(Product product);
         void Delete(int id);

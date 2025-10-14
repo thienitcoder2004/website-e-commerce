@@ -17,11 +17,40 @@ namespace website_e_commerce.Controllers
         }
 
         // Hiển thị danh sách sản phẩm
-        public IActionResult Index()
+        public IActionResult Index(string sortOrder, string priceRange)
         {
             var products = _productRepository.GetAll();
+
+            // --- Lọc theo giá ---
+            if (!string.IsNullOrEmpty(priceRange))
+            {
+                switch (priceRange)
+                {
+                    case "low":
+                        products = products.Where(p => p.NewPrice < 500000);
+                        break;
+                    case "mid":
+                        products = products.Where(p => p.NewPrice >= 500000 && p.NewPrice <= 10000000);
+                        break;
+                    case "high":
+                        products = products.Where(p => p.NewPrice > 10000000);
+                        break;
+                }
+            }
+
+            // --- Sắp xếp theo lựa chọn ---
+            products = sortOrder switch
+            {
+                "price_asc" => products.OrderBy(p => p.NewPrice),
+                "price_desc" => products.OrderByDescending(p => p.NewPrice),
+                "name_asc" => products.OrderBy(p => p.Name),
+                "name_desc" => products.OrderByDescending(p => p.Name),
+                _ => products
+            };
+
             return View(products);
         }
+
 
         // GET: Thêm mới
         public IActionResult Add()

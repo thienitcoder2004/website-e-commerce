@@ -18,8 +18,16 @@
                 <p><strong>Giảm giá:</strong> @Model.DiscountPercent%</p>
                 <p><strong>Mô tả:</strong></p>
                 <p>@Model.Description</p>
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">✏️ Sửa</a>
-                <a asp-action="Index" class="btn btn-secondary">⬅ Trở lại</a>
+
+                <form asp-controller="ShoppingCart" asp-action="AddToCart" method="post">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <div class="d-flex align-items-center mb-3">
+                        <label for="quantity" class="me-2 fw-bold">Số lượng:</label>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" class="form-control w-25" />
+                    </div>
+                    <button type="submit" class="btn btn-success me-2">🛒 Thêm vào giỏ hàng</button>
+                    <a asp-action="Product/Index" class="btn btn-secondary">⬅ Trở lại</a>
+                </form>
             </div>
         </div>
     </div>

@@ -1,4 +1,5 @@
 ﻿using website_e_commerce.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace website_e_commerce.Repositories
 {
@@ -11,9 +12,19 @@ namespace website_e_commerce.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<Product>> GetAllAsync()
+        {
+            return await _context.Products.ToListAsync();
+        }
+
         public IEnumerable<Product> GetAll()
         {
             return _context.Products.ToList();
+        }
+
+        public async Task<Product> GetByIdAsync(int id)
+        {
+            return await _context.Products.FindAsync(id);
         }
 
         public Product? GetById(int id)
