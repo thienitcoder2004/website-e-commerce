@@ -1,0 +1,61 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<section class="section-login">
+    <div class="bread-cumb">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li class="home">
+                    <a href="/" class="text-black">
+                        <span>Trang chủ</span>
+                    </a>
+                    <span class="mr-lr">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </span>
+                </li>
+                <li>
+                    <strong><span>Đăng nhập tài khoản</span></strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section-form-login">
+        <div class="container">
+            <div class="tabs">
+                <a href="/Identity/Account/Login" class="tab active">ĐĂNG NHẬP</a>
+                <a href="/Identity/Account/Register" class="tab">ĐĂNG KÝ</a>
+            </div>
+
+            <div class="form-box">
+                <h2>ĐĂNG NHẬP</h2>
+
+                <form id="loginForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="name@example.com" />
+                        <label asp-for="Input.Email">Email</label>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" placeholder="Mật khẩu" />
+                        <label asp-for="Input.Password">Mật khẩu</label>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+
+                    <button id="loginSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Đăng nhập</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
