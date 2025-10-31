@@ -10,26 +10,57 @@ namespace website_e_commerce.Models
         {
         }
 
-        public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
-        public DbSet<News> News { get; set; }
         public DbSet<Reviews> Reviews { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<News> News { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // ===== Cấu hình quan hệ =====
+            // ===== CATEGORY - PRODUCT =====
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ===== PRODUCT - PRODUCT IMAGE =====
+            modelBuilder.Entity<ProductImage>()
+                .HasOne(pi => pi.Product)
+                .WithMany(p => p.ProductImages)
+                .HasForeignKey(pi => pi.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ===== PRODUCT - REVIEWS =====
             modelBuilder.Entity<Reviews>()
                 .HasOne(r => r.Product)
                 .WithMany(p => p.Reviews)
                 .HasForeignKey(r => r.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // ===== Danh mục =====
+            // ===== ORDER - ORDER DETAIL =====
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Order)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(od => od.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ===== PRODUCT - ORDER DETAIL =====
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Product)
+                .WithMany()
+                .HasForeignKey(od => od.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Không cần cấu hình quan hệ Order - ApplicationUser
+            // vì đã có [ForeignKey("ApplicationUser")] trong Order.cs
+
+            // ===== SEED CATEGORY =====
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Điện thoại" },
                 new Category { Id = 2, Name = "Laptop" },
@@ -38,9 +69,8 @@ namespace website_e_commerce.Models
                 new Category { Id = 5, Name = "Tablet" }
             );
 
-            // ===== 20 sản phẩm mẫu =====
+            // ===== SEED PRODUCT =====
             modelBuilder.Entity<Product>().HasData(
-                // --- Điện thoại ---
                 new Product
                 {
                     Id = 1,
@@ -49,6 +79,9 @@ namespace website_e_commerce.Models
                     NewPrice = 35990000,
                     DiscountPercent = 10,
                     Description = "iPhone 15 Pro Max với chip A17 Pro, khung titan và camera 48MP ProRAW.",
+                    Specifications = "• Màn hình: Super Retina XDR OLED, 6.7 inch\n• Chip: Apple A17 Pro (3nm)\n• RAM: 8GB\n• Dung lượng: 256GB\n• Camera sau: 48MP + 12MP + 12MP\n• Camera trước: 12MP\n• Pin: 4422 mAh, sạc nhanh 27W\n• Hệ điều hành: iOS 17",
+                    GiftPromotion = "🎁 Tặng 1 x Ốp lưng silicon chính hãng Apple trị giá 890.000đ\n🎁 Tặng 1 x Cường lực toàn màn hình trị giá 390.000đ",
+                    SalePromotion = "💸 Giảm ngay 1.000.000đ khi thu cũ đổi mới.\n💸 Trả góp 0% lãi suất qua thẻ tín dụng.",
                     CategoryId = 1,
                     ImageUrl = "/images/product/iphone15promax.png"
                 },
@@ -60,6 +93,9 @@ namespace website_e_commerce.Models
                     NewPrice = 30990000,
                     DiscountPercent = 11,
                     Description = "Samsung Galaxy S24 Ultra với bút S-Pen và màn hình AMOLED 2K.",
+                    Specifications = "• Màn hình: Dynamic AMOLED 2X, 6.8 inch, QHD+\n• Chip: Snapdragon 8 Gen 3\n• RAM: 12GB\n• Dung lượng: 256GB\n• Camera sau: 200MP + 50MP + 12MP + 10MP\n• Camera trước: 12MP\n• Pin: 5000mAh, sạc nhanh 45W\n• Hệ điều hành: Android 14 (One UI 6.1)",
+                    GiftPromotion = "🎁 Tặng 1 x Bút S-Pen chính hãng Samsung trị giá 1.200.000đ\n🎁 Tặng 1 x Bao da Clear View trị giá 990.000đ",
+                    SalePromotion = "💸 Giảm ngay 2.000.000đ khi thanh toán qua Samsung Pay.\n💸 Ưu đãi 50% khi mua kèm Galaxy Buds FE.",
                     CategoryId = 1,
                     ImageUrl = "/images/product/galaxys24ultra.png"
                 },
@@ -71,6 +107,9 @@ namespace website_e_commerce.Models
                     NewPrice = 24990000,
                     DiscountPercent = 11,
                     Description = "Xiaomi 14 Ultra trang bị camera Leica và Snapdragon 8 Gen 3.",
+                    Specifications = "• Màn hình: AMOLED LTPO, 6.73 inch, 120Hz\n• Chip: Snapdragon 8 Gen 3\n• RAM: 16GB\n• Dung lượng: 512GB\n• Camera sau: 50MP x4 Leica Summicron\n• Camera trước: 32MP\n• Pin: 5000mAh, sạc nhanh 90W, không dây 50W\n• Hệ điều hành: HyperOS (Android 14)",
+                    GiftPromotion = "🎁 Tặng 1 x Ốp da Leica trị giá 990.000đ\n🎁 Tặng 1 x Củ sạc 120W chính hãng Xiaomi trị giá 890.000đ",
+                    SalePromotion = "💸 Giảm 1.000.000đ khi thanh toán bằng ví MoMo.\n💸 Tặng thêm 6 tháng bảo hành mở rộng Xiaomi Care+.",
                     CategoryId = 1,
                     ImageUrl = "/images/product/xiaomi14ultra.png"
                 },
@@ -82,10 +121,12 @@ namespace website_e_commerce.Models
                     NewPrice = 22990000,
                     DiscountPercent = 12,
                     Description = "Find X7 Pro với camera Hasselblad và sạc nhanh 100W.",
+                    Specifications = "• Màn hình: AMOLED, 6.82 inch, 120Hz\n• Chip: Snapdragon 8 Gen 3\n• RAM: 16GB\n• Dung lượng: 512GB\n• Camera sau: 50MP + 50MP + 50MP\n• Camera trước: 32MP\n• Pin: 5000mAh, sạc nhanh 100W\n• Hệ điều hành: ColorOS 14 (Android 14)",
+                    GiftPromotion = "🎁 Tặng 1 x Tai nghe OPPO Enco Buds 2 trị giá 790.000đ\n🎁 Tặng 1 x Bao da cao cấp trị giá 590.000đ",
+                    SalePromotion = "💸 Giảm ngay 1.500.000đ khi thanh toán qua VNPay.\n💸 Tặng voucher 500.000đ mua phụ kiện OPPO.",
                     CategoryId = 1,
                     ImageUrl = "/images/product/findx7pro.png"
                 },
-                // --- Laptop ---
                 new Product
                 {
                     Id = 5,
@@ -94,177 +135,116 @@ namespace website_e_commerce.Models
                     NewPrice = 28990000,
                     DiscountPercent = 12,
                     Description = "MacBook Air M3 hiệu năng mạnh, pin 18 tiếng, màn Liquid Retina.",
+                    Specifications = "• Màn hình: 13.6 inch, Liquid Retina, 500 nits\n• Chip: Apple M3 (8 nhân CPU, 10 nhân GPU)\n• RAM: 16GB\n• SSD: 512GB\n• Camera: 1080p FaceTime HD\n• Pin: Dùng 18 tiếng\n• Hệ điều hành: macOS Sonoma\n• Trọng lượng: 1.24 kg",
+                    GiftPromotion = "🎁 Tặng 1 x Túi chống shock GearVN 14 inch trị giá 399.000đ\n🎁 Tặng 1 x Chuột Logitech M331 trị giá 390.000đ",
+                    SalePromotion = "💸 Giảm ngay 500.000đ khi thanh toán bằng thẻ tín dụng Techcombank.\n💸 Trả góp 0% lãi suất trong 6 tháng.",
                     CategoryId = 2,
                     ImageUrl = "/images/product/macbookairm3.png"
+                }
+            );
+
+            // ===== SEED REVIEWS =====
+            modelBuilder.Entity<Reviews>().HasData(
+                new Reviews
+                {
+                    Id = 1,
+                    ProductId = 1,
+                    UserId = "user_001",
+                    Rating = 5,
+                    Title = "Đỉnh của chóp!",
+                    Body = "Mượt, camera cực đẹp, khung titan cầm rất chắc tay. Quá đáng tiền!",
+                    CreatedAt = new DateTime(2025, 1, 1),
+                    IsApproved = true
                 },
-                new Product
+                new Reviews
+                {
+                    Id = 2,
+                    ProductId = 1,
+                    UserId = "user_002",
+                    Rating = 4,
+                    Title = "Ổn nhưng hơi đắt",
+                    Body = "Máy đẹp, hiệu năng khủng, chỉ có giá hơi cao chút.",
+                    CreatedAt = new DateTime(2025, 1, 2),
+                    IsApproved = true
+                },
+                new Reviews
+                {
+                    Id = 3,
+                    ProductId = 2,
+                    UserId = "user_003",
+                    Rating = 5,
+                    Title = "S-Pen quá tiện",
+                    Body = "Dùng ghi chú và chụp ảnh rất sướng, màn hình siêu sáng và nét.",
+                    CreatedAt = new DateTime(2025, 1, 3),
+                    IsApproved = true
+                },
+                new Reviews
+                {
+                    Id = 4,
+                    ProductId = 2,
+                    UserId = "user_004",
+                    Rating = 4,
+                    Title = "Camera khủng thật",
+                    Body = "Ảnh chụp cực kỳ sắc nét, zoom 100x không đùa được!",
+                    CreatedAt = new DateTime(2025, 1, 4),
+                    IsApproved = true
+                },
+                new Reviews
+                {
+                    Id = 5,
+                    ProductId = 3,
+                    UserId = "user_005",
+                    Rating = 5,
+                    Title = "Leica chất lượng!",
+                    Body = "Ảnh cực kỳ trong trẻo, màu sắc tự nhiên, cấu hình siêu mạnh.",
+                    CreatedAt = new DateTime(2025, 1, 5),
+                    IsApproved = true
+                },
+                new Reviews
                 {
                     Id = 6,
-                    Name = "Asus ROG Zephyrus G14",
-                    OldPrice = 44990000,
-                    NewPrice = 38990000,
-                    DiscountPercent = 13,
-                    Description = "Laptop gaming mỏng nhẹ với Ryzen 9 và RTX 4070.",
-                    CategoryId = 2,
-                    ImageUrl = "/images/product/rogzephyrusg14.png"
+                    ProductId = 4,
+                    UserId = "user_006",
+                    Rating = 4,
+                    Title = "Sạc nhanh bá cháy 🔥",
+                    Body = "Pin 5000mAh mà sạc 100W siêu nhanh, thiết kế rất sang.",
+                    CreatedAt = new DateTime(2025, 1, 6),
+                    IsApproved = true
                 },
-                new Product
+                new Reviews
                 {
                     Id = 7,
-                    Name = "Dell XPS 13 Plus",
-                    OldPrice = 42990000,
-                    NewPrice = 37990000,
-                    DiscountPercent = 12,
-                    Description = "Laptop siêu mỏng viền siêu mảnh, bàn phím cảm ứng cực sang.",
-                    CategoryId = 2,
-                    ImageUrl = "/images/product/dellxps13plus.png"
+                    ProductId = 5,
+                    UserId = "user_007",
+                    Rating = 5,
+                    Title = "Rất hài lòng với MacBook Air M3",
+                    Body = "Máy nhẹ, pin trâu, hiệu năng mượt mà, quá ổn cho dân văn phòng.",
+                    CreatedAt = new DateTime(2025, 1, 7),
+                    IsApproved = true
                 },
-                new Product
+                new Reviews
                 {
                     Id = 8,
-                    Name = "HP Spectre x360 14",
-                    OldPrice = 38990000,
-                    NewPrice = 34990000,
-                    DiscountPercent = 10,
-                    Description = "Laptop xoay gập cao cấp, màn OLED cảm ứng tuyệt đẹp.",
-                    CategoryId = 2,
-                    ImageUrl = "/images/product/hpspectrex360.png"
-                },
-                // --- Phụ kiện ---
-                new Product
-                {
-                    Id = 9,
-                    Name = "Tai nghe AirPods Pro 2",
-                    OldPrice = 6990000,
-                    NewPrice = 5990000,
-                    DiscountPercent = 14,
-                    Description = "Tai nghe chống ồn chủ động, chip H2, sạc USB-C.",
-                    CategoryId = 3,
-                    ImageUrl = "/images/product/airpodspro2.png"
-                },
-                new Product
-                {
-                    Id = 10,
-                    Name = "Samsung Galaxy Buds3 Pro",
-                    OldPrice = 5990000,
-                    NewPrice = 4990000,
-                    DiscountPercent = 17,
-                    Description = "Tai nghe True Wireless chống ồn chủ động, âm thanh Dolby.",
-                    CategoryId = 3,
-                    ImageUrl = "/images/product/galaxybuds3pro.png"
-                },
-                new Product
-                {
-                    Id = 11,
-                    Name = "Sạc nhanh Anker 65W GaN",
-                    OldPrice = 1590000,
-                    NewPrice = 1290000,
-                    DiscountPercent = 19,
-                    Description = "Sạc nhanh USB-C PD 65W, hỗ trợ laptop, điện thoại.",
-                    CategoryId = 3,
-                    ImageUrl = "/images/product/anker65w.png"
-                },
-                new Product
-                {
-                    Id = 12,
-                    Name = "Cáp sạc Baseus 100W",
-                    OldPrice = 490000,
-                    NewPrice = 290000,
-                    DiscountPercent = 41,
-                    Description = "Cáp sạc nhanh USB-C to USB-C công suất 100W, bền chắc.",
-                    CategoryId = 3,
-                    ImageUrl = "/images/product/baseus100w.png"
-                },
-                // --- Đồng hồ ---
-                new Product
-                {
-                    Id = 13,
-                    Name = "Apple Watch Series 10",
-                    OldPrice = 12990000,
-                    NewPrice = 11990000,
-                    DiscountPercent = 8,
-                    Description = "Đồng hồ thông minh với cảm biến nhịp tim và ECG.",
-                    CategoryId = 4,
-                    ImageUrl = "/images/product/applewatch10.png"
-                },
-                new Product
-                {
-                    Id = 14,
-                    Name = "Samsung Galaxy Watch7",
-                    OldPrice = 8990000,
-                    NewPrice = 7990000,
-                    DiscountPercent = 11,
-                    Description = "Galaxy Watch7 theo dõi sức khỏe, pin 3 ngày, sạc nhanh.",
-                    CategoryId = 4,
-                    ImageUrl = "/images/product/galaxywatch7.png"
-                },
-                new Product
-                {
-                    Id = 15,
-                    Name = "Xiaomi Watch S3",
-                    OldPrice = 4990000,
-                    NewPrice = 3990000,
-                    DiscountPercent = 20,
-                    Description = "Đồng hồ thể thao pin 15 ngày, màn AMOLED 1.43 inch.",
-                    CategoryId = 4,
-                    ImageUrl = "/images/product/xiaomiwatchs3.png"
-                },
-                new Product
-                {
-                    Id = 16,
-                    Name = "Garmin Venu 3",
-                    OldPrice = 13990000,
-                    NewPrice = 12490000,
-                    DiscountPercent = 11,
-                    Description = "Đồng hồ GPS chuyên dụng cho vận động viên, pin 10 ngày.",
-                    CategoryId = 4,
-                    ImageUrl = "/images/product/garminvenu3.png"
-                },
-                // --- Tablet ---
-                new Product
-                {
-                    Id = 17,
-                    Name = "iPad Pro M4 2024",
-                    OldPrice = 32990000,
-                    NewPrice = 29990000,
-                    DiscountPercent = 9,
-                    Description = "iPad Pro M4 13 inch OLED siêu mỏng, hiệu năng cực mạnh.",
-                    CategoryId = 5,
-                    ImageUrl = "/images/product/ipadprom4.png"
-                },
-                new Product
-                {
-                    Id = 18,
-                    Name = "Samsung Galaxy Tab S9 Ultra",
-                    OldPrice = 32990000,
-                    NewPrice = 28990000,
-                    DiscountPercent = 12,
-                    Description = "Tablet Android cao cấp 14.6 inch, bút S-Pen, màn AMOLED 120Hz.",
-                    CategoryId = 5,
-                    ImageUrl = "/images/product/galaxytabs9ultra.png"
-                },
-                new Product
-                {
-                    Id = 19,
-                    Name = "Xiaomi Pad 6 Pro",
-                    OldPrice = 13990000,
-                    NewPrice = 10990000,
-                    DiscountPercent = 21,
-                    Description = "Tablet Snapdragon 8+ Gen 1, màn hình 144Hz, pin 8600mAh.",
-                    CategoryId = 5,
-                    ImageUrl = "/images/product/xiaomipad6pro.png"
-                },
-                new Product
-                {
-                    Id = 20,
-                    Name = "Lenovo Tab P12 Pro",
-                    OldPrice = 18990000,
-                    NewPrice = 15990000,
-                    DiscountPercent = 15,
-                    Description = "Tablet OLED 12.6 inch, Snapdragon 870, hỗ trợ bàn phím rời.",
-                    CategoryId = 5,
-                    ImageUrl = "/images/product/lenovotabp12pro.png"
+                    ProductId = 5,
+                    UserId = "user_008",
+                    Rating = 4,
+                    Title = "Mỏng nhẹ, pin tốt",
+                    Body = "Chạy cực êm, màn hình đẹp, chỉ hơi thiếu cổng kết nối.",
+                    CreatedAt = new DateTime(2025, 1, 8),
+                    IsApproved = true
                 }
+            );
+
+            // ===== SEED PRODUCT IMAGES =====
+            modelBuilder.Entity<ProductImage>().HasData(
+                new ProductImage { Id = 1, ProductId = 1, ImageUrl = "/images/product/iphone15promax_1.png" },
+                new ProductImage { Id = 2, ProductId = 1, ImageUrl = "/images/product/iphone15promax_2.png" },
+                new ProductImage { Id = 3, ProductId = 2, ImageUrl = "/images/product/galaxys24ultra_1.png" },
+                new ProductImage { Id = 4, ProductId = 2, ImageUrl = "/images/product/galaxys24ultra_2.png" },
+                new ProductImage { Id = 5, ProductId = 3, ImageUrl = "/images/product/xiaomi14ultra_1.png" },
+                new ProductImage { Id = 6, ProductId = 4, ImageUrl = "/images/product/findx7pro_1.png" },
+                new ProductImage { Id = 7, ProductId = 5, ImageUrl = "/images/product/macbookairm3_1.png" },
+                new ProductImage { Id = 8, ProductId = 5, ImageUrl = "/images/product/macbookairm3_2.png" }
             );
         }
     }

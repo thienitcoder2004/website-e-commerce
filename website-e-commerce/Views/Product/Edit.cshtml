@@ -1,58 +1,71 @@
 ﻿@model website_e_commerce.Models.Product
+
 @{
-    ViewData["Title"] = "Chỉnh sửa sản phẩm";
+    ViewData["Title"] = "Thêm sản phẩm";
 }
 
 <div class="container mt-4">
-    <h3 class="mb-3 text-primary">✏️ Chỉnh sửa sản phẩm</h3>
-    <form asp-action="Edit" method="post" enctype="multipart/form-data">
-        <input type="hidden" asp-for="Id" />
+    <h2 class="fw-bold mb-4 text-center">➕ Sửa sản phẩm</h2>
 
-        <div class="mb-3">
-            <label asp-for="Name" class="form-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+    <form asp-action="Edit" enctype="multipart/form-data" method="post" class="shadow p-4 rounded bg-light">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label asp-for="OldPrice" class="form-label"></label>
+                <input asp-for="OldPrice" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label asp-for="NewPrice" class="form-label"></label>
+                <input asp-for="NewPrice" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="DiscountPercent" class="form-label"></label>
+                <input asp-for="DiscountPercent" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="CategoryId" class="form-label"></label>
+                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select"></select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Ảnh chính</label>
+                <input type="file" name="imageUrl" class="form-control" />
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Ảnh phụ (nhiều ảnh)</label>
+                <input type="file" name="extraImages" class="form-control" multiple />
+            </div>
+
+            <div class="col-md-12">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" rows="3" class="form-control"></textarea>
+            </div>
+
+            <div class="col-md-12">
+                <label asp-for="Specifications" class="form-label"></label>
+                <textarea asp-for="Specifications" rows="3" class="form-control"></textarea>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="GiftPromotion" class="form-label"></label>
+                <textarea asp-for="GiftPromotion" class="form-control"></textarea>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="SalePromotion" class="form-label"></label>
+                <textarea asp-for="SalePromotion" class="form-control"></textarea>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label asp-for="OldPrice" class="form-label"></label>
-            <input asp-for="OldPrice" class="form-control" />
+        <div class="mt-4 text-center">
+            <button type="submit" class="btn btn-primary px-4">💾 Lưu</button>
+            <a asp-action="Index" class="btn btn-secondary px-4">⬅ Quay lại</a>
         </div>
-
-        <div class="mb-3">
-            <label asp-for="NewPrice" class="form-label"></label>
-            <input asp-for="NewPrice" class="form-control" />
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="DiscountPercent" class="form-label"></label>
-            <input asp-for="DiscountPercent" class="form-control" />
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="CategoryId" class="form-label">Danh mục</label>
-            <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select"></select>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Description" class="form-label"></label>
-            <textarea asp-for="Description" class="form-control"></textarea>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Ảnh hiện tại</label><br />
-            @if (!string.IsNullOrEmpty(Model.ImageUrl))
-            {
-                <img src="@Model.ImageUrl" style="max-width: 150px; border-radius: 8px;" />
-            }
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="ImageUrl" class="form-label">Cập nhật ảnh mới</label>
-            <input asp-for="ImageUrl" type="file" name="imageUrl" class="form-control" />
-        </div>
-
-        <button type="submit" class="btn btn-success">💾 Cập nhật</button>
-        <a asp-action="Index" class="btn btn-secondary">⬅ Trở lại</a>
     </form>
 </div>

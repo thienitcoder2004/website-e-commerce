@@ -1,12 +1,54 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\website-e-commerce\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\views\\review\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\views\\review\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\controllers\\reviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\controllers\\reviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ReviewController.cs",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Controllers\\ReviewController.cs",
+              "RelativeDocumentMoniker": "website-e-commerce\\Controllers\\ReviewController.cs",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Controllers\\ReviewController.cs",
+              "RelativeToolTip": "website-e-commerce\\Controllers\\ReviewController.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAgwEMAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T09:50:52.645Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\Review\\Index.cshtml",
+              "RelativeDocumentMoniker": "website-e-commerce\\Views\\Review\\Index.cshtml",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\Review\\Index.cshtml",
+              "RelativeToolTip": "website-e-commerce\\Views\\Review\\Index.cshtml",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAswFcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-31T09:46:23.932Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

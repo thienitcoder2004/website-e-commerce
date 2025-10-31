@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj": {}
+    "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj": {}
   },
   "projects": {
-    "D:\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj": {
+    "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj",
+        "projectUniqueName": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj",
         "projectName": "website-e-commerce",
-        "projectPath": "D:\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj",
+        "projectPath": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj",
         "packagesPath": "C:\\Users\\thien\\.nuget\\packages\\",
-        "outputPath": "D:\\website-e-commerce\\website-e-commerce\\obj\\",
+        "outputPath": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -100,7 +101,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

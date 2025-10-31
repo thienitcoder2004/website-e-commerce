@@ -12,24 +12,41 @@ namespace website_e_commerce.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public void AddProductImage(ProductImage image)
         {
-            return await _context.Products.ToListAsync();
+            _context.ProductImages.Add(image);
+            _context.SaveChanges();
         }
 
+
+        // Lấy tất cả sản phẩm + include danh mục
         public IEnumerable<Product> GetAll()
         {
-            return _context.Products.ToList();
+            return _context.Products
+                           .Include(p => p.Category)
+                           .ToList();
         }
 
-        public async Task<Product> GetByIdAsync(int id)
+        public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            return await _context.Products.FindAsync(id);
+            return await _context.Products
+                                 .Include(p => p.Category)
+                                 .ToListAsync();
         }
 
+        // Lấy 1 sản phẩm + include danh mục
         public Product? GetById(int id)
         {
-            return _context.Products.FirstOrDefault(p => p.Id == id);
+            return _context.Products
+                           .Include(p => p.Category)
+                           .FirstOrDefault(p => p.Id == id);
+        }
+
+        public async Task<Product?> GetByIdAsync(int id)
+        {
+            return await _context.Products
+                                 .Include(p => p.Category)
+                                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public void Add(Product product)

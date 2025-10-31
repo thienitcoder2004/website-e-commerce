@@ -1,38 +1,25 @@
-﻿function scrollProducts(direction)
-{
-    const container = document.getElementById('products');
+﻿function scrollProducts(direction) {
+    const container = document.getElementById("products");
     const scrollAmount = 250;
-    container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    if (container) {
+        container.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
+    }
 }
 
-$(document).ready(function () {
-    $(".increase-btn").click(function () {
-        const row = $(this).closest("tr");
-        const productId = row.data("id");
+document.addEventListener("DOMContentLoaded", () => {
+    const decreaseBtn = document.querySelector(".btn-decrease");
+    const increaseBtn = document.querySelector(".btn-increase");
+    const quantityInput = document.querySelector("#quantity");
 
-        $.post("/ShoppingCart/IncreaseQuantityAjax", { productId }, function (res) {
-            if (res.success) {
-                row.find(".quantity").text(res.quantity);
-                row.find(".item-total").text(res.itemTotal.toLocaleString('vi-VN') + " đ");
-                $("#cart-total").text(res.total.toLocaleString('vi-VN') + " đ");
-            }
+    if (decreaseBtn && increaseBtn && quantityInput) {
+        decreaseBtn.addEventListener("click", () => {
+            const current = parseInt(quantityInput.value) || 1;
+            if (current > 1) quantityInput.value = current - 1;
         });
-    });
 
-    $(".decrease-btn").click(function () {
-        const row = $(this).closest("tr");
-        const productId = row.data("id");
-
-        $.post("/ShoppingCart/DecreaseQuantityAjax", { productId }, function (res) {
-            if (res.success) {
-                if (res.quantity > 0) {
-                    row.find(".quantity").text(res.quantity);
-                    row.find(".item-total").text(res.itemTotal.toLocaleString('vi-VN') + " đ");
-                } else {
-                    row.fadeOut(200, function () { $(this).remove(); });
-                }
-                $("#cart-total").text(res.total.toLocaleString('vi-VN') + " đ");
-            }
+        increaseBtn.addEventListener("click", () => {
+            const current = parseInt(quantityInput.value) || 1;
+            quantityInput.value = current + 1;
         });
-    });
+    }
 });

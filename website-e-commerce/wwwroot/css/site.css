@@ -55,12 +55,6 @@ a {
     margin-bottom: 30px;
 }
 
-.btn {
-    width: 28px;
-    height: 38px;
-    padding: 1px 6px;
-}
-
 .row-fix {
     margin-left: -10px !important;
     margin-right: -10px !important;
@@ -132,6 +126,78 @@ a {
         height: 20px;
         stroke: var(--text-white);
     }
+
+.suggestion-box {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 5px 0;
+}
+
+.suggestion-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    text-decoration: none;
+    color: #222;
+    transition: background-color 0.2s ease;
+}
+
+    .suggestion-item:hover {
+        background-color: #f5f5f5;
+    }
+
+.suggestion-img {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.suggestion-info {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.product-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #222;
+    margin-bottom: 4px;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.product-prices {
+    font-size: 14px;
+}
+
+.new-price {
+    color: #d70018;
+    font-weight: 700;
+    margin-right: 8px;
+}
+
+.old-price {
+    color: #888;
+    text-decoration: line-through;
+    font-size: 13px;
+}
+
+.suggestion-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.suggestion-box::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 5px;
+}
+
 
 .topbar_utility {
     display: flex;
@@ -912,13 +978,15 @@ a {
     }
 
 /*-------------------------------------------------- Page Login / Register -------------------------------------------*/
-.section-login .bread-cumb {
+.section-login .bread-cumb,
+.shoppingcart-page .bread-cumb {
     background: var(--text-gray);
     margin-bottom: 20px;
     height: 54px;
 }
 
-.section-login .breadcrumb {
+.section-login .breadcrumb,
+.shoppingcart-page .bread-cumb {
     margin: 0;
     font-size: 14px;
     padding: 15px 0px;
@@ -929,19 +997,21 @@ a {
     text-align: left;
 }
 
-    .section-login .breadcrumb li .mr-lr {
+    .section-login .breadcrumb li .mr-lr,
+    .shoppingcart-page .bread-cumb li .mr-lr {
         padding: 0px 3px;
         color: var(--text-black);
     }
 
-    .section-login .breadcrumb li a:hover, .breadcrumb li.active, .breadcrumb li strong {
+    .section-login .breadcrumb li a:hover, .breadcrumb li.active, .breadcrumb li strong,
+    .shoppingcart-page .bread-cumb li a:hover, .bread-cumb li.active, .bread-cumb li strong {
         color: var(--bg-color-orange);
         font-weight: 400;
         text-decoration: none;
     }
 
 .section-form-login,
-.section-form-register{
+.section-form-register {
     width: 500px;
     margin: 60px auto;
     background: var(--text-white);
@@ -1011,6 +1081,62 @@ a {
     }
 
 /*-------------------------------------------------- Page Contact -----------------------------------------*/
+
+/*--------------------- Page Product Details -----------------*/
+.product-details .product-card {
+    background: var(--text-white);
+    width: 100%;
+    border-radius: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .product-details .product-card:hover {
+        transform: translateY(-3px);
+    }
+
+.product-details .product-image {
+    max-height: 450px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+    .product-details .product-image:hover {
+        transform: scale(1.03);
+    }
+
+.product-details .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .product-details .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+.product-details .quantity-group {
+    width: 120px;
+}
+
+.product-details .quantity-input {
+    width: 45px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.product-details .btn-quantity {
+    width: 35px;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 0;
+    line-height: 1;
+    border-color: #ddd;
+}
+
+    .product-details .btn-quantity:hover {
+        background-color: #f5f5f5;
+    }
+
 
 /*---------------------------------------------- Responsive -----------------------------------------------*/
 @media (min-width: 1200px) {
