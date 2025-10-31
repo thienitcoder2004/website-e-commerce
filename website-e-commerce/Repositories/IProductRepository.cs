@@ -9,6 +9,7 @@ namespace website_e_commerce.Repositories
 
         Task<Product?> GetByIdAsync(int id);
         Task<IEnumerable<Product>> GetAllAsync();
+        void AddProductImage(ProductImage image);
 
         void Add(Product product);
         void Update(Product product);

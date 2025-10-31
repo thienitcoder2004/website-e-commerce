@@ -1,0 +1,48 @@
+﻿@model website_e_commerce.Models.Reviews
+@{
+    ViewData["Title"] = "Đánh giá sản phẩm";
+    var product = ViewBag.Product as website_e_commerce.Models.Product;
+}
+
+<div class="container mt-5 mb-5">
+    <h3 class="text-danger fw-bold mb-4">Đánh giá sản phẩm: @product.Name</h3>
+
+    <form asp-controller="Review" asp-action="Add" method="post">
+        @Html.AntiForgeryToken()
+
+        <!-- ProductId ẩn -->
+        <input type="hidden" asp-for="ProductId" value="@Model.ProductId" />
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label fw-bold"></label>
+            <input asp-for="Title" class="form-control" placeholder="Nhập tiêu đề ngắn gọn..." />
+            <span asp-validation-for="Title" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Body" class="form-label fw-bold"></label>
+            <textarea asp-for="Body" class="form-control" rows="4" placeholder="Viết nội dung đánh giá..."></textarea>
+            <span asp-validation-for="Body" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Rating" class="form-label fw-bold"></label>
+            <div class="rating-stars fs-3">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <input asp-for="Rating" type="radio" id="star@i" value="@i" />
+                    <label for="star@i" class="text-warning">★</label>
+                }
+            </div>
+            <span asp-validation-for="Rating" class="text-danger small"></span>
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-danger fw-bold px-4">Gửi đánh giá</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

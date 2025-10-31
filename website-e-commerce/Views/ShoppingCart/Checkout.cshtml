@@ -1,27 +1,36 @@
 ﻿@model website_e_commerce.Models.ShoppingCart
-
 @{
     ViewData["Title"] = "Thanh toán";
 }
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4">💳 Thanh toán</h2>
+    <h2 class="mb-4 text-center">💳 Thanh toán</h2>
 
-    <form asp-action="Checkout" method="post" class="w-75 mx-auto">
+    <form method="post">
         <div class="mb-3">
-            <label class="form-label fw-bold">Địa chỉ giao hàng</label>
+            <label class="form-label fw-semibold">Địa chỉ giao hàng</label>
             <input type="text" name="shippingAddress" class="form-control" required />
         </div>
-
         <div class="mb-3">
-            <label class="form-label fw-bold">Ghi chú</label>
+            <label class="form-label fw-semibold">Ghi chú</label>
             <textarea name="notes" class="form-control" rows="3"></textarea>
         </div>
 
-        <h4 class="text-end">Tổng tiền: <span class="text-danger">@String.Format("{0:N0} đ", Model.GetTotal())</span></h4>
-
-        <div class="text-end mt-4">
-            <button type="submit" class="btn btn-primary px-4">Xác nhận thanh toán</button>
+        <div class="border p-3 rounded bg-light mb-3">
+            <h5 class="fw-bold">Tóm tắt đơn hàng</h5>
+            <ul class="list-unstyled">
+                @foreach (var item in Model.Items)
+                {
+                    <li>
+                        @item.Name × @item.Quantity —
+                        <span class="text-danger fw-bold">@String.Format("{0:N0} đ", item.Total)</span>
+                    </li>
+                }
+            </ul>
+            <hr />
+            <h5>Tổng cộng: <span class="text-danger fw-bold">@String.Format("{0:N0} đ", Model.GetTotal())</span></h5>
         </div>
+
+        <button type="submit" class="btn btn-success btn-lg w-100">Xác nhận đặt hàng</button>
     </form>
 </div>

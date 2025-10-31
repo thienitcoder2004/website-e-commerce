@@ -53,7 +53,7 @@ namespace website_e_commerce.Controllers
                 cart.RemoveItem(productId);
                 HttpContext.Session.SetObjectAsJson("Cart", cart);
             }
-            return RedirectToAction("ShoppingCart/Index");
+            return RedirectToAction("Index", "ShoppingCart");
         }
 
         [HttpPost]
@@ -128,7 +128,7 @@ namespace website_e_commerce.Controllers
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            HttpContext.Session.Remove("ShoppingCart/Cart");
+            HttpContext.Session.Remove("Cart");
             return RedirectToAction("OrderSuccess");
         }
 

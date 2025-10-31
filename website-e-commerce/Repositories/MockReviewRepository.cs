@@ -1,83 +1,54 @@
-﻿using website_e_commerce.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using website_e_commerce.Models;
 
 namespace website_e_commerce.Repositories
 {
     public class MockReviewRepository : IReviewRepository
     {
-        private List<Reviews> _reviewList;
+        private readonly ApplicationDbContext _context;
 
-        public MockReviewRepository()
+        public MockReviewRepository(ApplicationDbContext context)
         {
-            _reviewList = new List<Reviews>
-            {
-                new Reviews
-                {
-                    Id = 1,
-                    ProductId = 1,
-                    UserId = 101,
-                    Rating = 5,
-                    Title = "Rất hài lòng!",
-                    Body = "Laptop chạy rất mượt, pin tốt và thiết kế đẹp.",
-                    IsApproved = true
-                },
-                new Reviews
-                {
-                    Id = 2,
-                    ProductId = 1,
-                    UserId = 102,
-                    Rating = 4,
-                    Title = "Ổn trong tầm giá",
-                    Body = "Máy hoạt động ổn định, chỉ hơi nóng khi chơi game nặng.",
-                    IsApproved = true
-                },
-                new Reviews
-                {
-                    Id = 3,
-                    ProductId = 2,
-                    UserId = 103,
-                    Rating = 5,
-                    Title = "PC Gaming rất mạnh",
-                    Body = "Chạy mọi game AAA max setting, cực kỳ hài lòng!",
-                    IsApproved = true
-                }
-            };
+            _context = context;
         }
 
         public IEnumerable<Reviews> GetReviewsByProductId(int productId)
         {
-            return _reviewList.Where(r => r.ProductId == productId);
+            return _context.Reviews
+                .Where(r => r.ProductId == productId && r.IsApproved)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToList();
         }
 
-        public Reviews GetReviewById(int id)
+        public IEnumerable<Reviews> GetAllReviews()
         {
-            return _reviewList.FirstOrDefault(r => r.Id == id);
+            return _context.Reviews
+                .Include(r => r.Product)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToList();
         }
 
-        public void AddReview(Reviews review)
+        public Reviews GetById(int id)
         {
-            review.Id = _reviewList.Max(r => r.Id) + 1;
-            _reviewList.Add(review);
-        }
-
-        public void UpdateReview(Reviews review)
-        {
-            var existing = _reviewList.FirstOrDefault(r => r.Id == review.Id);
-            if (existing != null)
-            {
-                existing.Rating = review.Rating;
-                existing.Title = review.Title;
-                existing.Body = review.Body;
-                existing.IsApproved = review.IsApproved;
-            }
+            return _context.Reviews.FirstOrDefault(r => r.Id == id);
         }
 
         public void DeleteReview(int id)
         {
-            var review = _reviewList.FirstOrDefault(r => r.Id == id);
+            var review = _context.Reviews.FirstOrDefault(r => r.Id == id);
             if (review != null)
             {
-                _reviewList.Remove(review);
+                _context.Reviews.Remove(review);
+                _context.SaveChanges();
             }
+        }
+
+        public void AddReview(Reviews review)
+        {
+            _context.Reviews.Add(review);
+            _context.SaveChanges();
         }
     }
 }

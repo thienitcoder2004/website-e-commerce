@@ -1,30 +1,21 @@
 ﻿@model website_e_commerce.Models.Product
+
 @{
     ViewData["Title"] = "Xóa sản phẩm";
 }
 
-<div class="container mt-4">
-    <h3 class="text-danger mb-3">⚠️ Xác nhận xóa sản phẩm</h3>
+<div class="container mt-5 text-center">
+    <h3 class="text-danger mb-4">⚠️ Bạn có chắc muốn xóa sản phẩm này không?</h3>
 
-    <dl class="row">
-        <dt class="col-sm-3">Tên sản phẩm</dt>
-        <dd class="col-sm-9">@Model.Name</dd>
+    <div class="card shadow-sm p-4">
+        <img src="@Model.ImageUrl" class="img-fluid rounded mb-3" style="max-width:200px;" />
+        <h4>@Model.Name</h4>
+        <p class="text-muted">@String.Format("{0:N0} đ", Model.NewPrice)</p>
+    </div>
 
-        <dt class="col-sm-3">Giá mới</dt>
-        <dd class="col-sm-9">@String.Format("{0:N0}đ", Model.NewPrice)</dd>
-
-        <dt class="col-sm-3">Danh mục</dt>
-        <dd class="col-sm-9">@Model.Category?.Name</dd>
-
-        <dt class="col-sm-3">Ảnh</dt>
-        <dd class="col-sm-9">
-            <img src="@Model.ImageUrl" style="max-width: 150px;" />
-        </dd>
-    </dl>
-
-    <form asp-action="DeleteConfirmed" method="post">
+    <form asp-action="Delete" method="post" class="mt-4">
         <input type="hidden" asp-for="Id" />
-        <button type="submit" class="btn btn-danger">🗑 Xóa</button>
-        <a asp-action="Index" class="btn btn-secondary">⬅ Trở lại</a>
+        <button type="submit" class="btn btn-danger px-4">🗑️ Xóa</button>
+        <a asp-action="Index" class="btn btn-secondary px-4">⬅ Quay lại</a>
     </form>
 </div>

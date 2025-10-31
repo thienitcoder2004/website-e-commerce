@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace website_e_commerce.Models
 {
@@ -8,35 +7,27 @@ namespace website_e_commerce.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Vui lòng nhập tiêu đề")]
-        [StringLength(150, ErrorMessage = "Tiêu đề tối đa 150 ký tự")]
+        [StringLength(150)]
         public string? Title { get; set; }
 
         [Required(ErrorMessage = "Vui lòng nhập tên tác giả")]
         public string? Author { get; set; }
 
         [Display(Name = "Ngày đăng")]
-        public DateTime PublishedDate { get; set; }
+        public DateTime PublishedDate { get; set; } = DateTime.Now;
 
-        [StringLength(300, ErrorMessage = "Tóm tắt không quá 300 ký tự")]
+        [StringLength(300)]
         public string? Summary { get; set; }
 
         [Display(Name = "Ảnh minh họa")]
         public string? ImageUrl { get; set; }
 
         [Required(ErrorMessage = "Vui lòng nhập nội dung bài viết")]
-        [Display(Name = "Nội dung")]
         public string? Content { get; set; }
 
-        [Display(Name = "Đã xuất bản")]
         public bool IsPublished { get; set; } = true;
-
-        [Display(Name = "Thể loại")]
         public string? Category { get; set; }
-
-        [Display(Name = "Lượt xem")]
         public int ViewCount { get; set; } = 0;
-
-        [Display(Name = "Ngày chỉnh sửa gần nhất")]
         public DateTime? UpdatedDate { get; set; }
     }
 }

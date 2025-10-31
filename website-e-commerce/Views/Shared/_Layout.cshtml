@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/website_e_commerce.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/news.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
           integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
           crossorigin="anonymous"
@@ -42,7 +41,7 @@
 
                     <div class="search_smart">
                         <form action="/Product/Index" method="get" class="header_search_form input-group" role="search">
-                            <input type="text" name="query" required="" class="input-group-field auto-search search-auto form-control" placeholder="Bạn cần tìm gì..." autocomplete="off">
+                            <input type="text" name="query" class="form-control search-auto input-group-field auto-search" placeholder="Bạn cần tìm gì..." autocomplete="off">
                             <button type="submit" class="icon-fallback-text" aria-label="Tìm kiếm" title="Tìm kiếm">
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.6725 16.6412L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                             </button>
@@ -287,5 +286,65 @@
     @await RenderSectionAsync("Scripts", required: false)
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/news.js" asp-append-version="true"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            let searchBox = $('.search-auto');
+            let suggestionBox = $('<div class="suggestion-box shadow-lg"></div>');
+            suggestionBox.css({
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                width: '100%',
+                zIndex: 9999,
+                display: 'none'
+            });
+            searchBox.parent().css('position', 'relative');
+            searchBox.after(suggestionBox);
+
+            searchBox.on('keyup', function () {
+                let term = $(this).val().trim();
+                if (term.length < 1) {
+                    suggestionBox.hide();
+                    return;
+                }
+
+                $.getJSON('/Product/SearchSuggestions', { term: term }, function (data) {
+                    suggestionBox.empty();
+
+                    if (data.length > 0) {
+                        data.forEach(item => {
+                            let html = `
+                            <a href="/Product/Details/${item.id}" class="suggestion-item d-flex justify-content-between align-items-center">
+                                <div class="suggestion-info">
+                                    <div class="product-name">${item.name}</div>
+                                    <div class="product-prices">
+                                        <span class="new-price">${item.newPrice.toLocaleString()}đ</span>
+                                        ${item.oldPrice > 0 ? `<span class="old-price">${item.oldPrice.toLocaleString()}đ</span>` : ''}
+                                    </div>
+                                </div>
+                                <img src="${item.imageUrl}" alt="${item.name}" class="suggestion-img">
+                            </a>`;
+                            suggestionBox.append(html);
+                        });
+                        suggestionBox.show();
+                    } else {
+                        suggestionBox.hide();
+                    }
+                });
+            });
+
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.search-auto, .suggestion-box').length) {
+                    suggestionBox.hide();
+                }
+            });
+        });
+    </script>
+
+
+
 </body>
 </html>
