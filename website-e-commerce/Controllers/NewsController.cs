@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using website_e_commerce.Models;
 
 namespace website_e_commerce.Controllers
@@ -74,110 +75,126 @@ Cùng với thông báo về việc ra mắt vào đầu năm tới, đội ngũ
                 IsPublished = true
             }
         };
-            // ====================== HIỂN THỊ DANH SÁCH ======================
-            public IActionResult Index()
-            {
-                var published = Articles
-                    .Where(n => n.IsPublished)
-                    .OrderByDescending(n => n.PublishedDate)
-                    .ToList();
+        // ====================== HIỂN THỊ DANH SÁCH ======================
+        public IActionResult Index()
+        {
+            var published = Articles
+                .Where(n => n.IsPublished)
+                .OrderByDescending(n => n.PublishedDate)
+                .ToList();
 
-                return View(published);
+            return View(published);
+        }
+
+        // ====================== CHI TIẾT ======================
+        public IActionResult Detail(int id)
+        {
+            var article = GetArticleById(id);
+            if (article == null) return NotFound();
+
+            ViewBag.Related = Articles
+                .Where(a => a.Id != id)
+                .Take(3)
+                .ToList();
+
+            return View(article);
+        }
+
+        // ====================== THÊM ======================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(News model, [FromServices] IHubContext<website_e_commerce.Services.NewsHub> hubContext)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            model.Id = Articles.Any() ? Articles.Max(n => n.Id) + 1 : 1;
+            model.PublishedDate = DateTime.Now;
+            Articles.Add(model);
+
+            // 🟢 Gửi tín hiệu đến tất cả client khi có tin mới
+            await hubContext.Clients.All.SendAsync("ReceiveNews", model.Title);
+
+            TempData["Message"] = "Thêm bài viết thành công!";
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        // ====================== SỬA ======================
+        [HttpGet]
+        public IActionResult Update(int id)
+        {
+            var news = GetArticleById(id);
+            if (news == null) return NotFound();
+            return View(news);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(News model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var existing = GetArticleById(model.Id);
+            if (existing != null)
+            {
+                existing.Title = model.Title;
+                existing.Author = model.Author;
+                existing.Summary = model.Summary;
+                existing.Content = model.Content;
+                existing.ImageUrl = model.ImageUrl;
+                existing.IsPublished = model.IsPublished;
+
+                TempData["Message"] = "Cập nhật bài viết thành công!";
             }
 
-            // ====================== CHI TIẾT ======================
-            public IActionResult Detail(int id)
+            return RedirectToAction(nameof(Index));
+        }
+
+        // ====================== XÓA ======================
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var news = GetArticleById(id);
+            if (news == null) return NotFound();
+            return View(news);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var news = GetArticleById(id);
+            if (news != null)
             {
-                var article = GetArticleById(id);
-                if (article == null) return NotFound();
-
-                ViewBag.Related = Articles
-                    .Where(a => a.Id != id)
-                    .Take(3)
-                    .ToList();
-
-                return View(article);
+                Articles.Remove(news);
+                TempData["Message"] = "Xóa bài viết thành công!";
             }
+            return RedirectToAction(nameof(Index));
+        }
 
-            // ====================== THÊM ======================
-            [HttpGet]
-            public IActionResult Add()
-            {
-                return View();
-            }
+        // ====================== HÀM HỖ TRỢ ======================
+        private News GetArticleById(int id)
+        {
+            return Articles.FirstOrDefault(n => n.Id == id);
+        }
 
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public IActionResult Add(News model)
-            {
-                if (!ModelState.IsValid) return View(model);
-
-                model.Id = Articles.Any() ? Articles.Max(n => n.Id) + 1 : 1;
-                model.PublishedDate = DateTime.Now;
-                Articles.Add(model);
-
-                TempData["Message"] = "Thêm bài viết thành công!";
-                return RedirectToAction(nameof(Index));
-            }
-
-            // ====================== SỬA ======================
-            [HttpGet]
-            public IActionResult Update(int id)
-            {
-                var news = GetArticleById(id);
-                if (news == null) return NotFound();
-                return View(news);
-            }
-
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public IActionResult Update(News model)
-            {
-                if (!ModelState.IsValid) return View(model);
-
-                var existing = GetArticleById(model.Id);
-                if (existing != null)
+        [HttpGet]
+        public IActionResult GetLatest()
+        {
+            var list = Articles
+                .OrderByDescending(n => n.PublishedDate)
+                .Take(5)
+                .Select(n => new
                 {
-                    existing.Title = model.Title;
-                    existing.Author = model.Author;
-                    existing.Summary = model.Summary;
-                    existing.Content = model.Content;
-                    existing.ImageUrl = model.ImageUrl;
-                    existing.IsPublished = model.IsPublished;
+                    n.Id,
+                    n.Title,
+                    PublishedDate = n.PublishedDate.ToString("dd/MM/yyyy HH:mm")
+                })
+                .ToList();
 
-                    TempData["Message"] = "Cập nhật bài viết thành công!";
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-
-            // ====================== XÓA ======================
-            [HttpGet]
-            public IActionResult Delete(int id)
-            {
-                var news = GetArticleById(id);
-                if (news == null) return NotFound();
-                return View(news);
-            }
-
-            [HttpPost, ActionName("Delete")]
-            [ValidateAntiForgeryToken]
-            public IActionResult DeleteConfirmed(int id)
-            {
-                var news = GetArticleById(id);
-                if (news != null)
-                {
-                    Articles.Remove(news);
-                    TempData["Message"] = "Xóa bài viết thành công!";
-                }
-                return RedirectToAction(nameof(Index));
-            }
-
-            // ====================== HÀM HỖ TRỢ ======================
-            private News GetArticleById(int id)
-            {
-                return Articles.FirstOrDefault(n => n.Id == id);
-            }
+            return Json(list);
         }
 
     }
+
+}

@@ -11,9 +11,19 @@
             <label class="form-label fw-semibold">Địa chỉ giao hàng</label>
             <input type="text" name="shippingAddress" class="form-control" required />
         </div>
+
         <div class="mb-3">
             <label class="form-label fw-semibold">Ghi chú</label>
             <textarea name="notes" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Phương thức thanh toán</label>
+            <select name="paymentMethod" class="form-select" required>
+                <option value="COD">Thanh toán khi nhận hàng (COD)</option>
+                <option value="Momo">Ví MoMo</option>
+                <option value="VNPay">VNPay</option>
+            </select>
         </div>
 
         <div class="border p-3 rounded bg-light mb-3">
@@ -21,10 +31,7 @@
             <ul class="list-unstyled">
                 @foreach (var item in Model.Items)
                 {
-                    <li>
-                        @item.Name × @item.Quantity —
-                        <span class="text-danger fw-bold">@String.Format("{0:N0} đ", item.Total)</span>
-                    </li>
+                    <li>@item.Name × @item.Quantity — <span class="text-danger fw-bold">@String.Format("{0:N0} đ", item.Total)</span></li>
                 }
             </ul>
             <hr />

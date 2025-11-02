@@ -1,71 +1,84 @@
 ﻿@model website_e_commerce.Models.Product
-
 @{
     ViewData["Title"] = "Thêm sản phẩm";
 }
 
-<div class="container mt-4">
-    <h2 class="fw-bold mb-4 text-center">➕ Thêm sản phẩm mới</h2>
+<div class="container py-5">
+    <h2 class="fw-bold text-danger mb-4 text-center">➕ Thêm sản phẩm mới</h2>
 
-    <form asp-action="Add" enctype="multipart/form-data" method="post" class="shadow p-4 rounded bg-light">
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label asp-for="Name" class="form-label">Tên sản phẩm</label>
-                <input asp-for="Name" class="form-control" />
-            </div>
-            <div class="col-md-3">
-                <label asp-for="OldPrice" class="form-label">Giá cũ</label>
-                <input asp-for="OldPrice" class="form-control" />
-            </div>
-            <div class="col-md-3">
-                <label asp-for="NewPrice" class="form-label">Giá mới</label>
-                <input asp-for="NewPrice" class="form-control" />
-            </div>
+    <form asp-action="Add" method="post" enctype="multipart/form-data" class="shadow p-4 bg-light rounded-4">
 
+        <div class="mb-3">
+            <label class="form-label fw-bold">Tên sản phẩm</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <!-- 💰 Giá tiền -->
+        <div class="row mb-3">
             <div class="col-md-4">
-                <label asp-for="DiscountPercent" class="form-label">Giảm giá</label>
-                <input asp-for="DiscountPercent" class="form-control" />
+                <label class="form-label fw-bold">Giá cũ</label>
+                <input asp-for="OldPrice" type="number" id="oldPrice" class="form-control" placeholder="Nhập giá gốc" />
+                <span asp-validation-for="OldPrice" class="text-danger"></span>
             </div>
-
             <div class="col-md-4">
-                <label asp-for="CategoryId" class="form-label">Danh mục</label>
-                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select"></select>
+                <label class="form-label fw-bold">% giảm giá</label>
+                <input asp-for="DiscountPercent" type="number" id="discountPercent" class="form-control" placeholder="Nhập phần trăm giảm" />
+                <span asp-validation-for="DiscountPercent" class="text-danger"></span>
             </div>
-
             <div class="col-md-4">
-                <label class="form-label">Ảnh chính</label>
-                <input type="file" name="imageUrl" class="form-control" />
-            </div>
-
-            <div class="col-md-12">
-                <label class="form-label">Ảnh phụ (nhiều ảnh)</label>
-                <input type="file" name="extraImages" class="form-control" multiple />
-            </div>
-
-            <div class="col-md-12">
-                <label asp-for="Description" class="form-label"></label>
-                <textarea asp-for="Description" rows="3" class="form-control"></textarea>
-            </div>
-
-            <div class="col-md-12">
-                <label asp-for="Specifications" class="form-label"></label>
-                <textarea asp-for="Specifications" rows="3" class="form-control"></textarea>
-            </div>
-
-            <div class="col-md-6">
-                <label asp-for="GiftPromotion" class="form-label"></label>
-                <textarea asp-for="GiftPromotion" class="form-control"></textarea>
-            </div>
-
-            <div class="col-md-6">
-                <label asp-for="SalePromotion" class="form-label"></label>
-                <textarea asp-for="SalePromotion" class="form-control"></textarea>
+                <label class="form-label fw-bold">Giá sau giảm</label>
+                <input asp-for="NewPrice" type="number" id="newPrice" class="form-control" readonly />
+                <small class="text-muted">Tự tính theo Giá cũ và % giảm</small>
             </div>
         </div>
 
-        <div class="mt-4 text-center">
-            <button type="submit" class="btn btn-primary px-4">💾 Lưu</button>
-            <a asp-action="Index" class="btn btn-secondary px-4">⬅ Quay lại</a>
+        <!-- 📦 Kho -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Số lượng tồn kho</label>
+            <input asp-for="StockQuantity" type="number" class="form-control" placeholder="Nhập số lượng tồn kho ban đầu" />
+            <span asp-validation-for="StockQuantity" class="text-danger"></span>
+        </div>
+
+        <!-- 📂 Danh mục -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Danh mục</label>
+            <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select"></select>
+        </div>
+
+        <!-- 🖼️ Ảnh -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Ảnh đại diện</label>
+            <input type="file" name="imageUrl" class="form-control" />
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-danger px-4">Lưu sản phẩm</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Quay lại</a>
         </div>
     </form>
 </div>
+
+<script>
+    // 🧮 Tự động tính giá giảm
+    document.addEventListener("DOMContentLoaded", () => {
+        const oldPriceInput = document.getElementById("oldPrice");
+        const discountInput = document.getElementById("discountPercent");
+        const newPriceInput = document.getElementById("newPrice");
+
+        function updateNewPrice() {
+            const oldPrice = parseFloat(oldPriceInput.value) || 0;
+            const discount = parseFloat(discountInput.value) || 0;
+
+            if (oldPrice > 0 && discount >= 0 && discount <= 100) {
+                const newPrice = oldPrice - (oldPrice * discount / 100);
+                newPriceInput.value = newPrice.toFixed(0);
+            } else {
+                newPriceInput.value = "";
+            }
+        }
+
+        oldPriceInput.addEventListener("input", updateNewPrice);
+        discountInput.addEventListener("input", updateNewPrice);
+    });
+</script>

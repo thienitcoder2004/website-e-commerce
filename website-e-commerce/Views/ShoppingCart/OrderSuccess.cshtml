@@ -1,11 +1,82 @@
 ﻿@{
-    ViewData["Title"] = "Thanh toán thành công";
+    ViewData["Title"] = "Đặt hàng thành công";
 }
 
-<div class="container text-center mt-5">
-    <div class="alert alert-success p-5 rounded-4 shadow-sm">
-        <h2 class="mb-3">🎉 Thanh toán thành công!</h2>
-        <p>Cảm ơn bạn đã mua hàng tại <strong>E-Commerce Website</strong> 💖</p>
-        <a asp-controller="Product" asp-action="Index" class="btn btn-outline-primary mt-3">⬅ Tiếp tục mua sắm</a>
+<div class="container text-center py-5">
+    <h2 class="text-success fw-bold">🎉 Đặt hàng thành công!</h2>
+    <p class="mt-3">Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.</p>
+
+    <div class="card shadow-sm mx-auto mt-4" style="max-width: 400px;">
+        <div class="card-body">
+            <h5>Mã đơn hàng: <span class="fw-bold text-primary">@ViewBag.Order?.Id</span></h5>
+            <p>Tổng tiền: <span class="fw-bold text-danger">@String.Format("{0:N0} đ", ViewBag.Order?.TotalPrice)</span></p>
+            <p>Phương thức: <b>@ViewBag.Payment?.PaymentMethod</b></p>
+            <p>
+                Trạng thái thanh toán:
+                <b class="@(ViewBag.Payment?.Status == "Success" ? "text-success" : "text-danger")">
+                    @ViewBag.Payment?.Status
+                </b>
+            </p>
+        </div>
     </div>
+
+    <a href="/" class="btn btn-outline-success mt-4">Về trang chủ</a>
 </div>
+
+<script>
+    window.addEventListener("load", function () {
+        const orderId = "@ViewBag.Order?.Id";
+        const totalPrice = "@ViewBag.Order?.TotalPrice";
+        const method = "@ViewBag.Payment?.PaymentMethod";
+
+        // ✅ Chuyển số thành chữ tiếng Việt
+        function readNumber(num) {
+            const dv = ['','một','hai','ba','bốn','năm','sáu','bảy','tám','chín'];
+            const chuc = ['','mươi','trăm','nghìn','triệu','tỷ'];
+            num = parseInt(num);
+            if (isNaN(num) || num === 0) return "không đồng";
+            function convertBlock(num) {
+                let s = '';
+                const tr = Math.floor(num / 100);
+                const ch = Math.floor((num % 100) / 10);
+                const dvn = num % 10;
+                if (tr > 0) s += dv[tr] + " trăm ";
+                if (ch > 0) {
+                    if (ch === 1) s += "mười ";
+                    else s += dv[ch] + " mươi ";
+                }
+                if (dvn > 0) {
+                    if (ch === 0 && tr > 0) s += "linh ";
+                    if (dvn === 5 && ch !== 0) s += "lăm ";
+                    else if (dvn === 1 && ch > 1) s += "mốt ";
+                    else s += dv[dvn] + " ";
+                }
+                return s.trim();
+            }
+            const parts = [];
+            const units = ["", " nghìn", " triệu", " tỷ"];
+            let i = 0;
+            while (num > 0) {
+                const block = num % 1000;
+                if (block > 0) {
+                    parts.unshift(convertBlock(block) + units[i]);
+                }
+                num = Math.floor(num / 1000);
+                i++;
+            }
+            return parts.join(" ").trim() + " đồng";
+        }
+
+        const message = `Đã thanh toán thành công. ${readNumber(totalPrice)}. Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.`;
+
+        const utterance = new SpeechSynthesisUtterance(message);
+        utterance.lang = 'vi-VN';
+        utterance.pitch = 0.9; 
+        utterance.rate = 1.0;
+        utterance.volume = 1;
+
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utterance);
+    });
+</script>
+

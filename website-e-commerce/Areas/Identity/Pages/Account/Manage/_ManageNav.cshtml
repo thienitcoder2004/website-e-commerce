@@ -1,16 +1,78 @@
 ﻿@using website_e_commerce.Models
-    @inject SignInManager<ApplicationUser> SignInManager
-    @{
-        var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+<style>
+    .account-sidebar {
+        background: linear-gradient(135deg, #ffffff, #f0f4f8);
+        border-radius: 15px;
+        padding: 20px 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: all 0.3s ease-in-out;
     }
-    <ul class="nav nav-pills flex-column">
-        <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
-        <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Email</a></li>
-        <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
+
+        .account-sidebar:hover {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+
+        .account-sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            font-weight: 500;
+            color: #333;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+            .account-sidebar .nav-link i {
+                font-size: 18px;
+                color: #0d6efd;
+            }
+
+            .account-sidebar .nav-link.active,
+            .account-sidebar .nav-link:hover {
+                background-color: #0d6efd;
+                color: #fff;
+            }
+
+                .account-sidebar .nav-link.active i,
+                .account-sidebar .nav-link:hover i {
+                    color: #fff;
+                }
+</style>
+
+<div class="account-sidebar">
+    <h5 class="text-center fw-bold mb-3 text-primary">
+        <i class="fas fa-user-circle me-2"></i> Quản lý tài khoản
+    </h5>
+    <hr />
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">
+                <i class="fas fa-id-card"></i> Thông tin cá nhân
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">
+                <i class="fas fa-envelope"></i> Email
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">
+                <i class="fas fa-lock"></i> Mật khẩu
+            </a>
+        </li>
         @if (hasExternalLogins)
         {
-            <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>
+            <li class="nav-item">
+                <a class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" id="external-login" asp-page="./ExternalLogins">
+                    <i class="fas fa-share-alt"></i> Đăng nhập ngoài
+                </a>
+            </li>
         }
-        <li class="nav-item"><a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
-        <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal data</a></li>
     </ul>
+</div>

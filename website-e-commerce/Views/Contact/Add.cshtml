@@ -1,0 +1,93 @@
+﻿<section class="section-contact mt-4">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li class="home">
+                <a href="/"><span>Trang chủ</span></a>
+                <span class="mr_lr">&nbsp;<i class="fas fa-chevron-right"></i>&nbsp;</span>
+            </li>
+            <li><strong><span>Liên hệ</span></strong></li>
+        </ul>
+    </div>
+
+    <div class="layout-contact">
+        <div class="container">
+            <div class="row row-fix">
+
+                <!-- 🔹 Thông tin cửa hàng -->
+                <div class="col-lg-6 col-12 col-fix">
+                    <div class="contact block-background">
+                        <h4>Cửa hàng Gear Fiver</h4>
+                        <p class="content">
+                            Gear Fiver cam kết mang đến cho khách hàng trải nghiệm tốt nhất
+                            cùng sản phẩm chính hãng, hiện đại theo xu hướng 4.0.
+                        </p>
+
+                        <div class="info-contact">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <div>
+                                        <b>Địa chỉ</b>
+                                        <span>70 Lữ Gia, Phường 15, Quận 11, TP.HCM</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-clock"></i>
+                                    <div>
+                                        <b>Thời gian làm việc</b>
+                                        <span>8h - 22h (Thứ 2 - Chủ nhật)</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-phone"></i>
+                                    <div>
+                                        <b>Hotline</b>
+                                        <a href="tel:0123456789">0123 456 789</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-envelope"></i>
+                                    <div>
+                                        <b>Email</b>
+                                        <span>support@gearfiver.com</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🔹 Form liên hệ -->
+                <div class="col-lg-6 col-12 col-fix">
+                    <div class="contact-form block-background">
+                        <h4>Gửi thông tin liên hệ</h4>
+                        <form asp-action="Add" method="post" class="form-contact">
+                            <div class="form-group">
+                                <label>Họ và tên</label>
+                                <input type="text" name="FullName" class="form-control" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" name="Email" class="form-control" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Số điện thoại</label>
+                                <input type="text" name="Phone" class="form-control" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Nội dung</label>
+                                <textarea name="Message" rows="4" class="form-control" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-submit">Gửi liên hệ</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

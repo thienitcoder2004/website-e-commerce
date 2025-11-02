@@ -9,9 +9,14 @@ namespace website_e_commerce.Models
     {
         public int Id { get; set; }
 
+        // 🔹 Người đặt hàng (liên kết tới ApplicationUser)
         [ForeignKey("ApplicationUser")]
         public string UserId { get; set; }
 
+        [ValidateNever]
+        public ApplicationUser ApplicationUser { get; set; }
+
+        // 🔹 Thông tin đơn hàng
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
         [Column(TypeName = "decimal(18,2)")]
@@ -20,9 +25,11 @@ namespace website_e_commerce.Models
         public string ShippingAddress { get; set; }
         public string? Notes { get; set; }
 
+        // 🔹 Liên kết đến chi tiết và thanh toán
         [ValidateNever]
-        public ApplicationUser ApplicationUser { get; set; }
-
         public List<OrderDetail> OrderDetails { get; set; } = new();
+
+        [ValidateNever]
+        public List<Payment> Payments { get; set; } = new(); // ✅ thêm phần liên kết payment
     }
 }

@@ -40,6 +40,15 @@ namespace website_e_commerce.Models
         [Display(Name = "Ảnh đại diện")]
         public string? ImageUrl { get; set; }
 
+        // 🧩 Quản lý kho
+        [Display(Name = "Số lượng tồn kho")]
+        [Range(0, int.MaxValue, ErrorMessage = "Số lượng tồn không hợp lệ")]
+        public int StockQuantity { get; set; } = 0;
+
+        [Display(Name = "Số lượng hiển thị web")]
+        [Range(0, int.MaxValue, ErrorMessage = "Số lượng web không hợp lệ")]
+        public int WebQuantity { get; set; } = 0;
+
         public Category? Category { get; set; }
         public List<ProductImage>? ProductImages { get; set; }
         public List<Reviews>? Reviews { get; set; }

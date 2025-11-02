@@ -40,6 +40,26 @@
             <p class="text-muted text-decoration-line-through">@String.Format("{0:N0}đ", Model.OldPrice)</p>
             <span class="badge bg-danger">-@Model.DiscountPercent%</span>
 
+            <div class="mt-3">
+                @if (Model.WebQuantity <= 0)
+                {
+                    <div class="alert alert-danger fw-bold py-2">
+                        ❌ Sản phẩm hiện đã <span class="text-uppercase">hết hàng</span>
+                    </div>
+                }
+                else if (Model.WebQuantity < 10)
+                {
+                    <div class="alert alert-warning fw-bold py-2">
+                        ⚠️ Chỉ còn lại <span class="text-dark">@Model.WebQuantity</span> sản phẩm trong kho!
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-success fw-bold py-2">
+                        ✅ Còn <span class="text-dark">@Model.WebQuantity</span> sản phẩm sẵn hàng
+                    </div>
+                }
+            </div>
             <div class="mt-3 text-center">
                 <form id="addToCartForm" asp-controller="ShoppingCart" asp-action="AddToCart" method="post"
                       class="d-flex flex-column align-items-start gap-3">
@@ -134,24 +154,16 @@
             <!-- Tab 1 -->
             <div id="tab-specs" class="tab-pane active">
                 <div class="table-responsive">
-                    <table class="table table-bordered align-middle mb-0">
-                        <tbody>
-                            @if (!string.IsNullOrEmpty(Model.Specifications))
-                            {
-                                @foreach (var line in Model.Specifications.Split('\n'))
-                                {
-                                    var parts = line.Split(':');
-                                    if (parts.Length == 2)
-                                    {
-                                        <tr>
-                                            <th style="width: 25%">@parts[0]</th>
-                                            <td>@parts[1]</td>
-                                        </tr>
-                                    }
-                                }
-                            }
-                        </tbody>
-                    </table>
+                    <div class="bg-white p-3 rounded-3 border">
+                        @if (!string.IsNullOrEmpty(Model.Specifications))
+                        {
+                            @Html.Raw(Model.Specifications.Replace("\\n", "<br/>"))
+                        }
+                        else
+                        {
+                            <p class="text-muted">Chưa có thông số kỹ thuật cho sản phẩm này.</p>
+                        }
+                    </div>
                 </div>
             </div>
 
