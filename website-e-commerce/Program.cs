@@ -31,12 +31,19 @@ builder.Services.AddScoped<ICategoryRepository, MockCategoryRepository>();
 builder.Services.AddScoped<IProductRepository, MockProductRepository>();
 builder.Services.AddScoped<INewsRepository, MockNewsRepository>();
 builder.Services.AddScoped<IReviewRepository, MockReviewRepository>();
+builder.Services.AddScoped<INewsRepository, MockNewsRepository>();
+builder.Services.AddScoped<website_e_commerce.Services.EmailService>();
+
+builder.Services.AddSignalR();
+
 
 builder.Services.AddAuthorization();
 builder.Services.AddRazorPages();
 builder.Services.AddSession();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
+app.MapHub<website_e_commerce.Services.NewsHub>("/newsHub");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -57,7 +64,6 @@ app.UseAuthorization();
 app.MapStaticAssets();
 
 app.MapRazorPages();
-
 
 //builder.Services.ConfigureApplicationCookie(options =>
 //{
@@ -109,7 +115,7 @@ app.MapControllerRoute(
 //        {
 //            UserName = adminEmail,
 //            Email = adminEmail,
-//            FullName = "Admin",
+//            //FullName = "Admin",
 //            EmailConfirmed = true
 //        };
 //        var result = await userManager.CreateAsync(adminUser, adminPassword);

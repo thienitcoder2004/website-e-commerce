@@ -1,0 +1,20 @@
+﻿@model website_e_commerce.Models.Contact
+
+@{
+    ViewData["Title"] = "Xóa liên hệ";
+}
+
+<h3 class="text-danger mb-3">⚠️ Xác nhận xóa liên hệ</h3>
+
+<div class="alert alert-warning">
+    <p>Bạn có chắc muốn xóa liên hệ của <strong>@Model.FullName</strong> không?</p>
+    <p><b>Email:</b> @Model.Email</p>
+    <p><b>Số điện thoại:</b> @Model.Phone</p>
+    <p><b>Nội dung:</b> @Model.Message</p>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

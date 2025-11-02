@@ -22,4 +22,5 @@ document.addEventListener("DOMContentLoaded", () => {
             quantityInput.value = current + 1;
         });
     }
+
 });

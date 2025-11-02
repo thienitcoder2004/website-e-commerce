@@ -1,0 +1,62 @@
+﻿@model IEnumerable<website_e_commerce.Models.Order>
+@{
+    ViewData["Title"] = "Quản lý đơn hàng";
+}
+
+<div class="container py-5">
+    <h2 class="fw-bold text-center text-danger mb-4">📦 Quản lý đơn hàng</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <table class="table table-hover shadow-sm">
+        <thead class="table-danger text-center">
+            <tr>
+                <th>Mã đơn</th>
+                <th>Khách hàng</th>
+                <th>Ngày đặt</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody class="text-center align-middle">
+            @foreach (var order in Model)
+            {
+                var payment = order.Payments.FirstOrDefault();
+                <tr>
+                    <td>#@order.Id</td>
+                    <td>@order.ApplicationUser?.HoTen</td>
+                    <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td class="text-danger fw-bold">@String.Format("{0:N0} đ", order.TotalPrice)</td>
+                    <td>
+                        <span class="badge bg-@(payment == null ? "secondary" :
+                                                                               payment.Status == "Success" ? "success" :
+                                                                               payment.Status == "Pending" ? "warning text-dark" :
+                                                                               "danger")">
+                            @(payment == null
+                                                    ? "Chưa thanh toán"
+                                                    : payment.Status == "Success" ? "Thành công"
+                                                    : payment.Status == "Pending" ? "Đang chờ"
+                                                    : "Thất bại")
+                    </span>
+                </td>
+                <td class="d-flex justify-content-center gap-2">
+                    <a asp-action="Details" asp-route-id="@order.Id"
+                       class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
+
+                        <form asp-action="DeleteConfirmed" method="post" asp-route-id="@order.Id"
+                              onsubmit="return confirm('⚠️ Bạn có chắc muốn xoá đơn hàng này không?');">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Xoá</button>
+                        </form>
+                    </td>
+                </tr>
+                        }
+        </tbody>
+    </table>
+</div>

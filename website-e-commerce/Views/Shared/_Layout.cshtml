@@ -28,56 +28,178 @@
 
     <!-- Header -->
     <header class="header">
-        <div class="header_main">
-            <div class="container header_top">
-                <a href="/">
-                    <img class="logo" src="~/images/logo-wb.png" alt="Alternate Text" />
+        <!-- 🔹 Thanh trên cùng -->
+        <div class="header-top">
+            <div class="container">
+                <a href="/" class="logo">
+                    <img src="~/images/logo-wb.png" alt="Logo">
                 </a>
-                <div class="header_menu">
-                    <a href="#" class="header_btn_category">
-                        <i class="fa-solid fa-bars"></i>
-                        Danh mục
-                    </a>
 
-                    <div class="search_smart">
-                        <form action="/Product/Index" method="get" class="header_search_form input-group" role="search">
-                            <input type="text" name="query" class="form-control search-auto input-group-field auto-search" placeholder="Bạn cần tìm gì..." autocomplete="off">
-                            <button type="submit" class="icon-fallback-text" aria-label="Tìm kiếm" title="Tìm kiếm">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.6725 16.6412L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                            </button>
-                        </form>
+                <!-- Ô tìm kiếm -->
+                <form action="/Product/Index" method="get" class="search-bar">
+                    <input type="text" name="query" placeholder="Bạn cần tìm gì..." autocomplete="off">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+
+                <!-- Tiện ích -->
+                <div class="header-actions">
+                    <!-- 🔔 THÔNG BÁO -->
+                    <div class="nav-item dropdown" id="newsWrapper" style="position: relative;">
+                        <a class="nav-link" href="javascript:void(0);" id="newsToggle">
+                            <i class="fa-solid fa-bell" id="bellIcon"></i>
+                            <span class="badge bg-danger" id="newsCount">0</span>
+                        </a>
+
+                        <div id="newsPopup" class="shadow-lg rounded-3 bg-white border position-absolute end-0 mt-2"
+                             style="display:none; width:340px; max-height:420px; overflow-y:auto; z-index:1050;">
+                            <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                                <strong>📰 Tin tức mới nhất</strong>
+                                <a href="/News/Index" class="text-decoration-none small text-primary">Xem tất cả</a>
+                            </div>
+                            <ul class="list-group list-group-flush" id="newsList">
+                                <li class="list-group-item text-center text-muted">Đang tải...</li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <!-- Thanh tiện ích -->
-                    <div class="topbar_utility">
-                        <div class="utility_item">
-                            <i class="fas fa-headset"></i>
-                            <span>Hotline<br>1900.5301</span>
-                        </div>
-                        <div class="utility_item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Hệ thống<br>Showroom</span>
-                        </div>
-                        <div class="utility_item">
-                            <i class="fas fa-clipboard-list"></i>
-                            <span>Tra cứu<br>đơn hàng</span>
-                        </div>
-                        <div class="utility_item">
-                            <i class="fas fa-shopping-cart"></i>
-                            <form>
-                                <a href="/ShoppingCart/Index" title="Giỏ hàng" class="text-white">
-                                    <span>Giỏ hàng</span>
-                                </a>
-                            </form>
-                        </div>
-                        <div class="utility_item">
-                            <i class="fas fa-user"></i>
-                            <partial name="_LoginPartial"></partial>
-                        </div>
-                    </div>
+                    <!-- 🔗 CÁC NÚT KHÁC -->
+                    <a href="/Contact/Add"><i class="fas fa-headset"></i><span>Liên hệ</span></a>
+                    <a href="#"><i class="fas fa-clipboard-list"></i><span>Tra cứu<br />đơn hàng</span></a>
+                    <a href="/ShoppingCart/Index"><i class="fas fa-shopping-cart"></i><span>Giỏ hàng</span></a>
+                    <div class="user"><partial name="_LoginPartial"></partial></div>
                 </div>
+
+
             </div>
         </div>
+
+        <!-- 🔹 MENU CHÍNH -->
+        <nav class="main-nav">
+            <div class="container">
+                <ul class="menu">
+                    <li class="dropdown">
+                        <a href="#"><i class="fas fa-mobile-alt"></i> Điện thoại</a>
+                        <div class="submenu">
+                            <div>
+                                <h6>Hãng nổi bật</h6>
+                                <ul>
+                                    <li><a href="#">iPhone</a></li>
+                                    <li><a href="#">Samsung</a></li>
+                                    <li><a href="#">Xiaomi</a></li>
+                                    <li><a href="#">OPPO</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h6>Phân khúc giá</h6>
+                                <ul>
+                                    <li><a href="#">Dưới 5 triệu</a></li>
+                                    <li><a href="#">5 - 10 triệu</a></li>
+                                    <li><a href="#">Trên 10 triệu</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#"><i class="fas fa-laptop"></i> Laptop</a>
+                        <div class="submenu">
+                            <div>
+                                <h6>Thương hiệu</h6>
+                                <ul>
+                                    <li><a href="#">MacBook</a></li>
+                                    <li><a href="#">ASUS</a></li>
+                                    <li><a href="#">HP</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h6>Nhu cầu</h6>
+                                <ul>
+                                    <li><a href="#">Văn phòng</a></li>
+                                    <li><a href="#">Gaming</a></li>
+                                    <li><a href="#">Đồ họa</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#"><i class="fas fa-headphones"></i> Phụ kiện</a>
+                        <div class="submenu">
+                            <ul>
+                                <li><a href="#">Tai nghe</a></li>
+                                <li><a href="#">Sạc dự phòng</a></li>
+                                <li><a href="#">Ốp lưng</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#"><i class="fas fa-tablet-alt"></i> Tablet</a>
+                        <div class="submenu">
+                            <ul>
+                                <li><a href="#">iPad</a></li>
+                                <li><a href="#">Samsung</a></li>
+                                <li><a href="#">Xiaomi</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#"><i class="fas fa-tv"></i> Tivi</a>
+                        <div class="submenu">
+                            <ul>
+                                <li><a href="#">Smart Tivi</a></li>
+                                <li><a href="#">Android Tivi</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#"><i class="fas fa-clock"></i> Đồng hồ</a>
+                        <div class="submenu">
+                            <ul>
+                                <li><a href="#">Đồng hồ nam</a></li>
+                                <li><a href="#">Đồng hồ nữ</a></li>
+                                <li><a href="#">Smartwatch</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#"><i class="fas fa-blender"></i> Điện tử, điện lạnh</a>
+                        <div class="submenu">
+                            <ul>
+                                <li><a href="#">Quạt, điều hòa, máy lọc nước</a></li>
+                                <li><a href="#">Tủ lạnh - điều hòa</a></li>
+                                <li><a href="#">Máy giặt, máy sấy</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#"><i class="fas fa-blender"></i> Gia dụng</a>
+                        <div class="submenu">
+                            <ul>
+                                <li><a href="#">Ấm siêu tốc, nồi cơm điện, nồi chiên</a></li>
+                                <li><a href="#">Thiết bị bếp, nồi, chảo, máy rửa bát</a></li>
+                                <li><a href="#">Nồi áp suất, nồi lẩu điện, bếp điện</a></li>
+                                <li><a href="#">Máy xay sinh tố, điện gia dụng</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#"><i class="fas fa-blender"></i> Kết nối và giải trí</a>
+                        <div class="submenu">
+                            <ul>
+                                <li><a href="#">Camera, Thiết bị mạng</a></li>
+                                <li><a href="#">Thiết bị chơi game, Máy chiếu, Bàn, Ghế</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </header>
 
     <!-- main -->
@@ -343,8 +465,89 @@
             });
         });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
 
+    <script>
+        const newsPopup = document.getElementById("newsPopup");
+        const newsToggle = document.getElementById("newsToggle");
+        const newsWrapper = document.getElementById("newsWrapper");
+        const newsCount = document.getElementById("newsCount");
+        const newsList = document.getElementById("newsList");
+        const bellIcon = document.getElementById("bellIcon");
 
+        newsToggle.addEventListener("click", () => {
+            const visible = newsPopup.style.display === "block";
+            newsPopup.style.display = visible ? "none" : "block";
+            if (!visible) loadLatestNews();
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!newsWrapper.contains(e.target)) {
+                newsPopup.style.display = "none";
+            }
+        });
+
+        // 🔄 Hàm load tin tức
+        function loadLatestNews() {
+            fetch("/News/GetLatest")
+                .then(res => res.json())
+                .then(data => {
+                    newsList.innerHTML = "";
+                    if (data.length === 0) {
+                        newsList.innerHTML = `<li class="list-group-item text-center text-muted">Không có tin mới</li>`;
+                    } else {
+                        data.forEach(n => {
+                            newsList.innerHTML += `
+                                <li class="list-group-item">
+                                    <a href="/News/Detail/${n.id}" class="text-decoration-none text-dark d-block">
+                                        <div class="fw-semibold">${n.title}</div>
+                                        <small class="text-muted">${n.publishedDate}</small>
+                                    </a>
+                                </li>`;
+                        });
+                    }
+                    newsCount.innerText = data.length;
+                })
+                .catch(() => {
+                    newsList.innerHTML = `<li class="list-group-item text-center text-danger">Lỗi tải dữ liệu</li>`;
+                });
+        }
+
+        // 🕒 Auto reload mỗi 30s
+        setInterval(loadLatestNews, 30000);
+        loadLatestNews();
+
+        // 🔔 Kết nối SignalR
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/newsHub")
+            .build();
+
+        // Khi nhận tin mới từ server
+        connection.on("ReceiveNews", (title) => {
+            // Rung chuông
+            bellIcon.classList.add("ring");
+            setTimeout(() => bellIcon.classList.remove("ring"), 2000);
+
+            // Cập nhật danh sách tin mới nhất
+            loadLatestNews();
+
+            // Hiển thị thông báo nhỏ
+            const toast = document.createElement("div");
+            toast.className = "position-fixed top-0 end-0 p-3";
+            toast.innerHTML = `
+                <div class="toast align-items-center text-bg-primary border-0 show" style="z-index:2000">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            📰 Tin mới: <strong>${title}</strong>
+                        </div>
+                    </div>
+                </div>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        });
+
+        connection.start().catch(err => console.error(err.toString()));
+    </script>
 
 </body>
 </html>
