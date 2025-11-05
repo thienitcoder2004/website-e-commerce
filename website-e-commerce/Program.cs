@@ -33,9 +33,7 @@ builder.Services.AddScoped<INewsRepository, MockNewsRepository>();
 builder.Services.AddScoped<IReviewRepository, MockReviewRepository>();
 builder.Services.AddScoped<INewsRepository, MockNewsRepository>();
 builder.Services.AddScoped<website_e_commerce.Services.EmailService>();
-
-builder.Services.AddSignalR();
-
+builder.Services.AddScoped<website_e_commerce.Services.GeminiChatService>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddRazorPages();

@@ -17,11 +17,7 @@ namespace website_e_commerce.Models
 
         public string Status { get; set; } // Success / Failed / Pending
         public DateTime PaymentDate { get; set; } = DateTime.Now;
-
-        // ✅ Tên người đặt hàng (lưu cố định)
         public string CustomerName { get; set; }
-
-        // 🔹 Liên kết đến Order
         public Order Order { get; set; }
     }
 }

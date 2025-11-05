@@ -28,9 +28,17 @@ namespace website_e_commerce.Controllers
         public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
         {
             var product = await _productRepository.GetByIdAsync(productId);
-            if (product == null) return NotFound();
+            if (product == null) 
+                return NotFound();
+
+            if (product.WebQuantity <= 0)
+                return Json(new { success = false, message = "Sản phẩm đã hết hàng, không thể thêm vào giỏ." });
+
+            if (quantity > product.WebQuantity)
+                return Json(new { success = false, message = $"Chỉ còn {product.WebQuantity} sản phẩm trong kho." });
 
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
+            
             cart.AddItem(new CartItem
             {
                 ProductId = product.Id,
@@ -38,6 +46,7 @@ namespace website_e_commerce.Controllers
                 Price = product.NewPrice,
                 Quantity = quantity
             });
+
             HttpContext.Session.SetObjectAsJson("Cart", cart);
 
             return RedirectToAction("Index");
@@ -116,12 +125,14 @@ namespace website_e_commerce.Controllers
 
             var user = await _userManager.GetUserAsync(User);
 
+            // ✅ Tạo đơn hàng
             var order = new Order
             {
                 UserId = user.Id,
                 ShippingAddress = shippingAddress,
                 Notes = notes,
                 TotalPrice = cart.GetTotal(),
+                OrderDate = DateTime.Now,
                 OrderDetails = cart.Items.Select(i => new OrderDetail
                 {
                     ProductId = i.ProductId,
@@ -129,22 +140,26 @@ namespace website_e_commerce.Controllers
                     Price = i.Price
                 }).ToList()
             };
+
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
+            // ✅ Tạo thông tin thanh toán
             var payment = new Payment
             {
                 OrderId = order.Id,
                 PaymentMethod = paymentMethod,
                 Amount = order.TotalPrice,
-                Status = "Pending",
+                Status = "Pending", // ❗Luôn ở trạng thái chờ xác nhận
                 TransactionId = Guid.NewGuid().ToString(),
-                CustomerName = user.HoTen ?? user.UserName
+                CustomerName = user.HoTen ?? user.UserName,
+                PaymentDate = DateTime.Now
             };
+
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
 
-            // ✅ Nếu là thanh toán online
+            // ✅ Nếu là thanh toán online → chuyển hướng sang cổng
             if (paymentMethod == "Momo")
             {
                 var momoUrl = await GenerateMomoPaymentUrl(order, payment);
@@ -156,14 +171,11 @@ namespace website_e_commerce.Controllers
                 return Redirect(vnpayUrl);
             }
 
-            // ✅ Nếu là thanh toán COD → trừ hàng luôn
-            payment.Status = "Success";
-            await _context.SaveChangesAsync();
-            await UpdateStockAfterPaymentSuccess(order.Id);
-
+            // ✅ Nếu là COD → giữ trạng thái Pending, KHÔNG trừ kho ngay
             HttpContext.Session.Remove("Cart");
             return RedirectToAction("OrderSuccess", new { orderId = order.Id });
         }
+
 
         // ✅ Giảm tồn kho sau khi thanh toán thành công
         private async Task UpdateStockAfterPaymentSuccess(int orderId)
