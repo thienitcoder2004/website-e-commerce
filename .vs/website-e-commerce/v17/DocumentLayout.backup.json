@@ -3,20 +3,52 @@
   "WorkspaceRootPath": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\services\\geminichatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\services\\geminichatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\views\\promotion\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\views\\promotion\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\models\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\models\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\views\\promotion\\add.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\views\\promotion\\add.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\controllers\\chatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\controllers\\chatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\controllers\\promotioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\controllers\\promotioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\wwwroot\\js\\chatbot.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\wwwroot\\js\\chatbot.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\models\\promotioncode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\models\\promotioncode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\controllers\\shoppingcartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\controllers\\shoppingcartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\views\\shoppingcart\\ordersuccess.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\views\\shoppingcart\\ordersuccess.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\views\\shoppingcart\\checkout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\views\\shoppingcart\\checkout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\views\\shoppingcart\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\views\\shoppingcart\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\views\\promotion\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\views\\promotion\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\repositories\\mockpromotionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\repositories\\mockpromotionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\repositories\\ipromotionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\repositories\\ipromotionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,58 +58,162 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ApplicationDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Models\\ApplicationDbContext.cs",
-              "RelativeDocumentMoniker": "website-e-commerce\\Models\\ApplicationDbContext.cs",
-              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Models\\ApplicationDbContext.cs",
-              "RelativeToolTip": "website-e-commerce\\Models\\ApplicationDbContext.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAcwEkAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T06:59:29.874Z",
+              "DocumentIndex": 0,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\Promotion\\Edit.cshtml",
+              "RelativeDocumentMoniker": "website-e-commerce\\Views\\Promotion\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\Promotion\\Edit.cshtml",
+              "RelativeToolTip": "website-e-commerce\\Views\\Promotion\\Edit.cshtml",
+              "ViewState": "AgIAABgAAAAAAAAAAAAUwDQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-05T16:47:02.41Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "chatbot.js",
-              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\wwwroot\\js\\chatbot.js",
-              "RelativeDocumentMoniker": "website-e-commerce\\wwwroot\\js\\chatbot.js",
-              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\wwwroot\\js\\chatbot.js",
-              "RelativeToolTip": "website-e-commerce\\wwwroot\\js\\chatbot.js",
-              "ViewState": "AgIAABEAAAAAAAAAAAAAwCEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-11-05T05:01:27.918Z",
+              "Title": "PromotionCode.cs",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Models\\PromotionCode.cs",
+              "RelativeDocumentMoniker": "website-e-commerce\\Models\\PromotionCode.cs",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Models\\PromotionCode.cs",
+              "RelativeToolTip": "website-e-commerce\\Models\\PromotionCode.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAUwCUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-05T16:45:59.534Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "OrderSuccess.cshtml",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\ShoppingCart\\OrderSuccess.cshtml",
+              "RelativeDocumentMoniker": "website-e-commerce\\Views\\ShoppingCart\\OrderSuccess.cshtml",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\ShoppingCart\\OrderSuccess.cshtml",
+              "RelativeToolTip": "website-e-commerce\\Views\\ShoppingCart\\OrderSuccess.cshtml",
+              "ViewState": "AgIAADYAAAAAAAAAAAAUwD8AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-05T16:39:33.246Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Checkout.cshtml",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\ShoppingCart\\Checkout.cshtml",
+              "RelativeDocumentMoniker": "website-e-commerce\\Views\\ShoppingCart\\Checkout.cshtml",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\ShoppingCart\\Checkout.cshtml",
+              "RelativeToolTip": "website-e-commerce\\Views\\ShoppingCart\\Checkout.cshtml",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAUwHIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-05T16:39:30.306Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\ShoppingCart\\Index.cshtml",
+              "RelativeDocumentMoniker": "website-e-commerce\\Views\\ShoppingCart\\Index.cshtml",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\ShoppingCart\\Index.cshtml",
+              "RelativeToolTip": "website-e-commerce\\Views\\ShoppingCart\\Index.cshtml",
+              "ViewState": "AgIAAM4AAAAAAAAAAAAUwOoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-05T16:39:26.684Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ShoppingCartController.cs",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Controllers\\ShoppingCartController.cs",
+              "RelativeDocumentMoniker": "website-e-commerce\\Controllers\\ShoppingCartController.cs",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Controllers\\ShoppingCartController.cs",
+              "RelativeToolTip": "website-e-commerce\\Controllers\\ShoppingCartController.cs",
+              "ViewState": "AgIAAIYAAAAAAAAAAAAIwIwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-05T16:39:21.93Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Add.cshtml",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\Promotion\\Add.cshtml",
+              "RelativeDocumentMoniker": "website-e-commerce\\Views\\Promotion\\Add.cshtml",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\Promotion\\Add.cshtml",
+              "RelativeToolTip": "website-e-commerce\\Views\\Promotion\\Add.cshtml",
+              "ViewState": "AgIAABcAAAAAAAAAAAAUwDMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-05T16:27:59.059Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "ChatController.cs",
-              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Controllers\\ChatController.cs",
-              "RelativeDocumentMoniker": "website-e-commerce\\Controllers\\ChatController.cs",
-              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Controllers\\ChatController.cs",
-              "RelativeToolTip": "website-e-commerce\\Controllers\\ChatController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA8AAAAAAAAAA==",
+              "Title": "PromotionController.cs",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Controllers\\PromotionController.cs",
+              "RelativeDocumentMoniker": "website-e-commerce\\Controllers\\PromotionController.cs",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Controllers\\PromotionController.cs",
+              "RelativeToolTip": "website-e-commerce\\Controllers\\PromotionController.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAUwE0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T05:00:34.613Z",
+              "WhenOpened": "2025-11-05T16:24:33.627Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "GeminiChatService.cs",
-              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Services\\GeminiChatService.cs",
-              "RelativeDocumentMoniker": "website-e-commerce\\Services\\GeminiChatService.cs",
-              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Services\\GeminiChatService.cs",
-              "RelativeToolTip": "website-e-commerce\\Services\\GeminiChatService.cs",
-              "ViewState": "AgIAAFsAAAAAAAAAAAAwwNsAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 9,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Program.cs",
+              "RelativeDocumentMoniker": "website-e-commerce\\Program.cs",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Program.cs",
+              "RelativeToolTip": "website-e-commerce\\Program.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAACQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T05:00:12.879Z",
+              "WhenOpened": "2025-11-05T16:26:22.434Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "MockPromotionRepository.cs",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Repositories\\MockPromotionRepository.cs",
+              "RelativeDocumentMoniker": "website-e-commerce\\Repositories\\MockPromotionRepository.cs",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Repositories\\MockPromotionRepository.cs",
+              "RelativeToolTip": "website-e-commerce\\Repositories\\MockPromotionRepository.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAAA0wDwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-05T16:26:15.054Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "IPromotionRepository.cs",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Repositories\\IPromotionRepository.cs",
+              "RelativeDocumentMoniker": "website-e-commerce\\Repositories\\IPromotionRepository.cs",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Repositories\\IPromotionRepository.cs",
+              "RelativeToolTip": "website-e-commerce\\Repositories\\IPromotionRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-05T16:26:02.282Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\Promotion\\Index.cshtml",
+              "RelativeDocumentMoniker": "website-e-commerce\\Views\\Promotion\\Index.cshtml",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\Promotion\\Index.cshtml",
+              "RelativeToolTip": "website-e-commerce\\Views\\Promotion\\Index.cshtml",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAUwCcAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-05T16:25:02.07Z",
               "EditorCaption": ""
             }
           ]

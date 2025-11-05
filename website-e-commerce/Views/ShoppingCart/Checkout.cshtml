@@ -1,22 +1,54 @@
 ﻿@model website_e_commerce.Models.ShoppingCart
+@using website_e_commerce.Models
+@inject ApplicationDbContext _context
+
 @{
     ViewData["Title"] = "Thanh toán";
+
+    // ✅ Lấy mã giảm giá từ session
+    var promoCode = Context.Session.GetString("PromoCode");
+    double originalTotal = (double)Model.GetTotal();
+    double discountAmount = 0;
+    double finalTotal = originalTotal;
+
+    if (!string.IsNullOrEmpty(promoCode))
+    {
+        var promo = _context.PromotionCodes.FirstOrDefault(p => p.Code == promoCode);
+        if (promo != null)
+        {
+            if (promo.DiscountPercent.HasValue)
+            {
+                discountAmount = originalTotal * promo.DiscountPercent.Value / 100;
+                finalTotal = originalTotal - discountAmount;
+            }
+            else if (promo.DiscountAmount.HasValue)
+            {
+                discountAmount = promo.DiscountAmount.Value;
+                finalTotal = originalTotal - discountAmount;
+            }
+
+            if (finalTotal < 0) finalTotal = 0;
+        }
+    }
 }
 
 <div class="container mt-5">
-    <h2 class="mb-4 text-center">💳 Thanh toán</h2>
+    <h2 class="mb-4 text-center fw-bold text-danger">💳 Thanh toán</h2>
 
     <form method="post">
+        <!-- 🔹 Địa chỉ giao hàng -->
         <div class="mb-3">
             <label class="form-label fw-semibold">Địa chỉ giao hàng</label>
             <input type="text" name="shippingAddress" class="form-control" required />
         </div>
 
+        <!-- 🔹 Ghi chú -->
         <div class="mb-3">
             <label class="form-label fw-semibold">Ghi chú</label>
             <textarea name="notes" class="form-control" rows="3"></textarea>
         </div>
 
+        <!-- 🔹 Phương thức thanh toán -->
         <div class="mb-3">
             <label class="form-label fw-semibold">Phương thức thanh toán</label>
             <select name="paymentMethod" class="form-select" required>
@@ -26,18 +58,57 @@
             </select>
         </div>
 
+        <!-- 🔹 Tóm tắt đơn hàng -->
         <div class="border p-3 rounded bg-light mb-3">
-            <h5 class="fw-bold">Tóm tắt đơn hàng</h5>
+            <h5 class="fw-bold mb-3">🧾 Tóm tắt đơn hàng</h5>
             <ul class="list-unstyled">
                 @foreach (var item in Model.Items)
                 {
-                    <li>@item.Name × @item.Quantity — <span class="text-danger fw-bold">@String.Format("{0:N0} đ", item.Total)</span></li>
+                    <li>
+                        @item.Name × @item.Quantity —
+                        <span class="text-danger fw-bold">@String.Format("{0:N0} đ", item.Total)</span>
+                    </li>
                 }
             </ul>
+
             <hr />
-            <h5>Tổng cộng: <span class="text-danger fw-bold">@String.Format("{0:N0} đ", Model.GetTotal())</span></h5>
+
+            <!-- 🔹 Hiển thị mã khuyến mãi (nếu có) -->
+            @if (!string.IsNullOrEmpty(promoCode))
+            {
+                <div class="mb-2">
+                    <span class="text-success fw-bold">
+                        🎁 Mã giảm giá: @promoCode
+                    </span>
+                </div>
+                <div>
+                    <span class="text-muted">Giảm: </span>
+                    <span class="text-primary fw-bold">@String.Format("{0:N0} đ", discountAmount)</span>
+                </div>
+                <hr />
+            }
+
+            <!-- 🔹 Tổng tiền -->
+            <h5 class="fw-bold">
+                Tổng cộng:
+                <span class="text-danger">@String.Format("{0:N0} đ", finalTotal)</span>
+            </h5>
         </div>
 
-        <button type="submit" class="btn btn-success btn-lg w-100">Xác nhận đặt hàng</button>
+        <!-- 🔹 Nút xác nhận -->
+        <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow">
+            Xác nhận đặt hàng
+        </button>
     </form>
 </div>
+
+<!-- 🔹 CSS nhẹ cho form -->
+<style>
+    .form-label {
+        font-weight: 600;
+    }
+
+    .container {
+        max-width: 700px;
+    }
+</style>
