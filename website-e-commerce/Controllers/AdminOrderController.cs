@@ -54,9 +54,36 @@ namespace website_e_commerce.Controllers
             payment.Status = status;
             await _context.SaveChangesAsync();
 
+            if (status == "Success")
+            {
+                var order = await _context.Orders
+                    .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
+                    .FirstOrDefaultAsync(o => o.Id == orderId);
+
+                if (order != null)
+                {
+                    foreach (var item in order.OrderDetails)
+                    {
+                        var product = item.Product;
+                        if (product != null)
+                        {
+                            product.WebQuantity -= item.Quantity;
+                            product.StockQuantity -= item.Quantity;
+
+                            if (product.WebQuantity < 0) product.WebQuantity = 0;
+                            if (product.StockQuantity < 0) product.StockQuantity = 0;
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+            }
+
             TempData["SuccessMessage"] = "Đã cập nhật trạng thái thanh toán.";
             return RedirectToAction(nameof(Details), new { id = orderId });
         }
+
 
         // ✅ Xoá đơn hàng
         [HttpPost]

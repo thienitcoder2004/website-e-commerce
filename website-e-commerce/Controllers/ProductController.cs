@@ -68,8 +68,27 @@ namespace website_e_commerce.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ImportToStock(int id, int importQuantity)
+        {
+            var product = _productRepository.GetById(id);
+            if (product == null) return NotFound();
 
-        // ✅ Xuất sản phẩm ra web
+            if (importQuantity <= 0)
+            {
+                TempData["error"] = "⚠️ Số lượng nhập phải lớn hơn 0.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            product.StockQuantity += importQuantity;
+            _productRepository.Update(product);
+
+            TempData["success"] = $"📦 Đã nhập thêm {importQuantity} sản phẩm '{product.Name}' vào kho.";
+            return RedirectToAction(nameof(Index));
+        }
+
+
         // ✅ Xuất sản phẩm ra web
         [HttpPost]
         [ValidateAntiForgeryToken]

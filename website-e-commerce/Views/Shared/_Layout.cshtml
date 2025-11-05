@@ -12,6 +12,7 @@
     <link rel="shortcut icon" href="/images/logo-wb.png" type="image/x-icon">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css"/>
     <link rel="stylesheet" href="~/website_e_commerce.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
           integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
@@ -402,6 +403,23 @@
         </div>
     </footer>
 
+    <!-- 💬 Chatbot floating button -->
+    <button id="chatbotBtn" class="chatbot-btn">
+        <i class="fa-solid fa-robot fa-xl"></i>
+    </button>
+
+    <div id="chatbotBox" class="chatbot-box">
+        <div class="chatbot-header">🤖 Trợ lý HTM Shop</div>
+        <div id="chatMessages" class="chatbot-messages">
+            <div class="bot"><b>🤖 Bot:</b> Xin chào! Mình là trợ lý HTM Shop, bạn cần hỗ trợ gì không?</div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatInput" placeholder="Nhập tin nhắn..." />
+            <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -466,7 +484,7 @@
         });
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
-
+    <script src="~/js/chatbot.js"></script>
     <script>
         const newsPopup = document.getElementById("newsPopup");
         const newsToggle = document.getElementById("newsToggle");

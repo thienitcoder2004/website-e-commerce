@@ -78,9 +78,18 @@
                         <button type="button" class="btn btn-outline-primary btn-lg fw-bold" style="width: 270px;">
                             📞 Liên hệ
                         </button>
-                        <button type="submit" class="btn btn-danger btn-lg fw-bold" style="width: 270px;">
-                            🛒 Thêm vào giỏ hàng
-                        </button>
+                        @if (Model.WebQuantity > 0)
+                        {
+                            <button type="submit" class="btn btn-danger btn-lg fw-bold" style="width: 270px;">
+                                🛒 Thêm vào giỏ hàng
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-secondary btn-lg fw-bold" style="width: 270px;" disabled>
+                                🚫 Hết hàng
+                            </button>
+                        }
                     </div>
                 </form>
             </div>

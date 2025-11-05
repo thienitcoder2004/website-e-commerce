@@ -254,10 +254,17 @@
                     <td>@p.WebQuantity</td>
                     <td>
                         @(available <= 0 ? "Hết hàng" :
-                          available < 10 ? "Sắp hết" :
-                          "Còn hàng")
-                    </td>
-                    <td>
+                                            available < 10 ? "Sắp hết" :
+                                            "Còn hàng")
+                </td>
+                <td>
+                    <form asp-action="ImportToStock" method="post" class="d-inline-flex gap-1">
+                        <input type="hidden" name="id" value="@p.Id" />
+                        <input type="number" name="importQuantity" class="form-control form-control-sm" min="1"
+                               placeholder="SL" style="width:90px;" />
+                        <button type="submit" class="btn btn-sm btn-outline-success">Nhập thêm</button>
+                    </form>
+
                         <form asp-action="ExportToWeb" method="post" class="d-inline-flex gap-1">
                             <input type="hidden" name="id" value="@p.Id" />
                             <input type="number" name="exportQuantity" class="form-control form-control-sm" min="1"
@@ -274,13 +281,18 @@
                         </form>
                     </td>
                 </tr>
-            }
+                        }
         </tbody>
     </table>
 </div>
 
 <style>
-    .table-warning { background-color: #fff3cd !important; }
-    .table-danger { background-color: #f8d7da !important; }
+    .table-warning {
+        background-color: #fff3cd !important;
+    }
+
+    .table-danger {
+        background-color: #f8d7da !important;
+    }
 </style>
 
