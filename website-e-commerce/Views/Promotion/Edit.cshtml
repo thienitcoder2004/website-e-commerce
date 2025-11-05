@@ -1,0 +1,52 @@
+﻿@model website_e_commerce.Models.PromotionCode
+@{
+    ViewData["Title"] = "Chỉnh sửa mã khuyến mãi";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center text-warning mb-4">✏️ Sửa mã khuyến mãi</h2>
+    <form asp-action="Edit" method="post" class="border p-4 shadow-sm bg-light rounded">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Mã khuyến mãi</label>
+            <input asp-for="Code" class="form-control" required />
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Giảm (%)</label>
+                <input asp-for="DiscountPercent" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Giảm tiền (VNĐ)</label>
+                <input asp-for="DiscountAmount" class="form-control" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Ngày bắt đầu</label>
+                <input asp-for="StartDate" type="date" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Ngày kết thúc</label>
+                <input asp-for="EndDate" type="date" class="form-control" />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Giới hạn lượt sử dụng</label>
+            <input asp-for="MaxUsage" type="number" min="0" class="form-control" placeholder="0 hoặc để trống = không giới hạn" />
+            <small class="text-muted fst-italic">Để trống hoặc nhập 0 nếu muốn cho phép dùng vô hạn lần</small>
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+            <label class="form-check-label">Kích hoạt mã</label>
+        </div>
+
+        <button type="submit" class="btn btn-warning px-4 fw-bold">Cập nhật</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Quay lại</a>
+    </form>
+</div>

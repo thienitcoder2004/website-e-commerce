@@ -75,6 +75,21 @@
             <div class="text-end mt-4">
                 <h4 class="fw-bold">
                     Tổng cộng:
+
+                    <form asp-action="ApplyCoupon" method="post" class="d-flex justify-content-end mt-4">
+                        <input type="text" name="code" class="form-control w-auto me-2" placeholder="Nhập mã khuyến mãi..." required />
+                        <button type="submit" class="btn btn-outline-danger fw-bold">Áp dụng</button>
+                    </form>
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success mt-3">@TempData["Success"]</div>
+                    }
+                    else if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger mt-3">@TempData["Error"]</div>
+                    }
+
                     <span id="cart-total" class="text-danger">@String.Format("{0:N0} đ", Model.GetTotal())</span>
                 </h4>
                 <a asp-action="Checkout" class="btn btn-success mt-3 px-5 py-2 fw-bold rounded-pill shadow">

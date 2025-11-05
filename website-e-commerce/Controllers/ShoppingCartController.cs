@@ -28,7 +28,7 @@ namespace website_e_commerce.Controllers
         public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
         {
             var product = await _productRepository.GetByIdAsync(productId);
-            if (product == null) 
+            if (product == null)
                 return NotFound();
 
             if (product.WebQuantity <= 0)
@@ -38,7 +38,7 @@ namespace website_e_commerce.Controllers
                 return Json(new { success = false, message = $"Chỉ còn {product.WebQuantity} sản phẩm trong kho." });
 
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
-            
+
             cart.AddItem(new CartItem
             {
                 ProductId = product.Id,
@@ -67,7 +67,7 @@ namespace website_e_commerce.Controllers
                 cart.RemoveItem(productId);
                 HttpContext.Session.SetObjectAsJson("Cart", cart);
             }
-            return RedirectToAction("Index", "ShoppingCart");
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -109,8 +109,7 @@ namespace website_e_commerce.Controllers
         {
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
             if (cart == null || !cart.Items.Any())
-                return RedirectToAction("Index", "ShoppingCart");
-
+                return RedirectToAction("Index");
             return View(cart);
         }
 
@@ -121,17 +120,16 @@ namespace website_e_commerce.Controllers
         {
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
             if (cart == null || !cart.Items.Any())
-                return RedirectToAction("Index", "ShoppingCart");
+                return RedirectToAction("Index");
 
             var user = await _userManager.GetUserAsync(User);
 
-            // ✅ Tạo đơn hàng
             var order = new Order
             {
                 UserId = user.Id,
                 ShippingAddress = shippingAddress,
                 Notes = notes,
-                TotalPrice = cart.GetTotal(),
+                TotalPrice = (decimal)GetDiscountedTotal((double)cart.GetTotal()),
                 OrderDate = DateTime.Now,
                 OrderDetails = cart.Items.Select(i => new OrderDetail
                 {
@@ -144,13 +142,12 @@ namespace website_e_commerce.Controllers
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            // ✅ Tạo thông tin thanh toán
             var payment = new Payment
             {
                 OrderId = order.Id,
                 PaymentMethod = paymentMethod,
                 Amount = order.TotalPrice,
-                Status = "Pending", // ❗Luôn ở trạng thái chờ xác nhận
+                Status = "Pending",
                 TransactionId = Guid.NewGuid().ToString(),
                 CustomerName = user.HoTen ?? user.UserName,
                 PaymentDate = DateTime.Now
@@ -159,7 +156,7 @@ namespace website_e_commerce.Controllers
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
 
-            // ✅ Nếu là thanh toán online → chuyển hướng sang cổng
+            // 🔹 Nếu là online, chuyển hướng đến cổng thanh toán
             if (paymentMethod == "Momo")
             {
                 var momoUrl = await GenerateMomoPaymentUrl(order, payment);
@@ -171,11 +168,65 @@ namespace website_e_commerce.Controllers
                 return Redirect(vnpayUrl);
             }
 
-            // ✅ Nếu là COD → giữ trạng thái Pending, KHÔNG trừ kho ngay
+            // ✅ Nếu COD, cập nhật lượt sử dụng mã ngay
+            await UpdatePromotionUsageAfterSuccess();
+
             HttpContext.Session.Remove("Cart");
             return RedirectToAction("OrderSuccess", new { orderId = order.Id });
         }
 
+        // ================== VNPay ==================
+        public string GenerateVNPayPaymentUrl(Order order, Payment payment)
+        {
+            string vnp_TmnCode = "YOUR_VNP_TMNCODE";  // 🔹 thay bằng mã TMN thật của bạn
+            string vnp_HashSecret = "YOUR_VNP_HASHSECRET";  // 🔹 thay bằng key thật
+            string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+            string vnp_Returnurl = $"{Request.Scheme}://{Request.Host}/ShoppingCart/VNPayReturn";
+
+            var query = new SortedDictionary<string, string>
+            {
+                ["vnp_Version"] = "2.1.0",
+                ["vnp_Command"] = "pay",
+                ["vnp_TmnCode"] = vnp_TmnCode,
+                ["vnp_Amount"] = ((int)order.TotalPrice * 100).ToString(),
+                ["vnp_CreateDate"] = DateTime.Now.ToString("yyyyMMddHHmmss"),
+                ["vnp_CurrCode"] = "VND",
+                ["vnp_IpAddr"] = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1",
+                ["vnp_Locale"] = "vn",
+                ["vnp_OrderInfo"] = $"Thanh toán đơn hàng {order.Id}",
+                ["vnp_OrderType"] = "other",
+                ["vnp_ReturnUrl"] = vnp_Returnurl,
+                ["vnp_TxnRef"] = payment.Id.ToString()
+            };
+
+            string rawData = string.Join("&", query.Select(x => $"{x.Key}={x.Value}"));
+
+            using var hmac = new System.Security.Cryptography.HMACSHA512(System.Text.Encoding.UTF8.GetBytes(vnp_HashSecret));
+            var hash = BitConverter.ToString(hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(rawData))).Replace("-", "").ToLower();
+
+            string queryString = string.Join("&", query.Select(x => $"{x.Key}={x.Value}")) + $"&vnp_SecureHash={hash}";
+            return $"{vnp_Url}?{queryString}";
+        }
+
+
+        // ✅ Cập nhật lượt sử dụng mã khuyến mãi (chỉ khi thanh toán thành công)
+        private async Task UpdatePromotionUsageAfterSuccess()
+        {
+            var promoCode = HttpContext.Session.GetString("PromoCode");
+            if (string.IsNullOrEmpty(promoCode)) return;
+
+            var promo = await _context.PromotionCodes.FirstOrDefaultAsync(p => p.Code == promoCode);
+            if (promo != null)
+            {
+                promo.UsageCount++;
+                if (promo.MaxUsage.HasValue && promo.UsageCount >= promo.MaxUsage)
+                    promo.IsActive = false;
+
+                _context.PromotionCodes.Update(promo);
+                await _context.SaveChangesAsync();
+            }
+            HttpContext.Session.Remove("PromoCode");
+        }
 
         // ✅ Giảm tồn kho sau khi thanh toán thành công
         private async Task UpdateStockAfterPaymentSuccess(int orderId)
@@ -194,7 +245,6 @@ namespace website_e_commerce.Controllers
                 {
                     product.WebQuantity -= item.Quantity;
                     product.StockQuantity -= item.Quantity;
-
                     if (product.WebQuantity < 0) product.WebQuantity = 0;
                     if (product.StockQuantity < 0) product.StockQuantity = 0;
                 }
@@ -269,39 +319,7 @@ namespace website_e_commerce.Controllers
             if (json.RootElement.TryGetProperty("payUrl", out var payUrl))
                 return payUrl.GetString();
 
-            Console.WriteLine("⚠️ MoMo Response: " + content);
             return "/";
-        }
-
-        public string GenerateVNPayPaymentUrl(Order order, Payment payment)
-        {
-            string vnp_TmnCode = "YOUR_VNP_TMNCODE";
-            string vnp_HashSecret = "YOUR_VNP_HASHSECRET";
-            string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-            string vnp_Returnurl = $"{Request.Scheme}://{Request.Host}/ShoppingCart/VNPayReturn";
-
-            var query = new SortedDictionary<string, string>
-            {
-                ["vnp_Version"] = "2.1.0",
-                ["vnp_Command"] = "pay",
-                ["vnp_TmnCode"] = vnp_TmnCode,
-                ["vnp_Amount"] = ((int)order.TotalPrice * 100).ToString(),
-                ["vnp_CreateDate"] = DateTime.Now.ToString("yyyyMMddHHmmss"),
-                ["vnp_CurrCode"] = "VND",
-                ["vnp_IpAddr"] = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1",
-                ["vnp_Locale"] = "vn",
-                ["vnp_OrderInfo"] = $"Thanh toán đơn hàng {order.Id}",
-                ["vnp_OrderType"] = "other",
-                ["vnp_ReturnUrl"] = vnp_Returnurl,
-                ["vnp_TxnRef"] = payment.Id.ToString()
-            };
-
-            string rawData = string.Join("&", query.Select(x => $"{x.Key}={x.Value}"));
-            using var hmac = new System.Security.Cryptography.HMACSHA512(System.Text.Encoding.UTF8.GetBytes(vnp_HashSecret));
-            var hash = BitConverter.ToString(hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(rawData))).Replace("-", "").ToLower();
-
-            string queryString = string.Join("&", query.Select(x => $"{x.Key}={x.Value}")) + $"&vnp_SecureHash={hash}";
-            return $"{vnp_Url}?{queryString}";
         }
 
         // ✅ Kết quả trả về từ MoMo
@@ -314,7 +332,10 @@ namespace website_e_commerce.Controllers
             await _context.SaveChangesAsync();
 
             if (payment.Status == "Success")
+            {
                 await UpdateStockAfterPaymentSuccess(payment.OrderId);
+                await UpdatePromotionUsageAfterSuccess();
+            }
             else
                 await RestoreStockAfterPaymentFailed(payment.OrderId);
 
@@ -332,7 +353,10 @@ namespace website_e_commerce.Controllers
             await _context.SaveChangesAsync();
 
             if (payment.Status == "Success")
+            {
                 await UpdateStockAfterPaymentSuccess(payment.OrderId);
+                await UpdatePromotionUsageAfterSuccess();
+            }
             else
                 await RestoreStockAfterPaymentFailed(payment.OrderId);
 
@@ -340,7 +364,6 @@ namespace website_e_commerce.Controllers
             return RedirectToAction("OrderSuccess", new { orderId = payment.OrderId });
         }
 
-        // ✅ Trang hiển thị sau thanh toán
         public IActionResult OrderSuccess(int orderId)
         {
             var order = _context.Orders.FirstOrDefault(o => o.Id == orderId);
@@ -349,6 +372,51 @@ namespace website_e_commerce.Controllers
             ViewBag.Order = order;
             ViewBag.Payment = payment;
             return View();
+        }
+
+        // ✅ Áp dụng mã giảm giá
+        [HttpPost]
+        public IActionResult ApplyCoupon(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                TempData["Error"] = "Vui lòng nhập mã khuyến mãi!";
+                return RedirectToAction("Index");
+            }
+
+            var promo = _context.PromotionCodes.FirstOrDefault(p => p.Code == code && p.IsActive);
+            if (promo == null || promo.StartDate > DateTime.Now || promo.EndDate < DateTime.Now)
+            {
+                TempData["Error"] = "❌ Mã không hợp lệ hoặc đã hết hạn!";
+                return RedirectToAction("Index");
+            }
+
+            if (promo.MaxUsage.HasValue && promo.UsageCount >= promo.MaxUsage)
+            {
+                TempData["Error"] = "❌ Mã này đã đạt giới hạn sử dụng!";
+                return RedirectToAction("Index");
+            }
+
+            HttpContext.Session.SetString("PromoCode", promo.Code);
+            TempData["Success"] = $"🎁 Đã áp dụng mã giảm giá: {promo.Code}";
+            return RedirectToAction("Index");
+        }
+
+        // ✅ Tính tổng tiền sau khi áp mã
+        private double GetDiscountedTotal(double total)
+        {
+            var promoCode = HttpContext.Session.GetString("PromoCode");
+            if (string.IsNullOrEmpty(promoCode)) return total;
+
+            var promo = _context.PromotionCodes.FirstOrDefault(p => p.Code == promoCode);
+            if (promo == null) return total;
+
+            if (promo.DiscountPercent.HasValue)
+                total -= total * promo.DiscountPercent.Value / 100;
+            else if (promo.DiscountAmount.HasValue)
+                total -= promo.DiscountAmount.Value;
+
+            return total < 0 ? 0 : total;
         }
     }
 }

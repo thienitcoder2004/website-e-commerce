@@ -3,20 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\services\\geminichatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\services\\geminichatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\models\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\models\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\controllers\\chatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\controllers\\chatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\wwwroot\\js\\chatbot.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\wwwroot\\js\\chatbot.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,58 +18,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ApplicationDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Models\\ApplicationDbContext.cs",
-              "RelativeDocumentMoniker": "website-e-commerce\\Models\\ApplicationDbContext.cs",
-              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Models\\ApplicationDbContext.cs",
-              "RelativeToolTip": "website-e-commerce\\Models\\ApplicationDbContext.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAcwEkAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T06:59:29.874Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "chatbot.js",
-              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\wwwroot\\js\\chatbot.js",
-              "RelativeDocumentMoniker": "website-e-commerce\\wwwroot\\js\\chatbot.js",
-              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\wwwroot\\js\\chatbot.js",
-              "RelativeToolTip": "website-e-commerce\\wwwroot\\js\\chatbot.js",
-              "ViewState": "AgIAABEAAAAAAAAAAAAAwCEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-11-05T05:01:27.918Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ChatController.cs",
-              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Controllers\\ChatController.cs",
-              "RelativeDocumentMoniker": "website-e-commerce\\Controllers\\ChatController.cs",
-              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Controllers\\ChatController.cs",
-              "RelativeToolTip": "website-e-commerce\\Controllers\\ChatController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA8AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T05:00:34.613Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "GeminiChatService.cs",
-              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Services\\GeminiChatService.cs",
-              "RelativeDocumentMoniker": "website-e-commerce\\Services\\GeminiChatService.cs",
-              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Services\\GeminiChatService.cs",
-              "RelativeToolTip": "website-e-commerce\\Services\\GeminiChatService.cs",
-              "ViewState": "AgIAAFsAAAAAAAAAAAAwwNsAAAAAAAAAAAAAAA==",
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\appsettings.json",
+              "RelativeDocumentMoniker": "website-e-commerce\\appsettings.json",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\appsettings.json",
+              "RelativeToolTip": "website-e-commerce\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-05T16:49:45.155Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Program.cs",
+              "RelativeDocumentMoniker": "website-e-commerce\\Program.cs",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Program.cs",
+              "RelativeToolTip": "website-e-commerce\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T05:00:12.879Z",
+              "WhenOpened": "2025-11-05T16:49:44.369Z",
               "EditorCaption": ""
             }
           ]
