@@ -13,10 +13,15 @@ namespace website_e_commerce.Models
         [StringLength(50)]
         public string Ten { get; set; }
 
-        [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
         [Phone(ErrorMessage = "Số điện thoại không hợp lệ")]
         [StringLength(15)]
-        public override string PhoneNumber { get; set; }
+        public override string? PhoneNumber { get; set; }
+
+        // ✅ Họ tên đầy đủ
         public string HoTen => $"{Ho} {Ten}";
+
+        // ✅ Ảnh đại diện (Google / Facebook)
+        [StringLength(500)]
+        public string? AvatarUrl { get; set; }
     }
 }

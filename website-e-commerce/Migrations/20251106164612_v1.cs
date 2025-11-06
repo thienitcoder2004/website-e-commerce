@@ -107,6 +107,26 @@ namespace website_e_commerce.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PromotionCodes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DiscountPercent = table.Column<int>(type: "int", nullable: true),
+                    DiscountAmount = table.Column<double>(type: "float", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    UsageCount = table.Column<int>(type: "int", nullable: false),
+                    MaxUsage = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PromotionCodes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -528,6 +548,9 @@ namespace website_e_commerce.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductImages");
+
+            migrationBuilder.DropTable(
+                name: "PromotionCodes");
 
             migrationBuilder.DropTable(
                 name: "Reviews");
