@@ -1264,6 +1264,8 @@ C:\Users\thien\OneDrive\Documents\website-e-commerce\website-e-commerce\bin\Debu
 C:\Users\thien\OneDrive\Documents\website-e-commerce\website-e-commerce\bin\Debug\net9.0\Azure.Core.dll
 C:\Users\thien\OneDrive\Documents\website-e-commerce\website-e-commerce\bin\Debug\net9.0\Azure.Identity.dll
 C:\Users\thien\OneDrive\Documents\website-e-commerce\website-e-commerce\bin\Debug\net9.0\Humanizer.dll
+C:\Users\thien\OneDrive\Documents\website-e-commerce\website-e-commerce\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Facebook.dll
+C:\Users\thien\OneDrive\Documents\website-e-commerce\website-e-commerce\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Google.dll
 C:\Users\thien\OneDrive\Documents\website-e-commerce\website-e-commerce\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Users\thien\OneDrive\Documents\website-e-commerce\website-e-commerce\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
 C:\Users\thien\OneDrive\Documents\website-e-commerce\website-e-commerce\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll

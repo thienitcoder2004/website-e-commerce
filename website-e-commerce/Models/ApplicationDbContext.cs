@@ -19,7 +19,6 @@ namespace website_e_commerce.Models
         public DbSet<News> News { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<PromotionCode> PromotionCodes { get; set; }
-
         public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
