@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|c:\\users\\thien\\onedrive\\documents\\website-e-commerce\\website-e-commerce\\views\\stockhistory\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C163B9BE-16F2-4045-A94F-957540C5107D}|website-e-commerce\\website-e-commerce.csproj|solutionrelative:website-e-commerce\\views\\stockhistory\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -20,13 +20,13 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "website-e-commerce\\Views\\Home\\Index.cshtml",
-              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "website-e-commerce\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAFcAAAAAAAAAAAAAAF0AAABXAAAAAAAAAA==",
+              "DocumentMoniker": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\StockHistory\\Index.cshtml",
+              "RelativeDocumentMoniker": "website-e-commerce\\Views\\StockHistory\\Index.cshtml",
+              "ToolTip": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\Views\\StockHistory\\Index.cshtml",
+              "RelativeToolTip": "website-e-commerce\\Views\\StockHistory\\Index.cshtml",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAUwBcAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-07T10:10:19.627Z",
+              "WhenOpened": "2025-11-07T18:42:03.155Z",
               "EditorCaption": ""
             }
           ]

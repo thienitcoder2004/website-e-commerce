@@ -1,0 +1,13 @@
+﻿@model website_e_commerce.Models.StockHistory
+
+<h2 class="fw-bold text-primary">🔍 Chi tiết lịch sử</h2>
+
+<div class="card shadow-sm p-4" style="max-width:600px">
+    <p><b>Sản phẩm:</b> @Model.Product?.Name</p>
+    <p><b>Thao tác:</b> @(Model.ActionType == "Import" ? "➕ Nhập kho" : "➖ Xuất kho")</p>
+    <p><b>Số lượng:</b> @Model.Quantity</p>
+    <p><b>Ghi chú:</b> @Model.Note</p>
+    <p><b>Thời gian:</b> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+
+    <a href="/StockHistory/Index" class="btn btn-secondary mt-3">⬅ Quay lại</a>
+</div>
