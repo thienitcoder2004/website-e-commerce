@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using website_e_commerce.Models;
 using website_e_commerce.Repositories;
 
@@ -25,13 +24,86 @@ namespace website_e_commerce.Controllers
             _env = env;
         }
 
-        // ✅ Danh sách sản phẩm
-        public IActionResult Index()
+        // ✅ Danh sách sản phẩm (lọc theo tên)
+        public IActionResult Index(string? query, string? sortOrder, int page = 1)
         {
+            int pageSize = 12;
+            var products = _productRepository.GetAll().ToList();
+
+            // 🔍 Tìm kiếm
+            if (!string.IsNullOrEmpty(query))
+            {
+                string keyword = query.ToLower().Trim();
+
+                products = products
+                    .Where(p =>
+                        p.Name.ToLower().Contains(keyword) ||
+                        (p.Brand != null && p.Brand.Name.ToLower().Replace(" ", "").Contains(keyword)) ||
+                        (p.Category != null && p.Category.Name.ToLower().Replace(" ", "").Contains(keyword))
+                    )
+                    .ToList();
+
+                ViewBag.SearchKeyword = query;
+            }
+            else
+            {
+                ViewBag.SearchKeyword = "Tất cả sản phẩm";
+            }
+
+            // 🔽 Sắp xếp
+            switch (sortOrder)
+            {
+                case "price_asc":
+                    products = products.OrderBy(p => p.NewPrice).ToList();
+                    break;
+                case "price_desc":
+                    products = products.OrderByDescending(p => p.NewPrice).ToList();
+                    break;
+                case "name_asc":
+                    products = products.OrderBy(p => p.Name).ToList();
+                    break;
+                case "name_desc":
+                    products = products.OrderByDescending(p => p.Name).ToList();
+                    break;
+                default:
+                    products = products.OrderBy(p => p.Id).ToList();
+                    break;
+            }
+
+            // 🔢 Phân trang
+            int totalProducts = products.Count();
+            int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+            var paginated = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            // 📤 Gửi thông tin sang View
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.HasPreviousPage = page > 1;
+            ViewBag.HasNextPage = page < totalPages;
+            ViewBag.SortOrder = sortOrder;
+
+            return View(paginated);
+        }
+
+        // ✅ Hiển thị sản phẩm theo danh mục
+        public IActionResult Category(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return RedirectToAction("Index");
+
+            string categoryName = name.Trim().ToLower();
+
             var products = _productRepository.GetAll()
-                .OrderBy(p => p.Name)
+                .Where(p => p.Category != null &&
+                            p.Category.Name.ToLower().Replace(" ", "") == categoryName.Replace(" ", ""))
                 .ToList();
-            return View(products);
+
+            ViewBag.CategoryName = name;
+
+            if (!products.Any())
+                ViewBag.Message = $"⚠️ Hiện chưa có sản phẩm nào trong danh mục '{name}'.";
+
+            return View("Index", products);
         }
 
         // ✅ Thêm sản phẩm
@@ -56,18 +128,17 @@ namespace website_e_commerce.Controllers
 
             product.WebQuantity = 0;
 
-            // ✅ Nếu người dùng nhập giá cũ và % giảm thì tự tính giá mới
             if (product.OldPrice > 0 && product.DiscountPercent > 0)
             {
                 product.NewPrice = product.OldPrice - (product.OldPrice * product.DiscountPercent / 100);
             }
 
             _productRepository.Add(product);
-
             TempData["success"] = "✅ Đã thêm sản phẩm và tính giá giảm tự động.";
             return RedirectToAction(nameof(Index));
         }
 
+        // ✅ Nhập kho
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ImportToStock(int id, int importQuantity)
@@ -87,7 +158,6 @@ namespace website_e_commerce.Controllers
             TempData["success"] = $"📦 Đã nhập thêm {importQuantity} sản phẩm '{product.Name}' vào kho.";
             return RedirectToAction(nameof(Index));
         }
-
 
         // ✅ Xuất sản phẩm ra web
         [HttpPost]
@@ -109,7 +179,6 @@ namespace website_e_commerce.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // ✅ Trừ kho, tăng web
             product.StockQuantity -= exportQuantity;
             product.WebQuantity += exportQuantity;
 
@@ -119,23 +188,19 @@ namespace website_e_commerce.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-        // ✅ Khi người dùng xem chi tiết sản phẩm
+        // ✅ Chi tiết sản phẩm
         public IActionResult Details(int id)
         {
             var product = _productRepository.GetById(id);
             if (product == null)
                 return NotFound();
 
-            // Nếu chưa có số lượng thì gán mặc định tránh lỗi null
             if (product.StockQuantity < 0) product.StockQuantity = 0;
             if (product.WebQuantity < 0) product.WebQuantity = 0;
 
-            // Nếu sản phẩm chưa được xuất ra web thì cho xem thông tin, nhưng ẩn nút mua
             ViewBag.Reviews = _reviewRepository.GetReviewsByProductId(id).ToList();
             return View(product);
         }
-
 
         // ✅ Xóa sản phẩm
         [HttpPost]

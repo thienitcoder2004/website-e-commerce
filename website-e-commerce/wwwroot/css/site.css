@@ -278,7 +278,8 @@ a {
 
 
 /* ---------------------------------- Category ---------------------------- */
-.section_category .title-index {
+.section_category .title-index,
+.section-product-category .title-index {
     font-size: 22px;
     font-weight: 700;
     text-transform: uppercase;
@@ -287,7 +288,8 @@ a {
     align-items: center;
 }
 
-    .section_category .title-index .title-name{
+    .section_category .title-index .title-name,
+    .section-product-category .title-index .title-name{
         padding: 14px 28px 14px 40px;
         background: var(--bg-color-orange);
         color: var(--text-white);
@@ -295,7 +297,8 @@ a {
         position: relative;
     }
 
-        .section_category .title-index .title-name:before{
+        .section_category .title-index .title-name:before,
+        .section-product-category .title-index .title-name:before{
             content: "";
             width: 30px;
             height: 100%;

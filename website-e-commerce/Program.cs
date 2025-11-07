@@ -57,6 +57,7 @@ builder.Services.AddScoped<IReviewRepository, MockReviewRepository>();
 builder.Services.AddScoped<IPromotionRepository, MockPromotionRepository>();
 builder.Services.AddScoped<website_e_commerce.Services.EmailService>();
 builder.Services.AddScoped<website_e_commerce.Services.GeminiChatService>();
+builder.Services.AddScoped<IBrandRepository, MockBrandRepository>();
 
 builder.Services.AddAuthorization();
 

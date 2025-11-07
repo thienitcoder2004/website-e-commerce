@@ -1,0 +1,72 @@
+﻿@model IEnumerable<website_e_commerce.Models.Brand>
+
+@{
+    ViewData["Title"] = "Quản lý thương hiệu";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">🏷️ Danh sách thương hiệu</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="mb-3 text-end">
+        <a asp-action="Create" class="btn btn-success">
+            <i class="fa-solid fa-plus"></i> Thêm thương hiệu
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover align-middle shadow-sm">
+        <thead class="table-primary text-center">
+            <tr>
+                <th>Logo</th>
+                <th>Tên thương hiệu</th>
+                <th>Quốc gia</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            @foreach (var brand in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(brand.LogoUrl))
+                        {
+                            <img src="@brand.LogoUrl" width="60" class="rounded shadow-sm" />
+                        }
+                        else
+                        {
+                            <span class="text-muted fst-italic">Chưa có</span>
+                        }
+                    </td>
+                    <td>@brand.Name</td>
+                    <td>@brand.Country</td>
+                    <td>
+                        @if (brand.IsActive)
+                        {
+                            <span class="badge bg-success">Hiển thị</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Ẩn</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@brand.Id" class="btn btn-sm btn-warning me-1">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@brand.Id" class="btn btn-sm btn-danger">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

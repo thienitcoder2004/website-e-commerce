@@ -9,6 +9,7 @@ wwwroot\images\banner1_product8.png
 wwwroot\images\banner1_product9.png
 wwwroot\images\banner1_product_pc.png
 wwwroot\images\bn-video.png
+wwwroot\images\brands\be3e0d7f-7bb1-4923-aa6c-bbf19ac025d5.png
 wwwroot\images\email.png
 wwwroot\images\gearvn-acer-back-to-school-2025-slider.png
 wwwroot\images\gearvn-asus-sat-canh-nhe-ganh-hoc-choi-slider.png

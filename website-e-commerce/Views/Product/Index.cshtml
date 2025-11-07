@@ -177,6 +177,24 @@
                     <div class="col-12 text-center text-muted">Không có sản phẩm nào phù hợp.</div>
                 }
             </div>
+
+            @if (ViewBag.TotalPages > 1)
+            {
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            var active = i == ViewBag.CurrentPage ? "active" : "";
+                            <li class="page-item @active">
+                                <a class="page-link"
+                                   href="?page=@i@(ViewBag.CategoryId != null ? $"&categoryId={ViewBag.CategoryId}" : "")">
+                                    @i
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
         </div>
     </div>
 </div>
@@ -207,6 +225,17 @@
         transform: translateY(-3px);
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         transition: 0.2s;
+    }
+
+    .pagination .page-link {
+        color: #d10000;
+        font-weight: 500;
+    }
+
+    .pagination .active .page-link {
+        background-color: #d10000;
+        border-color: #d10000;
+        color: #fff;
     }
 </style>
 
