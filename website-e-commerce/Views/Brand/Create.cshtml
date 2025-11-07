@@ -1,0 +1,43 @@
+﻿@model website_e_commerce.Models.Brand
+
+@{
+    ViewData["Title"] = "Thêm thương hiệu";
+}
+
+<div class="container mt-5">
+    <h3 class="text-center text-success mb-4">➕ Thêm thương hiệu mới</h3>
+
+    <form asp-action="Create" enctype="multipart/form-data" class="border rounded p-4 bg-light shadow-sm">
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Tên thương hiệu</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Logo thương hiệu</label>
+            <input type="file" name="logoFile" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Mô tả</label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Quốc gia</label>
+                <input asp-for="Country" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3 d-flex align-items-center">
+                <input asp-for="IsActive" class="form-check-input me-2" type="checkbox" />
+                <label class="form-check-label">Hiển thị</label>
+            </div>
+        </div>
+
+        <div class="text-end">
+            <a asp-action="Index" class="btn btn-secondary me-2">⬅ Quay lại</a>
+            <button type="submit" class="btn btn-success">Lưu</button>
+        </div>
+    </form>
+</div>

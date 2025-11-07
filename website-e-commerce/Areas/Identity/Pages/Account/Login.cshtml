@@ -54,23 +54,15 @@
                 <p class="text-center mt-3">
                     <a asp-page="./ForgotPassword" class="text-decoration-none text-primary">Quên mật khẩu?</a>
                 </p>
+                <hr />
+                <div class="text-center">
+                    <form asp-page="./ExternalLogin" method="post" asp-route-provider="Google">
+                        <button type="submit" class="btn btn-outline-danger w-100 mb-2">
+                            <i class="fab fa-google"></i> Đăng nhập bằng Google
+                        </button>
+                    </form>
+                </div>
             </div>
-            <hr />
-            <div class="text-center">
-                <form asp-page="./ExternalLogin" method="post" asp-route-provider="Google">
-                    <button type="submit" class="btn btn-outline-danger w-100 mb-2">
-                        <i class="fab fa-google"></i> Đăng nhập bằng Google
-                    </button>
-                </form>
-
-                <form asp-page="./ExternalLogin" method="post" asp-route-provider="Facebook">
-                    <button type="submit" class="btn btn-outline-primary w-100">
-                        <i class="fab fa-facebook"></i> Đăng nhập bằng Facebook
-                    </button>
-                </form>
-            </div>
-
-
         </div>
     </div>
 </section>
