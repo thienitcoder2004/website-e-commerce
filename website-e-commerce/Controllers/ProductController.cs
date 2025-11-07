@@ -7,17 +7,20 @@ namespace website_e_commerce.Controllers
 {
     public class ProductController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IReviewRepository _reviewRepository;
         private readonly IWebHostEnvironment _env;
 
         public ProductController(
+            ApplicationDbContext context,
             IProductRepository productRepository,
             IReviewRepository reviewRepository,
             ICategoryRepository categoryRepository,
             IWebHostEnvironment env)
         {
+            _context = context;
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _reviewRepository = reviewRepository;
@@ -155,9 +158,21 @@ namespace website_e_commerce.Controllers
             product.StockQuantity += importQuantity;
             _productRepository.Update(product);
 
+            // ✅ Thêm dòng này để ghi lịch sử
+            _context.StockHistory.Add(new StockHistory
+            {
+                ProductId = id,
+                ActionType = "Import",
+                Quantity = importQuantity,
+                Note = "Nhập thêm vào kho",
+                CreatedAt = DateTime.Now
+            });
+            _context.SaveChanges();
+
             TempData["success"] = $"📦 Đã nhập thêm {importQuantity} sản phẩm '{product.Name}' vào kho.";
             return RedirectToAction(nameof(Index));
         }
+
 
         // ✅ Xuất sản phẩm ra web
         [HttpPost]
@@ -181,12 +196,23 @@ namespace website_e_commerce.Controllers
 
             product.StockQuantity -= exportQuantity;
             product.WebQuantity += exportQuantity;
-
             _productRepository.Update(product);
+
+            // ✅ Ghi lịch sử xuất kho
+            _context.StockHistory.Add(new StockHistory
+            {
+                ProductId = id,
+                ActionType = "Export",
+                Quantity = exportQuantity,
+                Note = "Xuất sản phẩm lên web bán",
+                CreatedAt = DateTime.Now
+            });
+            _context.SaveChanges();
 
             TempData["success"] = $"🚀 Đã xuất {exportQuantity} sản phẩm '{product.Name}' ra web.";
             return RedirectToAction(nameof(Index));
         }
+
 
         // ✅ Chi tiết sản phẩm
         public IActionResult Details(int id)

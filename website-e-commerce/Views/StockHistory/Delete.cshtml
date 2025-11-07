@@ -1,0 +1,15 @@
+﻿@model website_e_commerce.Models.StockHistory
+
+<h2 class="text-danger fw-bold">⚠️ Xác nhận xóa lịch sử này?</h2>
+
+<div class="card shadow-sm p-4" style="max-width:600px">
+    <p><b>Sản phẩm:</b> @Model.Product?.Name</p>
+    <p><b>Thao tác:</b> @(Model.ActionType == "Import" ? "Nhập kho" : "Xuất kho")</p>
+    <p><b>Số lượng:</b> @Model.Quantity</p>
+    <p><b>Thời gian:</b> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+
+    <form method="post">
+        <button class="btn btn-danger">🗑 Xóa ngay</button>
+        <a href="/StockHistory/Index" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

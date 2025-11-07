@@ -1,0 +1,41 @@
+﻿@model IEnumerable<website_e_commerce.Models.StockHistory>
+
+<h2 class="mb-4 text-center fw-bold text-danger">📜 Lịch sử nhập – xuất kho</h2>
+
+<table class="table table-hover table-bordered text-center align-middle shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Thao tác</th>
+            <th>Số lượng</th>
+            <th>Ghi chú</th>
+            <th>Thời gian</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var h in Model)
+        {
+            <tr>
+                <td class="fw-semibold">@h.Product?.Name</td>
+            <td>
+                @Html.Raw(h.ActionType == "Import"
+                                ? "<span class='text-success fw-bold'>Nhập kho</span>"
+                                : "<span class='text-primary fw-bold'>Xuất kho</span>")
+            </td>
+
+            <td>@h.Quantity</td>
+            <td>@h.Note</td>
+            <td>@h.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+            <td>
+                <a href="/StockHistory/Details/@h.Id" class="btn btn-sm btn-info">👁 Xem</a>
+
+                @if (User.IsInRole("Admin"))
+                    {
+                        <a href="/StockHistory/Delete/@h.Id" class="btn btn-sm btn-danger">🗑 Xóa</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
