@@ -15,6 +15,7 @@
     <table class="table table-bordered table-hover text-center align-middle shadow-sm">
         <thead class="table-danger">
             <tr>
+                <th>STT</th>
                 <th>Mã</th>
                 <th>Giảm %</th>
                 <th>Giảm tiền</th>
@@ -28,6 +29,7 @@
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>@item.Id</td>
                     <td>@item.Code</td>
                     <td>@item.DiscountPercent%</td>
                     <td>@String.Format("{0:N0}₫", item.DiscountAmount)</td>
