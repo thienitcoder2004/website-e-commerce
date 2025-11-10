@@ -29,8 +29,8 @@ namespace website_e_commerce.Services
                 string lower = message.ToLower().Trim();
 
                 // 🟩 1️⃣ Phản hồi tự nhiên
-                string[] greetings = { "hi", "hello", "xin chào", "chào", "hey", "alo", "chào shop", "chào bạn" };
-                string[] thanks = { "cảm ơn", "thank", "tks", "thanks" };
+                string[] greetings = { "hi", "hello", "xin chào", "chào", "hey", "alo", "chào shop", "chào bạn", "lô" };
+                string[] thanks = { "cảm ơn", "thank", "tks", "thanks", "ok" };
                 string[] goodbyes = { "tạm biệt", "bye", "hẹn gặp lại", "goodbye", "see you" };
 
                 if (greetings.Any(g => lower == g || lower.StartsWith(g + " ")))
