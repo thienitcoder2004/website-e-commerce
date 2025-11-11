@@ -1,0 +1,418 @@
+﻿@using website_e_commerce.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Gear 5 Admin</title>
+
+    <link rel="icon" type="image/png" href="/images/logo-wb.png" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        body {
+            background: #f2f4f7;
+        }
+
+        .admin-sidebar {
+            width: 240px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            background: #fff;
+            border-right: 1px solid #e3e6ea;
+            transition: width .25s ease;
+            z-index: 1035;
+        }
+
+            .admin-sidebar.collapsed {
+                width: 72px;
+            }
+
+        .brand {
+            height: 56px;
+            border-bottom: 1px solid #e3e6ea;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        #btnCollapseGhost {
+            position: absolute;
+            right: -18px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: white;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,.15);
+        }
+
+        .admin-sidebar .nav-link {
+            color: #444;
+            padding: .6rem 1rem;
+            border-radius: .45rem;
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            position: relative;
+        }
+
+            .admin-sidebar .nav-link:hover {
+                background: #eef4ff;
+                color: #0d6efd;
+                font-weight: 600;
+            }
+
+            .admin-sidebar .nav-link.active {
+                background: #e7f0ff;
+                color: #0d6efd;
+                font-weight: 700;
+            }
+
+        .admin-sidebar.collapsed .nav-link {
+            padding: .6rem .8rem !important;
+            justify-content: center; 
+        }
+
+            .admin-sidebar.collapsed .nav-link .text-label {
+                width: 0 !important;
+                overflow: hidden !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                opacity: 0 !important;
+            }
+
+            .admin-sidebar.collapsed .nav-link span.text-label::after {
+                left: 80px !important; 
+            }
+
+        .admin-sidebar .nav-link i {
+            font-size: 18px;
+            min-width: 24px;
+            text-align: center;
+        }
+
+
+        .text-label {
+            transition: opacity .2s;
+            white-space: nowrap;
+        }
+
+        .admin-sidebar.collapsed .text-label {
+            opacity: 0;
+        }
+
+        .admin-sidebar.collapsed .nav-link span.text-label::after {
+            content: attr(data-title);
+            position: absolute;
+            left: 70px;
+            padding: 4px 10px;
+            background: #111;
+            color: #fff;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: .2s;
+        }
+
+        .admin-sidebar.collapsed .nav-link:hover span.text-label::after {
+            opacity: 1;
+        }
+
+        .admin-main {
+            margin-left: 240px;
+            padding: 24px;
+            transition: margin-left .25s;
+        }
+
+            .admin-main.expanded {
+                margin-left: 72px;
+            }
+
+        @@media (max-width: 991.98px) {
+            .admin-sidebar {
+                display: none !important;
+            }
+
+            .admin-main {
+                margin-left: 0 !important;
+                padding: 16px;
+            }
+
+            nav.navbar {
+                padding: .6rem 1rem;
+            }
+
+            nav .nav-item img {
+                width: 32px !important;
+                height: 32px !important;
+            }
+
+            .nav-link{
+                padding: 10px 20px;
+            }
+
+            #newsWrapper {
+                margin-right: 10px;
+            }
+
+            .navbar .btn {
+                padding: .4rem .6rem;
+                border-radius: 6px;
+            }
+
+            .nav-right-user {
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                gap: 10px;
+            }
+
+            .navbar-nav {
+                flex-direction: row !important;
+            }
+
+        }
+    </style>
+    @functions {
+        string Active(string controller, string action = "Index")
+        {
+            var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+            var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+            return (string.Equals(currentController, controller, System.StringComparison.OrdinalIgnoreCase)
+            && string.Equals(currentAction, action, System.StringComparison.OrdinalIgnoreCase))
+            ? "active"
+            : "";
+        }
+    }
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+        <div class="container-fluid">
+            <button class="btn btn-outline-primary d-lg-none me-2" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <form class="ms-auto me-3 d-none d-md-block" method="get" action="/Product/Index">
+                <div class="input-group">
+                    <input name="query" class="form-control" type="search" placeholder="Tìm kiếm..." />
+                    <button class="btn btn-outline-primary"><i class="fa fa-search"></i></button>
+                </div>
+            </form>
+
+            <ul class="nav-right-user navbar-nav ms-auto align-items-center">
+                <li class="nav-item dropdown me-3" id="newsWrapper" style="position:relative;">
+                    <a class="nav-link position-relative" href="javascript:void(0);" id="newsToggle">
+                        <i class="fa-solid fa-bell" id="bellIcon"></i>
+                        <span class="badge bg-danger position-absolute" id="newsCount"
+                              style="top:-6px; right:-6px; font-size:.7rem;">0</span>
+                    </a>
+                    <div id="newsPopup"
+                         class="shadow bg-white border rounded position-absolute end-0 mt-2"
+                         style="display:none; width:340px; max-height:420px; overflow-y:auto;">
+                        <ul id="newsList" class="list-group list-group-flush"></ul>
+                    </div>
+
+                </li>
+
+                <li class="nav-item d-flex align-items-center">
+                    <img src="https://ui-avatars.com/api/?name=@User.Identity.Name"
+                         class="rounded-circle me-2" width="36" />
+                    <span class="fw-semibold d-none d-sm-inline">@User.Identity.Name</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <aside id="sidebar" class="admin-sidebar d-none d-lg-flex flex-column">
+        <div class="brand">
+            <button id="btnCollapseGhost"><i class="fa-solid fa-angles-left"></i></button>
+        </div>
+
+        <div class="p-3 nav flex-column">
+            <a class="nav-link @Active("AdminOrder", "Dashboard")" href="/AdminOrder/Dashboard">
+                <i class="fa-solid fa-chart-line"></i> <span class="text-label">Dashboard</span>
+            </a>
+
+            <a class="nav-link @Active("Category")" href="/Category/Index">
+                <i class="fa-solid fa-box"></i> <span class="text-label">Danh mục</span>
+            </a>
+
+            <a class="nav-link @Active("Brand")" href="/Brand/Index">
+                <i class="fa-solid fa-box"></i> <span class="text-label">Thương hiệu</span>
+            </a>
+
+            <a class="nav-link @Active("AdminOrder", "Index")" href="/AdminOrder/Index">
+                <i class="fa-solid fa-box"></i> <span class="text-label">Đơn hàng</span>
+            </a>
+
+            <a class="nav-link @Active("Product")" href="/Product/Index">
+                <i class="fa-solid fa-box"></i> <span class="text-label">Sản phẩm</span>
+            </a>
+
+            <a class="nav-link @Active("Promotion")" href="/Promotion/Index">
+                <i class="fa-solid fa-box"></i> <span class="text-label">Khuyến Mãi</span>
+            </a>
+
+            <a class="nav-link @Active("News")" href="/News/Index">
+                <i class="fa-solid fa-box"></i> <span class="text-label">Tin Tức</span>
+            </a>
+
+            <a class="nav-link @Active("Contact")" href="/Contact/Index">
+                <i class="fa-solid fa-box"></i> <span class="text-label">Liên hệ</span>
+            </a>
+
+            <a class="nav-link @Active("StockHistory")" href="/StockHistory/Index">
+                <i class="fa-solid fa-box"></i> <span class="text-label">Lịch sử kho</span>
+            </a>
+
+            <hr />
+
+            <a class="nav-link @Active("Manage")" href="/Identity/Account/Manage">
+                <i class="fa-solid fa-user-gear"></i> <span class="text-label" data-title="Tài khoản">Tài khoản</span>
+            </a>
+            <a class="nav-link text-danger" href="/Identity/Account/Logout">
+                <i class="fa-solid fa-right-from-bracket"></i> <span class="text-label" data-title="Đăng xuất">Đăng xuất</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="offcanvas offcanvas-start" id="mobileSidebar">
+        <div class="offcanvas-header">
+            <h5 class="fw-bold text-primary">Menu</h5>
+            <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <a class="nav-link @Active("Dashboard")" href="/Dashboard/Index"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a class="nav-link @Active("Order")" href="/Order/Index"><i class="fa-solid fa-box"></i> Đơn hàng</a>
+            <a class="nav-link @Active("Customer")" href="/Customer/Index"><i class="fa-solid fa-users"></i> Khách hàng</a>
+            <a class="nav-link @Active("Product")" href="/Product/Index"><i class="fa-solid fa-tags"></i> Sản phẩm</a>
+
+            @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_StockManager))
+            {
+                <a class="nav-link @Active("Warehouse")" href="/Warehouse/Index"><i class="fa-solid fa-warehouse"></i> Kho hàng</a>
+            }
+
+            <hr />
+            <a class="nav-link @Active("Manage")" href="/Identity/Account/Manage"><i class="fa-solid fa-user-gear"></i> Tài khoản</a>
+            <a class="nav-link text-danger" href="/Identity/Account/Logout"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+        </div>
+    </div>
+
+    <main id="mainContent" class="admin-main">
+        @RenderBody()
+    </main>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const s = document.getElementById('sidebar');
+        const m = document.getElementById('mainContent');
+        const g = document.getElementById('btnCollapseGhost');
+        g.onclick = () => { s.classList.toggle('collapsed'); m.classList.toggle('expanded'); };
+    </script>
+    <script>
+        const newsPopup = document.getElementById("newsPopup");
+        const newsToggle = document.getElementById("newsToggle");
+        const newsWrapper = document.getElementById("newsWrapper");
+        const newsCount = document.getElementById("newsCount");
+        const newsList = document.getElementById("newsList");
+        const bellIcon = document.getElementById("bellIcon");
+
+        newsToggle.addEventListener("click", () => {
+            const visible = newsPopup.style.display === "block";
+            newsPopup.style.display = visible ? "none" : "block";
+            if (!visible) loadLatestNews();
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!newsWrapper.contains(e.target)) {
+                newsPopup.style.display = "none";
+            }
+        });
+
+        // 🔄 Hàm load tin tức
+        function loadLatestNews() {
+            fetch("/News/GetLatest")
+                .then(res => res.json())
+                .then(data => {
+                    newsList.innerHTML = "";
+                    if (data.length === 0) {
+                        newsList.innerHTML = `<li class="list-group-item text-center text-muted">Không có tin mới</li>`;
+                    } else {
+                        data.forEach(n => {
+                            newsList.innerHTML += `
+                                <li class="list-group-item">
+                                    <a href="/News/Detail/${n.id}" class="text-decoration-none text-dark d-block">
+                                        <div class="fw-semibold">${n.title}</div>
+                                        <small class="text-muted">${n.publishedDate}</small>
+                                    </a>
+                                </li>`;
+                        });
+                    }
+                    newsCount.innerText = data.length;
+                })
+                .catch(() => {
+                    newsList.innerHTML = `<li class="list-group-item text-center text-danger">Lỗi tải dữ liệu</li>`;
+                });
+        }
+
+        // 🕒 Auto reload mỗi 30s
+        setInterval(loadLatestNews, 30000);
+        loadLatestNews();
+
+        // 🔔 Kết nối SignalR
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/newsHub")
+            .build();
+
+        // Khi nhận tin mới từ server
+        connection.on("ReceiveNews", (title) => {
+            // Rung chuông
+            bellIcon.classList.add("ring");
+            setTimeout(() => bellIcon.classList.remove("ring"), 2000);
+
+            // Cập nhật danh sách tin mới nhất
+            loadLatestNews();
+
+            // Hiển thị thông báo nhỏ
+            const toast = document.createElement("div");
+            toast.className = "position-fixed top-0 end-0 p-3";
+            toast.innerHTML = `
+                <div class="toast align-items-center text-bg-primary border-0 show" style="z-index:2000">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            📰 Tin mới: <strong>${title}</strong>
+                        </div>
+                    </div>
+                </div>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        });
+
+        connection.start().catch(err => console.error(err.toString()));
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

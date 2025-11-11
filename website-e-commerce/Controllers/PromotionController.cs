@@ -13,12 +13,27 @@ namespace website_e_commerce.Controllers.Admin
             _promotionRepo = promotionRepo;
         }
 
-        // 📦 Danh sách
-        public async Task<IActionResult> Index()
+        // 📦 Danh sách + Phân trang
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var promos = await _promotionRepo.GetAllAsync();
+            int pageSize = 10; // Số item mỗi trang
+            var promos = (await _promotionRepo.GetAllAsync()).ToList();
+
+            int totalItems = promos.Count();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            promos = promos
+                .OrderByDescending(p => p.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
             return View(promos);
         }
+
 
         // ➕ Hiển thị form thêm
         public IActionResult Add() => View();

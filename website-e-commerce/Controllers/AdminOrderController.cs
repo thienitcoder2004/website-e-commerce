@@ -15,17 +15,30 @@ namespace website_e_commerce.Controllers
             _context = context;
         }
 
-        // ✅ Danh sách đơn hàng
-        public async Task<IActionResult> Index()
+        // ✅ Danh sách đơn hàng + Phân trang
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var orders = await _context.Orders
+            int pageSize = 10; 
+
+            var ordersQuery = _context.Orders
                 .Include(o => o.ApplicationUser)
                 .Include(o => o.Payments)
-                .OrderByDescending(o => o.OrderDate)
+                .OrderByDescending(o => o.OrderDate);
+
+            int totalItems = await ordersQuery.CountAsync();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var orders = await ordersQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
 
             return View(orders);
         }
+
 
         // ✅ Chi tiết đơn hàng
         public async Task<IActionResult> Details(int id)

@@ -28,45 +28,78 @@
                 <th>Tên thương hiệu</th>
                 <th>Quốc gia</th>
                 <th>Trạng thái</th>
-                <th>Hành động</th>
+                <th style="width:180px;">Hành động</th>
             </tr>
         </thead>
         <tbody class="text-center">
-            @foreach (var brand in Model)
+            @if (Model != null && Model.Any())
+            {
+                foreach (var brand in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (!string.IsNullOrEmpty(brand.LogoUrl))
+                            {
+                                <img src="@brand.LogoUrl" width="60" class="rounded shadow-sm" />
+                            }
+                            else
+                            {
+                                <span class="text-muted fst-italic">Chưa có</span>
+                            }
+                        </td>
+
+                        <td class="fw-semibold">@brand.Name</td>
+                        <td>@brand.Country</td>
+                        <td>
+                            @if (brand.IsActive)
+                            {
+                                <span class="badge bg-success">Hiển thị</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Ẩn</span>
+                            }
+                        </td>
+
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@brand.Id" class="btn btn-sm btn-warning me-1">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@brand.Id" class="btn btn-sm btn-danger">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>
-                        @if (!string.IsNullOrEmpty(brand.LogoUrl))
-                        {
-                            <img src="@brand.LogoUrl" width="60" class="rounded shadow-sm" />
-                        }
-                        else
-                        {
-                            <span class="text-muted fst-italic">Chưa có</span>
-                        }
-                    </td>
-                    <td>@brand.Name</td>
-                    <td>@brand.Country</td>
-                    <td>
-                        @if (brand.IsActive)
-                        {
-                            <span class="badge bg-success">Hiển thị</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">Ẩn</span>
-                        }
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@brand.Id" class="btn btn-sm btn-warning me-1">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </a>
-                        <a asp-action="Delete" asp-route-id="@brand.Id" class="btn btn-sm btn-danger">
-                            <i class="fa-solid fa-trash"></i>
-                        </a>
-                    </td>
+                    <td colspan="5" class="text-center text-muted">Không có thương hiệu nào.</td>
                 </tr>
             }
         </tbody>
     </table>
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Trước</a>
+                </li>
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Sau</a>
+                </li>
+            </ul>
+        </nav>
+    }
 </div>

@@ -26,9 +26,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// ==========================
 // Đăng nhập bằng Google & Facebook
-// ==========================
 builder.Services.AddAuthentication()
     .AddGoogle(options =>
     {
@@ -39,6 +37,7 @@ builder.Services.AddAuthentication()
         options.Scope.Add("profile");
         options.ClaimActions.MapJsonKey("picture", "picture", "url");
     });
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";
@@ -84,18 +83,15 @@ app.MapRazorPages();
 
 // Định tuyến
 app.MapControllerRoute(
-    name: "Admin",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
 
 app.MapControllerRoute(
     name: "folderRouting",
     pattern: "{folder}",
     defaults: new { controller = "Home", action = "Index" });
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
 
 // Gọi hàm tạo/cập nhật Role & Admin
 await SeedRolesAndAdmin(app);
@@ -110,7 +106,7 @@ static async Task SeedRolesAndAdmin(IApplicationBuilder app)
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
     // Các role mặc định
-    string[] roles = { SD.Role_Admin, SD.Role_Employee, SD.Role_Customer };
+    string[] roles = { SD.Role_Admin, SD.Role_Employee, SD.Role_Customer, SD.Role_StockManager };
     foreach (var role in roles)
     {
         if (!await roleManager.RoleExistsAsync(role))
