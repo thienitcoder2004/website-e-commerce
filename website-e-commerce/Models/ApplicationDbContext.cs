@@ -104,7 +104,6 @@ namespace website_e_commerce.Models
                 new Product { Id = 20, Name = "Robot hút bụi Xiaomi S12", OldPrice = 9990000, NewPrice = 8490000, DiscountPercent = 15, CategoryId = 20, BrandId = 5, StockQuantity = 25, WebQuantity = 10, ImageUrl = "/images/products/xiaomirobot.jpg", Description = "Robot hút bụi thông minh", Specifications = "Laser, tự động sạc" }
             );
 
-
             // ========== STOCK HISTORY SEED ==========
             modelBuilder.Entity<StockHistory>().HasData(
     new StockHistory { Id = 1, ProductId = 1, ActionType = "Import", Quantity = 20, Note = "Nhập kho đợt đầu", CreatedAt = new DateTime(2024, 01, 05) },

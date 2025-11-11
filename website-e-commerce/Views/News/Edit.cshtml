@@ -1,0 +1,68 @@
+﻿@model website_e_commerce.Models.News
+@{
+    ViewData["Title"] = "Chỉnh sửa bài viết";
+}
+
+<div class="container mt-4" style="max-width:900px;">
+    <h2 class="fw-bold text-warning mb-4">✏️ Chỉnh sửa bài viết</h2>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data" class="card p-4 shadow-sm border-0 rounded-4">
+
+        <input type="hidden" asp-for="Id" />
+
+        <!-- Ảnh hiện tại -->
+        <div class="text-center mb-3">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" class="rounded shadow-sm" style="height:200px; object-fit:cover; max-width:100%;" />
+            }
+            else
+            {
+                <p class="text-muted">Chưa có ảnh</p>
+            }
+        </div>
+
+        <!-- Chọn ảnh mới -->
+        <div class="mb-4">
+            <label class="form-label fw-semibold">Đổi ảnh mới (tùy chọn):</label>
+            <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="Title" class="form-label fw-semibold"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Author" class="form-label fw-semibold"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Summary" class="form-label fw-semibold"></label>
+            <textarea asp-for="Summary" rows="2" class="form-control"></textarea>
+            <span asp-validation-for="Summary" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Content" class="form-label fw-semibold"></label>
+            <textarea asp-for="Content" rows="7" class="form-control"></textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-4">
+            <input asp-for="IsPublished" class="form-check-input" />
+            <label asp-for="IsPublished" class="form-check-label fw-semibold"></label>
+        </div>
+
+        <div class="text-end">
+            <a asp-action="Index" class="btn btn-secondary me-2">Hủy</a>
+            <button type="submit" class="btn btn-warning px-4">Lưu thay đổi</button>
+        </div>
+
+    </form>
+</div>

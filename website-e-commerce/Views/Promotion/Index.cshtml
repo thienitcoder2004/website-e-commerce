@@ -1,59 +1,101 @@
 ﻿@model IEnumerable<website_e_commerce.Models.PromotionCode>
+
 @{
     ViewData["Title"] = "Quản lý mã khuyến mãi";
 }
 
-<div class="container mt-4">
-    <h2 class="text-center fw-bold text-danger mb-4">🎁 Quản lý mã khuyến mãi</h2>
-    <a asp-action="Add" class="btn btn-success mb-3">+ Thêm mã mới</a>
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">🎁 Quản lý mã khuyến mãi</h2>
 
     @if (TempData["Success"] != null)
     {
-        <div class="alert alert-success">@TempData["Success"]</div>
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
     }
 
-    <table class="table table-bordered table-hover text-center align-middle shadow-sm">
-        <thead class="table-danger">
+    <div class="mb-3 text-end">
+        <a asp-action="Add" class="btn btn-success">
+            <i class="fa-solid fa-plus"></i> Thêm mã mới
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover align-middle shadow-sm">
+        <thead class="table-primary text-center">
             <tr>
-                <th>STT</th>
+                <th style="width:60px;">ID</th>
                 <th>Mã</th>
-                <th>Giảm %</th>
+                <th>Giảm (%)</th>
                 <th>Giảm tiền</th>
                 <th>Thời gian áp dụng</th>
-                <th>Lượt / Giới hạn</th>
+                <th>Số lượt dùng</th>
                 <th>Trạng thái</th>
-                <th>Hành động</th>
+                <th style="width:160px;">Hành động</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var item in Model)
+
+        <tbody class="text-center">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    var statusClass = item.IsActive ? "success" : "secondary";
+                    var statusText = item.IsActive ? "Hoạt động" : "Ngưng";
+
+                    <tr>
+                        <td class="fw-semibold">@item.Id</td>
+                        <td class="fw-bold">@item.Code</td>
+                        <td>@item.DiscountPercent %</td>
+                        <td class="text-danger fw-semibold">@String.Format("{0:N0} ₫", item.DiscountAmount)</td>
+                        <td>@item.StartDate.ToString("dd/MM/yyyy") - @item.EndDate.ToString("dd/MM/yyyy")</td>
+                        <td>@item.UsageCount / @item.MaxUsage</td>
+                        <td><span class="badge bg-@statusClass">@statusText</span></td>
+
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-1">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+
+                            <form asp-action="Delete" asp-route-id="@item.Id" method="post"
+                                  onsubmit="return confirm('⚠️ Bạn có chắc muốn xóa mã này?');"
+                                  style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Code</td>
-                    <td>@item.DiscountPercent%</td>
-                    <td>@String.Format("{0:N0}₫", item.DiscountAmount)</td>
-                    <td>@item.StartDate.ToShortDateString() - @item.EndDate.ToShortDateString()</td>
-                    <td>@item.UsageCount / @item.MaxUsage</td>
-                    <td>
-                        @if (item.IsActive)
-                        {
-                            <span class="badge bg-success">Hoạt động</span>
-                        }
-                        else
-                        {
-
-                            <span class="badge bg-secondary">Ngưng</span>
-                        }
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Sửa</a>
-                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
-                            <button class="btn btn-danger btn-sm" onclick="return confirm('Xóa mã này?')">Xóa</button>
-                        </form>
-                    </td>
+                    <td colspan="8" class="text-center text-muted">Không có mã khuyến mãi nào.</td>
                 </tr>
             }
         </tbody>
     </table>
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Trước</a>
+                </li>
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Sau</a>
+                </li>
+            </ul>
+        </nav>
+    }
 </div>

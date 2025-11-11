@@ -15,9 +15,22 @@ namespace website_e_commerce.Controllers
             _env = env;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var brands = await _brandRepo.GetAllAsync();
+            int pageSize = 10; // số thương hiệu mỗi trang
+            var brands = (await _brandRepo.GetAllAsync()).ToList();
+
+            int totalItems = brands.Count();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            brands = brands
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
             return View(brands);
         }
 

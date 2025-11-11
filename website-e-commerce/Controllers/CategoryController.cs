@@ -14,11 +14,25 @@ namespace website_e_commerce.Controllers
         }
 
         // GET: /Category
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
-            var categories = _categoryRepository.GetAllCategories();
+            int pageSize = 10;
+            var categories = _categoryRepository.GetAllCategories().ToList();
+
+            int totalItems = categories.Count();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            categories = categories
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
             return View(categories);
         }
+
 
         // GET: /Category/Add
         public IActionResult Add()

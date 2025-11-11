@@ -1,62 +1,101 @@
 ﻿@model IEnumerable<website_e_commerce.Models.Order>
+
 @{
     ViewData["Title"] = "Quản lý đơn hàng";
 }
 
-<div class="container py-5">
-    <h2 class="fw-bold text-center text-danger mb-4">📦 Quản lý đơn hàng</h2>
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">📦 Danh sách đơn hàng</h2>
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show">
             @TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
 
-    <table class="table table-hover shadow-sm">
-        <thead class="table-danger text-center">
+    <table class="table table-bordered table-hover align-middle shadow-sm">
+        <thead class="table-primary text-center">
             <tr>
-                <th>Mã đơn</th>
+                <th style="width:80px;">Mã</th>
                 <th>Khách hàng</th>
                 <th>Ngày đặt</th>
                 <th>Tổng tiền</th>
                 <th>Trạng thái</th>
-                <th>Hành động</th>
+                <th style="width:160px;">Hành động</th>
             </tr>
         </thead>
-        <tbody class="text-center align-middle">
-            @foreach (var order in Model)
-            {
-                var payment = order.Payments.FirstOrDefault();
-                <tr>
-                    <td>#@order.Id</td>
-                    <td>@order.ApplicationUser?.HoTen</td>
-                    <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td class="text-danger fw-bold">@String.Format("{0:N0} đ", order.TotalPrice)</td>
-                    <td>
-                        <span class="badge bg-@(payment == null ? "secondary" :
-                                                                               payment.Status == "Success" ? "success" :
-                                                                               payment.Status == "Pending" ? "warning text-dark" :
-                                                                               "danger")">
-                            @(payment == null
-                                                    ? "Chưa thanh toán"
-                                                    : payment.Status == "Success" ? "Thành công"
-                                                    : payment.Status == "Pending" ? "Đang chờ"
-                                                    : "Thất bại")
-                    </span>
-                </td>
-                <td class="d-flex justify-content-center gap-2">
-                    <a asp-action="Details" asp-route-id="@order.Id"
-                       class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
 
-                        <form asp-action="DeleteConfirmed" method="post" asp-route-id="@order.Id"
-                              onsubmit="return confirm('⚠️ Bạn có chắc muốn xoá đơn hàng này không?');">
-                            <button type="submit" class="btn btn-outline-danger btn-sm">Xoá</button>
-                        </form>
-                    </td>
+        <tbody class="text-center">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var order in Model)
+                {
+                    var payment = order.Payments.FirstOrDefault();
+
+                    string statusText = payment == null
+                    ? "Chưa thanh toán"
+                    : payment.Status == "Success" ? "Thành công"
+                    : payment.Status == "Pending" ? "Đang xử lý"
+                    : "Thất bại";
+
+                    string badgeClass = payment == null
+                    ? "secondary"
+                    : payment.Status == "Success" ? "success"
+                    : payment.Status == "Pending" ? "warning text-dark"
+                    : "danger";
+
+                    <tr>
+                        <td class="fw-semibold">#@order.Id</td>
+                        <td>@order.ApplicationUser?.HoTen</td>
+                        <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="text-danger fw-bold">@String.Format("{0:N0} đ", order.TotalPrice)</td>
+                        <td><span class="badge bg-@badgeClass">@statusText</span></td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-info me-1">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </a>
+
+                            <form asp-action="DeleteConfirmed" asp-route-id="@order.Id" method="post"
+                                  onsubmit="return confirm('⚠️ Bạn có chắc muốn xoá đơn hàng này không?');"
+                                  style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted">Không có đơn hàng nào.</td>
                 </tr>
-                        }
+            }
         </tbody>
     </table>
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Trước</a>
+                </li>
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Sau</a>
+                </li>
+            </ul>
+        </nav>
+    }
 </div>

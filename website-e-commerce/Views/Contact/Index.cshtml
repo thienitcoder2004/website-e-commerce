@@ -4,51 +4,97 @@
     ViewData["Title"] = "Danh sách liên hệ";
 }
 
-<h2 class="mb-3">📬 Danh sách liên hệ</h2>
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">📬 Danh sách liên hệ</h2>
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
 
-<a asp-action="Add" class="btn btn-success mb-3">+ Thêm liên hệ</a>
+    <div class="mb-3 text-end">
+        <a asp-action="Add" class="btn btn-success">
+            <i class="fa-solid fa-plus"></i> Thêm liên hệ
+        </a>
+    </div>
 
-<table class="table table-bordered table-hover">
-    <thead class="table-light">
-        <tr>
-            <th>ID</th>
-            <th>Họ tên</th>
-            <th>Email</th>
-            <th>Số điện thoại</th>
-            <th>Nội dung</th>
-            <th>Ngày gửi</th>
-            <th class="text-center">Hành động</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            foreach (var contact in Model)
+    <table class="table table-bordered table-hover align-middle shadow-sm">
+        <thead class="table-primary text-center">
+            <tr>
+                <th style="width:60px;">ID</th>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>Số điện thoại</th>
+                <th>Nội dung</th>
+                <th>Ngày gửi</th>
+                <th style="width:160px;">Hành động</th>
+            </tr>
+        </thead>
+
+        <tbody class="text-center">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var contact in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold">@contact.Id</td>
+                        <td>@contact.FullName</td>
+                        <td>@contact.Email</td>
+                        <td>@contact.Phone</td>
+                        <td class="text-start">@contact.Message</td>
+                        <td>@contact.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@contact.Id" class="btn btn-sm btn-warning me-1">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+
+                            <a asp-action="Details" asp-route-id="@contact.Id" class="btn btn-sm btn-info me-1">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </a>
+
+                            <form asp-action="DeleteConfirmed" asp-route-id="@contact.Id" method="post"
+                                  onsubmit="return confirm('⚠️ Bạn có chắc muốn xóa liên hệ này?');"
+                                  style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@contact.Id</td>
-                    <td>@contact.FullName</td>
-                    <td>@contact.Email</td>
-                    <td>@contact.Phone</td>
-                    <td>@contact.Message</td>
-                    <td>@contact.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td class="text-center">
-                        <a asp-action="Edit" asp-route-id="@contact.Id" class="btn btn-warning btn-sm">Sửa</a>
-                        <a asp-action="Delete" asp-route-id="@contact.Id" class="btn btn-danger btn-sm">Xóa</a>
-                    </td>
+                    <td colspan="7" class="text-center text-muted">Không có liên hệ nào.</td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="7" class="text-center text-muted">Không có liên hệ nào.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Trước</a>
+                </li>
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Sau</a>
+                </li>
+            </ul>
+        </nav>
+    }
+</div>

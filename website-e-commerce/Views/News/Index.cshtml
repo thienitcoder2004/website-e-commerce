@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<website_e_commerce.Models.News>
 
-@* <style>
+<style>
     .news-card {
         transition: all 0.3s ease;
         border-radius: 16px;
@@ -63,50 +63,147 @@
         .add-button:hover {
             background-color: #157347;
         }
-</style> *@
+</style>
 
-<section class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold text-primary">📰 Danh sách tin tức</h3>
-        <a href="/News/Add" class="add-button">
-            ➕ Thêm tin mới
-        </a>
-    </div>
+@if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+{
+    <div class="container mt-5">
+        <h2 class="text-center text-primary mb-4">📰 Danh sách tin tức</h2>
 
-    <div class="row g-4">
-        @if (Model != null && Model.Any())
+        @if (TempData["Message"] != null)
         {
-            @foreach (var item in Model)
-            {
-                <div class="col-md-4">
-                    <div class="news-card h-100">
-                        <img src="@item.ImageUrl" alt="@item.Title" />
-                        <div class="p-3 d-flex flex-column">
-                            <a href="/News/Detail/@item.Id" class="news-title">@item.Title</a>
-                            <p class="news-meta">
-                                📅 @item.PublishedDate.ToString("dd/MM/yyyy") — ✍️ <i>@item.Author</i>
-                            </p>
-                            <p class="news-summary flex-grow-1">@item.Summary</p>
+            <div class="alert alert-success alert-dismissible fade show">
+                @TempData["Message"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
 
-                            <div class="btn-group-sm mt-3 d-flex justify-content-between">
-                                <a href="/News/Detail/@item.Id" class="btn btn-outline-primary">👁️ Xem</a>
-                                <a href="/News/Update/@item.Id" class="btn btn-outline-warning text-dark">✏️ Sửa</a>
-                                <a href="/News/Delete/@item.Id"
-                                   class="btn btn-outline-danger"
-                                   onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này không?');">
-                                    🗑️ Xóa
+        <div class="mb-3 text-end">
+            <a asp-action="Add" class="btn btn-success">
+                <i class="fa-solid fa-plus"></i> Thêm tin mới
+            </a>
+        </div>
+
+        <table class="table table-bordered table-hover align-middle shadow-sm">
+            <thead class="table-primary text-center">
+                <tr>
+                    <th style="width:120px;">Ảnh</th>
+                    <th>Tiêu đề</th>
+                    <th>Tác giả</th>
+                    <th>Ngày đăng</th>
+                    <th style="width:120px;">Lượt xem</th>
+                    <th style="width:140px;">Trạng thái</th>
+                    <th style="width:200px;">Hành động</th>
+                </tr>
+            </thead>
+
+            <tbody class="text-center">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var news in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@news.ImageUrl" class="rounded" style="width:100px; height:60px; object-fit:cover;" />
+                            </td>
+
+                            <td class="fw-semibold text-start">@news.Title</td>
+                            <td>@news.Author</td>
+                            <td>@news.PublishedDate.ToString("dd/MM/yyyy")</td>
+                            <td>@news.ViewCount</td>
+
+                            <td>
+                                @if (news.IsPublished)
+                                {
+                                    <span class="badge bg-success">Đã đăng</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Chưa đăng</span>
+                                }
+                            </td>
+
+                            <td>
+                                <a asp-action="Detail" asp-route-id="@news.Id" class="btn btn-sm btn-info me-1">
+                                    <i class="fa-solid fa-circle-info"></i>
                                 </a>
+
+                                <a asp-action="Edit" asp-route-id="@news.Id" class="btn btn-sm btn-warning me-1">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+
+                                <form asp-action="Delete" asp-route-id="@news.Id" method="post"
+                                      onsubmit="return confirm('⚠️ Bạn có chắc muốn xóa bài viết này?');"
+                                      style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">Không có tin tức nào.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (ViewBag.TotalPages > 1)
+        {
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Trước</a>
+                    </li>
+
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                        </li>
+                    }
+
+                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Sau</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    </div>
+}
+else
+{
+    <section class="container mt-5">
+        <div class="row g-4">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-4">
+                        <div class="news-card h-100">
+                            <img src="@item.ImageUrl" alt="@item.Title" />
+                            <div class="p-3 d-flex flex-column">
+                                <a href="/News/Detail/@item.Id" class="news-title">@item.Title</a>
+                                <p class="news-meta">
+                                    📅 @item.PublishedDate.ToString("dd/MM/yyyy") — ✍️ <i>@item.Author</i>
+                                </p>
+                                <p class="news-summary flex-grow-1">@item.Summary</p>
                             </div>
                         </div>
                     </div>
+                }
+            }
+            else
+            {
+                <div class="text-center text-muted">
+                    <p>Không có tin tức nào để hiển thị.</p>
                 </div>
             }
-        }
-        else
-        {
-            <div class="text-center text-muted">
-                <p>Không có tin tức nào để hiển thị.</p>
-            </div>
-        }
-    </div>
-</section>
+        </div>
+    </section>
+}
+

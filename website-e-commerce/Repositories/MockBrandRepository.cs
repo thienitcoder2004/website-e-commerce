@@ -30,9 +30,17 @@ namespace website_e_commerce.Repositories
 
         public async Task UpdateAsync(Brand brand)
         {
-            _context.Brands.Update(brand);
+            var existing = await _context.Brands.FirstOrDefaultAsync(b => b.Id == brand.Id);
+            if (existing == null) return;
+
+            existing.Name = brand.Name;
+            existing.Country = brand.Country;
+            existing.IsActive = brand.IsActive;
+            existing.LogoUrl = brand.LogoUrl;
+
             await _context.SaveChangesAsync();
         }
+
 
         public async Task DeleteAsync(int id)
         {
