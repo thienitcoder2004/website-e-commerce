@@ -22,92 +22,12 @@
           integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const btn = document.getElementById("chatbotBtn");
-            const box = document.getElementById("chatbotBox");
-            const input = document.getElementById("chatInput");
-            const sendBtn = document.getElementById("sendBtn");
-            const messages = document.getElementById("chatMessages");
-
-            // 🧠 1️⃣ KHÔI PHỤC LỊCH SỬ CHAT
-            let savedHistory = localStorage.getItem("chatHistory");
-            if (savedHistory && savedHistory.trim() !== "") {
-                messages.innerHTML = savedHistory;
-                console.log("✅ Đã khôi phục lịch sử chat");
-            } else {
-                const hello = `<div class="bot"><b>🤖 Bot:</b> Xin chào! Mình là trợ lý HTM Shop, bạn cần hỗ trợ gì không?</div>`;
-                messages.innerHTML = hello;
-                localStorage.setItem("chatHistory", hello);
-                console.log("🚀 Tạo lời chào đầu tiên");
-            }
-
-            messages.scrollTop = messages.scrollHeight;
-
-            // 💬 2️⃣ NÚT MỞ / ẨN CHAT
-            btn.addEventListener("click", () => {
-                box.style.display = box.style.display === "flex" ? "none" : "flex";
-            });
-
-            // ✉️ 3️⃣ GỬI TIN NHẮN
-            sendBtn.addEventListener("click", sendMessage);
-            input.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
-
-            function appendMessage(sender, text) {
-                const div = document.createElement("div");
-                div.className = sender;
-                div.innerHTML = `<b>${sender === "user" ? "Bạn" : "🤖 Bot"}:</b> ${text}`;
-                messages.appendChild(div);
-                messages.scrollTop = messages.scrollHeight;
-                // 💾 Lưu lịch sử mỗi lần thêm tin nhắn
-                localStorage.setItem("chatHistory", messages.innerHTML);
-            }
-
-            function sendMessage() {
-                const text = input.value.trim();
-                if (!text) return;
-
-                appendMessage("user", text);
-                input.value = "";
-
-                const typing = document.createElement("div");
-                typing.className = "bot";
-                typing.textContent = "🤖 Bot đang gõ...";
-                messages.appendChild(typing);
-                messages.scrollTop = messages.scrollHeight;
-
-                const formData = new FormData();
-                formData.append("message", text);
-
-                fetch("/chat/send", { method: "POST", body: formData })
-                    .then(res => res.json())
-                    .then(data => {
-                        typing.remove();
-                        appendMessage("bot", data.reply);
-                    })
-                    .catch(() => {
-                        typing.remove();
-                        appendMessage("bot", "⚠️ Không thể kết nối đến server!");
-                    });
-            }
-
-            // 🔁 4️⃣ ĐỒNG BỘ GIỮA CÁC TAB
-            window.addEventListener("storage", e => {
-                if (e.key === "chatHistory") {
-                    messages.innerHTML = e.newValue;
-                    messages.scrollTop = messages.scrollHeight;
-                }
-            });
-
-            // 🧷 5️⃣ TRƯỚC KHI ĐÓNG TRÌNH DUYỆT — LUÔN LƯU LẠI
-            window.addEventListener("beforeunload", () => {
-                localStorage.setItem("chatHistory", messages.innerHTML);
-            });
-        });
-    </script>
-
 </head>
 <body>
+    <div id="page-loader">
+        <div class="loader"></div>
+    </div>
+
     <div class="banner-top d-none d-md-block" style="background: #d62828">
         <picture>
             <source media="(max-width: 567px)" srcset="//bizweb.dktcdn.net/thumb/large/100/558/309/themes/999496/assets/banner_top.jpg?1758009184577">
@@ -152,6 +72,10 @@
                     </div>
 
                     <!-- 🔗 CÁC NÚT KHÁC -->
+                    <a href="/Product/Compare">
+                        <i class="fa-solid fa-code-compare"></i> So sánh
+                    </a>
+                    <a href="/Product/Favorites"><i class="fa-regular fa-heart"></i><span>Yêu thích</span></a>
                     <a href="/Contact/Add"><i class="fas fa-headset"></i><span>Liên hệ</span></a>
                     <a href="#"><i class="fas fa-clipboard-list"></i><span>Tra cứu<br />đơn hàng</span></a>
                     <a href="/ShoppingCart/Index"><i class="fas fa-shopping-cart"></i><span>Giỏ hàng</span></a>
@@ -499,7 +423,7 @@
         <div class="chatbot-header d-flex justify-content-between align-items-center">
             <span>🤖 Trợ lý HTM Shop</span>
             <button id="resetChat" title="Xóa lịch sử chat" class="btn btn-sm btn-outline-danger py-0 px-2">
-                <i class="fa-solid fa-rotate-right"></i> Reset
+                <i class="fa-solid fa-rotate-right"></i>
             </button>
         </div>
 
@@ -535,9 +459,14 @@
             messages.scrollTop = messages.scrollHeight;
 
             // 💬 2️⃣ NÚT MỞ / ẨN CHAT
-            btn.addEventListener("click", () => {
-                box.style.display = box.style.display === "flex" ? "none" : "flex";
-            });
+                btn.addEventListener("click", () => {
+            if (box.style.display === "flex") {
+                box.style.display = "none";
+            } else {
+                box.style.display = "flex";
+                messages.scrollTop = messages.scrollHeight;
+            }
+        });
 
             // ✉️ 3️⃣ GỬI TIN NHẮN
             sendBtn.addEventListener("click", sendMessage);
@@ -603,6 +532,13 @@
                     console.log("🧹 Đã reset toàn bộ lịch sử chat!");
                 }
             });
+        });
+
+            window.addEventListener("load", function () {
+            const loader = document.getElementById("page-loader");
+            loader.classList.add("hide");
+
+            setTimeout(() => loader.remove(), 400);
         });
     </script>
 

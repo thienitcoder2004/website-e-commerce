@@ -23,5 +23,6 @@ namespace website_e_commerce.Models
         // ✅ Ảnh đại diện (Google / Facebook)
         [StringLength(500)]
         public string? AvatarUrl { get; set; }
+        public List<FavoriteProduct> FavoriteProducts { get; set; } = new();
     }
 }

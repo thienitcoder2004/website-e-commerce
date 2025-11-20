@@ -504,21 +504,6 @@ namespace website_e_commerce.Migrations
                     { 20, 5, 20, "Robot hút bụi thông minh", 15, null, "/images/products/xiaomirobot.jpg", "Robot hút bụi Xiaomi S12", 8490000m, 9990000m, null, "Laser, tự động sạc", 25, 10 }
                 });
 
-            migrationBuilder.InsertData(
-                table: "StockHistory",
-                columns: new[] { "Id", "ActionType", "CreatedAt", "Note", "ProductId", "Quantity" },
-                values: new object[,]
-                {
-                    { 1, "Import", new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nhập kho đợt đầu", 1, 20 },
-                    { 2, "Export", new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), "Xuất bán", 1, 5 },
-                    { 3, "Import", new DateTime(2024, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nhập kho M2", 3, 10 },
-                    { 4, "Export", new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Bán web", 3, 3 },
-                    { 5, "Import", new DateTime(2024, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nhập kho AirPods", 6, 30 },
-                    { 6, "Export", new DateTime(2024, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "Xuất bán web", 6, 10 },
-                    { 7, "Import", new DateTime(2024, 1, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nhập tủ lạnh", 9, 8 },
-                    { 8, "Export", new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Đẩy lên web", 9, 2 }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",

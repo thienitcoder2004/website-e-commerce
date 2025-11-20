@@ -1,4 +1,5 @@
 ﻿@page
+@using website_e_commerce.Models
 @model RegisterModel
 
 <section class="section-login">
@@ -46,7 +47,8 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="name@example.com" />
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username"
+                            placeholder="name@example.com" />
                         <label asp-for="Input.Email">Email</label>
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
@@ -58,24 +60,29 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" placeholder="Mật khẩu" />
+                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password"
+                            placeholder="Mật khẩu" />
                         <label asp-for="Input.Password">Mật khẩu</label>
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" placeholder="Xác nhận mật khẩu" />
+                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password"
+                            placeholder="Xác nhận mật khẩu" />
                         <label asp-for="Input.ConfirmPassword">Xác nhận mật khẩu</label>
                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label asp-for="Input.Role"></label>
-                        <select asp-for="Input.Role" asp-items="Model.Input.RoleList" class="form-control">
-                            <option value="">-- Mặc định: Customer --</option>
-                        </select>
-                        <span asp-validation-for="Input.Role" class="text-danger"></span>
-                    </div>
+                    @if (User.IsInRole(SD.Role_Admin))
+                    {
+                        <div class="form-group">
+                            <label asp-for="Input.Role"></label>
+                            <select asp-for="Input.Role" asp-items="Model.Input.RoleList" class="form-control">
+                                <option value="">-- Mặc định: Customer --</option>
+                            </select>
+                            <span asp-validation-for="Input.Role" class="text-danger"></span>
+                        </div>
+                    }
 
                     <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Đăng ký</button>
                 </form>
@@ -97,4 +104,32 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function (e) {
+            const inputs = document.querySelectorAll("#registerForm input[required]");
+            let valid = true;
+
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    valid = false;
+                    input.classList.add("is-invalid");
+                } else {
+                    input.classList.remove("is-invalid");
+                }
+            });
+
+            if (!valid) {
+                e.preventDefault(); 
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Thiếu thông tin!',
+                    text: 'Vui lòng điền đầy đủ tất cả các trường bắt buộc.',
+                    confirmButtonColor: '#3085d6'
+                });
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 }

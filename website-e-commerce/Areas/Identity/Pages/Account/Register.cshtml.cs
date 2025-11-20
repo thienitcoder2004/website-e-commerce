@@ -81,8 +81,9 @@ namespace website_e_commerce.Areas.Identity.Pages.Account
             [Display(Name = "Mật khẩu")]
             public string Password { get; set; }
 
+            [Required(ErrorMessage = "Vui lòng nhập lại mật khẩu")]
             [DataType(DataType.Password)]
-            [Display(Name = "Nhập lại mật khẩu")]
+            [Display(Name = "Xác nhận mật khẩu")]
             [Compare("Password", ErrorMessage = "Mật khẩu không khớp.")]
             public string ConfirmPassword { get; set; }
 
@@ -92,6 +93,7 @@ namespace website_e_commerce.Areas.Identity.Pages.Account
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
         }
+
 
         public async Task OnGetAsync(string returnUrl = null)
         {

@@ -9431,11 +9431,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj",
+      "projectUniqueName": "D:\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj",
       "projectName": "website-e-commerce",
-      "projectPath": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj",
+      "projectPath": "D:\\website-e-commerce\\website-e-commerce\\website-e-commerce.csproj",
       "packagesPath": "C:\\Users\\thien\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\thien\\OneDrive\\Documents\\website-e-commerce\\website-e-commerce\\obj\\",
+      "outputPath": "D:\\website-e-commerce\\website-e-commerce\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -9450,7 +9450,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -9541,7 +9540,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

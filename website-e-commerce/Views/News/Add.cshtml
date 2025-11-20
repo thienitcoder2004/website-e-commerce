@@ -10,18 +10,22 @@
 
         <div class="row mb-3">
             <div class="col-md-6">
-                <label asp-for="Title" class="form-label fw-semibold"></label>
+                <label asp-for="Title" class="form-label fw-semibold">Tiêu đề</label>
                 <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
+
             <div class="col-md-6">
-                <label asp-for="Author" class="form-label fw-semibold"></label>
+                <label asp-for="Author" class="form-label fw-semibold">Tác giả</label>
                 <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
             </div>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Summary" class="form-label fw-semibold"></label>
+            <label asp-for="Summary" class="form-label fw-semibold">Tóm tắt</label>
             <textarea asp-for="Summary" rows="2" class="form-control"></textarea>
+            <span asp-validation-for="Summary" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
@@ -30,13 +34,14 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="Content" class="form-label fw-semibold"></label>
-            <textarea asp-for="Content" rows="6" class="form-control"></textarea>
+            <label asp-for="Content" class="form-label fw-semibold">Nội dung</label>
+            <textarea asp-for="Content" rows="7" class="form-control"></textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
         </div>
 
         <div class="form-check mb-3">
             <input asp-for="IsPublished" class="form-check-input" />
-            <label asp-for="IsPublished" class="form-check-label"></label>
+            <label asp-for="IsPublished" class="form-check-label">Đăng bài</label>
         </div>
 
         <div class="text-end">

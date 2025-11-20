@@ -464,6 +464,24 @@ namespace website_e_commerce.Migrations
                     b.ToTable("Contacts");
                 });
 
+            modelBuilder.Entity("website_e_commerce.Models.FavoriteProduct", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("FavoriteProducts");
+                });
+
             modelBuilder.Entity("website_e_commerce.Models.News", b =>
                 {
                     b.Property<int>("Id")
@@ -1108,80 +1126,6 @@ namespace website_e_commerce.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("StockHistory");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ActionType = "Import",
-                            CreatedAt = new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Nhập kho đợt đầu",
-                            ProductId = 1,
-                            Quantity = 20
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ActionType = "Export",
-                            CreatedAt = new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Xuất bán",
-                            ProductId = 1,
-                            Quantity = 5
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ActionType = "Import",
-                            CreatedAt = new DateTime(2024, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Nhập kho M2",
-                            ProductId = 3,
-                            Quantity = 10
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ActionType = "Export",
-                            CreatedAt = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Bán web",
-                            ProductId = 3,
-                            Quantity = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ActionType = "Import",
-                            CreatedAt = new DateTime(2024, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Nhập kho AirPods",
-                            ProductId = 6,
-                            Quantity = 30
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ActionType = "Export",
-                            CreatedAt = new DateTime(2024, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Xuất bán web",
-                            ProductId = 6,
-                            Quantity = 10
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ActionType = "Import",
-                            CreatedAt = new DateTime(2024, 1, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Nhập tủ lạnh",
-                            ProductId = 9,
-                            Quantity = 8
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ActionType = "Export",
-                            CreatedAt = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Đẩy lên web",
-                            ProductId = 9,
-                            Quantity = 2
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1233,6 +1177,25 @@ namespace website_e_commerce.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("website_e_commerce.Models.FavoriteProduct", b =>
+                {
+                    b.HasOne("website_e_commerce.Models.Product", "Product")
+                        .WithMany("FavoriteProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("website_e_commerce.Models.ApplicationUser", "User")
+                        .WithMany("FavoriteProducts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("website_e_commerce.Models.Order", b =>
@@ -1331,6 +1294,11 @@ namespace website_e_commerce.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("website_e_commerce.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("FavoriteProducts");
+                });
+
             modelBuilder.Entity("website_e_commerce.Models.Brand", b =>
                 {
                     b.Navigation("Products");
@@ -1350,6 +1318,8 @@ namespace website_e_commerce.Migrations
 
             modelBuilder.Entity("website_e_commerce.Models.Product", b =>
                 {
+                    b.Navigation("FavoriteProducts");
+
                     b.Navigation("OrderDetails");
 
                     b.Navigation("ProductImages");
