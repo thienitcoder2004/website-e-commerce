@@ -1,0 +1,287 @@
+﻿@model IEnumerable<website_e_commerce.Models.Product>
+
+@{
+    ViewData["Title"] = "So sánh sản phẩm";
+    var products = Model.ToList();
+}
+
+<style>
+    .compare-top-card {
+        border-radius: 16px;
+        background-color: #fff;
+    }
+
+    .compare-product-card {
+        border-right: 1px solid #eee;
+    }
+
+        .compare-product-card:last-child {
+            border-right: none;
+        }
+
+    .compare-price-current {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #d70018;
+    }
+
+    .compare-price-old {
+        font-size: 0.9rem;
+        text-decoration: line-through;
+        color: #999;
+    }
+
+    .compare-tab-header {
+        border-bottom: none;
+        background-color: #fff;
+        border-radius: 12px 12px 0 0;
+    }
+
+        .compare-tab-header .nav-link {
+            border: none;
+            border-radius: 0;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+            .compare-tab-header .nav-link.active {
+                color: #d70018;
+                border-bottom: 3px solid #d70018;
+            }
+
+    .compare-table-wrapper {
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .compare-table-title {
+        background-color: #d70018;
+        color: #fff;
+        padding: 0.75rem 1rem;
+        font-weight: 600;
+    }
+
+    .compare-table tbody tr td,
+    .compare-table tbody tr th {
+        padding: 0.75rem 1rem;
+        vertical-align: top;
+    }
+
+    .compare-table tbody tr:nth-child(even) {
+        background-color: #fafafa;
+    }
+</style>
+
+<div class="container my-4">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">So sánh sản phẩm</li>
+        </ol>
+    </nav>
+
+    <h2 class="text-center fw-bold mb-4">So sánh sản phẩm</h2>
+
+    @if (!products.Any())
+    {
+        <div class="alert alert-info">
+            Bạn chưa chọn sản phẩm nào để so sánh.
+            <a asp-controller="Product" asp-action="Index" class="alert-link">Quay lại trang sản phẩm</a>.
+        </div>
+    }
+    else
+    {
+        <!-- 🔼 Vùng card sản phẩm ở trên -->
+        <div class="compare-top-card shadow-sm p-3 mb-4">
+            <div class="row g-3 align-items-stretch">
+                @foreach (var p in products)
+                {
+                    <div class="col-md-4">
+                        <div class="h-100 px-3 compare-product-card position-relative">
+
+                            <!-- nút X xoá -->
+                            <form asp-controller="Product" asp-action="RemoveFromCompare" method="post"
+                                  class="position-absolute top-0 end-0 mt-2 me-2">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@p.Id" />
+                                <button type="submit" class="btn btn-sm btn-light border-0">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </form>
+
+                            <div class="text-center mt-3 mb-2">
+                                <img src="@p.ImageUrl" alt="@p.Name" style="max-height: 120px;" class="img-fluid" />
+                            </div>
+
+                            <div class="text-center mb-2">
+                                <div class="compare-price-current">
+                                    @p.NewPrice.ToString("N0") ₫
+                                </div>
+                                @if (p.OldPrice > p.NewPrice)
+                                {
+                                    <div class="compare-price-old">
+                                        @p.OldPrice.ToString("N0") ₫
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="text-center mb-3">
+                                <div class="fw-semibold">@p.Name</div>
+                            </div>
+
+                            <div class="d-grid mb-3">
+                                <a asp-controller="Product" asp-action="Details" asp-route-id="@p.Id"
+                                   class="btn btn-danger">
+                                    Mua ngay
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- 🔽 Tabs + checkbox -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <ul class="nav nav-tabs compare-tab-header" id="compareTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="tab-highlight-tab" data-bs-toggle="tab"
+                            data-bs-target="#tab-highlight" type="button" role="tab">
+                        Thông số nổi bật
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab-detail-tab" data-bs-toggle="tab"
+                            data-bs-target="#tab-detail" type="button" role="tab">
+                        Thông tin chi tiết
+                    </button>
+                </li>
+            </ul>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="onlyDifferent" checked />
+                <label class="form-check-label" for="onlyDifferent">
+                    Chỉ xem điểm khác biệt
+                </label>
+            </div>
+        </div>
+
+        <div class="tab-content compare-table-wrapper shadow-sm">
+            <!-- TAB 1: Thông số nổi bật -->
+            <div class="tab-pane fade show active" id="tab-highlight" role="tabpanel">
+
+                <div class="compare-table-title">
+                    ✨ Thông số nổi bật
+                </div>
+
+                <table class="table mb-0 compare-table">
+                    <tbody>
+                        <tr class="compare-row">
+                            <th style="width:220px;">Danh mục</th>
+                            @foreach (var p in products)
+                            {
+                                <td class="text-center">
+                                    @(p.Category != null ? p.Category.Name : "—")
+                                </td>
+                            }
+                        </tr>
+
+                        <tr class="compare-row">
+                            <th>Thương hiệu</th>
+                            @foreach (var p in products)
+                            {
+                                <td class="text-center">
+                                    @(p.Brand != null ? p.Brand.Name : "—")
+                                </td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TAB 2: Thông tin chi tiết -->
+            <div class="tab-pane fade" id="tab-detail" role="tabpanel">
+
+                <div class="compare-table-title">
+                    📋 Thông tin chi tiết
+                </div>
+
+                <table class="table mb-0 compare-table">
+                    <tbody>
+                        <tr class="compare-row">
+                            <th style="width:220px;">Mô tả sản phẩm</th>
+                            @foreach (var p in products)
+                            {
+                                <td class="text-start">
+                                    @if (string.IsNullOrWhiteSpace(p.Description))
+                                    {
+                                        <span class="text-muted">Chưa có mô tả</span>
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw(p.Description.Replace("\n", "<br />"))
+                                    }
+                                </td>
+                            }
+                        </tr>
+
+                        <tr class="compare-row">
+                            <th>Thông số kỹ thuật</th>
+                            @foreach (var p in products)
+                            {
+                                <td class="text-start">
+                                    @if (string.IsNullOrWhiteSpace(p.Specifications))
+                                    {
+                                        <span class="text-muted">Chưa cập nhật</span>
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw(p.Specifications.Replace("\n", "<br />"))
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const chk = document.getElementById("onlyDifferent");
+
+            function updateRows() {
+                const onlyDiff = chk.checked;
+
+                document.querySelectorAll(".compare-row").forEach(row => {
+                    const tds = row.querySelectorAll("td");
+                    if (tds.length === 0) return;
+
+                    // Lấy text từng ô, chuẩn hoá (lowercase + bỏ khoảng trắng 2 đầu)
+                    const values = Array.from(tds).map(td =>
+                        td.innerText.trim().toLowerCase()
+                    );
+
+                    const first = values[0];
+                    const allSame = values.every(v => v === first);
+
+                    // Nếu “chỉ xem điểm khác biệt” và tất cả cột giống nhau → ẩn hàng
+                    if (onlyDiff && allSame) {
+                        row.style.display = "none";
+                    } else {
+                        row.style.display = "";
+                    }
+                });
+            }
+
+            chk.addEventListener("change", updateRows);
+            updateRows(); // chạy 1 lần khi load trang
+        });
+    </script>
+}

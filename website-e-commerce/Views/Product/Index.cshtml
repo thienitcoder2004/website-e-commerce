@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Danh sách sản phẩm";
     int? categoryId = ViewBag.CategoryId;
+    var favoriteIds = ViewBag.FavoriteIds as List<int> ?? new List<int>();
 }
 
 @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_StockManager))
@@ -54,7 +55,7 @@
                         <input type="hidden" name="id" value="@p.Id" />
                         <input type="number" name="importQuantity" class="form-control form-control-sm" min="1"
                                placeholder="SL" style="width:90px;" />
-                        <button type="submit" class="btn btn-sm btn-outline-success">Nhập thêm</button>
+                        <button type="submit" class="btn btn-sm btn-outline-success">Nhập</button>
                     </form>
 
                             <form asp-action="ExportToWeb" method="post" class="d-inline-flex gap-1">
@@ -76,6 +77,23 @@
                         }
             </tbody>
         </table>
+        @if (ViewBag.TotalPages > 1)
+        {
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        var active = i == ViewBag.CurrentPage ? "active" : "";
+                        <li class="page-item @active">
+                            <a class="page-link"
+                               href="?page=@i@(ViewBag.CategoryId != null ? $"&categoryId={ViewBag.CategoryId}" : "")">
+                                @i
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
     </div>
 }
 else if (User.IsInRole(SD.Role_Employee))
@@ -113,6 +131,23 @@ else if (User.IsInRole(SD.Role_Employee))
                         }
             </tbody>
         </table>
+        @if (ViewBag.TotalPages > 1)
+        {
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        var active = i == ViewBag.CurrentPage ? "active" : "";
+                        <li class="page-item @active">
+                            <a class="page-link"
+                               href="?page=@i@(ViewBag.CategoryId != null ? $"&categoryId={ViewBag.CategoryId}" : "")">
+                                @i
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
     </div>
 }
 else
@@ -275,7 +310,39 @@ else
                     @foreach (var p in Model)
                     {
                         <div class="col-md-4 col-sm-6">
-                            <div class="product-card text-center p-3 rounded shadow-sm">
+                            <!-- 🔥 THÊM position-relative để đặt trái tim góc trên -->
+                            <div class="product-card text-center p-3 rounded shadow-sm position-relative">
+
+                                <!-- 💖 Nút yêu thích -->
+                                <div class="position-absolute top-0 end-0 mt-2 me-2">
+                                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                                    {
+                                        bool isFavorite = favoriteIds.Contains(p.Id);
+
+                                        <form asp-controller="Product" asp-action="ToggleFavorite" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="productId" value="@p.Id" />
+                                            <button type="submit" class="btn btn-sm btn-light rounded-circle shadow-sm">
+                                                <i class="@(isFavorite ? "fa-solid fa-heart text-danger" : "fa-regular fa-heart")"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <a asp-area="Identity" asp-page="/Account/Login"
+                                           class="btn btn-sm btn-light rounded-circle shadow-sm"
+                                           title="Đăng nhập để thêm yêu thích">
+                                            <i class="fa-regular fa-heart"></i>
+                                        </a>
+                                    }
+                                </div>
+                                <form asp-controller="Product" asp-action="AddToCompare" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@p.Id" />
+                                    <button type="submit" class="btn btn-outline-primary btn-sm">
+                                        <i class="fa-solid fa-code-compare me-1"></i> So sánh
+                                    </button>
+                                </form>
                                 <a asp-action="Details" asp-route-id="@p.Id" class="text-decoration-none text-dark">
                                     <img src="@p.ImageUrl" alt="@p.Name" class="img-fluid mb-2" />
                                     <h6 class="fw-semibold">@p.Name</h6>

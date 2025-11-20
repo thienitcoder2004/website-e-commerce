@@ -25,6 +25,7 @@ namespace website_e_commerce.Models
         [Required(ErrorMessage = "Vui lòng nhập nội dung bài viết")]
         public string? Content { get; set; }
 
+        // Trạng thái xuất bản
         public bool IsPublished { get; set; } = true;
         public string? Category { get; set; }
         public int ViewCount { get; set; } = 0;

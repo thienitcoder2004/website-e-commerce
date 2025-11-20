@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace website_e_commerce.Models
@@ -48,12 +49,16 @@ namespace website_e_commerce.Models
         [Display(Name = "Số lượng hiển thị web")]
         [Range(0, int.MaxValue, ErrorMessage = "Số lượng web không hợp lệ")]
         public int WebQuantity { get; set; } = 0;
+
         public Category? Category { get; set; }
+
         [ForeignKey("Brand")]
         public int? BrandId { get; set; }
         public Brand? Brand { get; set; }
+
         public List<ProductImage>? ProductImages { get; set; }
         public List<Reviews>? Reviews { get; set; }
         public List<OrderDetail>? OrderDetails { get; set; }
+        public List<FavoriteProduct>? FavoriteProducts { get; set; }
     }
 }

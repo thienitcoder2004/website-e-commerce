@@ -9,7 +9,6 @@ namespace website_e_commerce.Models
             : base(options)
         {
         }
-
         public DbSet<Category> Categories { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -22,7 +21,7 @@ namespace website_e_commerce.Models
         public DbSet<PromotionCode> PromotionCodes { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<StockHistory> StockHistory { get; set; }
-
+        public DbSet<FavoriteProduct> FavoriteProducts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -45,6 +44,24 @@ namespace website_e_commerce.Models
                 .WithMany()
                 .HasForeignKey(od => od.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FavoriteProduct>(entity =>
+            {
+                // Khóa chính tổng hợp: UserId + ProductId
+                entity.HasKey(fp => new { fp.UserId, fp.ProductId });
+
+                // 1 User có nhiều FavoriteProduct
+                entity.HasOne(fp => fp.User)
+                      .WithMany(u => u.FavoriteProducts)
+                      .HasForeignKey(fp => fp.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // 1 Product được nhiều User yêu thích
+                entity.HasOne(fp => fp.Product)
+                      .WithMany(p => p.FavoriteProducts)
+                      .HasForeignKey(fp => fp.ProductId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
 
             // ========== CATEGORY SEED (20) ==========
             modelBuilder.Entity<Category>().HasData(
@@ -103,21 +120,6 @@ namespace website_e_commerce.Models
                 new Product { Id = 19, Name = "Máy giặt LG 10.5Kg", OldPrice = 10990000, NewPrice = 9590000, DiscountPercent = 13, CategoryId = 19, BrandId = 2, StockQuantity = 18, WebQuantity = 7, ImageUrl = "/images/products/washingmachine.jpg", Description = "Giặt tiết kiệm điện", Specifications = "AI DD, TurboWash" },
                 new Product { Id = 20, Name = "Robot hút bụi Xiaomi S12", OldPrice = 9990000, NewPrice = 8490000, DiscountPercent = 15, CategoryId = 20, BrandId = 5, StockQuantity = 25, WebQuantity = 10, ImageUrl = "/images/products/xiaomirobot.jpg", Description = "Robot hút bụi thông minh", Specifications = "Laser, tự động sạc" }
             );
-
-            // ========== STOCK HISTORY SEED ==========
-            modelBuilder.Entity<StockHistory>().HasData(
-    new StockHistory { Id = 1, ProductId = 1, ActionType = "Import", Quantity = 20, Note = "Nhập kho đợt đầu", CreatedAt = new DateTime(2024, 01, 05) },
-    new StockHistory { Id = 2, ProductId = 1, ActionType = "Export", Quantity = 5, Note = "Xuất bán", CreatedAt = new DateTime(2024, 01, 06) },
-
-    new StockHistory { Id = 3, ProductId = 3, ActionType = "Import", Quantity = 10, Note = "Nhập kho M2", CreatedAt = new DateTime(2024, 01, 08) },
-    new StockHistory { Id = 4, ProductId = 3, ActionType = "Export", Quantity = 3, Note = "Bán web", CreatedAt = new DateTime(2024, 01, 10) },
-
-    new StockHistory { Id = 5, ProductId = 6, ActionType = "Import", Quantity = 30, Note = "Nhập kho AirPods", CreatedAt = new DateTime(2024, 01, 12) },
-    new StockHistory { Id = 6, ProductId = 6, ActionType = "Export", Quantity = 10, Note = "Xuất bán web", CreatedAt = new DateTime(2024, 01, 13) },
-
-    new StockHistory { Id = 7, ProductId = 9, ActionType = "Import", Quantity = 8, Note = "Nhập tủ lạnh", CreatedAt = new DateTime(2024, 01, 14) },
-    new StockHistory { Id = 8, ProductId = 9, ActionType = "Export", Quantity = 2, Note = "Đẩy lên web", CreatedAt = new DateTime(2024, 01, 15) }
-);
         }
     }
 }

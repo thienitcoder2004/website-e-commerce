@@ -12,8 +12,8 @@ using website_e_commerce.Models;
 namespace website_e_commerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251111120407_v2")]
-    partial class v2
+    [Migration("20251120145535_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1111,80 +1111,6 @@ namespace website_e_commerce.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("StockHistory");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ActionType = "Import",
-                            CreatedAt = new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Nhập kho đợt đầu",
-                            ProductId = 1,
-                            Quantity = 20
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ActionType = "Export",
-                            CreatedAt = new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Xuất bán",
-                            ProductId = 1,
-                            Quantity = 5
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ActionType = "Import",
-                            CreatedAt = new DateTime(2024, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Nhập kho M2",
-                            ProductId = 3,
-                            Quantity = 10
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ActionType = "Export",
-                            CreatedAt = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Bán web",
-                            ProductId = 3,
-                            Quantity = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ActionType = "Import",
-                            CreatedAt = new DateTime(2024, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Nhập kho AirPods",
-                            ProductId = 6,
-                            Quantity = 30
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ActionType = "Export",
-                            CreatedAt = new DateTime(2024, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Xuất bán web",
-                            ProductId = 6,
-                            Quantity = 10
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ActionType = "Import",
-                            CreatedAt = new DateTime(2024, 1, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Nhập tủ lạnh",
-                            ProductId = 9,
-                            Quantity = 8
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ActionType = "Export",
-                            CreatedAt = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Note = "Đẩy lên web",
-                            ProductId = 9,
-                            Quantity = 2
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
