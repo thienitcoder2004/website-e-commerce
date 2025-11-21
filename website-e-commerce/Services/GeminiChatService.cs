@@ -23,9 +23,6 @@ namespace website_e_commerce.Services
             _context = context;
         }
 
-        // ==============================
-        // 1. HÀM CHÍNH – TRẢ LỜI BOT
-        // ==============================
         public async Task<string> GetReplyAsync(string message)
         {
             try
@@ -35,10 +32,10 @@ namespace website_e_commerce.Services
 
                 string lower = message.ToLower().Trim();
 
-                // 🟩 1.1 Câu chào, cảm ơn, tạm biệt
-                string[] greetings = { "hi", "hello", "xin chào", "chào", "hey", "alo", "chào shop", "chào bạn", "lô" };
-                string[] thanks = { "cảm ơn", "cảm ơn shop", "thank", "tks", "thanks", "ok" };
-                string[] goodbyes = { "tạm biệt", "bye", "hẹn gặp lại", "goodbye", "see you" };
+                // Câu chào, cảm ơn, tạm biệt
+                string[] greetings = { "hi", "hello", "xin chào", "chào", "hey", "alo", "chào shop", "chào bạn", "lô", "chao ban", "chao" };
+                string[] thanks = { "cảm ơn", "cảm ơn shop", "thank", "tks", "thanks", "ok" , "cam on"};
+                string[] goodbyes = { "tạm biệt", "bye", "hẹn gặp lại", "goodbye", "see you", "tam biet" };
 
                 if (greetings.Any(g => lower == g || lower.StartsWith(g + " ")))
                     return "🤖 Xin chào! Mình là trợ lý HTM Shop 😊 Bạn muốn tìm sản phẩm nào hôm nay?";
@@ -49,14 +46,14 @@ namespace website_e_commerce.Services
                 if (goodbyes.Any(b => lower.Contains(b)))
                     return "👋 Hẹn gặp lại bạn nha! Chúc bạn một ngày tuyệt vời 🌸";
 
-                // 🟦 1.2 Nếu có chữ “so sánh” → so sánh 2 sản phẩm
+                //  Nếu so sánh 2 sản phẩm
                 if (lower.Contains("so sánh") || lower.Contains("so sanh"))
-                    return await CompareProducts(message);   // dùng cả câu gốc để tách tên
+                    return await CompareProducts(message);   
 
-                // 🟧 1.3 Tách giá “dưới xx triệu”
+                // Tách giá “dưới xx triệu”
                 decimal? maxPrice = ExtractPrice(message);
 
-                // 🟨 1.4 Tìm sản phẩm theo từ khóa (name / category / brand)
+                // Tìm sản phẩm theo từ khóa (name / category / brand)
                 var products = await SearchProductsByKeywordsAsync(message, maxPrice);
 
                 if (products.Any())
@@ -64,21 +61,19 @@ namespace website_e_commerce.Services
                     return BuildProductListHtml(products);
                 }
 
-                // 🟥 1.5 Hoàn toàn không tìm thấy → gọi Gemini
+                // Hoàn toàn không tìm thấy → gọi Gemini
                 return await AskGeminiAsync(message);
             }
             catch
             {
-                return "⚠️ Có lỗi khi xử lý dữ liệu hoặc kết nối AI.";
+                return "Có lỗi khi xử lý dữ liệu hoặc kết nối AI.";
             }
         }
 
-        // ===========================================
-        // 2. TÌM SẢN PHẨM THEO TỪ KHÓA + GIÁ TỐI ĐA
-        // ===========================================
+        // TÌM SẢN PHẨM THEO TỪ KHÓA + GIÁ TỐI ĐA
         private async Task<List<Product>> SearchProductsByKeywordsAsync(string message, decimal? maxPrice)
         {
-            // Chuẩn hóa: bỏ ký tự lạ, tách từ
+            // bỏ ký tự lạ, tách từ
             string clean = Regex.Replace(message.ToLower(), @"[^a-z0-9\s]", " ");
             var words = clean.Split(' ', StringSplitOptions.RemoveEmptyEntries)
                              .Where(w => w.Length > 1)
@@ -137,7 +132,7 @@ namespace website_e_commerce.Services
         private string BuildProductListHtml(List<Product> products)
         {
             var result = new StringBuilder();
-            result.Append("<b>🔍 Kết quả tìm kiếm sản phẩm:</b><br><br>");
+            result.Append("<b>Kết quả tìm kiếm sản phẩm:</b><br><br>");
             result.Append("<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px'>");
 
             foreach (var p in products)
@@ -163,7 +158,7 @@ namespace website_e_commerce.Services
             return result.ToString();
         }
 
-        // 💰 Hàm tách giá (VD: “dưới 20 triệu”)
+        // Hàm tách giá (VD: “dưới 20 triệu”)
         private decimal? ExtractPrice(string text)
         {
             var match = Regex.Match(text, @"(\d+)\s*(triệu|tr|trieu)");
@@ -172,9 +167,7 @@ namespace website_e_commerce.Services
             return null;
         }
 
-        // ===================================
-        // 3. SO SÁNH 2 SẢN PHẨM TỪ CÂU GÕ
-        // ===================================
+        // SO SÁNH 2 SẢN PHẨM TỪ CÂU GÕ
         private async Task<string> CompareProducts(string message)
         {
             // Tách 2 cụm sản phẩm
@@ -182,7 +175,7 @@ namespace website_e_commerce.Services
 
             if (string.IsNullOrWhiteSpace(left) || string.IsNullOrWhiteSpace(right))
             {
-                return "⚠️ Bạn hãy nhập theo dạng: <b>\"so sánh iPhone 15 và Samsung S24\"</b> để mình biết 2 sản phẩm cần so sánh nhé.";
+                return "Bạn hãy nhập theo dạng: <b>\"so sánh iPhone 15 và Samsung S24\"</b> để mình biết 2 sản phẩm cần so sánh nhé.";
             }
 
             var allProducts = await _context.Products
@@ -195,7 +188,7 @@ namespace website_e_commerce.Services
             // Không tìm được gì cả
             if (first == null && second == null)
             {
-                return "❌ Cả hai sản phẩm bạn yêu cầu hiện <b>không có trong cửa hàng HTM Shop</b>. Bạn thử tìm lại trong danh mục sản phẩm giúp mình nhé.";
+                return "Cả hai sản phẩm bạn yêu cầu hiện <b>không có trong cửa hàng HTM Shop</b>. Bạn thử tìm lại trong danh mục sản phẩm giúp mình nhé.";
             }
 
             // Chỉ tìm được 1 sản phẩm
@@ -203,48 +196,48 @@ namespace website_e_commerce.Services
             {
                 if (first == null && second != null)
                 {
-                    return $"❌ Mình chỉ tìm được sản phẩm <b>{second.Name}</b>. " +
+                    return $"Mình chỉ tìm được sản phẩm <b>{second.Name}</b>. " +
                            $"Sản phẩm còn lại hiện <b>không có trong cửa hàng HTM Shop</b> hoặc tên bạn nhập chưa đúng.";
                 }
                 if (first != null && second == null)
                 {
-                    return $"❌ Mình chỉ tìm được sản phẩm <b>{first.Name}</b>. " +
+                    return $"Mình chỉ tìm được sản phẩm <b>{first.Name}</b>. " +
                            $"Sản phẩm còn lại hiện <b>không có trong cửa hàng HTM Shop</b> hoặc tên bạn nhập chưa đúng.";
                 }
             }
 
             // Cả 2 cùng có → build bảng so sánh
             var html = $@"
-<b>⚖️ So sánh giữa {first.Name} và {second.Name}</b><br><br>
+<b>So sánh giữa {first.Name} và {second.Name}</b><br><br>
 <table style='border-collapse:collapse;width:100%;font-size:14px'>
 <tr>
 <td style='width:50%;vertical-align:top;padding:5px;border-right:1px solid #ccc;text-align:center'>
 <img src='{first.ImageUrl}' width='120' style='border-radius:8px'><br>
 <b>{first.Name}</b><br>
-💰 {first.NewPrice:N0}₫<br>
-🏷️ {first.Category?.Name}<br><br>
+ {first.NewPrice:N0}₫<br>
+ {first.Category?.Name}<br><br>
 <a href='/Product/Details/{first.Id}' target='_blank'>➡️ Xem chi tiết</a>
 </td>
 
 <td style='width:50%;vertical-align:top;padding:5px;text-align:center'>
 <img src='{second.ImageUrl}' width='120' style='border-radius:8px'><br>
 <b>{second.Name}</b><br>
-💰 {second.NewPrice:N0}₫<br>
-🏷️ {second.Category?.Name}<br><br>
+ {second.NewPrice:N0}₫<br>
+ {second.Category?.Name}<br><br>
 <a href='/Product/Details/{second.Id}' target='_blank'>➡️ Xem chi tiết</a>
 </td>
 </tr>
 </table><br>
-<b>📊 Thông số kỹ thuật nổi bật</b><br>
-🧩 <b>{first.Name}:</b> {first.Specifications}<br><br>
-🧩 <b>{second.Name}:</b> {second.Specifications}<br><br>";
+<b> Thông số kỹ thuật nổi bật</b><br>
+ <b>{first.Name}:</b> {first.Specifications}<br><br>
+ <b>{second.Name}:</b> {second.Specifications}<br><br>";
 
             // Gọi AI để comment ngắn
             string aiOpinion = await AskGeminiAsync(
                 $"Hãy so sánh {first.Name} và {second.Name} ngắn gọn, thân thiện, bằng tiếng Việt, có emoji và bullet dễ đọc."
             );
 
-            html += $"<b>🤖 Đánh giá AI:</b><br>{SmartFormat(aiOpinion)}";
+            html += $"<b> Đánh giá AI:</b><br>{SmartFormat(aiOpinion)}";
             return html;
         }
 
@@ -318,9 +311,7 @@ namespace website_e_commerce.Services
             return bestScore >= 2 ? best : null;
         }
 
-        // ===================================
         // 4. GỌI GEMINI API
-        // ===================================
         private async Task<string> AskGeminiAsync(string message)
         {
             using var client = new HttpClient();
@@ -353,15 +344,15 @@ namespace website_e_commerce.Services
             using var doc = JsonDocument.Parse(json);
 
             if (doc.RootElement.TryGetProperty("error", out var error))
-                return $"⚠️ Lỗi từ Gemini API: {error.GetProperty("message").GetString()}";
+                return $" Lỗi từ Gemini API: {error.GetProperty("message").GetString()}";
 
             if (doc.RootElement.TryGetProperty("candidates", out var candidates))
             {
                 var text = candidates[0].GetProperty("content").GetProperty("parts")[0].GetProperty("text").GetString();
-                return text ?? "⚠️ Không nhận được phản hồi từ Gemini.";
+                return text ?? " Không nhận được phản hồi từ Gemini.";
             }
 
-            return "⚠️ Không nhận được phản hồi hợp lệ từ Gemini API.";
+            return " Không nhận được phản hồi hợp lệ từ Gemini API.";
         }
 
         // 🎨 Format phản hồi AI cho dễ đọc
