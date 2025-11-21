@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using website_e_commerce.Hubs;
 using website_e_commerce.Models;
 using website_e_commerce.Repositories;
+using website_e_commerce.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,13 +61,13 @@ builder.Services.AddScoped<website_e_commerce.Services.GeminiChatService>();
 builder.Services.AddScoped<IBrandRepository, MockBrandRepository>();
 builder.Services.AddScoped<IStockHistoryRepository, MockStockHistoryRepository>();
 
-
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
 // SignalR cho thông báo tin tức
 app.MapHub<website_e_commerce.Services.NewsHub>("/newsHub");
+app.MapHub<SupportChatHub>("/supportChatHub");
 
 // Pipeline cấu hình
 if (!app.Environment.IsDevelopment())

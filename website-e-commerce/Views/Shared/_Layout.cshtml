@@ -2,6 +2,12 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@{
+    var emp = UserManager.GetUsersInRoleAsync(SD.Role_Employee).Result.FirstOrDefault();
+    ViewBag.DefaultEmployee = emp?.Id;
+    var receiver = ViewBag.DefaultEmployee as string;
+}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -414,7 +420,7 @@
         </div>
     </footer>
 
-    <!-- 💬 Chatbot floating button -->
+    <!-- 💬 Chatbot floating button (AI – Gemini) -->
     <button id="chatbotBtn" class="chatbot-btn">
         <i class="fa-solid fa-robot fa-xl"></i>
     </button>
@@ -435,113 +441,225 @@
         </div>
     </div>
 
-    <!-- 💬 Script xử lý chatbot -->
+    <!-- 💬 Chat hỗ trợ người thật (Support Chat) -->
+    <div id="supportChatBtn"
+         style="position:fixed; bottom:90px; right:30px; z-index:999999;">
+        <button style="width:55px;height:55px;border-radius:50%;background:#1A3B79;color:white;border:none;">
+            <i class="fa-solid fa-comments"></i>
+        </button>
+    </div>
+
+    <div id="supportChatBox"
+         style="display:none; position:fixed; bottom:150px; right:25px; width:330px; height:480px;
+                background:#fff; border-radius:15px; box-shadow:0 0 10px rgba(0,0,0,0.2); z-index:999999;">
+        <div style="padding:12px; background:#1A3B79; color:white;">Hỗ trợ khách hàng</div>
+
+        <div id="supportMessages" style="height:350px; overflow-y:auto; padding:10px;">
+            <p><b>HTM Shop:</b> Xin chào! Bạn cần hỗ trợ gì?</p>
+        </div>
+
+        <div style="padding:10px; display:flex;">
+            <input id="supportInput" class="form-control" placeholder="Nhập tin..." autocomplete="off" />
+            <button id="supportSend" class="btn btn-primary" style="margin-left:8px;">
+                <i class="fa fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- SignalR (dùng chung cho SupportChat + NewsHub, v.v.) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const btn = document.getElementById("chatbotBtn");
-            const box = document.getElementById("chatbotBox");
-            const input = document.getElementById("chatInput");
-            const sendBtn = document.getElementById("sendBtn");
-            const messages = document.getElementById("chatMessages");
-            const resetBtn = document.getElementById("resetChat"); // ⬅️ Nút Reset
+            // ================== 0. Toggle 2 popup – không đè nhau ==================
+            const chatbotBtn = document.getElementById("chatbotBtn");
+            const chatbotBox = document.getElementById("chatbotBox");
 
-            // 🧠 1️⃣ KHÔI PHỤC LỊCH SỬ CHAT
-            let savedHistory = localStorage.getItem("chatHistory");
-            if (savedHistory && savedHistory.trim() !== "") {
-                messages.innerHTML = savedHistory;
-                console.log("✅ Đã khôi phục lịch sử chat");
-            } else {
-                const hello = `<div class="bot"><b>🤖 Bot:</b> Xin chào! Mình là trợ lý HTM Shop, bạn cần hỗ trợ gì không?</div>`;
-                messages.innerHTML = hello;
-                localStorage.setItem("chatHistory", hello);
-                console.log("🚀 Tạo lời chào đầu tiên");
-            }
-            messages.scrollTop = messages.scrollHeight;
+            const supportBtn = document.getElementById("supportChatBtn");
+            const supportBox = document.getElementById("supportChatBox");
 
-            // 💬 2️⃣ NÚT MỞ / ẨN CHAT
-                btn.addEventListener("click", () => {
-            if (box.style.display === "flex") {
-                box.style.display = "none";
-            } else {
-                box.style.display = "flex";
-                messages.scrollTop = messages.scrollHeight;
-            }
-        });
+            if (chatbotBox) chatbotBox.style.display = "none";
+            if (supportBox) supportBox.style.display = "none";
 
-            // ✉️ 3️⃣ GỬI TIN NHẮN
-            sendBtn.addEventListener("click", sendMessage);
-            input.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+            if (chatbotBtn) {
+                chatbotBtn.addEventListener("click", () => {
+                    if (!chatbotBox) return;
 
-            function appendMessage(sender, text) {
-                const div = document.createElement("div");
-                div.className = sender;
-                div.innerHTML = `<b>${sender === "user" ? "Bạn" : "🤖 Bot"}:</b> ${text}`;
-                messages.appendChild(div);
-                messages.scrollTop = messages.scrollHeight;
-                localStorage.setItem("chatHistory", messages.innerHTML);
+                    const isOpen = chatbotBox.style.display === "flex";
+                    chatbotBox.style.display = isOpen ? "none" : "flex";
+
+                    // mở chatbot → tắt support chat
+                    if (!isOpen && supportBox) supportBox.style.display = "none";
+                });
             }
 
-            function sendMessage() {
-                const text = input.value.trim();
-                if (!text) return;
+            if (supportBtn) {
+                supportBtn.addEventListener("click", () => {
+                    if (!supportBox) return;
 
-                appendMessage("user", text);
-                input.value = "";
+                    const isOpen = supportBox.style.display === "block";
+                    supportBox.style.display = isOpen ? "none" : "block";
 
-                const typing = document.createElement("div");
-                typing.className = "bot";
-                typing.textContent = "🤖 Bot đang gõ...";
-                messages.appendChild(typing);
-                messages.scrollTop = messages.scrollHeight;
-
-                const formData = new FormData();
-                formData.append("message", text);
-
-                fetch("/chat/send", { method: "POST", body: formData })
-                    .then(res => res.json())
-                    .then(data => {
-                        typing.remove();
-                        appendMessage("bot", data.reply);
-                    })
-                    .catch(() => {
-                        typing.remove();
-                        appendMessage("bot", "⚠️ Không thể kết nối đến server!");
-                    });
+                    // mở support chat → tắt chatbot
+                    if (!isOpen && chatbotBox) chatbotBox.style.display = "none";
+                });
             }
 
-            // 🔁 4️⃣ ĐỒNG BỘ GIỮA CÁC TAB
-            window.addEventListener("storage", e => {
-                if (e.key === "chatHistory") {
-                    messages.innerHTML = e.newValue;
-                    messages.scrollTop = messages.scrollHeight;
-                }
-            });
+            // ================== 1. CHATBOT AI – gọi /chat/send ==================
+            const botInput = document.getElementById("chatInput");
+            const botSendBtn = document.getElementById("sendBtn");
+            const botMessages = document.getElementById("chatMessages");
+            const resetBtn = document.getElementById("resetChat");
 
-            // 🧷 5️⃣ TRƯỚC KHI ĐÓNG TRÌNH DUYỆT — LUÔN LƯU LẠI
-            window.addEventListener("beforeunload", () => {
-                localStorage.setItem("chatHistory", messages.innerHTML);
-            });
-
-            // 🔄 6️⃣ NÚT RESET CHAT
-            resetBtn.addEventListener("click", function () {
-                if (confirm("Bạn có chắc muốn xóa toàn bộ nội dung chat không?")) {
+            if (botMessages) {
+                // 1.1 Khôi phục lịch sử chat
+                let savedHistory = localStorage.getItem("chatHistory");
+                if (savedHistory && savedHistory.trim() !== "") {
+                    botMessages.innerHTML = savedHistory;
+                } else {
                     const hello = `<div class="bot"><b>🤖 Bot:</b> Xin chào! Mình là trợ lý HTM Shop, bạn cần hỗ trợ gì không?</div>`;
-                    messages.innerHTML = hello;
+                    botMessages.innerHTML = hello;
                     localStorage.setItem("chatHistory", hello);
-                    messages.scrollTop = messages.scrollHeight;
-                    console.log("🧹 Đã reset toàn bộ lịch sử chat!");
                 }
-            });
+                botMessages.scrollTop = botMessages.scrollHeight;
+
+                // 1.2 Gửi tin nhắn
+                function appendBotMessage(sender, text) {
+                    const div = document.createElement("div");
+                    div.className = sender;
+                    div.innerHTML = `<b>${sender === "user" ? "Bạn" : "🤖 Bot"}:</b> ${text}`;
+                    botMessages.appendChild(div);
+                    botMessages.scrollTop = botMessages.scrollHeight;
+                    localStorage.setItem("chatHistory", botMessages.innerHTML);
+                }
+
+                function sendBotMessage() {
+                    const text = botInput.value.trim();
+                    if (!text) return;
+
+                    appendBotMessage("user", text);
+                    botInput.value = "";
+
+                    const typing = document.createElement("div");
+                    typing.className = "bot";
+                    typing.textContent = "🤖 Bot đang gõ...";
+                    botMessages.appendChild(typing);
+                    botMessages.scrollTop = botMessages.scrollHeight;
+
+                    const formData = new FormData();
+                    formData.append("message", text);
+
+                    fetch("/chat/send", { method: "POST", body: formData })
+                        .then(res => res.json())
+                        .then(data => {
+                            typing.remove();
+                            appendBotMessage("bot", data.reply);
+                        })
+                        .catch(() => {
+                            typing.remove();
+                            appendBotMessage("bot", "⚠️ Không thể kết nối đến server!");
+                        });
+                }
+
+                if (botSendBtn) botSendBtn.addEventListener("click", sendBotMessage);
+                if (botInput) {
+                    botInput.addEventListener("keypress", e => {
+                        if (e.key === "Enter") sendBotMessage();
+                    });
+                }
+
+                // 1.3 Đồng bộ giữa các tab
+                window.addEventListener("storage", e => {
+                    if (e.key === "chatHistory") {
+                        botMessages.innerHTML = e.newValue;
+                        botMessages.scrollTop = botMessages.scrollHeight;
+                    }
+                });
+
+                // 1.4 Reset chat
+                if (resetBtn) {
+                    resetBtn.addEventListener("click", () => {
+                        if (!confirm("Bạn có chắc muốn xóa toàn bộ nội dung chat không?")) return;
+                        const hello = `<div class="bot"><b>🤖 Bot:</b> Xin chào! Mình là trợ lý HTM Shop, bạn cần hỗ trợ gì không?</div>`;
+                        botMessages.innerHTML = hello;
+                        localStorage.setItem("chatHistory", hello);
+                        botMessages.scrollTop = botMessages.scrollHeight;
+                    });
+                }
+            }
+
+            // ================== 2. SUPPORT CHAT – khách ↔ nhân viên ==================
+            const supportInput = document.getElementById("supportInput");
+            const supportSendBtn = document.getElementById("supportSend");
+            const supportMessages = document.getElementById("supportMessages");
+
+            if (supportInput && supportSendBtn && supportMessages) {
+                let hub = new signalR.HubConnectionBuilder()
+                    .withUrl("/supportChatHub")
+                    .build();
+
+                hub.start();
+
+                hub.on("ReceiveSupportMessage", function (conversationId, senderId, receiverId, content) {
+                    // nếu trả lời cho guest_xxx → show bên mini chat
+                    if (receiverId && receiverId.startsWith("guest_")) {
+                        addSupportMessage(content, false);
+                    }
+                });
+
+                function addSupportMessage(text, isMe) {
+                    let p = document.createElement("p");
+                    p.style.textAlign = isMe ? "right" : "left";
+                    p.innerHTML = `<b>${isMe ? "Bạn" : "HTM"}:</b> ${text}`;
+                    supportMessages.appendChild(p);
+                    supportMessages.scrollTop = supportMessages.scrollHeight;
+                }
+
+                function sendSupport() {
+                    let text = supportInput.value.trim();
+                    if (!text) return;
+
+                    addSupportMessage(text, true);
+                    supportInput.value = "";
+
+                    fetch("/SupportChat/Send", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            receiverId: "@receiver",
+                            content: text
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            hub.invoke("SendToAll", data.conversationId, "guest_", "@receiver", text);
+                        });
+                }
+
+                supportSendBtn.addEventListener("click", sendSupport);
+                supportInput.addEventListener("keypress", e => {
+                    if (e.key === "Enter") sendSupport();
+                });
+            }
         });
 
-            window.addEventListener("load", function () {
+        // Loader
+        window.addEventListener("load", function () {
             const loader = document.getElementById("page-loader");
-            loader.classList.add("hide");
-
-            setTimeout(() => loader.remove(), 400);
+            if (loader) {
+                loader.classList.add("hide");
+                setTimeout(() => loader.remove(), 400);
+            }
         });
     </script>
 
+    <!-- Các script khác -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/news.js" asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- RỒI MỚI TỚI CÁC SCRIPT DƯỚI -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -689,6 +807,5 @@
 
         connection.start().catch(err => console.error(err.toString()));
     </script>
-
 </body>
 </html>

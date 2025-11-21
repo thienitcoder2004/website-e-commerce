@@ -272,6 +272,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tIaXN0b3J5XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/website-e-commerce/website-e-commerce/Views/SupportChat/AdminInbox.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3VwcG9ydENoYXRcQWRtaW5JbmJveC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/website-e-commerce/website-e-commerce/Views/SupportChat/ChatBox.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3VwcG9ydENoYXRcQ2hhdEJveC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/website-e-commerce/website-e-commerce/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
