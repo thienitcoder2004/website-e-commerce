@@ -22,6 +22,9 @@ namespace website_e_commerce.Models
         public DbSet<Payment> Payments { get; set; }
         public DbSet<StockHistory> StockHistory { get; set; }
         public DbSet<FavoriteProduct> FavoriteProducts { get; set; }
+        public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

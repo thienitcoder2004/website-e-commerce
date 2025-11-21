@@ -12,7 +12,7 @@ using website_e_commerce.Models;
 namespace website_e_commerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251120145535_v1")]
+    [Migration("20251121043543_v1")]
     partial class v1
     {
         /// <inheritdoc />
@@ -465,6 +465,24 @@ namespace website_e_commerce.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("website_e_commerce.Models.FavoriteProduct", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("FavoriteProducts");
                 });
 
             modelBuilder.Entity("website_e_commerce.Models.News", b =>
@@ -1164,6 +1182,25 @@ namespace website_e_commerce.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("website_e_commerce.Models.FavoriteProduct", b =>
+                {
+                    b.HasOne("website_e_commerce.Models.Product", "Product")
+                        .WithMany("FavoriteProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("website_e_commerce.Models.ApplicationUser", "User")
+                        .WithMany("FavoriteProducts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("website_e_commerce.Models.Order", b =>
                 {
                     b.HasOne("website_e_commerce.Models.ApplicationUser", "ApplicationUser")
@@ -1260,6 +1297,11 @@ namespace website_e_commerce.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("website_e_commerce.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("FavoriteProducts");
+                });
+
             modelBuilder.Entity("website_e_commerce.Models.Brand", b =>
                 {
                     b.Navigation("Products");
@@ -1279,6 +1321,8 @@ namespace website_e_commerce.Migrations
 
             modelBuilder.Entity("website_e_commerce.Models.Product", b =>
                 {
+                    b.Navigation("FavoriteProducts");
+
                     b.Navigation("OrderDetails");
 
                     b.Navigation("ProductImages");

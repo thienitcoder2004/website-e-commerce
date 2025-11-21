@@ -1,0 +1,89 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@model List<website_e_commerce.Models.Conversation>
+
+<style>
+    .messenger-container {
+        height: 85vh;
+        display: flex;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .sidebar {
+        width: 30%;
+        background: white;
+        border-right: 1px solid #ddd;
+        overflow-y: auto;
+    }
+
+    .chat-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .chat-item:hover {
+        background: #f5f5f5;
+    }
+
+    .chat-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #4460EF;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .chat-info {
+        flex: 1;
+    }
+
+    .chat-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        color: #777;
+        background: #f3f3f3;
+    }
+</style>
+
+<div class="messenger-container">
+    <div class="sidebar">
+        @foreach (var c in Model)
+        {
+            string adminId = UserManager.GetUserId(User);
+
+            string otherId = (c.User1Id == adminId) ? c.User2Id : c.User1Id;
+
+            string name = otherId.StartsWith("guest_")
+            ? "Khách " + otherId.Replace("guest_", "")
+            : (await UserManager.FindByIdAsync(otherId))?.UserName ?? "Unknown";
+
+            <div class="chat-item" data-id="@c.Id">
+                <div class="chat-avatar">@name.Substring(0, 1).ToUpper()</div>
+                <div class="chat-info">
+                    <a href="/SupportChat/ChatBox?id=@c.Id" style="text-decoration:none;color:inherit;">
+                        <strong>@name</strong><br />
+                        <small>Xem hội thoại...</small>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="chat-content">
+        Chọn một cuộc trò chuyện
+    </div>
+</div>
