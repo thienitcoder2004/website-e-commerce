@@ -2,11 +2,21 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext Db
+
 @{
+    // 1. Lấy nhân viên Support mặc định
     var emp = UserManager.GetUsersInRoleAsync(SD.Role_Employee).Result.FirstOrDefault();
     ViewBag.DefaultEmployee = emp?.Id;
     var receiver = ViewBag.DefaultEmployee as string;
+
+    // 2. Thông tin user hiện tại (hoặc guest)
+    string loggedUserId = User.Identity.IsAuthenticated ? UserManager.GetUserId(User) : "";
+    string loggedUserName = User.Identity.IsAuthenticated
+        ? (UserManager.GetUserAsync(User).Result?.HoTen ?? "Bạn")
+        : "Bạn";
 }
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -471,6 +481,10 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // ================== 0. Toggle 2 popup – không đè nhau ==================
+                  const loggedUser = "@loggedUserId";       // User ID hoặc ""
+        const loggedUserName = "@loggedUserName"; // Tên người dùng
+        const defaultReceiver = "@receiver";      // Nhân viên hỗ trợ
+
             const chatbotBtn = document.getElementById("chatbotBtn");
             const chatbotBox = document.getElementById("chatbotBox");
 
@@ -588,58 +602,94 @@
             }
 
             // ================== 2. SUPPORT CHAT – khách ↔ nhân viên ==================
-            const supportInput = document.getElementById("supportInput");
-            const supportSendBtn = document.getElementById("supportSend");
-            const supportMessages = document.getElementById("supportMessages");
 
-            if (supportInput && supportSendBtn && supportMessages) {
-                let hub = new signalR.HubConnectionBuilder()
-                    .withUrl("/supportChatHub")
-                    .build();
+                           const supportInput = document.getElementById("supportInput");
+        const supportSendBtn = document.getElementById("supportSend");
+        const supportMessages = document.getElementById("supportMessages");
 
-                hub.start();
+        if (supportInput && supportSendBtn && supportMessages) {
 
-                hub.on("ReceiveSupportMessage", function (conversationId, senderId, receiverId, content) {
-                    // nếu trả lời cho guest_xxx → show bên mini chat
-                    if (receiverId && receiverId.startsWith("guest_")) {
+            let hub = new signalR.HubConnectionBuilder()
+                .withUrl("/supportChatHub")
+                .build();
+
+            hub.start();
+
+
+            // ====================================================
+            // 1. NHẬN TIN NHẮN
+            // ====================================================
+            hub.on("ReceiveSupportMessage",
+                function (convId, senderId, receiverId, content) {
+
+                    let myRealId = loggedUser || sessionStorage.getItem("guestId");
+
+                    // CHỈ nhận khi ADMIN gửi đúng cho mình
+                    if (receiverId === myRealId && senderId !== myRealId) {
                         addSupportMessage(content, false);
                     }
-                });
-
-                function addSupportMessage(text, isMe) {
-                    let p = document.createElement("p");
-                    p.style.textAlign = isMe ? "right" : "left";
-                    p.innerHTML = `<b>${isMe ? "Bạn" : "HTM"}:</b> ${text}`;
-                    supportMessages.appendChild(p);
-                    supportMessages.scrollTop = supportMessages.scrollHeight;
                 }
+            );
 
-                function sendSupport() {
-                    let text = supportInput.value.trim();
-                    if (!text) return;
 
-                    addSupportMessage(text, true);
-                    supportInput.value = "";
+            // ====================================================
+            // 2. SHOW TIN NHẮN
+            // ====================================================
+            function addSupportMessage(text, isMe) {
+                let p = document.createElement("p");
+                p.style.textAlign = isMe ? "right" : "left";
+                p.innerHTML = `<b>${isMe ? loggedUserName : "HTM"}:</b> ${text}`;
+                supportMessages.appendChild(p);
+                supportMessages.scrollTop = supportMessages.scrollHeight;
+            }
 
-                    fetch("/SupportChat/Send", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            receiverId: "@receiver",
-                            content: text
-                        })
+
+            // ====================================================
+            // 3. GỬI TIN NHẮN
+            // ====================================================
+            function sendSupport() {
+                let text = supportInput.value.trim();
+                if (!text) return;
+
+                addSupportMessage(text, true);
+                supportInput.value = "";
+
+                fetch("/SupportChat/Send", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        receiverId: defaultReceiver,
+                        content: text,
+                        conversationId: null
                     })
-                        .then(res => res.json())
-                        .then(data => {
-                            hub.invoke("SendToAll", data.conversationId, "guest_", "@receiver", text);
-                        });
-                }
+                })
+                .then(res => res.json())
+                .then(data => {
 
-                supportSendBtn.addEventListener("click", sendSupport);
-                supportInput.addEventListener("keypress", e => {
-                    if (e.key === "Enter") sendSupport();
+                    // Lưu guestId thật trả về từ server
+                    if (!loggedUser) {
+                        sessionStorage.setItem("guestId", data.senderId);
+                    }
+
+                    let myRealId = loggedUser || data.senderId;
+
+                    hub.invoke("SendToAll",
+                        data.conversationId,
+                        myRealId,
+                        defaultReceiver,
+                        text
+                    );
                 });
             }
+
+
+            supportSendBtn.addEventListener("click", sendSupport);
+            supportInput.addEventListener("keypress", e => {
+                if (e.key === "Enter") sendSupport();
+            });
+        }
+
+               
         });
 
         // Loader

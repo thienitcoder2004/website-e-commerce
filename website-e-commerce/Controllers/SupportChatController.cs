@@ -47,8 +47,8 @@ namespace website_e_commerce.Controllers
         }
 
         // ============ GET / CREATE CONVERSATION ============
-        private Conversation GetOrCreateConversation(string senderId, string receiverId,
-            string senderRole, string receiverRole)
+        private Conversation GetOrCreateConversation(
+            string senderId, string receiverId, string senderRole, string receiverRole)
         {
             var conv = _db.Conversations.FirstOrDefault(c =>
                 (c.User1Id == senderId && c.User2Id == receiverId) ||
@@ -71,21 +71,21 @@ namespace website_e_commerce.Controllers
         }
 
         // ============ DTO ============
-
         public class SupportSendDto
         {
             public string ReceiverId { get; set; }
             public string Content { get; set; }
-            public int? ConversationId { get; set; } // nếu đã có sẵn (trong ChatBox)
+            public int? ConversationId { get; set; }
         }
 
-        // ============ SEND ============
+        // ============ SEND (Mini + AdminBox) ============
         [HttpPost]
         public async Task<IActionResult> Send([FromBody] SupportSendDto dto)
         {
             string senderId;
             string senderRole;
 
+            // USER ĐÃ LOGIN
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(User);
@@ -94,13 +94,14 @@ namespace website_e_commerce.Controllers
             }
             else
             {
+                // USER CHƯA LOGIN → TẠO guest_xxx
                 senderId = GetOrCreateGuestId();
                 senderRole = "Guest";
             }
 
             Conversation conv;
 
-            // Nếu đã có ConversationId (trong ChatBox admin/nhân viên)
+            // Nếu đã có ID hội thoại
             if (dto.ConversationId.HasValue && dto.ConversationId.Value > 0)
             {
                 conv = _db.Conversations.FirstOrDefault(c => c.Id == dto.ConversationId.Value);
@@ -131,8 +132,14 @@ namespace website_e_commerce.Controllers
             _db.Messages.Add(msg);
             await _db.SaveChangesAsync();
 
-            return Ok(new { conversationId = conv.Id });
+            // TRẢ VỀ senderId thật (guest hoặc userId)
+            return Ok(new
+            {
+                conversationId = conv.Id,
+                senderId = senderId
+            });
         }
+
 
         // ============ CHAT BOX ============
         public async Task<IActionResult> ChatBox(int id)
@@ -150,24 +157,27 @@ namespace website_e_commerce.Controllers
 
             string otherId = conv.User1Id == currentId ? conv.User2Id : conv.User1Id;
 
+            var other = await _userManager.FindByIdAsync(otherId);
+
             ViewBag.CurrentUserId = currentId;
             ViewBag.OtherUserId = otherId;
             ViewBag.ConversationId = id;
 
             ViewBag.OtherUserName = otherId.StartsWith("guest_")
                 ? "Khách " + otherId.Substring(6)
-                : (await _userManager.FindByIdAsync(otherId))?.UserName;
+                : other?.HoTen ?? "Người dùng";
+
+            ViewBag.OtherAvatar = other?.AvatarUrl;
 
             return View(msgs);
         }
 
-        // ============ ADMIN INBOX ============
+        // ============ ADMIN / EMPLOYEE / STOCK INBOX ============
         public IActionResult AdminInbox()
         {
             return View(_db.Conversations.ToList());
         }
 
-        // ============ EMPLOYEE INBOX ============
         public async Task<IActionResult> EmployeeInbox()
         {
             var current = await _userManager.GetUserAsync(User);
@@ -179,7 +189,6 @@ namespace website_e_commerce.Controllers
             return View(list);
         }
 
-        // ============ STOCK INBOX ============
         public async Task<IActionResult> StockInbox()
         {
             var current = await _userManager.GetUserAsync(User);
@@ -187,8 +196,7 @@ namespace website_e_commerce.Controllers
             var list = _db.Conversations
                 .Where(c =>
                     (c.User1Id == current.Id || c.User2Id == current.Id) &&
-                    (c.User1Role != SD.Role_Customer && c.User2Role != SD.Role_Customer)
-                )
+                    (c.User1Role != SD.Role_Customer && c.User2Role != SD.Role_Customer))
                 .ToList();
 
             return View(list);
