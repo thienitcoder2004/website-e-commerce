@@ -104,13 +104,18 @@
 <div class="messenger-wrapper">
     <div class="chat-area">
         <div class="chat-header">
-            <!-- Nút quay lại -->
             <button type="button" class="back-btn" onclick="window.history.back();">
                 <i class="fa fa-arrow-left"></i>
             </button>
 
-            <span>Đang chat với @otherName</span>
+            @if (!string.IsNullOrEmpty(ViewBag.OtherAvatar))
+            {
+                <img src="@ViewBag.OtherAvatar" style="width:35px;height:35px;border-radius:50%;" />
+            }
+
+            <span>Đang chat với @ViewBag.OtherUserName</span>
         </div>
+
 
         <div id="chatMessages" class="msg-box">
             @foreach (var m in Model)
