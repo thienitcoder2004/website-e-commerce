@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -65,7 +64,7 @@ namespace website_e_commerce.Controllers
 
             // ==========================
             // LOAD BỘ LỌC (CATEGORY HOẶC MẶC ĐỊNH)
-            // Nếu categoryId == null hoặc == 0 ⇒ dùng bộ lọc mặc định
+            // ==========================
             if (categoryId == null || categoryId == 0)
             {
                 ViewBag.CategoryId = 0;
@@ -74,26 +73,27 @@ namespace website_e_commerce.Controllers
                 {
                     CategoryId = 0,
                     Groups = new List<object>
-        {
-            new {
-                Id = 100,
-                GroupName = "Hãng",
-                Options = _context.Brands
-                    .Select(b => new { Label = b.Name, Value = $"brand={b.Name}" })
-                    .ToList()
-            },
-            new {
-                Id = 200,
-                GroupName = "Giá tiền",
-                Options = new List<object>
-                {
-                    new { Label = "Dưới 5 triệu", Value = "price<5000000" },
-                    new { Label = "5 - 10 triệu", Value = "price=5-10" },
-                    new { Label = "10 - 20 triệu", Value = "price=10-20" },
-                    new { Label = "Trên 20 triệu", Value = "price>20000000" }
-                }
-            }
-        }
+                    {
+                        new {
+                            Id = 100,
+                            GroupName = "Hãng",
+                            Options = _context.Brands
+                                .Where(b => b.IsActive)
+                                .Select(b => new { Label = b.Name, Value = $"brand={b.Name}" })
+                                .ToList()
+                        },
+                        new {
+                            Id = 200,
+                            GroupName = "Giá tiền",
+                            Options = new List<object>
+                            {
+                                new { Label = "Dưới 5 triệu", Value = "price<5000000" },
+                                new { Label = "5 - 10 triệu", Value = "price=5-10" },
+                                new { Label = "10 - 20 triệu", Value = "price=10-20" },
+                                new { Label = "Trên 20 triệu", Value = "price>20000000" }
+                            }
+                        }
+                    }
                 };
             }
             else
@@ -107,7 +107,6 @@ namespace website_e_commerce.Controllers
                 ViewBag.CategoryId = categoryId;
                 ViewBag.Filters = filterCategory;
             }
-
 
             // ==========================
             // ÁP DỤNG BỘ LỌC
@@ -236,7 +235,10 @@ namespace website_e_commerce.Controllers
             int totalProducts = products.Count();
             int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
 
-            var paginated = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var paginated = products
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
@@ -348,37 +350,72 @@ namespace website_e_commerce.Controllers
         }
 
         // ================================
-        // ADD + EDIT
+        // ADD (FPTSHOP STYLE)
         // ================================
         public IActionResult Add()
         {
             ViewBag.Categories = new SelectList(_categoryRepository.GetAllCategories(), "Id", "Name");
+            ViewBag.Brands = new SelectList(_context.Brands.Where(b => b.IsActive), "Id", "Name");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(Product product, IFormFile? imageUrl)
+        public async Task<IActionResult> Add(
+             Product product,
+             IFormFile? thumbnail,
+             List<IFormFile>? galleryImages)
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Categories =
-                    new SelectList(_categoryRepository.GetAllCategories(), "Id", "Name", product.CategoryId);
-
+                ViewBag.Categories = new SelectList(_categoryRepository.GetAllCategories(), "Id", "Name", product.CategoryId);
+                ViewBag.Brands = new SelectList(_context.Brands.Where(b => b.IsActive), "Id", "Name", product.BrandId);
                 return View(product);
             }
 
-            if (imageUrl != null)
-                product.ImageUrl = await SaveImage(imageUrl);
+            // ============== ẢNH CHÍNH ==============
+            if (thumbnail == null)
+            {
+                ModelState.AddModelError("", "Bạn phải chọn ảnh đại diện.");
+                return View(product);
+            }
 
-            product.WebQuantity = 0;
+            product.ImageUrl = await SaveImage(thumbnail);
 
+            // ============== GIÁ SAU GIẢM ==============
             if (product.OldPrice > 0 && product.DiscountPercent > 0)
+            {
                 product.NewPrice = product.OldPrice - (product.OldPrice * product.DiscountPercent / 100);
+            }
+            if (product.NewPrice <= 0)
+                product.NewPrice = product.OldPrice;
 
-            _productRepository.Add(product);
+            product.WebQuantity = Math.Max(0, product.WebQuantity);
 
-            TempData["success"] = "Đã thêm sản phẩm.";
+            // ============== LƯU SẢN PHẨM ==============
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+
+            // ============== ẢNH GALLERY (nhiều ảnh) ==============
+            if (galleryImages != null)
+            {
+                foreach (var img in galleryImages)
+                {
+                    if (img != null && img.Length > 0)
+                    {
+                        string url = await SaveImage(img);
+
+                        _context.ProductImages.Add(new ProductImage
+                        {
+                            ProductId = product.Id,
+                            ImageUrl = url
+                        });
+                    }
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            TempData["success"] = "Đã thêm sản phẩm thành công!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -468,18 +505,28 @@ namespace website_e_commerce.Controllers
         // ================================
         public IActionResult Details(int id)
         {
-            var product = _productRepository.GetById(id);
+            var product = _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Id == id);
 
             if (product == null)
                 return NotFound();
 
-            if (product.StockQuantity < 0) product.StockQuantity = 0;
-            if (product.WebQuantity < 0) product.WebQuantity = 0;
+            product.StockQuantity = Math.Max(0, product.StockQuantity);
+            product.WebQuantity = Math.Max(0, product.WebQuantity);
 
             ViewBag.Reviews = _reviewRepository.GetReviewsByProductId(id).ToList();
 
+            ViewBag.RelatedProducts = _context.Products
+                .Where(p => p.CategoryId == product.CategoryId && p.Id != product.Id)
+                .Take(8)
+                .ToList();
+
             return View(product);
         }
+
 
         // ================================
         // DELETE
@@ -582,7 +629,7 @@ namespace website_e_commerce.Controllers
         // ================================
         private async Task<string> SaveImage(IFormFile image)
         {
-            string folder = Path.Combine(_env.WebRootPath, "images", "product");
+            string folder = Path.Combine(_env.WebRootPath, "images", "products");
 
             if (!Directory.Exists(folder))
                 Directory.CreateDirectory(folder);
@@ -595,7 +642,7 @@ namespace website_e_commerce.Controllers
                 await image.CopyToAsync(stream);
             }
 
-            return "/images/product/" + fileName;
+            return "/images/products/" + fileName;
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿@{
     Layout = null;
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 }
 
-<div class="d-flex justify-content-center align-items-center">
-    <div class="error-404-container">
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="error-404-container text-center">
         <img src="https://cdn-icons-png.flaticon.com/512/2748/2748558.png"
              alt="404" class="error-404-img" />
 
@@ -17,3 +18,37 @@
         <a href="/" class="error-404-btn">Quay về trang chủ</a>
     </div>
 </div>
+
+<style>
+    .error-404-container {
+        max-width: 600px;
+        padding: 20px;
+    }
+
+    .error-404-img {
+        width: 200px;
+        margin-bottom: 20px;
+    }
+
+    .error-404-title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #d10000;
+    }
+
+    .error-404-desc {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .error-404-btn {
+        padding: 12px 20px;
+        background: #d10000;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+</style>
