@@ -306,6 +306,34 @@ namespace website_e_commerce.Migrations
                             Country = "Trung Quốc",
                             IsActive = true,
                             Name = "Oppo"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Country = "Hàn Quốc",
+                            IsActive = true,
+                            Name = "LG"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Country = "Nhật Bản",
+                            IsActive = true,
+                            Name = "Sony"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Country = "Trung Quốc",
+                            IsActive = true,
+                            Name = "Lenovo"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Country = "Mỹ",
+                            IsActive = true,
+                            Name = "HP"
                         });
                 });
 
@@ -509,6 +537,1116 @@ namespace website_e_commerce.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("FavoriteProducts");
+                });
+
+            modelBuilder.Entity("website_e_commerce.Models.FilterCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FilterCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 1,
+                            Name = "Điện thoại"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 3,
+                            Name = "Laptop"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = 2,
+                            Name = "Tablet"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 7,
+                            Name = "Tivi"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = 15,
+                            Name = "Âm thanh"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryId = 8,
+                            Name = "Đồng hồ"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryId = 5,
+                            Name = "PC - Màn hình"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryId = 10,
+                            Name = "Đồ gia dụng"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CategoryId = 6,
+                            Name = "Phụ kiện"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CategoryId = 13,
+                            Name = "Mạng - Camera"
+                        });
+                });
+
+            modelBuilder.Entity("website_e_commerce.Models.FilterGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("FilterCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilterCategoryId");
+
+                    b.ToTable("FilterGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 11,
+                            FilterCategoryId = 1,
+                            GroupName = "RAM",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            FilterCategoryId = 1,
+                            GroupName = "Bộ nhớ trong",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            FilterCategoryId = 1,
+                            GroupName = "Vi xử lý (CPU)",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            FilterCategoryId = 1,
+                            GroupName = "Màn hình",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            FilterCategoryId = 1,
+                            GroupName = "Camera",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            FilterCategoryId = 1,
+                            GroupName = "Dung lượng pin",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            FilterCategoryId = 1,
+                            GroupName = "Tính năng",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            FilterCategoryId = 2,
+                            GroupName = "CPU",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            FilterCategoryId = 2,
+                            GroupName = "GPU",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            FilterCategoryId = 2,
+                            GroupName = "RAM",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            FilterCategoryId = 2,
+                            GroupName = "Ổ cứng",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            FilterCategoryId = 2,
+                            GroupName = "Màn hình",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            FilterCategoryId = 2,
+                            GroupName = "Trọng lượng",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            FilterCategoryId = 2,
+                            GroupName = "Nhu cầu",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            FilterCategoryId = 3,
+                            GroupName = "RAM",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            FilterCategoryId = 3,
+                            GroupName = "Màn hình",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            FilterCategoryId = 3,
+                            GroupName = "Bộ nhớ trong",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 41,
+                            FilterCategoryId = 4,
+                            GroupName = "Kích thước màn hình",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 42,
+                            FilterCategoryId = 4,
+                            GroupName = "Độ phân giải",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 43,
+                            FilterCategoryId = 4,
+                            GroupName = "Công nghệ hiển thị",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 51,
+                            FilterCategoryId = 5,
+                            GroupName = "Kết nối",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 52,
+                            FilterCategoryId = 5,
+                            GroupName = "Loại âm thanh",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 61,
+                            FilterCategoryId = 6,
+                            GroupName = "Kích thước mặt",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 62,
+                            FilterCategoryId = 6,
+                            GroupName = "Tính năng đặc biệt",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 71,
+                            FilterCategoryId = 7,
+                            GroupName = "CPU",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 72,
+                            FilterCategoryId = 7,
+                            GroupName = "GPU",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 73,
+                            FilterCategoryId = 7,
+                            GroupName = "RAM",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 74,
+                            FilterCategoryId = 7,
+                            GroupName = "Kích thước màn hình",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 81,
+                            FilterCategoryId = 8,
+                            GroupName = "Loại sản phẩm",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 82,
+                            FilterCategoryId = 8,
+                            GroupName = "Công suất",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 91,
+                            FilterCategoryId = 9,
+                            GroupName = "Loại phụ kiện",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 92,
+                            FilterCategoryId = 9,
+                            GroupName = "Cổng kết nối",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 101,
+                            FilterCategoryId = 10,
+                            GroupName = "Loại thiết bị",
+                            Type = "select"
+                        },
+                        new
+                        {
+                            Id = 102,
+                            FilterCategoryId = 10,
+                            GroupName = "Tính năng",
+                            Type = "select"
+                        });
+                });
+
+            modelBuilder.Entity("website_e_commerce.Models.FilterOption", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("FilterGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Max")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("Min")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilterGroupId");
+
+                    b.ToTable("FilterOptions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1001,
+                            FilterGroupId = 11,
+                            Label = "4 GB",
+                            Value = "ram=4"
+                        },
+                        new
+                        {
+                            Id = 1002,
+                            FilterGroupId = 11,
+                            Label = "6 GB",
+                            Value = "ram=6"
+                        },
+                        new
+                        {
+                            Id = 1003,
+                            FilterGroupId = 11,
+                            Label = "8 GB",
+                            Value = "ram=8"
+                        },
+                        new
+                        {
+                            Id = 1004,
+                            FilterGroupId = 11,
+                            Label = "12 GB",
+                            Value = "ram=12"
+                        },
+                        new
+                        {
+                            Id = 1011,
+                            FilterGroupId = 12,
+                            Label = "64 GB",
+                            Value = "rom=64"
+                        },
+                        new
+                        {
+                            Id = 1012,
+                            FilterGroupId = 12,
+                            Label = "128 GB",
+                            Value = "rom=128"
+                        },
+                        new
+                        {
+                            Id = 1013,
+                            FilterGroupId = 12,
+                            Label = "256 GB",
+                            Value = "rom=256"
+                        },
+                        new
+                        {
+                            Id = 1014,
+                            FilterGroupId = 12,
+                            Label = "512 GB",
+                            Value = "rom=512"
+                        },
+                        new
+                        {
+                            Id = 1015,
+                            FilterGroupId = 12,
+                            Label = "1 TB",
+                            Value = "rom=1024"
+                        },
+                        new
+                        {
+                            Id = 1021,
+                            FilterGroupId = 13,
+                            Label = "Snapdragon",
+                            Value = "cpu=Snapdragon"
+                        },
+                        new
+                        {
+                            Id = 1022,
+                            FilterGroupId = 13,
+                            Label = "MediaTek",
+                            Value = "cpu=MediaTek"
+                        },
+                        new
+                        {
+                            Id = 1023,
+                            FilterGroupId = 13,
+                            Label = "Apple A Bionic",
+                            Value = "cpu=Apple"
+                        },
+                        new
+                        {
+                            Id = 1031,
+                            FilterGroupId = 14,
+                            Label = "6.1 inch",
+                            Value = "screen=6.1"
+                        },
+                        new
+                        {
+                            Id = 1032,
+                            FilterGroupId = 14,
+                            Label = "6.5 inch",
+                            Value = "screen=6.5"
+                        },
+                        new
+                        {
+                            Id = 1033,
+                            FilterGroupId = 14,
+                            Label = "6.7 inch",
+                            Value = "screen=6.7"
+                        },
+                        new
+                        {
+                            Id = 1041,
+                            FilterGroupId = 15,
+                            Label = "50 MP",
+                            Value = "camera=50"
+                        },
+                        new
+                        {
+                            Id = 1042,
+                            FilterGroupId = 15,
+                            Label = "64 MP",
+                            Value = "camera=64"
+                        },
+                        new
+                        {
+                            Id = 1043,
+                            FilterGroupId = 15,
+                            Label = "108 MP",
+                            Value = "camera=108"
+                        },
+                        new
+                        {
+                            Id = 1051,
+                            FilterGroupId = 16,
+                            Label = "4000 mAh",
+                            Value = "battery=4000"
+                        },
+                        new
+                        {
+                            Id = 1052,
+                            FilterGroupId = 16,
+                            Label = "5000 mAh",
+                            Value = "battery=5000"
+                        },
+                        new
+                        {
+                            Id = 1053,
+                            FilterGroupId = 16,
+                            Label = "6000 mAh",
+                            Value = "battery=6000"
+                        },
+                        new
+                        {
+                            Id = 1061,
+                            FilterGroupId = 17,
+                            Label = "Sạc nhanh",
+                            Value = "feature=fastcharge"
+                        },
+                        new
+                        {
+                            Id = 1062,
+                            FilterGroupId = 17,
+                            Label = "Chống nước",
+                            Value = "feature=waterproof"
+                        },
+                        new
+                        {
+                            Id = 1063,
+                            FilterGroupId = 17,
+                            Label = "5G",
+                            Value = "feature=5g"
+                        },
+                        new
+                        {
+                            Id = 2001,
+                            FilterGroupId = 21,
+                            Label = "Core i3",
+                            Value = "cpu=i3"
+                        },
+                        new
+                        {
+                            Id = 2002,
+                            FilterGroupId = 21,
+                            Label = "Core i5",
+                            Value = "cpu=i5"
+                        },
+                        new
+                        {
+                            Id = 2003,
+                            FilterGroupId = 21,
+                            Label = "Core i7",
+                            Value = "cpu=i7"
+                        },
+                        new
+                        {
+                            Id = 2004,
+                            FilterGroupId = 21,
+                            Label = "Core i9",
+                            Value = "cpu=i9"
+                        },
+                        new
+                        {
+                            Id = 2011,
+                            FilterGroupId = 22,
+                            Label = "RTX 3050",
+                            Value = "gpu=3050"
+                        },
+                        new
+                        {
+                            Id = 2012,
+                            FilterGroupId = 22,
+                            Label = "RTX 4050",
+                            Value = "gpu=4050"
+                        },
+                        new
+                        {
+                            Id = 2013,
+                            FilterGroupId = 22,
+                            Label = "RTX 4060",
+                            Value = "gpu=4060"
+                        },
+                        new
+                        {
+                            Id = 2014,
+                            FilterGroupId = 22,
+                            Label = "RTX 4070",
+                            Value = "gpu=4070"
+                        },
+                        new
+                        {
+                            Id = 2021,
+                            FilterGroupId = 23,
+                            Label = "8 GB",
+                            Value = "ram=8"
+                        },
+                        new
+                        {
+                            Id = 2022,
+                            FilterGroupId = 23,
+                            Label = "16 GB",
+                            Value = "ram=16"
+                        },
+                        new
+                        {
+                            Id = 2023,
+                            FilterGroupId = 23,
+                            Label = "32 GB",
+                            Value = "ram=32"
+                        },
+                        new
+                        {
+                            Id = 2024,
+                            FilterGroupId = 23,
+                            Label = "64 GB",
+                            Value = "ram=64"
+                        },
+                        new
+                        {
+                            Id = 2031,
+                            FilterGroupId = 24,
+                            Label = "256 GB SSD",
+                            Value = "ssd=256"
+                        },
+                        new
+                        {
+                            Id = 2032,
+                            FilterGroupId = 24,
+                            Label = "512 GB SSD",
+                            Value = "ssd=512"
+                        },
+                        new
+                        {
+                            Id = 2033,
+                            FilterGroupId = 24,
+                            Label = "1 TB SSD",
+                            Value = "ssd=1024"
+                        },
+                        new
+                        {
+                            Id = 2041,
+                            FilterGroupId = 25,
+                            Label = "13 inch",
+                            Value = "screen=13"
+                        },
+                        new
+                        {
+                            Id = 2042,
+                            FilterGroupId = 25,
+                            Label = "14 inch",
+                            Value = "screen=14"
+                        },
+                        new
+                        {
+                            Id = 2043,
+                            FilterGroupId = 25,
+                            Label = "15.6 inch",
+                            Value = "screen=15.6"
+                        },
+                        new
+                        {
+                            Id = 2051,
+                            FilterGroupId = 26,
+                            Label = "Dưới 1.2 kg",
+                            Value = "weight=1.2"
+                        },
+                        new
+                        {
+                            Id = 2052,
+                            FilterGroupId = 26,
+                            Label = "1.2 – 1.8 kg",
+                            Value = "weight=1.8"
+                        },
+                        new
+                        {
+                            Id = 2053,
+                            FilterGroupId = 26,
+                            Label = "Trên 2 kg",
+                            Value = "weight=2"
+                        },
+                        new
+                        {
+                            Id = 2061,
+                            FilterGroupId = 27,
+                            Label = "Học tập – Văn phòng",
+                            Value = "need=office"
+                        },
+                        new
+                        {
+                            Id = 2062,
+                            FilterGroupId = 27,
+                            Label = "Đồ họa – Kỹ thuật",
+                            Value = "need=design"
+                        },
+                        new
+                        {
+                            Id = 2063,
+                            FilterGroupId = 27,
+                            Label = "Gaming",
+                            Value = "need=gaming"
+                        },
+                        new
+                        {
+                            Id = 3001,
+                            FilterGroupId = 31,
+                            Label = "4 GB",
+                            Value = "ram=4"
+                        },
+                        new
+                        {
+                            Id = 3002,
+                            FilterGroupId = 31,
+                            Label = "8 GB",
+                            Value = "ram=8"
+                        },
+                        new
+                        {
+                            Id = 3003,
+                            FilterGroupId = 31,
+                            Label = "16 GB",
+                            Value = "ram=16"
+                        },
+                        new
+                        {
+                            Id = 3011,
+                            FilterGroupId = 32,
+                            Label = "8 inch",
+                            Value = "screen=8"
+                        },
+                        new
+                        {
+                            Id = 3012,
+                            FilterGroupId = 32,
+                            Label = "10 inch",
+                            Value = "screen=10"
+                        },
+                        new
+                        {
+                            Id = 3013,
+                            FilterGroupId = 32,
+                            Label = "11 inch",
+                            Value = "screen=11"
+                        },
+                        new
+                        {
+                            Id = 3021,
+                            FilterGroupId = 33,
+                            Label = "64 GB",
+                            Value = "rom=64"
+                        },
+                        new
+                        {
+                            Id = 3022,
+                            FilterGroupId = 33,
+                            Label = "128 GB",
+                            Value = "rom=128"
+                        },
+                        new
+                        {
+                            Id = 3023,
+                            FilterGroupId = 33,
+                            Label = "256 GB",
+                            Value = "rom=256"
+                        },
+                        new
+                        {
+                            Id = 4001,
+                            FilterGroupId = 41,
+                            Label = "32 inch",
+                            Value = "size=32"
+                        },
+                        new
+                        {
+                            Id = 4002,
+                            FilterGroupId = 41,
+                            Label = "43 inch",
+                            Value = "size=43"
+                        },
+                        new
+                        {
+                            Id = 4003,
+                            FilterGroupId = 41,
+                            Label = "55 inch",
+                            Value = "size=55"
+                        },
+                        new
+                        {
+                            Id = 4004,
+                            FilterGroupId = 41,
+                            Label = "65 inch",
+                            Value = "size=65"
+                        },
+                        new
+                        {
+                            Id = 4005,
+                            FilterGroupId = 41,
+                            Label = "75 inch",
+                            Value = "size=75"
+                        },
+                        new
+                        {
+                            Id = 4011,
+                            FilterGroupId = 42,
+                            Label = "Full HD",
+                            Value = "res=FHD"
+                        },
+                        new
+                        {
+                            Id = 4012,
+                            FilterGroupId = 42,
+                            Label = "4K",
+                            Value = "res=4K"
+                        },
+                        new
+                        {
+                            Id = 4013,
+                            FilterGroupId = 42,
+                            Label = "8K",
+                            Value = "res=8K"
+                        },
+                        new
+                        {
+                            Id = 4021,
+                            FilterGroupId = 43,
+                            Label = "OLED",
+                            Value = "tech=OLED"
+                        },
+                        new
+                        {
+                            Id = 4022,
+                            FilterGroupId = 43,
+                            Label = "QLED",
+                            Value = "tech=QLED"
+                        },
+                        new
+                        {
+                            Id = 4023,
+                            FilterGroupId = 43,
+                            Label = "MiniLED",
+                            Value = "tech=MiniLED"
+                        },
+                        new
+                        {
+                            Id = 5001,
+                            FilterGroupId = 51,
+                            Label = "Bluetooth",
+                            Value = "connect=bluetooth"
+                        },
+                        new
+                        {
+                            Id = 5002,
+                            FilterGroupId = 51,
+                            Label = "Có dây",
+                            Value = "connect=wire"
+                        },
+                        new
+                        {
+                            Id = 5011,
+                            FilterGroupId = 52,
+                            Label = "Tai nghe",
+                            Value = "type=headphone"
+                        },
+                        new
+                        {
+                            Id = 5012,
+                            FilterGroupId = 52,
+                            Label = "Loa",
+                            Value = "type=speaker"
+                        },
+                        new
+                        {
+                            Id = 6001,
+                            FilterGroupId = 61,
+                            Label = "41 mm",
+                            Value = "size=41"
+                        },
+                        new
+                        {
+                            Id = 6002,
+                            FilterGroupId = 61,
+                            Label = "45 mm",
+                            Value = "size=45"
+                        },
+                        new
+                        {
+                            Id = 6011,
+                            FilterGroupId = 62,
+                            Label = "GPS",
+                            Value = "feature=gps"
+                        },
+                        new
+                        {
+                            Id = 6012,
+                            FilterGroupId = 62,
+                            Label = "LTE",
+                            Value = "feature=lte"
+                        },
+                        new
+                        {
+                            Id = 6013,
+                            FilterGroupId = 62,
+                            Label = "SpO2",
+                            Value = "feature=spo2"
+                        },
+                        new
+                        {
+                            Id = 6014,
+                            FilterGroupId = 62,
+                            Label = "ECG",
+                            Value = "feature=ecg"
+                        },
+                        new
+                        {
+                            Id = 7001,
+                            FilterGroupId = 71,
+                            Label = "Core i5",
+                            Value = "cpu=i5"
+                        },
+                        new
+                        {
+                            Id = 7002,
+                            FilterGroupId = 71,
+                            Label = "Core i7",
+                            Value = "cpu=i7"
+                        },
+                        new
+                        {
+                            Id = 7011,
+                            FilterGroupId = 72,
+                            Label = "GTX 1660",
+                            Value = "gpu=1660"
+                        },
+                        new
+                        {
+                            Id = 7012,
+                            FilterGroupId = 72,
+                            Label = "RTX 2060",
+                            Value = "gpu=2060"
+                        },
+                        new
+                        {
+                            Id = 7021,
+                            FilterGroupId = 73,
+                            Label = "8 GB",
+                            Value = "ram=8"
+                        },
+                        new
+                        {
+                            Id = 7022,
+                            FilterGroupId = 73,
+                            Label = "16 GB",
+                            Value = "ram=16"
+                        },
+                        new
+                        {
+                            Id = 7031,
+                            FilterGroupId = 74,
+                            Label = "24 inch",
+                            Value = "size=24"
+                        },
+                        new
+                        {
+                            Id = 7032,
+                            FilterGroupId = 74,
+                            Label = "27 inch",
+                            Value = "size=27"
+                        },
+                        new
+                        {
+                            Id = 7033,
+                            FilterGroupId = 74,
+                            Label = "32 inch",
+                            Value = "size=32"
+                        },
+                        new
+                        {
+                            Id = 8001,
+                            FilterGroupId = 81,
+                            Label = "Nồi chiên",
+                            Value = "type=airfryer"
+                        },
+                        new
+                        {
+                            Id = 8002,
+                            FilterGroupId = 81,
+                            Label = "Robot hút bụi",
+                            Value = "type=robot"
+                        },
+                        new
+                        {
+                            Id = 8003,
+                            FilterGroupId = 81,
+                            Label = "Máy lọc nước",
+                            Value = "type=water"
+                        },
+                        new
+                        {
+                            Id = 8011,
+                            FilterGroupId = 82,
+                            Label = "1500W",
+                            Value = "power=1500"
+                        },
+                        new
+                        {
+                            Id = 8012,
+                            FilterGroupId = 82,
+                            Label = "2000W",
+                            Value = "power=2000"
+                        },
+                        new
+                        {
+                            Id = 9001,
+                            FilterGroupId = 91,
+                            Label = "Cáp",
+                            Value = "type=cable"
+                        },
+                        new
+                        {
+                            Id = 9002,
+                            FilterGroupId = 91,
+                            Label = "Sạc",
+                            Value = "type=charger"
+                        },
+                        new
+                        {
+                            Id = 9003,
+                            FilterGroupId = 91,
+                            Label = "Ốp lưng",
+                            Value = "type=case"
+                        },
+                        new
+                        {
+                            Id = 9011,
+                            FilterGroupId = 92,
+                            Label = "Lightning",
+                            Value = "port=lightning"
+                        },
+                        new
+                        {
+                            Id = 9012,
+                            FilterGroupId = 92,
+                            Label = "USB-C",
+                            Value = "port=usb-c"
+                        },
+                        new
+                        {
+                            Id = 9013,
+                            FilterGroupId = 92,
+                            Label = "Micro USB",
+                            Value = "port=micro-usb"
+                        },
+                        new
+                        {
+                            Id = 10001,
+                            FilterGroupId = 101,
+                            Label = "Router",
+                            Value = "type=router"
+                        },
+                        new
+                        {
+                            Id = 10002,
+                            FilterGroupId = 101,
+                            Label = "Camera IP",
+                            Value = "type=camera"
+                        },
+                        new
+                        {
+                            Id = 10003,
+                            FilterGroupId = 101,
+                            Label = "Repeater",
+                            Value = "type=repeater"
+                        },
+                        new
+                        {
+                            Id = 10011,
+                            FilterGroupId = 102,
+                            Label = "WiFi 6",
+                            Value = "feature=wifi6"
+                        },
+                        new
+                        {
+                            Id = 10012,
+                            FilterGroupId = 102,
+                            Label = "Theo dõi chuyển động",
+                            Value = "feature=motion"
+                        },
+                        new
+                        {
+                            Id = 10013,
+                            FilterGroupId = 102,
+                            Label = "Lưu trữ đám mây",
+                            Value = "feature=cloud"
+                        });
                 });
 
             modelBuilder.Entity("website_e_commerce.Models.Message", b =>
@@ -1261,6 +2399,28 @@ namespace website_e_commerce.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("website_e_commerce.Models.FilterGroup", b =>
+                {
+                    b.HasOne("website_e_commerce.Models.FilterCategory", "FilterCategory")
+                        .WithMany("Groups")
+                        .HasForeignKey("FilterCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FilterCategory");
+                });
+
+            modelBuilder.Entity("website_e_commerce.Models.FilterOption", b =>
+                {
+                    b.HasOne("website_e_commerce.Models.FilterGroup", "FilterGroup")
+                        .WithMany("Options")
+                        .HasForeignKey("FilterGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FilterGroup");
+                });
+
             modelBuilder.Entity("website_e_commerce.Models.Order", b =>
                 {
                     b.HasOne("website_e_commerce.Models.ApplicationUser", "ApplicationUser")
@@ -1370,6 +2530,16 @@ namespace website_e_commerce.Migrations
             modelBuilder.Entity("website_e_commerce.Models.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("website_e_commerce.Models.FilterCategory", b =>
+                {
+                    b.Navigation("Groups");
+                });
+
+            modelBuilder.Entity("website_e_commerce.Models.FilterGroup", b =>
+                {
+                    b.Navigation("Options");
                 });
 
             modelBuilder.Entity("website_e_commerce.Models.Order", b =>

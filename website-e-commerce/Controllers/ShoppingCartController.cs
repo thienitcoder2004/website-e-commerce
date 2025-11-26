@@ -26,7 +26,7 @@ namespace website_e_commerce.Controllers
             _userManager = userManager;
         }
 
-        // ================= CART =================
+        // ========== CART ==========
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
         {
@@ -35,10 +35,10 @@ namespace website_e_commerce.Controllers
                 return NotFound();
 
             if (product.WebQuantity <= 0)
-                return Json(new { success = false, message = "Sản phẩm đã hết hàng!" });
+                return Json(new { success = false, message = "San pham het hang!" });
 
             if (quantity > product.WebQuantity)
-                return Json(new { success = false, message = $"Chỉ còn {product.WebQuantity} sản phẩm!" });
+                return Json(new { success = false, message = $"Chi con {product.WebQuantity} san pham!" });
 
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
             cart.AddItem(new CartItem
@@ -104,7 +104,7 @@ namespace website_e_commerce.Controllers
             });
         }
 
-        // ================= CHECKOUT =================
+        // ========== CHECKOUT ==========
         [Authorize]
         public IActionResult Checkout()
         {
@@ -139,6 +139,7 @@ namespace website_e_commerce.Controllers
                     Price = i.Price
                 }).ToList()
             };
+
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
@@ -152,10 +153,10 @@ namespace website_e_commerce.Controllers
                 CustomerName = user.HoTen ?? user.UserName,
                 PaymentDate = DateTime.Now
             };
+
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
 
-            // ===== ONLINE PAYMENT =====
             if (paymentMethod == "Momo")
             {
                 var url = await GenerateMomoPaymentUrl(order, payment);
@@ -168,14 +169,13 @@ namespace website_e_commerce.Controllers
                 return Redirect(url);
             }
 
-            // ===== COD =====
             await UpdatePromotionUsageAfterSuccess();
             HttpContext.Session.Remove("Cart");
 
             return RedirectToAction("OrderSuccess", new { orderId = order.Id });
         }
 
-        // ================= MOMO =================
+        // ========== MOMO ==========
         private async Task<string> GenerateMomoPaymentUrl(Order order, Payment payment)
         {
             string endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
@@ -183,11 +183,11 @@ namespace website_e_commerce.Controllers
             string accessKey = "F8BBA842ECF85";
             string secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
 
-            string orderInfo = $"Thanh toán đơn hàng #{order.Id}";
+            string orderInfo = $"Thanh toan don hang {order.Id}";
             string redirectUrl = $"{Request.Scheme}://{Request.Host}/ShoppingCart/MomoReturn";
             string ipnUrl = redirectUrl;
 
-            string orderId = Guid.NewGuid().ToString();   // FIX DUPLICATE
+            string orderId = Guid.NewGuid().ToString();
             string requestId = Guid.NewGuid().ToString();
             string amount = ((int)order.TotalPrice).ToString();
 
@@ -229,32 +229,52 @@ namespace website_e_commerce.Controllers
             return "/";
         }
 
-        // MOMO RETURN FIX
         public async Task<IActionResult> MomoReturn(string orderId, string resultCode)
         {
+            // Lấy payment đang chờ xử lý
             var payment = _context.Payments
                 .OrderByDescending(p => p.Id)
                 .FirstOrDefault(p => p.Status == "Pending");
 
-            if (payment == null) return NotFound();
+            if (payment == null)
+                return RedirectToAction("Checkout", new { error = "Không tìm thấy giao dịch thanh toán!" });
 
-            payment.Status = resultCode == "0" ? "Success" : "Failed";
+            // MoMo CANCEL -> KHÔNG có resultCode => hủy
+            if (string.IsNullOrEmpty(resultCode))
+            {
+                payment.Status = "Failed";
+                await _context.SaveChangesAsync();
+
+                // ❗ Không xóa giỏ hàng, không trừ tồn kho
+                TempData["Error"] = "❌ Bạn đã hủy thanh toán MoMo!";
+                return RedirectToAction("Checkout");
+            }
+
+            // Trường hợp MoMo trả về mã lỗi
+            if (resultCode != "0")
+            {
+                payment.Status = "Failed";
+                await _context.SaveChangesAsync();
+
+                TempData["Error"] = "❌ Thanh toán MoMo thất bại!";
+                return RedirectToAction("Checkout");
+            }
+
+            // ===== THÀNH CÔNG =====
+            payment.Status = "Success";
             await _context.SaveChangesAsync();
 
-            if (payment.Status == "Success")
-            {
-                await UpdateStockAfterPaymentSuccess(payment.OrderId);
-                await UpdatePromotionUsageAfterSuccess();
-            }
-            else
-                await RestoreStockAfterPaymentFailed(payment.OrderId);
+            await UpdateStockAfterPaymentSuccess(payment.OrderId);
+            await UpdatePromotionUsageAfterSuccess();
 
+            // Chỉ xóa giỏ hàng khi thành công
             HttpContext.Session.Remove("Cart");
 
             return RedirectToAction("OrderSuccess", new { orderId = payment.OrderId });
         }
 
-        // ================= VNPAY =================
+
+        // ========== VNPAY ==========
         public string GenerateVNPayPaymentUrl(Order order, Payment payment)
         {
             string vnp_TmnCode = "YOUR_VNP_TMNCODE";
@@ -272,7 +292,7 @@ namespace website_e_commerce.Controllers
                 ["vnp_CurrCode"] = "VND",
                 ["vnp_IpAddr"] = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1",
                 ["vnp_Locale"] = "vn",
-                ["vnp_OrderInfo"] = $"Thanh toán đơn hàng {order.Id}",
+                ["vnp_OrderInfo"] = $"Thanh toan don hang {order.Id}",
                 ["vnp_OrderType"] = "other",
                 ["vnp_ReturnUrl"] = vnp_Returnurl,
                 ["vnp_TxnRef"] = payment.Id.ToString()
@@ -315,7 +335,7 @@ namespace website_e_commerce.Controllers
             return RedirectToAction("OrderSuccess", new { orderId = payment.OrderId });
         }
 
-        // ================= UTILS =================
+        // ========== UTILS ==========
         public IActionResult OrderSuccess(int orderId)
         {
             ViewBag.Order = _context.Orders.FirstOrDefault(o => o.Id == orderId);
