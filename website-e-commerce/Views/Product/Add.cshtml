@@ -4,52 +4,108 @@
 }
 
 <div class="container py-5">
-    <h2 class="fw-bold text-danger mb-4 text-center">➕ Thêm sản phẩm mới</h2>
+    <h2 class="fw-bold text-danger text-center mb-4">
+        <i class="fa-solid fa-plus"></i> Thêm sản phẩm mới
+    </h2>
 
-    <form asp-action="Add" method="post" enctype="multipart/form-data" class="shadow p-4 bg-light rounded-4">
+    <form asp-action="Add" method="post" enctype="multipart/form-data"
+          class="shadow p-4 bg-white rounded-4">
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Tên sản phẩm</label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+        <!-- TÊN SP + CATEGORY + BRAND -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Tên sản phẩm</label>
+                <input asp-for="Name" class="form-control" placeholder="iPhone 15 Pro Max..." />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Danh mục</label>
+                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
+                    <option value="">-- Chọn danh mục --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Thương hiệu</label>
+                <select asp-for="BrandId" asp-items="ViewBag.Brands" class="form-select">
+                    <option value="">-- Chọn thương hiệu --</option>
+                </select>
+                <span asp-validation-for="BrandId" class="text-danger"></span>
+            </div>
         </div>
 
-        <!-- 💰 Giá tiền -->
-        <div class="row mb-3">
+        <!-- GIÁ -->
+        <div class="row mb-4">
             <div class="col-md-4">
                 <label class="form-label fw-bold">Giá cũ</label>
-                <input asp-for="OldPrice" type="number" id="oldPrice" class="form-control" placeholder="Nhập giá gốc" />
-                <span asp-validation-for="OldPrice" class="text-danger"></span>
+                <input asp-for="OldPrice" type="number" class="form-control" id="oldPrice" />
             </div>
+
             <div class="col-md-4">
-                <label class="form-label fw-bold">% giảm giá</label>
-                <input asp-for="DiscountPercent" type="number" id="discountPercent" class="form-control" placeholder="Nhập phần trăm giảm" />
-                <span asp-validation-for="DiscountPercent" class="text-danger"></span>
+                <label class="form-label fw-bold">% Giảm giá</label>
+                <input asp-for="DiscountPercent" type="number" id="discountPercent" class="form-control" />
             </div>
+
             <div class="col-md-4">
                 <label class="form-label fw-bold">Giá sau giảm</label>
                 <input asp-for="NewPrice" type="number" id="newPrice" class="form-control" readonly />
-                <small class="text-muted">Tự tính theo Giá cũ và % giảm</small>
+                <small class="text-muted">Tự tính theo giá cũ + % giảm</small>
             </div>
         </div>
 
-        <!-- 📦 Kho -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Số lượng tồn kho</label>
-            <input asp-for="StockQuantity" type="number" class="form-control" placeholder="Nhập số lượng tồn kho ban đầu" />
-            <span asp-validation-for="StockQuantity" class="text-danger"></span>
+        <!-- KHO -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Tồn kho ban đầu</label>
+                <input asp-for="StockQuantity" type="number" min="0" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Số lượng hiển thị web</label>
+                <input asp-for="WebQuantity" type="number" min="0" class="form-control" placeholder="Nên để 0" />
+            </div>
         </div>
 
-        <!-- 📂 Danh mục -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Danh mục</label>
-            <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select"></select>
+        <!-- HÌNH ẢNH -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Ảnh đại diện</label>
+                <input type="file" name="thumbnail" class="form-control" />
+                <small class="text-muted">Ảnh thumbnail chính</small>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Gallery (nhiều ảnh)</label>
+                <input type="file" name="galleryImages" multiple class="form-control" />
+                <small class="text-muted">Chọn nhiều ảnh phụ</small>
+            </div>
         </div>
 
-        <!-- 🖼️ Ảnh -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Ảnh đại diện</label>
-            <input type="file" name="imageUrl" class="form-control" />
+        <!-- MÔ TẢ -->
+        <div class="mb-4">
+            <label class="form-label fw-bold">Mô tả</label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        </div>
+
+        <!-- SPEC -->
+        <div class="mb-4">
+            <label class="form-label fw-bold">Thông số kỹ thuật</label>
+            <textarea asp-for="Specifications" class="form-control" rows="5"
+                      placeholder="RAM: 8GB&#10;ROM: 256GB&#10;Pin: 4500mAh"></textarea>
+        </div>
+
+        <!-- PROMO -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Quà tặng</label>
+                <input asp-for="GiftPromotion" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Khuyến mãi</label>
+                <input asp-for="SalePromotion" class="form-control" />
+            </div>
         </div>
 
         <div class="text-end">
@@ -60,25 +116,20 @@
 </div>
 
 <script>
-    // 🧮 Tự động tính giá giảm
     document.addEventListener("DOMContentLoaded", () => {
-        const oldPriceInput = document.getElementById("oldPrice");
-        const discountInput = document.getElementById("discountPercent");
-        const newPriceInput = document.getElementById("newPrice");
+        const oldP = document.getElementById("oldPrice");
+        const dis = document.getElementById("discountPercent");
+        const newP = document.getElementById("newPrice");
 
-        function updateNewPrice() {
-            const oldPrice = parseFloat(oldPriceInput.value) || 0;
-            const discount = parseFloat(discountInput.value) || 0;
+        function update() {
+            let o = parseFloat(oldP.value) || 0;
+            let d = parseFloat(dis.value) || 0;
 
-            if (oldPrice > 0 && discount >= 0 && discount <= 100) {
-                const newPrice = oldPrice - (oldPrice * discount / 100);
-                newPriceInput.value = newPrice.toFixed(0);
-            } else {
-                newPriceInput.value = "";
-            }
+            if (o > 0 && d >= 0)
+                newP.value = (o - o * d / 100).toFixed(0);
         }
 
-        oldPriceInput.addEventListener("input", updateNewPrice);
-        discountInput.addEventListener("input", updateNewPrice);
+        oldP.addEventListener("input", update);
+        dis.addEventListener("input", update);
     });
 </script>

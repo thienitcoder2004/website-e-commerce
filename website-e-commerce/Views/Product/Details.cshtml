@@ -8,25 +8,29 @@
         <!-- ẢNH SẢN PHẨM -->
         <div class="col-lg-5">
             <div class="product-gallery position-relative mb-3">
-                <!-- ẢNH CHÍNH -->
+
+                <!-- Ảnh chính -->
                 <div class="main-image text-center mb-2">
-                    <img id="mainProductImage" src="@Model.ImageUrl" alt="@Model.Name"
-                         class="img-fluid rounded shadow-sm" style="max-height: 450px; object-fit: contain;" />
+                    <img id="mainProductImage"
+                         src="@Model.ImageUrl"
+                         class="img-fluid rounded shadow-sm"
+                         style="max-height: 450px; object-fit: contain;" />
                 </div>
 
-                <!-- NÚT TRƯỢT -->
+                <!-- nút trượt -->
                 <button class="carousel-btn left" id="thumbPrev"><i class="fa-solid fa-chevron-left"></i></button>
                 <button class="carousel-btn right" id="thumbNext"><i class="fa-solid fa-chevron-right"></i></button>
 
-                <!-- DANH SÁCH ẢNH NHỎ -->
-                <div class="thumb-container d-flex align-items-center gap-2 overflow-hidden px-1" id="thumbContainer">
-                    <img src="@Model.ImageUrl" class="thumb-image active" alt="@Model.Name" />
+                <!-- ảnh nhỏ -->
+                <div class="thumb-container d-flex gap-2 overflow-hidden" id="thumbContainer">
+
+                    <img src="@Model.ImageUrl" class="thumb-image active" />
 
                     @if (Model.ProductImages != null && Model.ProductImages.Any())
                     {
                         foreach (var img in Model.ProductImages)
                         {
-                            <img src="@img.ImageUrl" alt="Ảnh phụ" class="thumb-image rounded border" />
+                            <img src="@img.ImageUrl" class="thumb-image" />
                         }
                     }
                 </div>
