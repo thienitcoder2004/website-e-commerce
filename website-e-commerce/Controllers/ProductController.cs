@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -32,13 +33,162 @@ namespace website_e_commerce.Controllers
             _env = env;
         }
 
-        //  Danh sách sản phẩm (lọc theo tên)
-        public IActionResult Index(string? query, string? sortOrder, int page = 1)
+        // ================================
+        // DANH SÁCH SẢN PHẨM + BỘ LỌC
+        // ================================
+        public IActionResult Index(
+            string? query,
+            string? sortOrder,
+            int? categoryId,
+            string? filter,
+            int page = 1)
         {
             int pageSize = 12;
+
+            // Lấy toàn bộ sản phẩm
             var products = _productRepository.GetAll().ToList();
 
-            //  Tìm kiếm
+            // ==========================
+            // AUTO CATEGORY KHI SEARCH
+            // ==========================
+            if (!string.IsNullOrEmpty(query) && categoryId == null)
+            {
+                string keyword = query.ToLower().Trim();
+
+                var first = products.FirstOrDefault(p =>
+                    p.Name.ToLower().Contains(keyword) ||
+                    (p.Category != null && p.Category.Name.ToLower().Contains(keyword)));
+
+                if (first != null)
+                    categoryId = first.CategoryId;
+            }
+
+            // ==========================
+            // LOAD BỘ LỌC (CATEGORY HOẶC MẶC ĐỊNH)
+            // Nếu categoryId == null hoặc == 0 ⇒ dùng bộ lọc mặc định
+            if (categoryId == null || categoryId == 0)
+            {
+                ViewBag.CategoryId = 0;
+
+                ViewBag.Filters = new
+                {
+                    CategoryId = 0,
+                    Groups = new List<object>
+        {
+            new {
+                Id = 100,
+                GroupName = "Hãng",
+                Options = _context.Brands
+                    .Select(b => new { Label = b.Name, Value = $"brand={b.Name}" })
+                    .ToList()
+            },
+            new {
+                Id = 200,
+                GroupName = "Giá tiền",
+                Options = new List<object>
+                {
+                    new { Label = "Dưới 5 triệu", Value = "price<5000000" },
+                    new { Label = "5 - 10 triệu", Value = "price=5-10" },
+                    new { Label = "10 - 20 triệu", Value = "price=10-20" },
+                    new { Label = "Trên 20 triệu", Value = "price>20000000" }
+                }
+            }
+        }
+                };
+            }
+            else
+            {
+                // Có danh mục ⇒ load filter theo category
+                var filterCategory = _context.FilterCategories
+                    .Include(fc => fc.Groups)
+                    .ThenInclude(g => g.Options)
+                    .FirstOrDefault(fc => fc.CategoryId == categoryId);
+
+                ViewBag.CategoryId = categoryId;
+                ViewBag.Filters = filterCategory;
+            }
+
+
+            // ==========================
+            // ÁP DỤNG BỘ LỌC
+            // ==========================
+            if (!string.IsNullOrEmpty(filter))
+            {
+                // ==== BRAND ====
+                if (filter.StartsWith("brand="))
+                {
+                    var brandName = filter.Replace("brand=", "").ToLower();
+                    products = products.Where(p =>
+                        p.Brand != null &&
+                        p.Brand.Name.ToLower() == brandName
+                    ).ToList();
+                }
+
+                // ==== GIÁ: price<5000000 ====
+                if (filter.StartsWith("price<"))
+                {
+                    decimal max = decimal.Parse(filter.Replace("price<", ""));
+                    products = products.Where(p => p.NewPrice < max).ToList();
+                }
+
+                // ==== GIÁ: price>20000000 ====
+                if (filter.StartsWith("price>"))
+                {
+                    decimal min = decimal.Parse(filter.Replace("price>", ""));
+                    products = products.Where(p => p.NewPrice > min).ToList();
+                }
+
+                // ==== GIÁ: price=5-10 ====
+                if (filter.StartsWith("price=") && filter.Contains("-"))
+                {
+                    var parts = filter.Replace("price=", "").Split('-');
+                    decimal min = decimal.Parse(parts[0]) * 1_000_000;
+                    decimal max = decimal.Parse(parts[1]) * 1_000_000;
+
+                    products = products
+                        .Where(p => p.NewPrice >= min && p.NewPrice <= max)
+                        .ToList();
+                }
+
+                // ==== ROM ====
+                if (filter.StartsWith("rom="))
+                {
+                    var rom = filter.Replace("rom=", "");
+                    products = products.Where(p => p.Specifications?.Contains(rom) == true).ToList();
+                }
+
+                // ==== RAM ====
+                if (filter.StartsWith("ram="))
+                {
+                    var ram = filter.Replace("ram=", "");
+                    products = products.Where(p => p.Specifications?.Contains(ram) == true).ToList();
+                }
+
+                // ==== CPU ====
+                if (filter.StartsWith("cpu="))
+                {
+                    var cpu = filter.Replace("cpu=", "");
+                    products = products.Where(p => p.Specifications?.Contains(cpu) == true).ToList();
+                }
+
+                // ==== GPU ====
+                if (filter.StartsWith("gpu="))
+                {
+                    var gpu = filter.Replace("gpu=", "");
+                    products = products.Where(p => p.Specifications?.Contains(gpu) == true).ToList();
+                }
+
+                // ==== SIZE ====
+                if (filter.StartsWith("size="))
+                {
+                    var size = filter.Replace("size=", "");
+                    products = products.Where(p => p.Specifications?.Contains(size) == true).ToList();
+                }
+            }
+
+            // ==========================
+            // TÌM KIẾM
+            // ==========================
             if (!string.IsNullOrEmpty(query))
             {
                 string keyword = query.ToLower().Trim();
@@ -46,8 +196,8 @@ namespace website_e_commerce.Controllers
                 products = products
                     .Where(p =>
                         p.Name.ToLower().Contains(keyword) ||
-                        (p.Brand != null && p.Brand.Name.ToLower().Replace(" ", "").Contains(keyword)) ||
-                        (p.Category != null && p.Category.Name.ToLower().Replace(" ", "").Contains(keyword))
+                        (p.Brand != null && p.Brand.Name.ToLower().Contains(keyword)) ||
+                        (p.Category != null && p.Category.Name.ToLower().Contains(keyword))
                     )
                     .ToList();
 
@@ -58,7 +208,9 @@ namespace website_e_commerce.Controllers
                 ViewBag.SearchKeyword = "Tất cả sản phẩm";
             }
 
-            //  Sắp xếp
+            // ==========================
+            // SẮP XẾP
+            // ==========================
             switch (sortOrder)
             {
                 case "price_asc":
@@ -78,22 +230,27 @@ namespace website_e_commerce.Controllers
                     break;
             }
 
-            //  Phân trang
+            // ==========================
+            // PHÂN TRANG
+            // ==========================
             int totalProducts = products.Count();
             int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+
             var paginated = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-            //  Gửi thông tin sang View
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
-            ViewBag.HasPreviousPage = page > 1;
-            ViewBag.HasNextPage = page < totalPages;
             ViewBag.SortOrder = sortOrder;
+            ViewBag.Filter = filter;
 
+            // ==========================
+            // YÊU THÍCH
+            // ==========================
             List<int> favoriteIds = new();
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                 if (!string.IsNullOrEmpty(userId))
                 {
                     favoriteIds = _context.FavoriteProducts
@@ -105,20 +262,18 @@ namespace website_e_commerce.Controllers
             ViewBag.FavoriteIds = favoriteIds;
 
             return View(paginated);
-
-
-            return View(paginated);
         }
 
-        // Xem danh sách sản phẩm yêu thích
+        // ================================
+        // FAVORITE LIST
+        // ================================
         [Authorize]
         public IActionResult Favorites()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (string.IsNullOrEmpty(userId))
-            {
                 return RedirectToPage("/Account/Login", new { area = "Identity" });
-            }
 
             var favoriteProducts = _context.Products
                 .Where(p => p.FavoriteProducts.Any(fp => fp.UserId == userId))
@@ -126,21 +281,21 @@ namespace website_e_commerce.Controllers
                 .Include(p => p.Brand)
                 .ToList();
 
-            return View(favoriteProducts); 
+            return View(favoriteProducts);
         }
 
-
-        // Bật/tắt yêu thích 1 sản phẩm
+        // ================================
+        // TOGGLE FAVORITE
+        // ================================
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ToggleFavorite(int productId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (string.IsNullOrEmpty(userId))
-            {
                 return Unauthorized();
-            }
 
             var favorite = _context.FavoriteProducts
                 .FirstOrDefault(fp => fp.UserId == userId && fp.ProductId == productId);
@@ -149,7 +304,6 @@ namespace website_e_commerce.Controllers
 
             if (favorite == null)
             {
-                // Thêm vào yêu thích
                 _context.FavoriteProducts.Add(new FavoriteProduct
                 {
                     UserId = userId,
@@ -165,57 +319,37 @@ namespace website_e_commerce.Controllers
 
             _context.SaveChanges();
 
-            // Nếu gọi bằng Ajax thì trả JSON
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
                 return Json(new { success = true, isFavorite });
-            }
 
-            // Không Ajax thì quay lại trang trước
             var referer = Request.Headers["Referer"].ToString();
-            if (!string.IsNullOrEmpty(referer))
-                return Redirect(referer);
-
-            return RedirectToAction(nameof(Index));
+            return !string.IsNullOrEmpty(referer)
+                ? Redirect(referer)
+                : RedirectToAction(nameof(Index));
         }
 
-
-        // Hiển thị sản phẩm theo danh mục
+        // ================================
+        // CATEGORY = REDIRECT INDEX
+        // ================================
         public IActionResult Category(string name)
         {
             if (string.IsNullOrEmpty(name))
                 return RedirectToAction("Index");
 
-            string categoryName = name.Trim().ToLower();
+            string key = name.Trim().ToLower().Replace(" ", "");
 
-            var products = _productRepository.GetAll()
-                .Where(p => p.Category != null &&
-                            p.Category.Name.ToLower().Replace(" ", "") == categoryName.Replace(" ", ""))
-                .ToList();
+            var category = _context.Categories
+                .FirstOrDefault(c => c.Name.ToLower().Replace(" ", "") == key);
 
-            ViewBag.CategoryName = name;
+            if (category == null)
+                return RedirectToAction("Index", new { query = name });
 
-            if (!products.Any())
-                ViewBag.Message = $"⚠️ Hiện chưa có sản phẩm nào trong danh mục '{name}'.";
-
-            List<int> favoriteIds = new();
-            if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (!string.IsNullOrEmpty(userId))
-                {
-                    favoriteIds = _context.FavoriteProducts
-                        .Where(fp => fp.UserId == userId)
-                        .Select(fp => fp.ProductId)
-                        .ToList();
-                }
-            }
-            ViewBag.FavoriteIds = favoriteIds;
-
-            return View("Index", products);
+            return RedirectToAction("Index", new { categoryId = category.Id });
         }
 
-        // Thêm sản phẩm
+        // ================================
+        // ADD + EDIT
+        // ================================
         public IActionResult Add()
         {
             ViewBag.Categories = new SelectList(_categoryRepository.GetAllCategories(), "Id", "Name");
@@ -228,7 +362,9 @@ namespace website_e_commerce.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Categories = new SelectList(_categoryRepository.GetAllCategories(), "Id", "Name", product.CategoryId);
+                ViewBag.Categories =
+                    new SelectList(_categoryRepository.GetAllCategories(), "Id", "Name", product.CategoryId);
+
                 return View(product);
             }
 
@@ -238,92 +374,102 @@ namespace website_e_commerce.Controllers
             product.WebQuantity = 0;
 
             if (product.OldPrice > 0 && product.DiscountPercent > 0)
-            {
                 product.NewPrice = product.OldPrice - (product.OldPrice * product.DiscountPercent / 100);
-            }
 
             _productRepository.Add(product);
-            TempData["success"] = "✅ Đã thêm sản phẩm và tính giá giảm tự động.";
+
+            TempData["success"] = "Đã thêm sản phẩm.";
             return RedirectToAction(nameof(Index));
         }
 
-        // Nhập kho
+        // ================================
+        // STOCK IMPORT
+        // ================================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ImportToStock(int id, int importQuantity)
         {
             var product = _productRepository.GetById(id);
-            if (product == null) return NotFound();
+
+            if (product == null)
+                return NotFound();
 
             if (importQuantity <= 0)
             {
-                TempData["error"] = "⚠️ Số lượng nhập phải lớn hơn 0.";
+                TempData["error"] = "Số lượng nhập phải lớn hơn 0.";
                 return RedirectToAction(nameof(Index));
             }
 
             product.StockQuantity += importQuantity;
             _productRepository.Update(product);
 
-            //  Thêm dòng này để ghi lịch sử
             _context.StockHistory.Add(new StockHistory
             {
                 ProductId = id,
                 ActionType = "Import",
                 Quantity = importQuantity,
-                Note = "Nhập thêm vào kho",
+                Note = "Nhập kho",
                 CreatedAt = DateTime.Now
             });
+
             _context.SaveChanges();
 
-            TempData["success"] = $"📦 Đã nhập thêm {importQuantity} sản phẩm '{product.Name}' vào kho.";
+            TempData["success"] = $"Đã nhập thêm {importQuantity} sản phẩm.";
             return RedirectToAction(nameof(Index));
         }
 
-
-        //  Xuất sản phẩm ra web
+        // ================================
+        // STOCK EXPORT
+        // ================================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ExportToWeb(int id, int exportQuantity)
         {
             var product = _productRepository.GetById(id);
-            if (product == null) return NotFound();
+
+            if (product == null)
+                return NotFound();
 
             if (exportQuantity <= 0)
             {
-                TempData["error"] = "⚠️ Số lượng xuất ra web phải lớn hơn 0.";
+                TempData["error"] = "Số lượng phải lớn hơn 0.";
                 return RedirectToAction(nameof(Index));
             }
 
             if (product.StockQuantity < exportQuantity)
             {
-                TempData["error"] = $"⚠️ Không đủ hàng trong kho. Hiện còn {product.StockQuantity} sản phẩm.";
+                TempData["error"] =
+                    $"Không đủ hàng trong kho. Hiện còn {product.StockQuantity}.";
                 return RedirectToAction(nameof(Index));
             }
 
             product.StockQuantity -= exportQuantity;
             product.WebQuantity += exportQuantity;
+
             _productRepository.Update(product);
 
-            //  Ghi lịch sử xuất kho
             _context.StockHistory.Add(new StockHistory
             {
                 ProductId = id,
                 ActionType = "Export",
                 Quantity = exportQuantity,
-                Note = "Xuất sản phẩm lên web bán",
+                Note = "Xuất hàng lên web",
                 CreatedAt = DateTime.Now
             });
+
             _context.SaveChanges();
 
-            TempData["success"] = $"🚀 Đã xuất {exportQuantity} sản phẩm '{product.Name}' ra web.";
+            TempData["success"] = $"Đã xuất {exportQuantity} sản phẩm.";
             return RedirectToAction(nameof(Index));
         }
 
-
-        // Chi tiết sản phẩm
+        // ================================
+        // DETAILS
+        // ================================
         public IActionResult Details(int id)
         {
             var product = _productRepository.GetById(id);
+
             if (product == null)
                 return NotFound();
 
@@ -331,23 +477,31 @@ namespace website_e_commerce.Controllers
             if (product.WebQuantity < 0) product.WebQuantity = 0;
 
             ViewBag.Reviews = _reviewRepository.GetReviewsByProductId(id).ToList();
+
             return View(product);
         }
 
-        // Xóa sản phẩm
+        // ================================
+        // DELETE
+        // ================================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
             var product = _productRepository.GetById(id);
-            if (product == null) return NotFound();
+
+            if (product == null)
+                return NotFound();
 
             _productRepository.Delete(id);
-            TempData["success"] = "🗑️ Đã xóa sản phẩm & kho tương ứng.";
+
+            TempData["success"] = "Đã xoá sản phẩm.";
             return RedirectToAction(nameof(Index));
         }
 
-        // HÀM HỖ TRỢ LẤY / LƯU DS ID SO SÁNH
+        // ================================
+        // SO SÁNH
+        // ================================
         private List<int> GetCompareList()
         {
             var list = HttpContext.Session.GetObjectFromJson<List<int>>(CompareSessionKey);
@@ -359,25 +513,22 @@ namespace website_e_commerce.Controllers
             HttpContext.Session.SetObjectAsJson(CompareSessionKey, productIds);
         }
 
-        // Trang so sánh sản phẩm
         public IActionResult Compare()
         {
             var compareList = GetCompareList();
 
-            var products = compareList
-                .Select(id => _productRepository.GetById(id))
-                .Where(p => p != null)
-                .ToList();
+            var products = compareList.Select(id => _productRepository.GetById(id))
+                .Where(p => p != null).ToList();
 
-            return View(products); // Views/Product/Compare.cshtml
+            return View(products);
         }
 
-        // Thêm sản phẩm vào danh sách so sánh
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddToCompare(int id)
         {
             var product = _productRepository.GetById(id);
+
             if (product == null)
             {
                 TempData["error"] = "Sản phẩm không tồn tại.";
@@ -388,35 +539,35 @@ namespace website_e_commerce.Controllers
 
             if (!compareList.Contains(id))
             {
-                if (compareList.Count >= 3) // giới hạn 3 sản phẩm
+                if (compareList.Count >= 3)
                 {
-                    TempData["error"] = "Bạn chỉ có thể so sánh tối đa 3 sản phẩm.";
+                    TempData["error"] = "Chỉ so sánh tối đa 3 sản phẩm.";
                 }
                 else
                 {
                     compareList.Add(id);
                     SaveCompareList(compareList);
+
                     TempData["success"] = $"Đã thêm '{product.Name}' vào danh sách so sánh.";
                 }
             }
             else
             {
-                TempData["info"] = "Sản phẩm này đã có trong danh sách so sánh.";
+                TempData["info"] = "Sản phẩm đã có trong danh sách.";
             }
 
             var referer = Request.Headers["Referer"].ToString();
-            if (!string.IsNullOrEmpty(referer))
-                return Redirect(referer);
-
-            return RedirectToAction(nameof(Index));
+            return !string.IsNullOrEmpty(referer)
+                ? Redirect(referer)
+                : RedirectToAction(nameof(Index));
         }
 
-        // Xóa sản phẩm khỏi danh sách so sánh
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult RemoveFromCompare(int id)
         {
             var compareList = GetCompareList();
+
             if (compareList.Contains(id))
             {
                 compareList.Remove(id);
@@ -426,11 +577,13 @@ namespace website_e_commerce.Controllers
             return RedirectToAction(nameof(Compare));
         }
 
-
-        // Hàm lưu ảnh
+        // ================================
+        // LƯU ẢNH
+        // ================================
         private async Task<string> SaveImage(IFormFile image)
         {
             string folder = Path.Combine(_env.WebRootPath, "images", "product");
+
             if (!Directory.Exists(folder))
                 Directory.CreateDirectory(folder);
 
