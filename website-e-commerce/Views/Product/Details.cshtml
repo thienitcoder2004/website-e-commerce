@@ -11,9 +11,7 @@
 
                 <!-- Ảnh chính -->
                 <div class="main-image text-center mb-2">
-                    <img id="mainProductImage"
-                         src="@Model.ImageUrl"
-                         class="img-fluid rounded shadow-sm"
+                    <img id="mainProductImage" src="@Model.ImageUrl" class="img-fluid rounded shadow-sm"
                          style="max-height: 450px; object-fit: contain;" />
                 </div>
 
@@ -73,7 +71,8 @@
                     <!-- Bộ chọn số lượng -->
                     <div class="quantity-selector d-flex justify-content-center align-items-center border rounded-pill px-3 py-2">
                         <button type="button" class="btn-qty minus">−</button>
-                        <input type="text" name="quantity" value="1" readonly class="qty-input text-center border-0 mx-2" />
+                        <input type="text" name="quantity" value="1" readonly
+                               class="qty-input text-center border-0 mx-2" />
                         <button type="button" class="btn-qty plus">+</button>
                     </div>
 
@@ -84,9 +83,18 @@
                         </button>
                         @if (Model.WebQuantity > 0)
                         {
-                            <button type="submit" class="btn btn-danger btn-lg fw-bold" style="width: 270px;">
-                                🛒 Thêm vào giỏ hàng
-                            </button>
+                            @if (User.Identity != null && User.Identity.IsAuthenticated)
+                            {
+                                <button type="submit" class="btn btn-danger btn-lg fw-bold" style="width: 270px;">
+                                    🛒 Thêm vào giỏ hàng
+                                </button>
+                            }
+                            else
+                            {
+                                <a href="/Identity/Account/Login" class="btn btn-danger btn-lg fw-bold" style="width: 270px;">
+                                    🛒 Thêm vào giỏ hàng
+                                </a>
+                            }
                         }
                         else
                         {
@@ -147,7 +155,10 @@
                             <div class="card-body text-center">
                                 <h6 class="fw-bold">@p.Name</h6>
                                 <p class="text-danger mb-1 fw-bold">@String.Format("{0:N0}đ", p.NewPrice)</p>
-                                <a href="/Product/Details/@p.Id" class="btn btn-outline-danger btn-sm rounded-pill">Xem chi tiết</a>
+                                <a href="/Product/Details/@p.Id" class="btn btn-outline-danger btn-sm rounded-pill">
+                                    Xem chi
+                                    tiết
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -321,7 +332,8 @@
         transition: all 0.3s ease;
     }
 
-        .thumb-image.active, .thumb-image:hover {
+        .thumb-image.active,
+        .thumb-image:hover {
             border-color: #ff4d4f;
             transform: scale(1.05);
         }
@@ -331,7 +343,7 @@
         position: absolute;
         top: 40%;
         transform: translateY(-50%);
-        background: rgba(255,255,255,0.9);
+        background: rgba(255, 255, 255, 0.9);
         border: none;
         border-radius: 50%;
         width: 35px;
@@ -394,7 +406,7 @@
         font-weight: 600;
         padding: 15px 25px;
         border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         opacity: 0;
         transform: translateY(50px);
         transition: all 0.4s ease;
@@ -431,7 +443,7 @@
         .tab-btn.active {
             background-color: #ff4d4f;
             color: #fff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
 
     .tab-pane {
@@ -472,7 +484,8 @@
 
     /* ==== ĐÁNH GIÁ SAO ==== */
     .rating-stars {
-        direction: rtl; /* để chọn sao từ phải sang trái */
+        direction: rtl;
+        /* để chọn sao từ phải sang trái */
         font-size: 2rem;
         gap: 5px;
     }
@@ -492,7 +505,6 @@
             .rating-stars input:checked ~ label {
                 color: #ffcc00;
             }
-
 </style>
 
 <script>
@@ -548,19 +560,40 @@
         /* =============================
            🔢  CHỌN SỐ LƯỢNG
         ============================== */
-        const minusBtn = document.querySelector(".btn-qty.minus");
-        const plusBtn = document.querySelector(".btn-qty.plus");
-        const qtyInput = document.querySelector(".qty-input");
+        const maxQty = @Model.WebQuantity;
 
-        minusBtn.addEventListener("click", () => {
-            let v = parseInt(qtyInput.value);
-            if (v > 1) qtyInput.value = v - 1;
-        });
+    const minusBtn = document.querySelector(".btn-qty.minus");
+    const plusBtn = document.querySelector(".btn-qty.plus");
+    const qtyInput = document.querySelector(".qty-input");
 
-        plusBtn.addEventListener("click", () => {
-            let v = parseInt(qtyInput.value);
+    // Nếu chỉ còn 1 sản phẩm → khóa nút tăng
+    if (maxQty <= 1) {
+        plusBtn.disabled = true;
+    }
+
+    minusBtn.addEventListener("click", () => {
+        let v = parseInt(qtyInput.value);
+
+        if (v > 1) {
+            qtyInput.value = v - 1;
+        }
+
+        if (parseInt(qtyInput.value) < maxQty) {
+            plusBtn.disabled = false;
+        }
+    });
+
+    plusBtn.addEventListener("click", () => {
+        let v = parseInt(qtyInput.value);
+
+        if (v < maxQty) {
             qtyInput.value = v + 1;
-        });
+        }
+
+        if (parseInt(qtyInput.value) >= maxQty) {
+            plusBtn.disabled = true;
+        }
+    });
 
 
         /* =============================
@@ -602,28 +635,26 @@
                     method: "POST",
                     body: formData
                 })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById("reviewMessage").classList.remove("d-none");
-                        this.reset();
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById("reviewMessage").classList.remove("d-none");
+                            this.reset();
 
-                        // Bỏ chọn sao sau khi gửi
-                        document.querySelectorAll('input[name="Rating"]').forEach(r => r.checked = false);
+                            // Bỏ chọn sao sau khi gửi
+                            document.querySelectorAll('input[name="Rating"]').forEach(r => r.checked = false);
 
-                        setTimeout(() => {
-                            document.getElementById("reviewMessage").classList.add("d-none");
-                            location.reload(); // reload để hiện review mới
-                        }, 2000);
-                    } else {
-                        alert(data.message || "Có lỗi xảy ra khi gửi đánh giá!");
-                    }
-                })
-                .catch(() => alert("Không thể gửi đánh giá, vui lòng thử lại!"));
+                            setTimeout(() => {
+                                document.getElementById("reviewMessage").classList.add("d-none");
+                                location.reload(); // reload để hiện review mới
+                            }, 2000);
+                        } else {
+                            alert(data.message || "Có lỗi xảy ra khi gửi đánh giá!");
+                        }
+                    })
+                    .catch(() => alert("Không thể gửi đánh giá, vui lòng thử lại!"));
             });
         }
 
     });
 </script>
-
-

@@ -1,0 +1,38 @@
+﻿@model FlashSale
+@{
+    var products = ViewBag.Products as List<Product>;
+}
+
+<h2 class="mb-3">Chỉnh sửa Flash Sale</h2>
+
+<form method="post" class="card p-4 w-50">
+
+    <!-- SẢN PHẨM -->
+    <label>Sản phẩm</label>
+    <select asp-for="ProductId"
+            class="form-control mb-3"
+            asp-items="@(new SelectList(products, "Id", "Name", Model.ProductId))">
+    </select>
+
+    <!-- GIÁ FLASH -->
+    <label>Giá Flash</label>
+    <input asp-for="FlashPrice" type="number" step="0.01" class="form-control mb-3" />
+
+    <!-- SỐ LƯỢNG -->
+    <label>Số lượng</label>
+    <input asp-for="FlashQuantity" type="number" class="form-control mb-3" />
+
+    <!-- BẮT ĐẦU -->
+    <label>Bắt đầu</label>
+    <input asp-for="StartTime" type="datetime-local"
+           value="@Model.StartTime.ToString("yyyy-MM-ddTHH:mm")"
+           class="form-control mb-3" />
+
+    <!-- KẾT THÚC -->
+    <label>Kết thúc</label>
+    <input asp-for="EndTime" type="datetime-local"
+           value="@Model.EndTime.ToString("yyyy-MM-ddTHH:mm")"
+           class="form-control mb-3" />
+
+    <button class="btn btn-success">Cập nhật</button>
+</form>

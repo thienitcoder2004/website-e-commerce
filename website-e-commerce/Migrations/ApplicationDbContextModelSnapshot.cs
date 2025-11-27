@@ -1649,6 +1649,42 @@ namespace website_e_commerce.Migrations
                         });
                 });
 
+            modelBuilder.Entity("website_e_commerce.Models.FlashSale", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("FlashPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("FlashQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SoldQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("FlashSales");
+                });
+
             modelBuilder.Entity("website_e_commerce.Models.Message", b =>
                 {
                     b.Property<int>("Id")
@@ -2419,6 +2455,17 @@ namespace website_e_commerce.Migrations
                         .IsRequired();
 
                     b.Navigation("FilterGroup");
+                });
+
+            modelBuilder.Entity("website_e_commerce.Models.FlashSale", b =>
+                {
+                    b.HasOne("website_e_commerce.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("website_e_commerce.Models.Order", b =>

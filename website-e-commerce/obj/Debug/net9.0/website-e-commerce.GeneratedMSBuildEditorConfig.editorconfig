@@ -160,6 +160,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXJyb3JcNDA0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/website-e-commerce/website-e-commerce/Views/FlashSale/Add.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmxhc2hTYWxlXEFkZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/website-e-commerce/website-e-commerce/Views/FlashSale/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmxhc2hTYWxlXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/website-e-commerce/website-e-commerce/Views/FlashSale/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmxhc2hTYWxlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/website-e-commerce/website-e-commerce/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

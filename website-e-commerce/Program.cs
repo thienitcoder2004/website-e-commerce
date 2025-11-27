@@ -60,6 +60,7 @@ builder.Services.AddScoped<website_e_commerce.Services.EmailService>();
 builder.Services.AddScoped<website_e_commerce.Services.GeminiChatService>();
 builder.Services.AddScoped<IBrandRepository, MockBrandRepository>();
 builder.Services.AddScoped<IStockHistoryRepository, MockStockHistoryRepository>();
+builder.Services.AddScoped<IFlashSaleRepository, MockFlashSaleRepository>();
 builder.Services.AddSingleton<MomoService>();
 builder.Services.AddSingleton<VnPayService>();
 
@@ -96,7 +97,6 @@ app.MapControllerRoute(
     name: "folderRouting",
     pattern: "{folder}",
     defaults: new { controller = "Home", action = "Index" });
-
 
 // Gọi hàm tạo/cập nhật Role & Admin
 await SeedRolesAndAdmin(app);

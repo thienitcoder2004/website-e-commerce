@@ -1,0 +1,31 @@
+@model FlashSale
+@{
+    var products = ViewBag.Products as List<Product>;
+}
+
+<h2 class="mb-3">+ Tạo Flash Sale</h2>
+
+<form method="post" class="card p-4 w-50">
+
+    <label>Sản phẩm</label>
+    <select name="ProductId" class="form-control mb-3">
+        @foreach (var p in products)
+        {
+            <option value="@p.Id">@p.Name</option>
+        }
+    </select>
+
+    <label>Giá Flash</label>
+    <input type="number" name="FlashPrice" step="0.01" class="form-control mb-3" />
+
+    <label>Số lượng</label>
+    <input type="number" name="FlashQuantity" class="form-control mb-3" />
+
+    <label>Bắt đầu</label>
+    <input type="datetime-local" name="StartTime" class="form-control mb-3" />
+
+    <label>Kết thúc</label>
+    <input type="datetime-local" name="EndTime" class="form-control mb-3" />
+
+    <button class="btn btn-primary">Tạo</button>
+</form>

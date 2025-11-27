@@ -267,6 +267,32 @@ namespace website_e_commerce.Controllers
         }
 
         // ================================
+        // SEARCH SUGGESTIONS (API GỢI Ý)
+        // ================================
+        [HttpGet]
+        public async Task<IActionResult> SearchSuggestions(string term)
+        {
+            if (string.IsNullOrWhiteSpace(term))
+                return Json(new List<object>());
+
+            var result = await _context.Products
+                .Where(p => p.Name.Contains(term))
+                .OrderBy(p => p.Name)
+                .Take(10)
+                .Select(p => new
+                {
+                    id = p.Id,
+                    name = p.Name,
+                    price = p.NewPrice,      // ⚠ Nếu bạn muốn giá khuyến mãi
+                    image = p.ImageUrl
+                })
+                .ToListAsync();
+
+            return Json(result);
+        }
+
+
+        // ================================
         // FAVORITE LIST
         // ================================
         [Authorize]
