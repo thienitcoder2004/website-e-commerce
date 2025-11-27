@@ -30,6 +30,7 @@
         <table class="table table-hover text-center align-middle shadow-sm">
             <thead class="table-danger">
                 <tr>
+                    <th>Mã</th>
                     <th>Tên sản phẩm</th>
                     <th>Giá</th>
                     <th>Tồn kho</th>
@@ -45,6 +46,7 @@
                     var rowClass = available <= 0 ? "table-danger" : available < 10 ? "table-warning" : "";
 
                     <tr class="@rowClass">
+                        <td>@p.Id</td>
                         <td class="text-start fw-semibold">@p.Name</td>
                         <td>@String.Format("{0:N0} đ", p.NewPrice)</td>
                         <td>@p.StockQuantity</td>
@@ -53,21 +55,21 @@
                             @(available <= 0 ? "Hết hàng" :
                                                 available < 10 ? "Sắp hết" :
                                                 "Còn hàng")
-                </td>
-                <td>
-                    <form asp-action="ImportToStock" method="post" class="d-inline-flex gap-1">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value="@p.Id" />
-                        <input type="number" name="importQuantity" class="form-control form-control-sm" min="1"
-                               placeholder="SL" style="width:90px;" />
-                        <button type="submit" class="btn btn-sm btn-outline-success">Nhập</button>
-                    </form>
+                        </td>
+                        <td>
+                            <form asp-action="ImportToStock" method="post" class="d-inline-flex gap-1">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@p.Id" />
+                                <input type="number" name="importQuantity" class="form-control form-control-sm" min="1"
+                                    placeholder="SL" style="width:90px;" />
+                                <button type="submit" class="btn btn-sm btn-outline-success">Nhập</button>
+                            </form>
 
                             <form asp-action="ExportToWeb" method="post" class="d-inline-flex gap-1">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@p.Id" />
                                 <input type="number" name="exportQuantity" class="form-control form-control-sm" min="1"
-                                       placeholder="SL" style="width:90px;" />
+                                    placeholder="SL" style="width:90px;" />
                                 <button type="submit" class="btn btn-sm btn-outline-primary">Xuất</button>
                             </form>
 
@@ -75,13 +77,13 @@
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@p.Id" />
                                 <button type="submit" class="btn btn-sm btn-outline-danger"
-                                        onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')">
+                                    onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')">
                                     Xóa
                                 </button>
                             </form>
                         </td>
                     </tr>
-                        }
+                }
             </tbody>
         </table>
 
@@ -94,7 +96,7 @@
                         var active = i == ViewBag.CurrentPage ? "active" : "";
                         <li class="page-item @active">
                             <a class="page-link"
-                               href="?page=@i@(ViewBag.CategoryId != null ? $"&categoryId={ViewBag.CategoryId}" : "")">
+                                href="?page=@i@(ViewBag.CategoryId != null ? $"&categoryId={ViewBag.CategoryId}" : "")">
                                 @i
                             </a>
                         </li>
@@ -112,6 +114,7 @@ else if (User.IsInRole(SD.Role_Employee))
         <table class="table table-hover text-center align-middle shadow-sm">
             <thead class="table-danger">
                 <tr>
+                    <th>Mã</th>
                     <th>Tên sản phẩm</th>
                     <th>Giá</th>
                     <th>Tồn kho</th>
@@ -126,6 +129,7 @@ else if (User.IsInRole(SD.Role_Employee))
                     var rowClass = available <= 0 ? "table-danger" : available < 10 ? "table-warning" : "";
 
                     <tr class="@rowClass">
+                        <td>@p.Id</td>
                         <td class="text-start fw-semibold">@p.Name</td>
                         <td>@String.Format("{0:N0} đ", p.NewPrice)</td>
                         <td>@p.StockQuantity</td>
@@ -134,9 +138,9 @@ else if (User.IsInRole(SD.Role_Employee))
                             @(available <= 0 ? "Hết hàng" :
                                                 available < 10 ? "Sắp hết" :
                                                 "Còn hàng")
-                </td>
-            </tr>
-                        }
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
 
@@ -149,7 +153,7 @@ else if (User.IsInRole(SD.Role_Employee))
                         var active = i == ViewBag.CurrentPage ? "active" : "";
                         <li class="page-item @active">
                             <a class="page-link"
-                               href="?page=@i@(ViewBag.CategoryId != null ? $"&categoryId={ViewBag.CategoryId}" : "")">
+                                href="?page=@i@(ViewBag.CategoryId != null ? $"&categoryId={ViewBag.CategoryId}" : "")">
                                 @i
                             </a>
                         </li>
@@ -203,9 +207,8 @@ else
                             {
                                 <div class="accordion-item mb-2">
                                     <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed py-2"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#g-@group.Id">
+                                        <button class="accordion-button collapsed py-2" data-bs-toggle="collapse"
+                                            data-bs-target="#g-@group.Id">
                                             @group.GroupName
                                         </button>
                                     </h2>
@@ -218,7 +221,8 @@ else
                                                 bool isActive = selectedFilter != null &&
                                                 selectedFilter.ToString().ToLower() == option.Value.ToLower();
 
-                                                var url = $"?query={searchKeyword}&categoryId={catId}&filter={option.Value}&sortOrder={currentSort}";
+                                                var url =
+                                                $"?query={searchKeyword}&categoryId={catId}&filter={option.Value}&sortOrder={currentSort}";
 
                                                 <div class="filter-option @(isActive ? "active" : "")">
                                                     <a href="@url">@option.Label</a>
@@ -244,87 +248,90 @@ else
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold">Kết quả tìm kiếm</h5>
                     <div>
-                        <select class="form-select form-select-sm"
-                                onchange="location = this.value;">
+                        <select class="form-select form-select-sm" onchange="location = this.value;">
 
-                            <option value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=")">
+                            <option
+                                value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=")">
                                 Sắp xếp theo
                             </option>
 
-                            <option value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=price_asc")"
-                                    selected="@(currentSort == "price_asc" ? "selected" : null)">
+                            <option
+                                value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=price_asc")"
+                                selected="@(currentSort == "price_asc" ? "selected" : null)">
                                 Giá tăng dần
                             </option>
 
-                            <option value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=price_desc")"
-                                    selected="@(currentSort == "price_desc" ? "selected" : null)">
+                            <option
+                                value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=price_desc")"
+                                selected="@(currentSort == "price_desc" ? "selected" : null)">
                                 Giá giảm dần
                             </option>
 
-                            <option value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=name_asc")"
-                                    selected="@(currentSort == "name_asc" ? "selected" : null)">
+                            <option
+                                value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=name_asc")"
+                                selected="@(currentSort == "name_asc" ? "selected" : null)">
                                 Tên A-Z
                             </option>
 
-                            <option value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=name_desc")"
-                                    selected="@(currentSort == "name_desc" ? "selected" : null)">
+                            <option
+                                value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=name_desc")"
+                                selected="@(currentSort == "name_desc" ? "selected" : null)">
                                 Tên Z-A
                             </option>
                         </select>
                     </div>
                 </div>
 
-                <div class="row g-3">
+                <div class="row g-3 mb-lg-5">
                     @foreach (var p in Model)
                     {
                         <div class="col-md-4 col-sm-6">
                             <div class="product-card text-center p-3 rounded shadow-sm position-relative">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <!-- NÚT YÊU THÍCH -->
+                                    <div class="position-absolute top-0 end-0 mt-2 me-2">
+                                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                                        {
+                                            bool isFavorite = favoriteIds.Contains(p.Id);
 
-                                <!-- NÚT YÊU THÍCH -->
-                                <div class="position-absolute top-0 end-0 mt-2 me-2">
-                                    @if (User.Identity != null && User.Identity.IsAuthenticated)
-                                    {
-                                        bool isFavorite = favoriteIds.Contains(p.Id);
+                                            <form asp-controller="Product" asp-action="ToggleFavorite" method="post"
+                                                class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="productId" value="@p.Id" />
+                                                <button type="submit" class="btn btn-sm btn-light rounded-circle shadow-sm">
+                                                    <i
+                                                        class="@(isFavorite ? "fa-solid fa-heart text-danger" : "fa-regular fa-heart")"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <a asp-area="Identity" asp-page="/Account/Login"
+                                                class="btn btn-sm btn-light rounded-circle shadow-sm">
+                                                <i class="fa-regular fa-heart"></i>
+                                            </a>
+                                        }
+                                    </div>
 
-                                        <form asp-controller="Product"
-                                              asp-action="ToggleFavorite"
-                                              method="post"
-                                              class="d-inline">
-                                            @Html.AntiForgeryToken()
-                                            <input type="hidden" name="productId" value="@p.Id" />
-                                            <button type="submit" class="btn btn-sm btn-light rounded-circle shadow-sm">
-                                                <i class="@(isFavorite ? "fa-solid fa-heart text-danger" : "fa-regular fa-heart")"></i>
-                                            </button>
-                                        </form>
-                                    }
-                                    else
-                                    {
-                                        <a asp-area="Identity" asp-page="/Account/Login"
-                                           class="btn btn-sm btn-light rounded-circle shadow-sm">
-                                            <i class="fa-regular fa-heart"></i>
-                                        </a>
-                                    }
+                                    <!-- SO SÁNH -->
+                                    <form asp-controller="Product" asp-action="AddToCompare" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@p.Id" />
+                                        <button type="submit" class="btn btn-outline-primary btn-sm mb-2">
+                                            <i class="fa-solid fa-code-compare me-1"></i> So sánh
+                                        </button>
+                                    </form>
                                 </div>
 
-                                <!-- SO SÁNH -->
-                                <form asp-controller="Product"
-                                      asp-action="AddToCompare"
-                                      method="post"
-                                      class="d-inline">
-                                    @Html.AntiForgeryToken()
-                                    <input type="hidden" name="id" value="@p.Id" />
-                                    <button type="submit" class="btn btn-outline-primary btn-sm mb-2">
-                                        <i class="fa-solid fa-code-compare me-1"></i> So sánh
-                                    </button>
-                                </form>
-
                                 <!-- ẢNH + TÊN -->
-                                <a asp-action="Details"
-                                   asp-route-id="@p.Id"
-                                   class="text-decoration-none text-dark">
+                                <a asp-action="Details" asp-route-id="@p.Id" class="text-decoration-none text-dark">
                                     <img src="@p.ImageUrl" class="img-fluid mb-2" />
                                     <h6 class="fw-semibold">@p.Name</h6>
                                 </a>
+
+                                <div class="text-green fw-medium">
+                                    @p.GiftPromotion
+                                </div>
 
                                 <div class="text-danger fw-bold">
                                     @p.NewPrice.ToString("N0") ₫
@@ -368,7 +375,7 @@ else
 <style>
     .filter-sidebar {
         background: #fff;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     }
 
     .accordion-button {
@@ -383,13 +390,13 @@ else
         text-decoration: none;
     }
 
-        .accordion-body a:hover {
-            color: #d10000;
-        }
+    .accordion-body a:hover {
+        color: #d10000;
+    }
 
     .product-card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         transition: 0.2s;
     }
 

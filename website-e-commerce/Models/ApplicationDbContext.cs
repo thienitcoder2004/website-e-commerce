@@ -28,6 +28,7 @@ namespace website_e_commerce.Models
         public DbSet<FilterCategory> FilterCategories { get; set; }
         public DbSet<FilterGroup> FilterGroups { get; set; }
         public DbSet<FilterOption> FilterOptions { get; set; }
+        public DbSet<FlashSale> FlashSales { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
