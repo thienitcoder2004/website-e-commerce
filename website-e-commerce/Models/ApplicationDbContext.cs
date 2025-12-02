@@ -28,7 +28,10 @@ namespace website_e_commerce.Models
         public DbSet<FilterCategory> FilterCategories { get; set; }
         public DbSet<FilterGroup> FilterGroups { get; set; }
         public DbSet<FilterOption> FilterOptions { get; set; }
+        public DbSet<ProductFilterOption> ProductFilterOptions { get; set; }
         public DbSet<FlashSale> FlashSales { get; set; }
+        public DbSet<ReviewReply> ReviewReplies { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -66,6 +69,18 @@ namespace website_e_commerce.Models
                 .HasForeignKey(fp => fp.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<ProductFilterOption>()
+                .HasKey(pf => new { pf.ProductId, pf.FilterOptionId });
+
+            modelBuilder.Entity<ProductFilterOption>()
+                .HasOne(pf => pf.Product)
+                .WithMany(p => p.ProductFilterOptions)
+                .HasForeignKey(pf => pf.ProductId);
+
+            modelBuilder.Entity<ProductFilterOption>()
+                .HasOne(pf => pf.FilterOption)
+                .WithMany()
+                .HasForeignKey(pf => pf.FilterOptionId);
 
             // CATEGORY SEED
             modelBuilder.Entity<Category>().HasData(

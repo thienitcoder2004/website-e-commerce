@@ -1696,3 +1696,11 @@ D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\refint\website-e-comme
 D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\website-e-commerce.pdb
 D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\website-e-commerce.genruntimeconfig.cache
 D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\ref\website-e-commerce.dll
+D:\website-e-commerce\website-e-commerce\bin\Debug\net9.0\EPPlus.dll
+D:\website-e-commerce\website-e-commerce\bin\Debug\net9.0\Microsoft.IO.RecyclableMemoryStream.dll
+D:\website-e-commerce\website-e-commerce\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
+D:\website-e-commerce\website-e-commerce\bin\Debug\net9.0\System.Drawing.Common.dll
+D:\website-e-commerce\website-e-commerce\bin\Debug\net9.0\System.Xml.XPath.XmlDocument.dll
+D:\website-e-commerce\website-e-commerce\bin\Debug\net9.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+D:\website-e-commerce\website-e-commerce\bin\Debug\net9.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\website-e-commerce\website-e-commerce\bin\Debug\net9.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll

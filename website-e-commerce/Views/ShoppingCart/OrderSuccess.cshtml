@@ -1,49 +1,79 @@
 ﻿@{
     ViewData["Title"] = "Đặt hàng thành công";
+
+    var order = ViewBag.Order;
+    var payment = ViewBag.Payment;
+
+    // 🔥 Chuyển trạng thái tiếng Anh → tiếng Việt
+    string statusVN = payment?.Status switch
+    {
+        "Pending" => "Đang chờ xử lý",
+        "Success" => "Đã thanh toán",
+        "Failed" => "Thanh toán thất bại",
+        _ => "Không xác định"
+    };
+
+    // 🔥 Chọn màu theo trạng thái
+    string statusColor =
+        payment?.Status == "Success" ? "text-success" :
+        payment?.Status == "Pending" ? "text-warning" :
+        "text-danger";
 }
 
 <div class="container text-center py-5">
+
     <h2 class="text-success fw-bold">🎉 Đặt hàng thành công!</h2>
     <p class="mt-3">Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.</p>
 
     <div class="card shadow-sm mx-auto mt-4" style="max-width: 400px;">
         <div class="card-body">
-            <h5>Mã đơn hàng: <span class="fw-bold text-primary">@ViewBag.Order?.Id</span></h5>
-            <p>Tổng tiền: <span class="fw-bold text-danger">@String.Format("{0:N0} đ", ViewBag.Order?.TotalPrice)</span></p>
-            <p>Phương thức: <b>@ViewBag.Payment?.PaymentMethod</b></p>
+
+            <h5>
+                Mã đơn hàng:
+                <span class="fw-bold text-primary">@order?.Id</span>
+            </h5>
+
+            <p>
+                Tổng tiền:
+                <span class="fw-bold text-danger">
+                    @String.Format("{0:N0} đ", order?.TotalPrice)
+                </span>
+            </p>
+
+            <p>Phương thức: <b>@payment?.PaymentMethod</b></p>
+
             <p>
                 Trạng thái thanh toán:
-                <b class="@(ViewBag.Payment?.Status == "Success" ? "text-success" : "text-danger")">
-                    @ViewBag.Payment?.Status
-                </b>
+                <b class="@statusColor">@statusVN</b>
             </p>
+
         </div>
     </div>
 
     <a href="/" class="btn btn-outline-success mt-4">Về trang chủ</a>
 </div>
 
+
+<!-- ================= VOICE READER ================= -->
 <script>
     window.addEventListener("load", function () {
-        const orderId = "@ViewBag.Order?.Id";
-        const totalPrice = "@ViewBag.Order?.TotalPrice";
-        const method = "@ViewBag.Payment?.PaymentMethod";
+        const totalPrice = "@order?.TotalPrice";
 
-        // ✅ Chuyển số thành chữ tiếng Việt
+        // 🔊 Đọc số thành chữ tiếng Việt
         function readNumber(num) {
-            const dv = ['','một','hai','ba','bốn','năm','sáu','bảy','tám','chín'];
-            const chuc = ['','mươi','trăm','nghìn','triệu','tỷ'];
+            const dv = ['', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
             num = parseInt(num);
-            if (isNaN(num) || num === 0) return "không đồng";
-            function convertBlock(num) {
-                let s = '';
-                const tr = Math.floor(num / 100);
-                const ch = Math.floor((num % 100) / 10);
-                const dvn = num % 10;
+            if (!num) return "không đồng";
+
+            function convertBlock(n) {
+                let s = "";
+                const tr = Math.floor(n / 100);
+                const ch = Math.floor((n % 100) / 10);
+                const dvn = n % 10;
+
                 if (tr > 0) s += dv[tr] + " trăm ";
                 if (ch > 0) {
-                    if (ch === 1) s += "mười ";
-                    else s += dv[ch] + " mươi ";
+                    s += ch === 1 ? "mười " : dv[ch] + " mươi ";
                 }
                 if (dvn > 0) {
                     if (ch === 0 && tr > 0) s += "linh ";
@@ -53,30 +83,33 @@
                 }
                 return s.trim();
             }
-            const parts = [];
-            const units = ["", " nghìn", " triệu", " tỷ"];
+
+            let parts = [];
+            let unit = ["", " nghìn", " triệu", " tỷ"];
             let i = 0;
+
             while (num > 0) {
-                const block = num % 1000;
+                let block = num % 1000;
                 if (block > 0) {
-                    parts.unshift(convertBlock(block) + units[i]);
+                    parts.unshift(convertBlock(block) + unit[i]);
                 }
                 num = Math.floor(num / 1000);
                 i++;
             }
+
             return parts.join(" ").trim() + " đồng";
         }
 
-        const message = `Đã thanh toán thành công. ${readNumber(totalPrice)}. Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.`;
+        const message =
+            `Đơn hàng đã được ghi nhận. Tổng tiền là ${readNumber(totalPrice)}. Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.`;
 
-        const utterance = new SpeechSynthesisUtterance(message);
-        utterance.lang = 'vi-VN';
-        utterance.pitch = 0.9; 
-        utterance.rate = 1.0;
-        utterance.volume = 1;
+        const voice = new SpeechSynthesisUtterance(message);
+        voice.lang = "vi-VN";
+        voice.rate = 1.0;
+        voice.pitch = 1.0;
+        voice.volume = 1;
 
         speechSynthesis.cancel();
-        speechSynthesis.speak(utterance);
+        speechSynthesis.speak(voice);
     });
 </script>
-

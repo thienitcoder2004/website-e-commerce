@@ -207,6 +207,7 @@
         </div>
 
         <!-- ĐÁNH GIÁ SẢN PHẨM -->
+        <!-- ĐÁNH GIÁ SẢN PHẨM -->
         <div class="product-reviews mt-5">
             <h5 class="fw-bold text-danger mb-3">📝 Đánh giá sản phẩm</h5>
 
@@ -247,10 +248,11 @@
                 <p class="text-muted">Chưa có đánh giá nào cho sản phẩm này.</p>
             }
 
+            <!-- FORM GỬI ĐÁNH GIÁ -->
             <form id="reviewForm" method="post" action="/Review/AddReview">
                 <input type="hidden" name="ProductId" value="@Model.Id" />
 
-                <!-- ⭐ Rating (radio) -->
+                <!-- ⭐ Rating -->
                 <div class="mb-3">
                     <label class="form-label fw-bold d-block">Đánh giá của bạn:</label>
                     <div class="rating-stars d-flex flex-row-reverse justify-content-start">
@@ -289,7 +291,7 @@
                 {
                     foreach (var r in reviews)
                     {
-                        <div class="review-item border-bottom py-3">
+                        <div class="review-item border-bottom py-3" id="review-@r.Id">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <strong>@r.Title</strong>
@@ -302,7 +304,44 @@
                                     }
                                 </div>
                             </div>
-                            <p class="mb-0 mt-1">@r.Body</p>
+                            <p class="mb-1 mt-1">@r.Body</p>
+                            <!-- DANH SÁCH TRẢ LỜI -->
+                            @if (r.Replies != null && r.Replies.Any())
+                            {
+                                <div class="review-replies ms-4 mt-2">
+                                    @foreach (var reply in r.Replies.OrderBy(x => x.CreatedAt))
+                                    {
+                                        <div class="reply-item small py-1">
+                                            <span class="fw-bold @(reply.IsAuto ? "text-danger" : "text-primary")">
+                                                @reply.UserName:
+                                            </span>
+                                            <span>@reply.Content</span>
+                                            <small class="text-muted">(@reply.CreatedAt.ToString("dd/MM/yyyy HH:mm"))</small>
+                                        </div>
+                                    }
+                                </div>
+                            }
+
+                            <!-- FORM TRẢ LỜI -->
+                            <div class="reply-form-wrapper ms-4 mt-2">
+                                <button type="button"
+                                        class="btn btn-link p-0 small text-primary toggle-reply"
+                                        data-review-id="@r.Id">
+                                    💬 Trả lời
+                                </button>
+
+                                <form class="reply-form d-none mt-2" data-review-id="@r.Id">
+                                    <input type="hidden" name="ReviewId" value="@r.Id" />
+                                    <textarea name="Content"
+                                      class="form-control form-control-sm mb-2"
+                                      rows="2"
+                                      placeholder="Nhập nội dung trả lời..."></textarea>
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">
+                                        Gửi trả lời
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
                     }
                 }
@@ -312,7 +351,6 @@
                 }
             </div>
         </div>
-
 
     </div>
 </div>
@@ -505,6 +543,42 @@
             .rating-stars input:checked ~ label {
                 color: #ffcc00;
             }
+
+    /* ==== ĐÁNH GIÁ SAO (FORM) ==== */
+    .rating-stars {
+        direction: rtl;
+        font-size: 2rem;
+        gap: 5px;
+    }
+
+        .rating-stars input {
+            display: none;
+        }
+
+        .rating-stars label {
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+            .rating-stars label:hover,
+            .rating-stars label:hover ~ label,
+            .rating-stars input:checked ~ label {
+                color: #ffcc00;
+            }
+
+    .review-replies {
+        border-left: 2px solid #ffe0e0;
+        padding-left: 10px;
+    }
+
+    .reply-item {
+        background-color: #fff7f7;
+        border-radius: 6px;
+        padding: 4px 8px;
+        margin-bottom: 4px;
+    }
+
 </style>
 
 <script>
@@ -519,82 +593,85 @@
         const btnPrev = document.getElementById("thumbPrev");
         const btnNext = document.getElementById("thumbNext");
 
-        // Chọn ảnh nhỏ để đổi ảnh chính
-        thumbs.forEach(img => {
-            img.addEventListener("click", function () {
-                thumbs.forEach(t => t.classList.remove("active"));
-                this.classList.add("active");
-                mainImage.src = this.src;
+        if (thumbs && mainImage) {
+            thumbs.forEach(img => {
+                img.addEventListener("click", function () {
+                    thumbs.forEach(t => t.classList.remove("active"));
+                    this.classList.add("active");
+                    mainImage.src = this.src;
+                });
             });
-        });
+        }
 
-        // Trượt ảnh phụ
-        btnPrev.addEventListener("click", () => container.scrollBy({ left: -200, behavior: "smooth" }));
-        btnNext.addEventListener("click", () => container.scrollBy({ left: 200, behavior: "smooth" }));
-
+        if (btnPrev && btnNext && container) {
+            btnPrev.addEventListener("click", () => container.scrollBy({ left: -200, behavior: "smooth" }));
+            btnNext.addEventListener("click", () => container.scrollBy({ left: 200, behavior: "smooth" }));
+        }
 
         /* =============================
            🛒  XỬ LÝ THÊM VÀO GIỎ HÀNG
         ============================== */
-        const form = document.getElementById("addToCartForm");
+        const formCart = document.getElementById("addToCartForm");
 
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
+        if (formCart) {
+            formCart.addEventListener("submit", function (e) {
+                e.preventDefault();
 
-            const formData = new FormData(form);
-            fetch(form.action, { method: "POST", body: formData })
-                .then(res => {
-                    if (res.ok) showToastCart();
-                    else alert("Lỗi khi thêm vào giỏ hàng!");
-                })
-                .catch(() => alert("Không thể kết nối đến máy chủ!"));
-        });
+                const formData = new FormData(formCart);
+                fetch(formCart.action, { method: "POST", body: formData })
+                    .then(res => {
+                        if (res.ok) showToastCart();
+                        else alert("Lỗi khi thêm vào giỏ hàng!");
+                    })
+                    .catch(() => alert("Không thể kết nối đến máy chủ!"));
+            });
+        }
 
         function showToastCart() {
             const toast = document.getElementById("toastCart");
+            if (!toast) return;
             toast.classList.add("show");
             setTimeout(() => toast.classList.remove("show"), 2000);
         }
-
 
         /* =============================
            🔢  CHỌN SỐ LƯỢNG
         ============================== */
         const maxQty = @Model.WebQuantity;
+        const minusBtn = document.querySelector(".btn-qty.minus");
+        const plusBtn = document.querySelector(".btn-qty.plus");
+        const qtyInput = document.querySelector(".qty-input");
 
-    const minusBtn = document.querySelector(".btn-qty.minus");
-    const plusBtn = document.querySelector(".btn-qty.plus");
-    const qtyInput = document.querySelector(".qty-input");
+        if (qtyInput && minusBtn && plusBtn) {
 
-    // Nếu chỉ còn 1 sản phẩm → khóa nút tăng
-    if (maxQty <= 1) {
-        plusBtn.disabled = true;
-    }
+            if (maxQty <= 1) {
+                plusBtn.disabled = true;
+            }
 
-    minusBtn.addEventListener("click", () => {
-        let v = parseInt(qtyInput.value);
+            minusBtn.addEventListener("click", () => {
+                let v = parseInt(qtyInput.value);
 
-        if (v > 1) {
-            qtyInput.value = v - 1;
+                if (v > 1) {
+                    qtyInput.value = v - 1;
+                }
+
+                if (parseInt(qtyInput.value) < maxQty) {
+                    plusBtn.disabled = false;
+                }
+            });
+
+            plusBtn.addEventListener("click", () => {
+                let v = parseInt(qtyInput.value);
+
+                if (v < maxQty) {
+                    qtyInput.value = v + 1;
+                }
+
+                if (parseInt(qtyInput.value) >= maxQty) {
+                    plusBtn.disabled = true;
+                }
+            });
         }
-
-        if (parseInt(qtyInput.value) < maxQty) {
-            plusBtn.disabled = false;
-        }
-    });
-
-    plusBtn.addEventListener("click", () => {
-        let v = parseInt(qtyInput.value);
-
-        if (v < maxQty) {
-            qtyInput.value = v + 1;
-        }
-
-        if (parseInt(qtyInput.value) >= maxQty) {
-            plusBtn.disabled = true;
-        }
-    });
-
 
         /* =============================
            📑  CHUYỂN TAB THÔNG TIN
@@ -602,20 +679,22 @@
         const tabButtons = document.querySelectorAll(".tab-btn");
         const tabPanes = document.querySelectorAll(".tab-pane");
 
-        tabButtons.forEach(btn => {
-            btn.addEventListener("click", () => {
-                tabButtons.forEach(b => b.classList.remove("active"));
-                tabPanes.forEach(p => p.classList.remove("active"));
-                btn.classList.add("active");
+        if (tabButtons && tabPanes) {
+            tabButtons.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    tabButtons.forEach(b => b.classList.remove("active"));
+                    tabPanes.forEach(p => p.classList.remove("active"));
+                    btn.classList.add("active");
 
-                const tabId = btn.getAttribute("data-tab");
-                document.getElementById("tab-" + tabId).classList.add("active");
+                    const tabId = btn.getAttribute("data-tab");
+                    const pane = document.getElementById("tab-" + tabId);
+                    if (pane) pane.classList.add("active");
+                });
             });
-        });
-
+        }
 
         /* =============================
-           ✍️  GỬI ĐÁNH GIÁ SẢN PHẨM (RADIO SAO)
+           ✍️  GỬI ĐÁNH GIÁ SẢN PHẨM
         ============================== */
         const reviewForm = document.getElementById("reviewForm");
 
@@ -638,16 +717,15 @@
                     .then(res => res.json())
                     .then(data => {
                         if (data.success) {
-                            document.getElementById("reviewMessage").classList.remove("d-none");
+                            const msg = document.getElementById("reviewMessage");
+                            if (msg) msg.classList.remove("d-none");
                             this.reset();
-
-                            // Bỏ chọn sao sau khi gửi
                             document.querySelectorAll('input[name="Rating"]').forEach(r => r.checked = false);
 
                             setTimeout(() => {
-                                document.getElementById("reviewMessage").classList.add("d-none");
-                                location.reload(); // reload để hiện review mới
-                            }, 2000);
+                                if (msg) msg.classList.add("d-none");
+                                location.reload(); // reload để hiện review + auto reply
+                            }, 1500);
                         } else {
                             alert(data.message || "Có lỗi xảy ra khi gửi đánh giá!");
                         }
@@ -655,6 +733,50 @@
                     .catch(() => alert("Không thể gửi đánh giá, vui lòng thử lại!"));
             });
         }
+
+        /* =============================
+           💬  TRẢ LỜI ĐÁNH GIÁ
+        ============================== */
+        // Bấm nút "Trả lời" -> hiện / ẩn form
+        const replyToggles = document.querySelectorAll(".toggle-reply");
+        replyToggles.forEach(btn => {
+            btn.addEventListener("click", function () {
+                const id = this.dataset.reviewId;
+                const form = document.querySelector(`form.reply-form[data-review-id="${id}"]`);
+                if (form) {
+                    form.classList.toggle("d-none");
+                }
+            });
+        });
+
+        // Gửi nội dung trả lời qua AJAX
+        const replyForms = document.querySelectorAll("form.reply-form");
+        replyForms.forEach(f => {
+            f.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const fd = new FormData(this);
+
+                const content = fd.get("Content");
+                if (!content || !content.toString().trim()) {
+                    alert("Vui lòng nhập nội dung trả lời.");
+                    return;
+                }
+
+                fetch("/Review/AddReply", {
+                    method: "POST",
+                    body: fd
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload(); // đơn giản: reload để thấy reply mới
+                        } else {
+                            alert(data.message || "Không thể gửi trả lời.");
+                        }
+                    })
+                    .catch(() => alert("Không thể kết nối đến máy chủ."));
+            });
+        });
 
     });
 </script>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -27,8 +28,11 @@ namespace website_e_commerce.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool IsApproved { get; set; } = true;
+
         [ValidateNever]
         public Product Product { get; set; }
-    }
 
+        // ✅ DANH SÁCH TRẢ LỜI
+        public List<ReviewReply> Replies { get; set; } = new();
+    }
 }

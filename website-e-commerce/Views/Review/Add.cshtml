@@ -1,48 +1,98 @@
 ﻿@model website_e_commerce.Models.Reviews
+@using website_e_commerce.Models
+
 @{
     ViewData["Title"] = "Đánh giá sản phẩm";
-    var product = ViewBag.Product as website_e_commerce.Models.Product;
+    var product = ViewBag.Product as Product;
 }
 
-<div class="container mt-5 mb-5">
-    <h3 class="text-danger fw-bold mb-4">Đánh giá sản phẩm: @product.Name</h3>
+<div class="container mt-5 mb-5" style="max-width: 700px;">
+    <h3 class="text-danger fw-bold mb-3">
+        ✍️ Đánh giá sản phẩm: @product?.Name
+    </h3>
 
-    <form asp-controller="Review" asp-action="Add" method="post">
-        @Html.AntiForgeryToken()
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
 
-        <!-- ProductId ẩn -->
-        <input type="hidden" asp-for="ProductId" value="@Model.ProductId" />
+            <form asp-controller="Review" asp-action="Add" method="post">
+                @Html.AntiForgeryToken()
 
-        <div class="mb-3">
-            <label asp-for="Title" class="form-label fw-bold"></label>
-            <input asp-for="Title" class="form-control" placeholder="Nhập tiêu đề ngắn gọn..." />
-            <span asp-validation-for="Title" class="text-danger small"></span>
+                <!-- ProductId ẩn -->
+                <input type="hidden" asp-for="ProductId" />
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label fw-bold"></label>
+                    <input asp-for="Title" class="form-control" placeholder="Nhập tiêu đề ngắn gọn..." />
+                    <span asp-validation-for="Title" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Body" class="form-label fw-bold"></label>
+                    <textarea asp-for="Body" class="form-control" rows="4"
+                              placeholder="Viết nội dung đánh giá chi tiết về sản phẩm..."></textarea>
+                    <span asp-validation-for="Body" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Rating" class="form-label fw-bold d-block"></label>
+
+                    <div class="rating-stars">
+                        @for (int i = 5; i >= 1; i--)
+                        {
+                            <input type="radio"
+                                   id="star-@i"
+                                   name="Rating"
+                                   value="@i"
+                                   @(Model.Rating == i ? "checked" : "") />
+
+                            <label for="star-@i" title="@i sao">★</label>
+                        }
+                    </div>
+
+                    <span asp-validation-for="Rating" class="text-danger small d-block mt-1"></span>
+                </div>
+
+                <div class="text-end">
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@Model.ProductId"
+                       class="btn btn-outline-secondary me-2">
+                        Quay lại
+                    </a>
+                    <button type="submit" class="btn btn-danger fw-bold px-4">
+                        Gửi đánh giá
+                    </button>
+                </div>
+            </form>
+
         </div>
-
-        <div class="mb-3">
-            <label asp-for="Body" class="form-label fw-bold"></label>
-            <textarea asp-for="Body" class="form-control" rows="4" placeholder="Viết nội dung đánh giá..."></textarea>
-            <span asp-validation-for="Body" class="text-danger small"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Rating" class="form-label fw-bold"></label>
-            <div class="rating-stars fs-3">
-                @for (int i = 1; i <= 5; i++)
-                {
-                    <input asp-for="Rating" type="radio" id="star@i" value="@i" />
-                    <label for="star@i" class="text-warning">★</label>
-                }
-            </div>
-            <span asp-validation-for="Rating" class="text-danger small"></span>
-        </div>
-
-        <div class="text-end">
-            <button type="submit" class="btn btn-danger fw-bold px-4">Gửi đánh giá</button>
-        </div>
-    </form>
+    </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<style>
+    .rating-stars {
+        direction: rtl;
+        display: inline-flex;
+        gap: 2px;
+    }
+
+        .rating-stars input {
+            display: none;
+        }
+
+        .rating-stars label {
+            font-size: 30px;
+            color: #e5e7eb;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0 2px;
+        }
+
+            .rating-stars input:checked ~ label,
+            .rating-stars label:hover,
+            .rating-stars label:hover ~ label {
+                color: #facc15;
+            }
+</style>

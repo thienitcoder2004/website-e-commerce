@@ -2,104 +2,323 @@
 
 @{
     ViewData["Title"] = "Quản lý thương hiệu";
+    int totalBrands = Model?.Count() ?? 0;
 }
 
-<div class="container mt-5">
-    <h2 class="text-center text-primary mb-4">🏷️ Danh sách thương hiệu</h2>
+<style>
+    .brand-page-wrapper {
+        background: radial-gradient(circle at top left, #eef2ff, #ffffff);
+        border-radius: 18px;
+        padding: 28px 24px;
+        margin-top: 20px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    }
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show">
-            @TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    .brand-title {
+        font-weight: 800;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        font-size: 18px;
+    }
+
+    .brand-subtitle {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .brand-badge-summary {
+        font-size: 13px;
+        border-radius: 999px;
+        background: #f9fafb;
+        color: #4b5563;
+        border: 1px solid #e5e7eb;
+    }
+
+    .btn-brand-add {
+        border-radius: 999px;
+        font-size: 14px;
+        padding: 8px 18px;
+    }
+
+    .brand-table-wrapper {
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+        background: #fff;
+    }
+
+    .table thead th {
+        background: #0d6efd;
+        color: #fff;
+        border-bottom: none;
+        vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f3f4ff;
+    }
+
+    .brand-logo-img {
+        width: 56px;
+        height: 56px;
+        object-fit: contain;
+        border-radius: 50%;
+        background: #fafafa;
+        border: 1px solid #e5e7eb;
+        padding: 6px;
+    }
+
+    .country-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #f3f4f6;
+        color: #374151;
+    }
+
+        .country-pill i {
+            font-size: 11px;
+        }
+
+    .status-badge {
+        font-size: 12px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .status-active {
+        background: rgba(25, 135, 84, .1);
+        color: #198754;
+        border: 1px solid rgba(25, 135, 84, .4);
+    }
+
+    .status-inactive {
+        background: rgba(108, 117, 125, .08);
+        color: #6c757d;
+        border: 1px solid rgba(107, 114, 128, .45);
+    }
+
+    .brand-search-input {
+        max-width: 260px;
+        border-radius: 999px;
+        font-size: 14px;
+    }
+
+    @@media (max-width: 768px) {
+        .brand-page-wrapper {
+            padding: 20px 16px;
+            border-radius: 12px;
+        }
+
+        .table-responsive {
+            font-size: 13px;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="brand-page-wrapper">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h2 class="brand-title text-primary mb-1">
+                    🏷️ Quản lý thương hiệu
+                </h2>
+                <p class="brand-subtitle mb-0">
+                    Theo dõi, chỉnh sửa và quản lý thương hiệu sản phẩm trong cửa hàng của bạn.
+                </p>
+            </div>
+
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span class="badge brand-badge-summary">
+                    <i class="fa-solid fa-layer-group me-1"></i>
+                    Tổng thương hiệu: <strong>@totalBrands</strong>
+                </span>
+                <a asp-action="Create" class="btn btn-success btn-brand-add">
+                    <i class="fa-solid fa-plus me-1"></i> Thêm thương hiệu
+                </a>
+            </div>
         </div>
-    }
 
-    <div class="mb-3 text-end">
-        <a asp-action="Create" class="btn btn-success">
-            <i class="fa-solid fa-plus"></i> Thêm thương hiệu
-        </a>
-    </div>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show mb-4">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
 
-    <table class="table table-bordered table-hover align-middle shadow-sm">
-        <thead class="table-primary text-center">
-            <tr>
-                <th>Logo</th>
-                <th>Tên thương hiệu</th>
-                <th>Quốc gia</th>
-                <th>Trạng thái</th>
-                <th style="width:180px;">Hành động</th>
-            </tr>
-        </thead>
-        <tbody class="text-center">
-            @if (Model != null && Model.Any())
-            {
-                foreach (var brand in Model)
-                {
-                    <tr>
-                        <td>
-                            @if (!string.IsNullOrEmpty(brand.LogoUrl))
+        <!-- Thanh công cụ: Tìm kiếm -->
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <div class="text-muted small">
+                <i class="fa-regular fa-circle-question me-1"></i>
+                Gợi ý: Bạn có thể tìm nhanh theo tên thương hiệu.
+            </div>
+            <div class="input-group input-group-sm" style="max-width: 280px;">
+                <span class="input-group-text">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text"
+                       id="brandSearch"
+                       class="form-control brand-search-input"
+                       placeholder="Tìm kiếm thương hiệu..." />
+            </div>
+        </div>
+
+        <!-- Bảng danh sách -->
+        <div class="brand-table-wrapper">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="brandTable">
+                    <thead class="text-center">
+                        <tr>
+                            <th style="width:100px;">Logo</th>
+                            <th>Tên thương hiệu</th>
+                            <th style="width:170px;">Quốc gia</th>
+                            <th style="width:140px;">Trạng thái</th>
+                            <th style="width:180px;">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var brand in Model)
                             {
-                                <img src="@brand.LogoUrl" width="60" class="rounded shadow-sm" />
-                            }
-                            else
-                            {
-                                <span class="text-muted fst-italic">Chưa có</span>
-                            }
-                        </td>
+                                <tr data-brand-name="@brand.Name.ToLower()">
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(brand.LogoUrl))
+                                        {
+                                            <img src="@brand.LogoUrl" class="brand-logo-img" alt="@brand.Name" />
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted fst-italic small">Chưa có logo</span>
+                                        }
+                                    </td>
 
-                        <td class="fw-semibold">@brand.Name</td>
-                        <td>@brand.Country</td>
-                        <td>
-                            @if (brand.IsActive)
-                            {
-                                <span class="badge bg-success">Hiển thị</span>
+                                    <td class="text-start">
+                                        <div class="fw-semibold">@brand.Name</div>
+                                    </td>
+
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(brand.Country))
+                                        {
+                                            <span class="country-pill">
+                                                <i class="fa-solid fa-flag"></i>
+                                                @brand.Country
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted small fst-italic">Không rõ</span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (brand.IsActive)
+                                        {
+                                            <span class="status-badge status-active">
+                                                <i class="fa-solid fa-circle-check"></i> Hiển thị
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge status-inactive">
+                                                <i class="fa-solid fa-eye-slash"></i> Ẩn
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@brand.Id" class="btn btn-sm btn-warning me-1"
+                                           title="Chỉnh sửa">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@brand.Id" class="btn btn-sm btn-danger"
+                                           onclick="return confirm('Bạn có chắc muốn xóa thương hiệu này?');"
+                                           title="Xóa thương hiệu">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                             }
-                            else
-                            {
-                                <span class="badge bg-secondary">Ẩn</span>
-                            }
-                        </td>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">
+                                    Không có thương hiệu nào.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@brand.Id" class="btn btn-sm btn-warning me-1">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                            <a asp-action="Delete" asp-route-id="@brand.Id" class="btn btn-sm btn-danger">
-                                <i class="fa-solid fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="5" class="text-center text-muted">Không có thương hiệu nào.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    @if (ViewBag.TotalPages > 1)
-    {
-        <nav>
-            <ul class="pagination justify-content-center">
-                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Trước</a>
-                </li>
-
-                @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                {
-                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                        <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+        <!-- Phân trang -->
+        @if (ViewBag.TotalPages > 1)
+        {
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-page="@(ViewBag.CurrentPage - 1)">
+                            Trước
+                        </a>
                     </li>
-                }
 
-                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Sau</a>
-                </li>
-            </ul>
-        </nav>
-    }
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-page="@i">
+                                @i
+                            </a>
+                        </li>
+                    }
+
+                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-page="@(ViewBag.CurrentPage + 1)">
+                            Sau
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Tìm kiếm theo tên thương hiệu (client-side)
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("brandSearch");
+            const rows = document.querySelectorAll("#brandTable tbody tr[data-brand-name]");
+
+            if (!searchInput) return;
+
+            searchInput.addEventListener("input", function () {
+                const keyword = this.value.trim().toLowerCase();
+
+                rows.forEach(row => {
+                    const name = row.getAttribute("data-brand-name") || "";
+                    if (name.includes(keyword)) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            });
+        });
+    </script>
+}

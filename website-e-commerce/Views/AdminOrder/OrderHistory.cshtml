@@ -1,0 +1,419 @@
+﻿@model IEnumerable<website_e_commerce.Models.Order>
+
+@{
+    ViewData["Title"] = "Lịch sử đơn hàng";
+}
+
+<style>
+    /* Main Container */
+    .order-history-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Tabs */
+    .tabs-container {
+        margin-bottom: 20px;
+    }
+
+    .nav-pills .nav-link {
+        border-radius: 20px;
+        font-weight: bold;
+        padding: 10px 20px;
+        background-color: #f0f0f0;
+        color: #007bff;
+    }
+
+        .nav-pills .nav-link.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+    /* Order Item */
+    .order-item {
+        background-color: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        margin-bottom: 20px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* Order Header */
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-id {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .order-status {
+        font-size: 14px;
+        font-weight: bold;
+        padding: 5px 15px;
+        border-radius: 20px;
+        color: white;
+    }
+
+    .badge-warning {
+        background-color: #ffac33;
+    }
+
+    .badge-info {
+        background-color: #17a2b8;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+    }
+
+    /* Product Details */
+    .product-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .product-info {
+        flex-grow: 1;
+        margin-left: 20px;
+    }
+
+    .product-name {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .product-quantity {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .product-price {
+        font-size: 16px;
+        color: #d9534f;
+        font-weight: bold;
+    }
+
+    /* Footer */
+    .order-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .total-label {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .total-amount {
+        color: #d9534f;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+        .action-buttons .btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+
+        .action-buttons .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .action-buttons .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .action-buttons .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .action-buttons .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .tab-content {
+        padding-top: 20px;
+    }
+
+</style>
+
+<div class="order-history-container">
+    <!-- Tabs for filtering -->
+    <div class="tabs-container">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" id="tab5" data-bs-toggle="pill" href="#tatca">Tất cả</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" id="tab1" data-bs-toggle="pill" href="#choxacnhan">Chờ xác nhận</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab2" data-bs-toggle="pill" href="#vanchuyen">Vận chuyển</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab3" data-bs-toggle="pill" href="#hoanthanh">Hoàn thành</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab4" data-bs-toggle="pill" href="#dahuy">Đã hủy</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Tabs Content -->
+    <div class="tab-content mt-4">
+        <!-- Tất cả đơn hàng -->
+        <div id="tatca" class="tab-pane fade show active">
+            @if (!Model.Any())
+            {
+                <p class="text-center text-muted">Chưa có đơn hàng nào.</p>
+            }
+            else
+            {
+                @foreach (var order in Model)
+                {
+                    <div class="order-item">
+                        <div class="order-header">
+                            @if (order.Payments.FirstOrDefault()?.Status == "Pending")
+                            {
+                                <span class="order-status badge badge-warning">Đang xử lý</span>
+                            }
+                            else if (order.Payments.FirstOrDefault()?.Status == "Shipping")
+                            {
+                                <span class="order-status badge badge-info">Đang vận chuyển</span>
+                            }
+                            else if (order.Payments.FirstOrDefault()?.Status == "Completed")
+                            {
+                                <span class="order-status badge badge-success">Hoàn thành</span>
+                            }
+                            else if (order.Payments.FirstOrDefault()?.Status == "Cancelled")
+                            {
+                                <span class="order-status badge badge-danger">Đã hủy</span>
+                            }
+                            <span class="order-id">#@order.Id</span>
+                        </div>
+                        <div class="order-details">
+                            @foreach (var item in order.OrderDetails)
+                            {
+                                if (item.Product != null && item.Quantity >= 0)
+                                {
+                                    <div class="product-item d-flex mb-3">
+                                        <img src="@item.Product.ImageUrl" alt="Product Image" class="product-image">
+                                        <div class="product-info">
+                                            <h5 class="product-name">@item.Product.Name</h5>
+                                            <p class="product-quantity">x @item.Quantity</p>
+                                            <p class="product-price">@String.Format("{0:N0} đ", item.Price)</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="order-footer">
+                            <p class="total-label">Thành tiền: <span class="total-amount">@String.Format("{0:N0} đ", order.TotalPrice)</span></p>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-sm">Mua Lại</button>
+                                <button class="btn btn-primary btn-sm">Xem Chi Tiết Đơn Hàng</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <!-- Chờ xác nhận -->
+        <div id="choxacnhan" class="tab-pane fade">
+            @if (!Model.Where(o => o.Payments.FirstOrDefault()?.Status == "Pending").Any())
+            {
+                <p class="text-center text-muted">Không có đơn hàng nào đang chờ xác nhận.</p>
+            }
+            else
+            {
+                @foreach (var order in Model.Where(o => o.Payments.FirstOrDefault()?.Status == "Pending"))
+                {
+                    <div class="order-item">
+                        <div class="order-header">
+                            <span class="order-status badge badge-warning">Đang xử lý</span>
+                            <span class="order-id">#@order.Id</span>
+                        </div>
+                        <div class="order-details">
+                            @foreach (var item in order.OrderDetails)
+                            {
+                                if (item.Product != null && item.Quantity > 0)
+                                {
+                                    <div class="product-item d-flex mb-3">
+                                        <img src="@item.Product.ImageUrl" alt="Product Image" class="product-image">
+                                        <div class="product-info">
+                                            <h5 class="product-name">@item.Product.Name</h5>
+                                            <p class="product-quantity">x @item.Quantity</p>
+                                            <p class="product-price">@String.Format("{0:N0} đ", item.Price)</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="order-footer">
+                            <p class="total-label">Thành tiền: <span class="total-amount">@String.Format("{0:N0} đ", order.TotalPrice)</span></p>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-sm">Mua Lại</button>
+                                <button class="btn btn-primary btn-sm">Xem Chi Tiết Đơn Hàng</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <!-- Vận chuyển -->
+        <div id="vanchuyen" class="tab-pane fade">
+            @if (!Model.Where(o => o.Payments.FirstOrDefault()?.Status == "Shipping").Any())
+            {
+                <p class="text-center text-muted">Không có đơn hàng nào đang vận chuyển.</p>
+            }
+            else
+            {
+                @foreach (var order in Model.Where(o => o.Payments.FirstOrDefault()?.Status == "Shipping"))
+                {
+                    <div class="order-item">
+                        <div class="order-header">
+                            <span class="order-status badge badge-info">Đang vận chuyển</span>
+                            <span class="order-id">#@order.Id</span>
+                        </div>
+                        <div class="order-details">
+                            @foreach (var item in order.OrderDetails)
+                            {
+                                if (item.Product != null && item.Quantity > 0)
+                                {
+                                    <div class="product-item d-flex mb-3">
+                                        <img src="@item.Product.ImageUrl" alt="Product Image" class="product-image">
+                                        <div class="product-info">
+                                            <h5 class="product-name">@item.Product.Name</h5>
+                                            <p class="product-quantity">x @item.Quantity</p>
+                                            <p class="product-price">@String.Format("{0:N0} đ", item.Price)</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="order-footer">
+                            <p class="total-label">Thành tiền: <span class="total-amount">@String.Format("{0:N0} đ", order.TotalPrice)</span></p>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-sm">Mua Lại</button>
+                                <button class="btn btn-primary btn-sm">Xem Chi Tiết Đơn Hàng</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <!-- Hoàn thành -->
+        <div id="hoanthanh" class="tab-pane fade">
+            @if (!Model.Where(o => o.Payments.FirstOrDefault()?.Status == "Completed").Any())
+            {
+                <p class="text-center text-muted">Không có đơn hàng nào đã hoàn thành.</p>
+            }
+            else
+            {
+                @foreach (var order in Model.Where(o => o.Payments.FirstOrDefault()?.Status == "Completed"))
+                {
+                    <div class="order-item">
+                        <div class="order-header">
+                            <span class="order-status badge badge-success">Hoàn thành</span>
+                            <span class="order-id">#@order.Id</span>
+                        </div>
+                        <div class="order-details">
+                            @foreach (var item in order.OrderDetails)
+                            {
+                                if (item.Product != null && item.Quantity > 0)
+                                {
+                                    <div class="product-item d-flex mb-3">
+                                        <img src="@item.Product.ImageUrl" alt="Product Image" class="product-image">
+                                        <div class="product-info">
+                                            <h5 class="product-name">@item.Product.Name</h5>
+                                            <p class="product-quantity">x @item.Quantity</p>
+                                            <p class="product-price">@String.Format("{0:N0} đ", item.Price)</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="order-footer">
+                            <p class="total-label">Thành tiền: <span class="total-amount">@String.Format("{0:N0} đ", order.TotalPrice)</span></p>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-sm">Mua Lại</button>
+                                <button class="btn btn-primary btn-sm">Xem Chi Tiết Đơn Hàng</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <!-- Đã hủy -->
+        <div id="dahuy" class="tab-pane fade">
+            @if (!Model.Where(o => o.Payments.FirstOrDefault()?.Status == "Cancelled").Any())
+            {
+                <p class="text-center text-muted">Không có đơn hàng nào đã bị hủy.</p>
+            }
+            else
+            {
+                @foreach (var order in Model.Where(o => o.Payments.FirstOrDefault()?.Status == "Cancelled"))
+                {
+                    <div class="order-item">
+                        <div class="order-header">
+                            <span class="order-status badge badge-danger">Đã hủy</span>
+                            <span class="order-id">#@order.Id</span>
+                        </div>
+                        <div class="order-details">
+                            @foreach (var item in order.OrderDetails)
+                            {
+                                if (item.Product != null && item.Quantity > 0)
+                                {
+                                    <div class="product-item d-flex mb-3">
+                                        <img src="@item.Product.ImageUrl" alt="Product Image" class="product-image">
+                                        <div class="product-info">
+                                            <h5 class="product-name">@item.Product.Name</h5>
+                                            <p class="product-quantity">x @item.Quantity</p>
+                                            <p class="product-price">@String.Format("{0:N0} đ", item.Price)</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="order-footer">
+                            <p class="total-label">Thành tiền: <span class="total-amount">@String.Format("{0:N0} đ", order.TotalPrice)</span></p>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-sm">Mua Lại</button>
+                                <button class="btn btn-primary btn-sm">Xem Chi Tiết Hủy Đơn</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

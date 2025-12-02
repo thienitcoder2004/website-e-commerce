@@ -4,97 +4,249 @@
     var values = Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ChartValues);
 }
 
-<div class="container py-5">
-    <h2 class="text-center text-danger fw-bold mb-5">📊 Thống kê tổng quan</h2>
+<style>
+    .dashboard-wrapper {
+        background: radial-gradient(circle at top left, #f1f5f9, #ffffff);
+        border-radius: 18px;
+        padding: 32px 28px;
+        margin-top: 16px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+        animation: fadeIn 0.4s ease-out;
+    }
 
-    <!-- Tổng quan -->
-    <div class="row g-4 text-center mb-5">
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <h6 class="text-muted">Tổng đơn hàng</h6>
-                    <h3 class="fw-bold text-primary">@ViewBag.TotalOrders</h3>
+    .dashboard-title {
+        font-weight: 800;
+        letter-spacing: .5px;
+        text-transform: uppercase;
+        font-size: 18px;
+    }
+
+    .dashboard-subtitle {
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+    .stat-card {
+        border-radius: 16px;
+        border: none;
+        overflow: hidden;
+    }
+
+    .stat-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+        font-size: 18px;
+    }
+
+    .stat-label {
+        font-size: 13px;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+    }
+
+    .stat-value {
+        font-size: 24px;
+    }
+
+    .filter-wrapper {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 18px;
+    }
+
+    .filter-select {
+        width: 190px;
+        border-radius: 999px;
+        font-size: 14px;
+    }
+
+    .chart-card {
+        border-radius: 18px;
+        border: none;
+    }
+
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+    }
+
+    .chart-caption {
+        font-size: 13px;
+        color: #9ca3af;
+    }
+
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .chart-canvas-wrapper {
+        height: 450px; 
+    }
+
+    @@media (max-width: 768px) {
+        .dashboard-wrapper {
+            padding: 20px 16px;
+            border-radius: 12px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+        }
+
+        .filter-select {
+            width: 100%;
+        }
+
+        .filter-wrapper {
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="container py-4">
+    <div class="dashboard-wrapper">
+        <!-- Tiêu đề -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="dashboard-title text-danger mb-1">
+                    📊 Thống kê tổng quan cửa hàng
+                </h2>
+                <p class="dashboard-subtitle mb-0">
+                    Xem nhanh tình hình đơn hàng, doanh thu và người dùng theo thời gian.
+                </p>
+            </div>
+        </div>
+
+        <!-- Tổng quan -->
+        <div class="row g-4 text-center mb-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm stat-card">
+                    <div class="card-body">
+                        <div class="stat-icon bg-primary-subtle text-primary mx-auto">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <h6 class="text-muted stat-label">Tổng đơn hàng</h6>
+                        <h3 class="fw-bold text-primary stat-value">@ViewBag.TotalOrders</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm stat-card">
+                    <div class="card-body">
+                        <div class="stat-icon bg-success-subtle text-success mx-auto">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <h6 class="text-muted stat-label">Doanh thu</h6>
+                        <h3 class="fw-bold text-success stat-value">
+                            @String.Format("{0:N0} đ", ViewBag.TotalRevenue)
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm stat-card">
+                    <div class="card-body">
+                        <div class="stat-icon bg-danger-subtle text-danger mx-auto">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <h6 class="text-muted stat-label">Người dùng</h6>
+                        <h3 class="fw-bold text-danger stat-value">@ViewBag.TotalUsers</h3>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <h6 class="text-muted">Doanh thu</h6>
-                    <h3 class="fw-bold text-success">@String.Format("{0:N0} đ", ViewBag.TotalRevenue)</h3>
-                </div>
+
+        <!-- Bộ lọc thời gian -->
+        <div class="filter-wrapper mb-3">
+            <form method="get" asp-action="Dashboard" class="d-flex gap-2 align-items-center flex-wrap">
+                <span class="text-muted small me-1">
+                    <i class="fa-regular fa-clock me-1"></i>Lọc theo:
+                </span>
+                <select name="filter" class="form-select filter-select" onchange="this.form.submit()">
+                    @if (ViewBag.Filter == "day")
+                    {
+                        <option value="day" selected>Theo ngày (7 ngày gần nhất)</option>
+                    }
+                    else
+                    {
+                        <option value="day">Theo ngày (7 ngày gần nhất)</option>
+                    }
+
+                    @if (ViewBag.Filter == "week")
+                    {
+                        <option value="week" selected>Theo tuần (30 ngày gần nhất)</option>
+                    }
+                    else
+                    {
+                        <option value="week">Theo tuần (30 ngày gần nhất)</option>
+                    }
+
+                    @if (ViewBag.Filter == "month")
+                    {
+                        <option value="month" selected>Theo tháng (6 tháng gần nhất)</option>
+                    }
+                    else
+                    {
+                        <option value="month">Theo tháng (6 tháng gần nhất)</option>
+                    }
+
+                    @if (ViewBag.Filter == "year")
+                    {
+                        <option value="year" selected>Theo năm (3 năm gần nhất)</option>
+                    }
+                    else
+                    {
+                        <option value="year">Theo năm (3 năm gần nhất)</option>
+                    }
+                </select>
+            </form>
+        </div>
+
+        <!-- Biểu đồ doanh thu -->
+        <div class="card shadow-sm chart-card p-4 mb-2">
+            <div class="chart-header">
+                <h5 class="text-secondary mb-1 fw-bold">
+                    💰 Biểu đồ doanh thu theo @(
+                    ViewBag.Filter == "day" ? "ngày" :
+                    ViewBag.Filter == "week" ? "tuần" :
+                    ViewBag.Filter == "month" ? "tháng" : "năm")
+                </h5>
+                <span class="chart-caption">
+                    <i class="fa-regular fa-chart-bar me-1"></i>
+                    Đơn vị: VNĐ
+                </span>
+            </div>
+            <div class="chart-canvas-wrapper">
+                <canvas id="revenueChart"></canvas>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <h6 class="text-muted">Người dùng</h6>
-                    <h3 class="fw-bold text-danger">@ViewBag.TotalUsers</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bộ lọc thời gian -->
-    <div class="d-flex justify-content-end mb-4">
-        <form method="get" asp-action="Dashboard" class="d-flex gap-2">
-            <select name="filter" class="form-select" onchange="this.form.submit()" style="width:180px;">
-                @if (ViewBag.Filter == "day")
-                {
-                    <option value="day" selected>Theo ngày</option>
-                }
-                else
-                {
-                    <option value="day">Theo ngày</option>
-                }
-
-                @if (ViewBag.Filter == "week")
-                {
-                    <option value="week" selected>Theo tuần</option>
-                }
-                else
-                {
-                    <option value="week">Theo tuần</option>
-                }
-
-                @if (ViewBag.Filter == "month")
-                {
-                    <option value="month" selected>Theo tháng</option>
-                }
-                else
-                {
-                    <option value="month">Theo tháng</option>
-                }
-
-                @if (ViewBag.Filter == "year")
-                {
-                    <option value="year" selected>Theo năm</option>
-                }
-                else
-                {
-                    <option value="year">Theo năm</option>
-                }
-            </select>
-
-        </form>
-    </div>
-
-    <!-- Biểu đồ doanh thu -->
-    <div class="card shadow-sm border-0 p-4 mb-5">
-        <h5 class="text-secondary mb-3 fw-bold text-center">
-            💰 Biểu đồ doanh thu theo @(
-            ViewBag.Filter == "day" ? "ngày" :
-            ViewBag.Filter == "week" ? "tuần" :
-            ViewBag.Filter == "month" ? "tháng" : "năm")
-        </h5>
-        <canvas id="revenueChart" height="100"></canvas>
     </div>
 </div>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('revenueChart');
+    const canvas = document.getElementById('revenueChart');
+    const ctx = canvas.getContext('2d');
+
     const chart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -102,20 +254,44 @@
             datasets: [{
                 label: 'Doanh thu (VNĐ)',
                 data: @Html.Raw(values),
-                backgroundColor: 'rgba(220, 53, 69, 0.8)',
-                borderRadius: 8
+                backgroundColor: 'rgba(220, 53, 69, 0.85)',
+                borderColor: 'rgba(185, 28, 28, 1)',
+                borderWidth: 1,
+                borderRadius: 10,
+                borderSkipped: false,
+                maxBarThickness: 40,
+                barPercentage: 0.55,
+                categoryPercentage: 0.6
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,   // để canvas fit với .chart-canvas-wrapper (260px)
+            layout: {
+                padding: { top: 10, right: 10, bottom: 0, left: 0 } // có khoảng trống trên
+            },
             scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: {
+                        maxRotation: 0,
+                        minRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: 8
+                    }
+                },
                 y: {
+                    beginAtZero: true,
+                    grace: '10%', // chừa 10% khoảng trống phía trên, cột không đụng nóc
                     ticks: {
                         callback: function (val) {
                             return val.toLocaleString('vi-VN') + " đ";
-                        }
+                        },
+                        font: { size: 11 }
                     },
-                    beginAtZero: true
+                    grid: {
+                        color: 'rgba(148, 163, 184, 0.25)'
+                    }
                 }
             },
             plugins: {
@@ -123,7 +299,7 @@
                 tooltip: {
                     callbacks: {
                         label: function (context) {
-                            return context.formattedValue + " đ";
+                            return context.raw.toLocaleString('vi-VN') + " đ";
                         }
                     }
                 }
@@ -131,3 +307,5 @@
         }
     });
 </script>
+
+

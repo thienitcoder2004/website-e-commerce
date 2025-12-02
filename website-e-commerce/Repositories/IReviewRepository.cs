@@ -12,5 +12,7 @@ namespace website_e_commerce.Repositories
         void AddReview(Reviews review);
         void DeleteReview(int id);
 
+        void AddReply(ReviewReply reply);
+        IEnumerable<ReviewReply> GetRepliesByReviewId(int reviewId);
     }
 }

@@ -13,18 +13,19 @@
 
         <!-- TÊN SP + CATEGORY + BRAND -->
         <div class="row mb-4">
+
             <div class="col-md-4">
                 <label class="form-label fw-bold">Tên sản phẩm</label>
                 <input asp-for="Name" class="form-control" placeholder="iPhone 15 Pro Max..." />
-                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div class="col-md-4">
                 <label class="form-label fw-bold">Danh mục</label>
-                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
+                <select asp-for="CategoryId" id="CategoryId"
+                        asp-items="ViewBag.Categories"
+                        class="form-select">
                     <option value="">-- Chọn danh mục --</option>
                 </select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
 
             <div class="col-md-4">
@@ -32,9 +33,12 @@
                 <select asp-for="BrandId" asp-items="ViewBag.Brands" class="form-select">
                     <option value="">-- Chọn thương hiệu --</option>
                 </select>
-                <span asp-validation-for="BrandId" class="text-danger"></span>
             </div>
+
         </div>
+
+        <!-- BỘ LỌC -->
+        <div id="filter-area" class="mb-4"></div>
 
         <!-- GIÁ -->
         <div class="row mb-4">
@@ -51,7 +55,6 @@
             <div class="col-md-4">
                 <label class="form-label fw-bold">Giá sau giảm</label>
                 <input asp-for="NewPrice" type="number" id="newPrice" class="form-control" readonly />
-                <small class="text-muted">Tự tính theo giá cũ + % giảm</small>
             </div>
         </div>
 
@@ -73,13 +76,11 @@
             <div class="col-md-6">
                 <label class="form-label fw-bold">Ảnh đại diện</label>
                 <input type="file" name="thumbnail" class="form-control" />
-                <small class="text-muted">Ảnh thumbnail chính</small>
             </div>
 
             <div class="col-md-6">
                 <label class="form-label fw-bold">Gallery (nhiều ảnh)</label>
                 <input type="file" name="galleryImages" multiple class="form-control" />
-                <small class="text-muted">Chọn nhiều ảnh phụ</small>
             </div>
         </div>
 
@@ -102,6 +103,7 @@
                 <label class="form-label fw-bold">Quà tặng</label>
                 <input asp-for="GiftPromotion" class="form-control" />
             </div>
+
             <div class="col-md-6">
                 <label class="form-label fw-bold">Khuyến mãi</label>
                 <input asp-for="SalePromotion" class="form-control" />
@@ -112,24 +114,72 @@
             <button type="submit" class="btn btn-danger px-4">Lưu sản phẩm</button>
             <a asp-action="Index" class="btn btn-outline-secondary">Quay lại</a>
         </div>
+
     </form>
 </div>
 
+<!-- SCRIPT GIÁ -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const oldP = document.getElementById("oldPrice");
         const dis = document.getElementById("discountPercent");
         const newP = document.getElementById("newPrice");
 
-        function update() {
+        function calc() {
             let o = parseFloat(oldP.value) || 0;
             let d = parseFloat(dis.value) || 0;
-
-            if (o > 0 && d >= 0)
-                newP.value = (o - o * d / 100).toFixed(0);
+            newP.value = o > 0 ? (o - o * d / 100).toFixed(0) : 0;
         }
 
-        oldP.addEventListener("input", update);
-        dis.addEventListener("input", update);
+        oldP.addEventListener("input", calc);
+        dis.addEventListener("input", calc);
+    });
+</script>
+
+<!-- SCRIPT BỘ LỌC -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const categorySelect = document.getElementById("CategoryId");
+        const filterArea = document.getElementById("filter-area");
+
+        console.log("CategoryId:", categorySelect);
+
+        categorySelect.addEventListener("change", async () => {
+
+            filterArea.innerHTML = "<p class='text-muted'>Đang tải bộ lọc...</p>";
+
+            let cid = categorySelect.value;
+            if (!cid) {
+                filterArea.innerHTML = "";
+                return;
+            }
+
+            const response = await fetch(`/Product/GetFiltersByCategory?categoryId=${cid}`);
+            const data = await response.json();
+
+            if (!data.ok) {
+                filterArea.innerHTML = "<p class='text-muted'>Không có bộ lọc cho danh mục này.</p>";
+                return;
+            }
+
+            let html = "";
+
+            data.groups.forEach(g => {
+                html += `
+                    <div class="mb-3">
+                        <label class="fw-bold">${g.name}</label>
+                        <select name="SelectedFilterOptions" class="form-select">
+                            <option value="">-- Chọn --</option>
+                            ${g.options.map(o =>
+                                `<option value="${o.id}">${o.label}</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                `;
+            });
+
+            filterArea.innerHTML = html;
+        });
     });
 </script>

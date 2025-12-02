@@ -2,6 +2,46 @@
 
 <h2 class="mb-4 text-center fw-bold text-danger">📜 Lịch sử nhập – xuất kho</h2>
 
+<!-- BỘ LỌC THỜI GIAN -->
+<div class="card p-3 shadow-sm mb-4">
+    <form method="get" class="row g-3">
+
+        <div class="col-md-3">
+            <label class="fw-bold">Loại lọc</label>
+            <select name="filterType" class="form-select">
+                <option value="">-- Tất cả --</option>
+                <option value="day">Theo ngày</option>
+                <option value="week">Theo tuần</option>
+                <option value="month">Theo tháng</option>
+                <option value="range">Khoảng thời gian</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="fw-bold">Từ ngày</label>
+            <input type="date" name="from" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="fw-bold">Đến ngày</label>
+            <input type="date" name="to" class="form-control" />
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end">
+            <button class="btn btn-dark w-100">🔎 Lọc</button>
+        </div>
+    </form>
+
+    <a class="btn btn-success mt-3"
+       href="@Url.Action("ExportExcel", new { 
+    filterType = Context.Request.Query["filterType"], 
+    from = Context.Request.Query["from"], 
+    to = Context.Request.Query["to"] })"
+    >
+        📤 Xuất Excel
+    </a>
+</div>
+
 <table class="table table-hover table-bordered text-center align-middle shadow-sm">
     <thead class="table-dark">
         <tr>

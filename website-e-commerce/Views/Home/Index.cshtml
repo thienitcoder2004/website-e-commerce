@@ -3,40 +3,67 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
-    var flashSales = ViewBag.FlashSales as List<FlashSale>;
-    var slots = ViewBag.TimeSlots as List<dynamic>; // 👈 đúng tên
+    var flashSales = ViewBag.FlashSales as List<FlashSale> ?? new List<FlashSale>();
+
+    var slots = flashSales
+        .Select(x => new DateTime(
+            x.StartTime.Year,
+            x.StartTime.Month,
+            x.StartTime.Day,
+            x.StartTime.Hour,
+            x.StartTime.Minute,
+            0))
+        .Distinct()
+        .OrderBy(t => t)
+        .ToList();
 }
+
 
 <style>
     .flash-title {
         font-size: 26px;
-        font-weight: bold;
+        font-weight: 800;
         color: #ff4500;
+        text-transform: uppercase;
+        margin-bottom: 10px;
     }
 
     .flash-slots {
         display: flex;
+        flex-wrap: wrap;
         gap: 12px;
     }
 
     .flash-slot {
-        padding: 12px 20px;
-        border: 1px solid #ddd;
-        border-radius: 12px;
+        min-width: 90px;
+        padding: 10px 14px;
+        border: 1px solid #ffd0b3;
+        border-radius: 999px;
         cursor: pointer;
-        background: white;
+        background: #fff5ee;
         transition: 0.25s;
         text-align: center;
+        font-size: 13px;
     }
 
         .flash-slot:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
         }
 
         .flash-slot.active {
             border-color: #ff5722;
-            background: #ffece6;
+            background: #ffe1d5;
         }
+
+    .slot-hour {
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    .slot-status {
+        font-size: 12px;
+    }
 
     .flash-img {
         width: 100%;
@@ -46,18 +73,27 @@
 
     .flash-card {
         padding: 10px;
-        background: white;
-        border-radius: 12px;
+        background: #ffffff;
+        border-radius: 16px;
         transition: 0.3s;
+        min-height: 270px;
     }
 
         .flash-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
         }
+
+    .flash-name {
+        font-size: 14px;
+        min-height: 36px;
+        margin-top: 8px;
+        margin-bottom: 4px;
+    }
 
     .flash-price {
         color: #d32f2f;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: bold;
     }
 
@@ -65,24 +101,35 @@
         width: 100%;
         background: #ffe5e5;
         border-radius: 10px;
+        margin-top: 6px;
+        overflow: hidden;
     }
 
     .flash-progress-bar {
         background: #ff0000;
-        padding: 4px 0;
+        padding: 3px 0;
         color: white;
-        font-size: 12px;
+        font-size: 11px;
         border-radius: 10px;
+        text-align: center;
+        white-space: nowrap;
     }
 
     .flash-countdown {
-        font-size: 18px;
+        font-size: 14px;
         font-weight: bold;
         color: #e53935;
         text-align: center;
+        margin-top: 6px;
     }
 
+    @@media (max-width: 768px) {
+        .flash-card {
+            min-height: 260px;
+        }
+    }
 </style>
+
 
 @if (User.IsInRole(SD.Role_Admin)
 || User.IsInRole(SD.Role_StockManager)
@@ -200,7 +247,7 @@ else
 
             <div class="danhmuc-slider swiper-container swiper-container-initialized swiper-container-horizontal">
                 <div class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px);">
-                    <div class="swiper-slide swiper-slide-active" style="width: 385px; margin-right: 20px;">
+                    <div class="swiper-slide swiper-slide-active" style="width: 310px; margin-right: 20px;">
                         <a class="item danhmuc" href="/ban-phim-gaming" title="Bàn phím gaming">
                             <div class="bg" style="background: linear-gradient(90deg,#A8FF78 0%,#78FFD6 50%);">
                             </div>
@@ -216,7 +263,7 @@ else
                             <h4 class="line-clamp line-clamp-1">Bàn phím gaming</h4>
                         </a>
                     </div>
-                    <div class="swiper-slide swiper-slide-next" style="width: 385px; margin-right: 20px;">
+                    <div class="swiper-slide swiper-slide-next" style="width: 310px; margin-right: 20px;">
                         <a class="item danhmuc" href="/chuot-gaming" title="Chuột gaming">
                             <div class="bg" style="background: linear-gradient(90deg,#FF416C 0%,#FF4B2B 50%);">
                             </div>
@@ -232,7 +279,7 @@ else
                             <h4 class="line-clamp line-clamp-1">Chuột gaming</h4>
                         </a>
                     </div>
-                    <div class="swiper-slide" style="width: 385px; margin-right: 20px;">
+                    <div class="swiper-slide" style="width: 310px; margin-right: 20px;">
                         <a class="item danhmuc" href="/tai-nghe-gaming" title="Tai nghe gaming">
                             <div class="bg" style="background: linear-gradient(90deg,#B2FEFA 0%,#0ED2F7 50%);">
                             </div>
@@ -248,7 +295,7 @@ else
                             <h4 class="line-clamp line-clamp-1">Tai nghe gaming</h4>
                         </a>
                     </div>
-                    <div class="swiper-slide" style="width: 385px; margin-right: 20px;">
+                    <div class="swiper-slide" style="width: 310px; margin-right: 20px;">
                         <a class="item danhmuc" href="/dieu-khien-gaming" title="Điều khiển gaming">
                             <div class="bg" style="background: linear-gradient(90deg,#FFEFBA 0%,#DDEFBB 50%);">
                             </div>
@@ -413,92 +460,116 @@ else
                 FLASH SALE GIỜ VÀNG
             </h3>
 
-            @if (slots == null || !slots.Any())
+            @* Nếu không có Flash Sale nào *@
+            @if (!flashSales.Any())
             {
-                <div class="alert alert-warning mt-3">Chưa có Flash Sale</div>
+                <div class="alert alert-warning mt-3 mb-0">
+                    Chưa có Flash Sale
+                </div>
             }
             else
             {
-                <div class="flash-slots mt-3">
-                    @foreach (var s in slots)
-                    {
-                        bool isCurrent = DateTime.Now >= s.StartTime &&
-                        DateTime.Now <= s.StartTime.AddHours(2);
+                @* Các khung giờ *@
+                @if (slots.Any())
+                {
+                    <div class="flash-slots mt-3">
+                        @foreach (var startTime in slots)
+                        {
+                            bool isCurrent = DateTime.Now >= startTime && DateTime.Now <= startTime.AddHours(2);
+                            var startKey = startTime.ToString("yyyy-MM-ddTHH:mm"); // key dùng chung cho slot & item
 
-                        <div class="flash-slot @(isCurrent ? "active" : "")"
-                             data-start="@s.StartTime.ToString("yyyy-MM-ddTHH:mm:ss")">
-
-                            <div class="slot-hour">@s.StartTime.ToString("HH:mm")</div>
-                            <div class="slot-status @(isCurrent ? "text-danger" : "text-muted")">
-                                @(isCurrent ? "Đang diễn ra" : "Sắp diễn ra")
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-
-            <div class="swiper flash-swiper mt-4">
-                <div class="swiper-wrapper">
-
-                    @foreach (var fs in flashSales)
-                    {
-                        <div class="swiper-slide flash-item"
-                             data-start="@fs.StartTime.ToString("yyyy-MM-ddTHH:mm:ss")">
-
-                            <div class="flash-card shadow">
-
-                                <img src="@fs.Product.ImageUrl" class="flash-img" />
-
-                                <h5 class="flash-name">@fs.Product.Name</h5>
-
-                                <div class="flash-price text-danger fw-bold">
-                                    @fs.FlashPrice.ToString("N0") đ
+                            <div class="flash-slot @(isCurrent ? "active" : "")"
+                                 data-start="@startKey">
+                                <div class="slot-hour">@startTime.ToString("HH:mm")</div>
+                                <div class="slot-status @(isCurrent ? "text-danger" : "text-muted")">
+                                    @(isCurrent ? "Đang diễn ra" : "Sắp diễn ra")
                                 </div>
+                            </div>
+                        }
+                    </div>
+                }
 
-                                @{
-                                    int percent = (int)((double)fs.SoldQuantity / fs.FlashQuantity * 100);
-                                    if (percent > 100) percent = 100;
-                                }
+                @* Slider sản phẩm *@
+                <div class="swiper flash-swiper mt-4">
+                    <div class="swiper-wrapper">
 
-                                <div class="flash-progress">
-                                    <div class="flash-progress-bar" style="width:@percent%">
-                                        @percent% đã bán
+                        @foreach (var fs in flashSales)
+                        {
+                            var itemStartKey = fs.StartTime.ToString("yyyy-MM-ddTHH:mm");
+
+                            <div class="swiper-slide flash-item"
+                                 data-start="@itemStartKey">
+
+                                <div class="flash-card shadow">
+                                    <img src="@fs.Product.ImageUrl" class="flash-img" alt="@fs.Product.Name" />
+
+                                    <h5 class="flash-name">@fs.Product.Name</h5>
+
+                                    <div class="flash-price">
+                                        @fs.FlashPrice.ToString("N0") đ
+                                    </div>
+
+                                    @{
+                                        int percent = 0;
+                                        if (fs.FlashQuantity > 0)
+                                        {
+                                            percent = (int)Math.Round((double)fs.SoldQuantity / fs.FlashQuantity * 100);
+                                        }
+                                        if (percent > 100) percent = 100;
+                                    }
+
+                                    <div class="flash-progress">
+                                        <div class="flash-progress-bar" style="width:@percent%">
+                                            @percent% đã bán
+                                        </div>
+                                    </div>
+
+                                    <div class="flash-countdown"
+                                         data-end="@fs.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")">
+                                        00:00:00
                                     </div>
                                 </div>
-
-                                <div class="flash-countdown"
-                                     data-end="@fs.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")">
-                                    00:00:00
-                                </div>
-
                             </div>
-                        </div>
-                    }
-                </div>
+                        }
+                    </div>
 
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            }
         </div>
     </section>
 }
 
 <script>
-    var swiper = new Swiper(".flash-swiper", {
-        slidesPerView: 6,
-        spaceBetween: 10,
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev"
-        }
-    });
+    // Khởi tạo Swiper nếu thư viện tồn tại
+    if (window.Swiper) {
+        var swiper = new Swiper(".flash-swiper", {
+            slidesPerView: 6,
+            spaceBetween: 10,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev"
+            },
+            breakpoints: {
+                0: { slidesPerView: 2 },
+                576: { slidesPerView: 3 },
+                768: { slidesPerView: 4 },
+                992: { slidesPerView: 5 },
+                1200: { slidesPerView: 6 }
+            }
+        });
+    }
 
-    // COUNTDOWN
+    // Countdown: nếu > 24h thì chuyển thành "X ngày HH:MM:SS"
     document.querySelectorAll(".flash-countdown").forEach(cd => {
-        let end = new Date(cd.dataset.end).getTime();
+        const endStr = cd.dataset.end;
+        if (!endStr) return;
+
+        const end = new Date(endStr).getTime();
 
         function tick() {
-            let now = Date.now();
+            const now = Date.now();
             let diff = end - now;
 
             if (diff <= 0) {
@@ -506,34 +577,66 @@ else
                 return;
             }
 
-            let h = Math.floor(diff / (1000 * 60 * 60));
-            let m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            let s = Math.floor((diff % (1000 * 60)) / 1000);
+            const dayMs = 1000 * 60 * 60 * 24;
+            const hourMs = 1000 * 60 * 60;
+            const minuteMs = 1000 * 60;
 
-            cd.innerText = `${h.toString().padStart(2, "0")}:${m
-                .toString()
-                .padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+            const days = Math.floor(diff / dayMs);
+            diff -= days * dayMs;
+
+            const h = Math.floor(diff / hourMs);
+            diff -= h * hourMs;
+
+            const m = Math.floor(diff / minuteMs);
+            diff -= m * minuteMs;
+
+            const s = Math.floor(diff / 1000);
+
+            const hh = h.toString().padStart(2, "0");
+            const mm = m.toString().padStart(2, "0");
+            const ss = s.toString().padStart(2, "0");
+
+            if (days > 0) {
+                cd.innerText = `${days} ngày ${hh}:${mm}:${ss}`;
+            } else {
+                cd.innerText = `${hh}:${mm}:${ss}`;
+            }
         }
 
         tick();
         setInterval(tick, 1000);
     });
 
-    // SLOT FILTER
-    document.querySelectorAll(".flash-slot").forEach(slot => {
-        slot.onclick = function () {
-            let start = this.dataset.start;
+    // Lọc sản phẩm theo slot
+    function applySlotFilter() {
+        const activeSlot = document.querySelector(".flash-slot.active");
+        const items = document.querySelectorAll(".flash-item");
+        if (!activeSlot || !items.length) return;
 
-            document
-                .querySelectorAll(".flash-slot")
-                .forEach(s => s.classList.remove("active"));
+        const start = activeSlot.dataset.start;
+        items.forEach(item => {
+            item.style.display = (item.dataset.start === start) ? "" : "none";
+        });
+    }
 
-            this.classList.add("active");
+    document.addEventListener("DOMContentLoaded", function () {
+        const slots = document.querySelectorAll(".flash-slot");
 
-            document.querySelectorAll(".flash-item").forEach(item => {
-                item.style.display =
-                    item.dataset.start === start ? "" : "none";
+        if (slots.length) {
+            // Nếu chưa có slot nào active (không nằm trong khung giờ hiện tại) thì chọn slot đầu
+            if (!document.querySelector(".flash-slot.active")) {
+                slots[0].classList.add("active");
+            }
+
+            applySlotFilter();
+
+            slots.forEach(slot => {
+                slot.addEventListener("click", function () {
+                    slots.forEach(s => s.classList.remove("active"));
+                    this.classList.add("active");
+                    applySlotFilter();
+                });
             });
-        };
+        }
     });
 </script>
