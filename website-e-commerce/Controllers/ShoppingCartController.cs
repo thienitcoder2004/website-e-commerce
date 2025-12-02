@@ -46,7 +46,8 @@ namespace website_e_commerce.Controllers
                 ProductId = product.Id,
                 Name = product.Name,
                 Price = product.NewPrice,
-                Quantity = quantity
+                Quantity = quantity,
+                ImageUrl = product.ImageUrl
             });
             HttpContext.Session.SetObjectAsJson("Cart", cart);
 
@@ -273,7 +274,6 @@ namespace website_e_commerce.Controllers
             return RedirectToAction("OrderSuccess", new { orderId = payment.OrderId });
         }
 
-
         // ========== VNPAY ==========
         public string GenerateVNPayPaymentUrl(Order order, Payment payment)
         {
@@ -411,5 +411,61 @@ namespace website_e_commerce.Controllers
 
             return total < 0 ? 0 : total;
         }
+
+        // ========== ÁP DỤNG MÃ GIẢM GIÁ ==========
+        [HttpPost]
+        public IActionResult ApplyCoupon(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                TempData["Error"] = "Vui lòng nhập mã khuyến mãi!";
+                return RedirectToAction("Index");
+            }
+
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
+            if (cart == null || !cart.Items.Any())
+            {
+                TempData["Error"] = "Giỏ hàng đang trống!";
+                return RedirectToAction("Index");
+            }
+
+            var promo = _context.PromotionCodes
+                .FirstOrDefault(p => p.Code.ToUpper() == code.ToUpper());
+
+            if (promo == null)
+            {
+                TempData["Error"] = "Mã giảm giá không tồn tại!";
+                return RedirectToAction("Index");
+            }
+
+            // Kiểm tra ngày hợp lệ
+            var now = DateTime.Now;
+            if (now < promo.StartDate || now > promo.EndDate)
+            {
+                TempData["Error"] = "Mã giảm giá đã hết hạn hoặc chưa được kích hoạt!";
+                return RedirectToAction("Index");
+            }
+
+            // Check trạng thái
+            if (!promo.IsActive)
+            {
+                TempData["Error"] = "Mã khuyến mãi đã bị vô hiệu hóa!";
+                return RedirectToAction("Index");
+            }
+
+            // Check giới hạn sử dụng
+            if (promo.MaxUsage.HasValue && promo.UsageCount >= promo.MaxUsage.Value)
+            {
+                TempData["Error"] = "Mã giảm giá đã đạt giới hạn sử dụng!";
+                return RedirectToAction("Index");
+            }
+
+            // Lưu mã giảm giá vào Session
+            HttpContext.Session.SetString("PromoCode", promo.Code);
+
+            TempData["Success"] = "🎉 Áp dụng mã giảm giá thành công!";
+            return RedirectToAction("Index");
+        }
+
     }
 }

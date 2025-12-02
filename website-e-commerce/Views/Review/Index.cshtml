@@ -21,7 +21,7 @@
                     <th style="width: 220px;">Tiêu đề</th>
                     <th>Nội dung</th>
                     <th style="width: 160px;">Ngày tạo</th>
-                    <th style="width: 100px;">Hành động</th>
+                    <th style="width: 130px;">Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,11 +40,37 @@
                         <td>@r.Body</td>
                         <td class="text-center">@r.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
                         <td class="text-center">
+                            <button class="btn btn-sm btn-outline-primary me-1" onclick="replyReview(@r.Id)">
+                                <i class="fa-solid fa-reply"></i>
+                            </button>
                             <button class="btn btn-sm btn-danger" onclick="deleteReview(@r.Id)">
-                                <i class="fa-solid fa-trash"></i> Xóa
+                                <i class="fa-solid fa-trash"></i>
                             </button>
                         </td>
                     </tr>
+
+                    @* Hàng hiển thị các câu trả lời *@
+                    @if (r.Replies != null && r.Replies.Any())
+                    {
+                        <tr class="bg-light">
+                            <td></td>
+                            <td colspan="6">
+                                @foreach (var rep in r.Replies.OrderBy(x => x.CreatedAt))
+                                {
+                                    <div class="small mb-1">
+                                        <span class="badge bg-primary me-1">
+                                            @(rep.IsAuto
+                                                                            ? "HTM Shop"
+                                                                            : (string.IsNullOrEmpty(rep.UserName) ? "Nhân viên HTM Shop" : rep.UserName))
+                            </span>
+                            @rep.Content
+                            <span class="text-muted ms-1">(@rep.CreatedAt.ToString("dd/MM/yyyy HH:mm"))</span>
+                        </div>
+                                                }
+                            </td>
+                        </tr>
+                    }
+
                     i++;
                 }
             </tbody>
@@ -57,7 +83,6 @@
     }
 </div>
 
-<!-- ========== SCRIPT XÓA ========== -->
 <script>
     function deleteReview(id) {
         if (!confirm("🗑️ Bạn có chắc muốn xóa đánh giá này không?")) return;
@@ -69,54 +94,68 @@
             method: 'POST',
             body: formData
         })
-        .then(response => {
-            if (!response.ok) throw new Error("HTTP error " + response.status);
-            return response.json();
+            .then(response => {
+                if (!response.ok) throw new Error("HTTP error " + response.status);
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    const row = document.getElementById("row-" + id);
+                    if (row) row.remove();
+                    alert("✅ Đã xóa đánh giá thành công!");
+                    location.reload();
+                } else {
+                    alert("❌ " + (data.message || "Không thể xóa đánh giá!"));
+                }
+            })
+            .catch(err => alert("⚠️ Lỗi: " + err.message));
+    }
+
+    function replyReview(id) {
+        const content = prompt("Nhập nội dung trả lời cho đánh giá #" + id + ":");
+        if (!content || !content.trim()) return;
+
+        const formData = new FormData();
+        formData.append("reviewId", id);
+        formData.append("content", content);
+
+        fetch('/Review/AddReply', {
+            method: 'POST',
+            body: formData
         })
-        .then(data => {
-            if (data.success) {
-                const row = document.getElementById("row-" + id);
-                if (row) row.remove();
-                alert("✅ Đã xóa đánh giá thành công!");
-            } else {
-                alert("❌ " + (data.message || "Không thể xóa đánh giá!"));
-            }
-        })
-        .catch(err => alert("⚠️ Lỗi: " + err.message));
+            .then(r => {
+                if (!r.ok) throw new Error("HTTP " + r.status);
+                return r.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert("✅ Đã gửi trả lời!");
+                    location.reload();
+                } else {
+                    alert("❌ " + (data.message || "Không thể gửi trả lời!"));
+                }
+            })
+            .catch(err => alert("⚠️ Lỗi: " + err.message));
     }
 </script>
 
-<!-- ========== CSS ========== -->
 <style>
     .table {
         width: 100%;
-        table-layout: auto; /* ✅ Cho cột tự co giãn theo nội dung */
-        word-wrap: break-word; /* ✅ Cho text tự xuống dòng */
+        table-layout: auto;
+        word-wrap: break-word;
     }
 
-        .table td, .table th {
-            white-space: normal !important; /* ✅ Cho phép text xuống dòng */
+        .table td,
+        .table th {
+            white-space: normal !important;
         }
-
 
         .table th {
             background-color: #ffccd5 !important;
             color: #333;
             font-weight: 600;
         }
-
-        .table td i.fa-star {
-            font-size: 1.1rem;
-            margin: 0 2px;
-        }
-
-        .table td {
-            white-space: nowrap;
-        }
-
-            .table td:nth-child(3) {
-                min-width: 130px;
-            }
 
     .btn-danger {
         background-color: #dc3545;
@@ -128,18 +167,16 @@
             background-color: #bb2d3b;
         }
 
-    /* Làm nổi khi hover */
     .table tbody tr:hover {
         background-color: #fff5f5;
         transition: background-color 0.3s ease;
     }
 
     .table-responsive {
-        overflow-x: hidden !important; /* ❌ Ẩn thanh cuộn ngang */
-        overflow-y: auto; /* ✅ Chỉ cuộn dọc nếu bảng quá dài */
+        overflow-x: hidden !important;
+        overflow-y: auto;
         max-height: 600px;
     }
-
 
     .table thead th {
         position: sticky;

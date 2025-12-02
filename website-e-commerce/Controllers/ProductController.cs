@@ -388,9 +388,10 @@ namespace website_e_commerce.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(
-             Product product,
-             IFormFile? thumbnail,
-             List<IFormFile>? galleryImages)
+     Product product,
+     IFormFile? thumbnail,
+     List<IFormFile>? galleryImages,
+     List<int>? SelectedFilterOptions)
         {
             if (!ModelState.IsValid)
             {
@@ -420,7 +421,7 @@ namespace website_e_commerce.Controllers
 
             // ============== LƯU SẢN PHẨM ==============
             _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // <== để có product.Id
 
             // ============== ẢNH GALLERY (nhiều ảnh) ==============
             if (galleryImages != null)
@@ -441,9 +442,78 @@ namespace website_e_commerce.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            // ============== LƯU FILTER ==============
+            if (SelectedFilterOptions != null)
+            {
+                foreach (var opt in SelectedFilterOptions)
+                {
+                    if (opt > 0)
+                    {
+                        _context.ProductFilterOptions.Add(new ProductFilterOption
+                        {
+                            ProductId = product.Id,
+                            FilterOptionId = opt
+                        });
+                    }
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            // =====================================================
+            // 🔥🔥🔥  PHẦN QUAN TRỌNG: GHI LỊCH SỬ NHẬP KHO  🔥🔥🔥
+            // =====================================================
+            if (product.StockQuantity > 0)
+            {
+                var history = new StockHistory
+                {
+                    ProductId = product.Id,
+                    ActionType = "Import",
+                    Quantity = product.StockQuantity,
+                    Note = "Nhập kho lúc tạo sản phẩm",
+                    CreatedAt = DateTime.Now
+                };
+
+                _context.StockHistory.Add(history);
+                await _context.SaveChangesAsync();
+            }
+            // =====================================================
+
             TempData["success"] = "Đã thêm sản phẩm thành công!";
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult GetFiltersByCategory(int categoryId)
+        {
+            if (categoryId <= 0)
+            {
+                return Json(new { ok = false, message = "CategoryId không hợp lệ" });
+            }
+
+            var filterCategory = _context.FilterCategories
+                .Include(fc => fc.Groups)
+                    .ThenInclude(g => g.Options)
+                .FirstOrDefault(fc => fc.CategoryId == categoryId);
+
+            if (filterCategory == null || filterCategory.Groups == null || !filterCategory.Groups.Any())
+            {
+                return Json(new { ok = false, message = "Không có bộ lọc cho danh mục này" });
+            }
+
+            var groups = filterCategory.Groups.Select(g => new
+            {
+                id = g.Id,
+                name = g.GroupName,
+                options = (g.Options ?? new List<FilterOption>()).Select(o => new
+                {
+                    id = o.Id,
+                    label = o.Label
+                }).ToList()
+            }).ToList();
+
+            return Json(new { ok = true, groups });
+        }
+
 
         // ================================
         // STOCK IMPORT

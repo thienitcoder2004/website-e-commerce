@@ -81,7 +81,7 @@ namespace website_e_commerce.Controllers.Admin
         }
 
         // 🗑️ Xóa
-        [HttpPost]
+        [HttpPost]  
         public async Task<IActionResult> Delete(int id)
         {
             await _promotionRepo.DeleteAsync(id);

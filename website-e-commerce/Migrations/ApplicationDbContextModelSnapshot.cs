@@ -1781,6 +1781,10 @@ namespace website_e_commerce.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("OrderStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ShippingAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -2233,6 +2237,21 @@ namespace website_e_commerce.Migrations
                         });
                 });
 
+            modelBuilder.Entity("website_e_commerce.Models.ProductFilterOption", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FilterOptionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "FilterOptionId");
+
+                    b.HasIndex("FilterOptionId");
+
+                    b.ToTable("ProductFilterOptions");
+                });
+
             modelBuilder.Entity("website_e_commerce.Models.ProductImage", b =>
                 {
                     b.Property<int>("Id")
@@ -2293,6 +2312,42 @@ namespace website_e_commerce.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PromotionCodes");
+                });
+
+            modelBuilder.Entity("website_e_commerce.Models.ReviewReply", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAuto")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ReviewId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReviewId");
+
+                    b.ToTable("ReviewReplies");
                 });
 
             modelBuilder.Entity("website_e_commerce.Models.Reviews", b =>
@@ -2531,6 +2586,25 @@ namespace website_e_commerce.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("website_e_commerce.Models.ProductFilterOption", b =>
+                {
+                    b.HasOne("website_e_commerce.Models.FilterOption", "FilterOption")
+                        .WithMany()
+                        .HasForeignKey("FilterOptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("website_e_commerce.Models.Product", "Product")
+                        .WithMany("ProductFilterOptions")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FilterOption");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("website_e_commerce.Models.ProductImage", b =>
                 {
                     b.HasOne("website_e_commerce.Models.Product", "Product")
@@ -2540,6 +2614,17 @@ namespace website_e_commerce.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("website_e_commerce.Models.ReviewReply", b =>
+                {
+                    b.HasOne("website_e_commerce.Models.Reviews", "Review")
+                        .WithMany("Replies")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Review");
                 });
 
             modelBuilder.Entity("website_e_commerce.Models.Reviews", b =>
@@ -2602,9 +2687,16 @@ namespace website_e_commerce.Migrations
 
                     b.Navigation("OrderDetails");
 
+                    b.Navigation("ProductFilterOptions");
+
                     b.Navigation("ProductImages");
 
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("website_e_commerce.Models.Reviews", b =>
+                {
+                    b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618
         }

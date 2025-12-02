@@ -5,14 +5,13 @@
 }
 
 <div class="shoppingcart-page pb-5">
-    <!-- 🔹 Breadcrumb -->
+
+    <!-- BREADCRUMB -->
     <div class="bread-cumb py-3 bg-light border-bottom mb-4">
         <div class="container">
             <ul class="breadcrumb mb-0">
                 <li class="home">
-                    <a href="/" class="text-decoration-none text-dark fw-semibold">
-                        Trang chủ
-                    </a>
+                    <a href="/" class="text-decoration-none text-dark fw-semibold">Trang chủ</a>
                     <span class="mx-2 text-muted">
                         <i class="fa-solid fa-chevron-right"></i>
                     </span>
@@ -22,79 +21,104 @@
         </div>
     </div>
 
-    <!-- 🔹 Nội dung giỏ hàng -->
+    <!-- NỘI DUNG GIỎ HÀNG -->
     <div class="container mt-4">
         <h2 class="mb-4 text-center fw-bold text-uppercase text-danger">🛒 Giỏ hàng của bạn</h2>
 
         @if (Model.Items.Any())
         {
-            <div class="table-responsive shadow-sm rounded-4">
-                <table class="table align-middle text-center mb-0">
-                    <thead class="table-danger text-dark">
-                        <tr>
-                            <th style="width: 120px;">Ảnh</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Giá</th>
-                            <th style="width:150px;">Số lượng</th>
-                            <th>Tổng</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="cart-body" class="bg-white">
-                        @foreach (var item in Model.Items)
-                        {
-                            <tr class="cart-item-row" data-id="@item.ProductId">
-                                <td>
-                                    <img src="/images/product/default.png"
-                                         class="img-fluid rounded shadow-sm"
-                                         alt="@item.Name"
-                                         style="width:100px; height:100px; object-fit:contain;" />
-                                </td>
-                                <td class="text-start fw-semibold">@item.Name</td>
-                                <td class="text-danger fw-bold">@String.Format("{0:N0} đ", item.Price)</td>
-                                <td>
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <button class="btn btn-sm btn-light border decrease-btn rounded-circle">−</button>
-                                        <span class="mx-2 quantity fw-bold">@item.Quantity</span>
-                                        <button class="btn btn-sm btn-light border increase-btn rounded-circle">+</button>
+            <div class="row">
+
+                <!-- LIST CART -->
+                <div class="col-lg-8">
+
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="cart-item-fpt shadow-sm rounded-4 mb-3 p-3" data-id="@item.ProductId">
+
+                            <div class="row align-items-center">
+
+                                <!-- ẢNH -->
+                                <div class="col-3">
+                                    <img src="@item.ImageUrl"
+                                         class="img-fluid rounded"
+                                         style="max-height:120px; object-fit:contain;" />
+
+                                </div>
+
+                                <!-- TÊN + GIÁ -->
+                                <div class="col-5">
+                                    <h6 class="fw-bold">@item.Name</h6>
+
+                                    <div class="text-danger fw-bold fs-5">
+                                        @String.Format("{0:N0} đ", item.Price)
                                     </div>
-                                </td>
-                                <td class="item-total text-danger fw-bold">@String.Format("{0:N0} đ", item.Total)</td>
-                                <td>
-                                    <a asp-action="RemoveFromCart" asp-route-productId="@item.ProductId"
-                                       class="btn btn-outline-danger btn-sm rounded-circle" title="Xóa sản phẩm">
-                                        <i class="fa-solid fa-trash"></i>
+                                </div>
+
+                                <!-- NÚT TĂNG GIẢM -->
+                                <div class="col-2 text-center">
+                                    <div class="qty-box d-flex justify-content-center align-items-center">
+                                        <button class="btn-qty decrease-btn">−</button>
+                                        <span class="mx-2 fw-bold quantity">@item.Quantity</span>
+                                        <button class="btn-qty increase-btn">+</button>
+                                    </div>
+                                </div>
+
+                                <!-- TỔNG + XÓA -->
+                                <div class="col-2 text-end">
+                                    <div class="fw-bold text-danger item-total">
+                                        @String.Format("{0:N0} đ", item.Total)
+                                    </div>
+
+                                    <a asp-action="RemoveFromCart"
+                                       asp-route-productId="@item.ProductId"
+                                       class="text-muted small remove-item">
+                                        Xóa
                                     </a>
-                                </td>
-                            </tr>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+                <!-- BILL -->
+                <div class="col-lg-4">
+                    <div class="card p-3 shadow-sm sticky-top" style="top:80px;">
+                        <h5 class="fw-bold mb-3">Thông tin thanh toán</h5>
+
+                        <!-- MÃ GIẢM GIÁ -->
+                        <form asp-action="ApplyCoupon" method="post" class="input-group mb-3">
+                            <input type="text" name="code" class="form-control border-danger"
+                                   placeholder="Nhập mã giảm giá..." required />
+                            <button class="btn btn-danger fw-bold">Áp dụng</button>
+                        </form>
+
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success">@TempData["Success"]</div>
                         }
-                    </tbody>
-                </table>
-            </div>
+                        else if (TempData["Error"] != null)
+                        {
+                            <div class="alert alert-danger">@TempData["Error"]</div>
+                        }
 
-            <div class="text-end mt-4">
-                <h4 class="fw-bold">
-                    Tổng cộng:
+                        <hr />
 
-                    <form asp-action="ApplyCoupon" method="post" class="d-flex justify-content-end mt-4">
-                        <input type="text" name="code" class="form-control w-auto me-2" placeholder="Nhập mã khuyến mãi..." required />
-                        <button type="submit" class="btn btn-outline-danger fw-bold">Áp dụng</button>
-                    </form>
+                        <!-- TỔNG TIỀN -->
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="fw-semibold">Tạm tính:</span>
+                            <span class="fw-bold" id="cart-total">@String.Format("{0:N0} đ", Model.GetTotal())</span>
+                        </div>
 
-                    @if (TempData["Success"] != null)
-                    {
-                        <div class="alert alert-success mt-3">@TempData["Success"]</div>
-                    }
-                    else if (TempData["Error"] != null)
-                    {
-                        <div class="alert alert-danger mt-3">@TempData["Error"]</div>
-                    }
+                        <a asp-action="Checkout"
+                           class="btn btn-danger w-100 fw-bold py-2 rounded-pill shadow">
+                            Thanh toán ngay
+                        </a>
+                    </div>
+                </div>
 
-                    <span id="cart-total" class="text-danger">@String.Format("{0:N0} đ", Model.GetTotal())</span>
-                </h4>
-                <a asp-action="Checkout" class="btn btn-success mt-3 px-5 py-2 fw-bold rounded-pill shadow">
-                    Thanh toán ngay
-                </a>
             </div>
         }
         else
@@ -108,25 +132,23 @@
     </div>
 </div>
 
-<!-- 🔹 Toast thông báo -->
+<!-- TOAST -->
 <div id="toast" class="toast-message">✅ Giỏ hàng đã được cập nhật</div>
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        // ======= Toast thông báo =======
         function showToast() {
             const toast = $("#toast");
             toast.fadeIn(200);
             setTimeout(() => toast.fadeOut(400), 2000);
         }
 
-        // ======= Tăng / giảm số lượng =======
         $(document).ready(function () {
 
             $(".increase-btn").click(function () {
-                const row = $(this).closest("tr");
+                const row = $(this).closest(".cart-item-fpt");
                 const productId = row.data("id");
 
                 $.post("/ShoppingCart/IncreaseQuantityAjax", { productId }, function (res) {
@@ -140,7 +162,7 @@
             });
 
             $(".decrease-btn").click(function () {
-                const row = $(this).closest("tr");
+                const row = $(this).closest(".cart-item-fpt");
                 const productId = row.data("id");
 
                 $.post("/ShoppingCart/DecreaseQuantityAjax", { productId }, function (res) {
@@ -151,67 +173,53 @@
                         } else {
                             row.fadeOut(200, function () { $(this).remove(); });
                         }
+
                         $("#cart-total").text(res.total.toLocaleString('vi-VN') + " đ");
                         showToast();
                     }
                 });
             });
+
         });
     </script>
 
+    <!-- CSS FPTSHOP STYLE -->
     <style>
-        /* ===== GIAO DIỆN CHUNG ===== */
-        .breadcrumb li {
-            display: inline;
-            font-size: 0.95rem;
+
+        /* CARD SẢN PHẨM */
+        .cart-item-fpt {
+            border: 1px solid #eee;
+            transition: 0.2s ease;
         }
 
-        /* ===== BẢNG GIỎ HÀNG ===== */
-        .table {
-            border-collapse: separate;
-        }
+            .cart-item-fpt:hover {
+                border-color: #ff4d4f;
+                background: #fff9f9;
+            }
 
-        .cart-item-row {
-            transition: all 0.25s ease;
-        }
-
-        /* ===== NÚT TĂNG GIẢM ===== */
-        .btn-light.border {
+        /* NÚT TĂNG GIẢM */
+        .btn-qty {
             width: 32px;
             height: 32px;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            background: white;
+            font-size: 18px;
             line-height: 20px;
-            padding: 0;
-            font-size: 1.2rem;
         }
 
-            .btn-light.border:hover {
-                background-color: #ff4d4f;
+            .btn-qty:hover {
+                background: #ff4d4f;
                 color: #fff;
             }
 
-        /* ===== NÚT THANH TOÁN ===== */
-        .btn-success {
-            background-color: #28a745;
-            border: none;
-            transition: all 0.3s;
+        /* BILL */
+        .card hr {
+            opacity: .2;
+            margin: 10px 0;
         }
 
-            .btn-success:hover {
-                background-color: #218838;
-            }
-
-        /* ===== NÚT XÓA ===== */
-        .btn-outline-danger {
-            border: 1.5px solid #dc3545;
-            color: #dc3545;
-        }
-
-            .btn-outline-danger:hover {
-                background-color: #dc3545;
-                color: white;
-            }
-
-        /* ===== TOAST THÔNG BÁO ===== */
+        /* TOAST */
         .toast-message {
             display: none;
             position: fixed;
@@ -224,11 +232,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             z-index: 9999;
             font-weight: 500;
-        }
-
-        /* ===== ẢNH GIỎ HÀNG TRỐNG ===== */
-        .empty-cart {
-            width: 220px;
         }
     </style>
 }

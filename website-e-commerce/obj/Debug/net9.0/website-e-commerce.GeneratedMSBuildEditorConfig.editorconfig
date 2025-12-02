@@ -104,6 +104,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5PcmRlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/website-e-commerce/website-e-commerce/Views/AdminOrder/OrderHistory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5PcmRlclxPcmRlckhpc3RvcnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/website-e-commerce/website-e-commerce/Views/Brand/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -282,6 +286,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/website-e-commerce/website-e-commerce/Views/StockHistory/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tIaXN0b3J5XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/website-e-commerce/website-e-commerce/Views/StockHistory/Statistics.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tIaXN0b3J5XFN0YXRpc3RpY3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/website-e-commerce/website-e-commerce/Views/SupportChat/AdminInbox.cshtml]

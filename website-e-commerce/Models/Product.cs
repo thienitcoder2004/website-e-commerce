@@ -13,7 +13,7 @@ namespace website_e_commerce.Models
         public string Name { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        [Range(0.01, 100000000, ErrorMessage = "Giá cũ không hợp lệ")]
+        [Range(1, 100000000, ErrorMessage = "Giá cũ không hợp lệ")]
         public decimal OldPrice { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
@@ -60,5 +60,6 @@ namespace website_e_commerce.Models
         public List<Reviews>? Reviews { get; set; }
         public List<OrderDetail>? OrderDetails { get; set; }
         public List<FavoriteProduct>? FavoriteProducts { get; set; }
+        public List<ProductFilterOption>? ProductFilterOptions { get; set; }
     }
 }
