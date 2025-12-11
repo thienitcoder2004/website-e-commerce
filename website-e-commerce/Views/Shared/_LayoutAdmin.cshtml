@@ -86,7 +86,7 @@
 
         .admin-sidebar.collapsed .nav-link {
             padding: .6rem .8rem !important;
-            justify-content: center; 
+            justify-content: center;
         }
 
             .admin-sidebar.collapsed .nav-link .text-label {
@@ -98,7 +98,7 @@
             }
 
             .admin-sidebar.collapsed .nav-link span.text-label::after {
-                left: 80px !important; 
+                left: 80px !important;
             }
 
         .admin-sidebar .nav-link i {
@@ -164,7 +164,7 @@
                 height: 32px !important;
             }
 
-            .nav-link{
+            .nav-link {
                 padding: 10px 20px;
             }
 
@@ -188,7 +188,6 @@
             .navbar-nav {
                 flex-direction: row !important;
             }
-
         }
     </style>
     @functions {
@@ -212,13 +211,6 @@
                     data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
                 <i class="fa-solid fa-bars"></i>
             </button>
-
-            <form class="ms-auto me-3 d-none d-md-block" method="get" action="/Product/Index">
-                <div class="input-group">
-                    <input name="query" class="form-control" type="search" placeholder="Tìm kiếm..." />
-                    <button class="btn btn-outline-primary"><i class="fa fa-search"></i></button>
-                </div>
-            </form>
 
             <ul class="nav-right-user navbar-nav ms-auto align-items-center">
                 <li class="nav-item dropdown me-3" id="newsWrapper" style="position:relative;">
@@ -255,51 +247,55 @@
             </a>
 
             <a class="nav-link @Active("AdminOrder", "Index")" href="/AdminOrder/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Đơn hàng</span>
+                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý đơn hàng</span>
             </a>
 
             <a class="nav-link @Active("Brand")" href="/Brand/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Thương hiệu</span>
+                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý thương hiệu</span>
             </a>
 
             <a class="nav-link @Active("Category")" href="/Category/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Danh mục</span>
+                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý danh mục</span>
             </a>
 
             <a class="nav-link @Active("Contact")" href="/Contact/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Liên hệ</span>
+                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý liên hệ</span>
             </a>
 
             <a class="nav-link @Active("FlashSale")" href="/FlashSale/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Giảm giá</span>
+                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý giảm giá</span>
             </a>
 
             <a class="nav-link @Active("News")" href="/News/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Tin Tức</span>
+                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý tin Tức</span>
             </a>
 
             <a class="nav-link @Active("Product")" href="/Product/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Sản phẩm</span>
+                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý sản phẩm</span>
             </a>
 
             <a class="nav-link @Active("Promotion")" href="/Promotion/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Khuyến Mãi</span>
+                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý khuyến Mãi</span>
             </a>
 
             <a class="nav-link @Active("Review")" href="/Review/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Đánh giá</span>
+                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý đánh giá</span>
             </a>
 
-            <a class="nav-link @Active("StockHistory","Index")" href="/StockHistory/Index">
+            <a class="nav-link @Active("StockHistory", "Index")" href="/StockHistory/Index">
                 <i class="fa-solid fa-box"></i> <span class="text-label">Lịch sử kho</span>
             </a>
 
-            <a class="nav-link @Active("StockHistory","Statistics")" href="/StockHistory/Statistics">
+            <a class="nav-link @Active("StockHistory", "Statistics")" href="/StockHistory/Statistics">
                 <i class="fa-solid fa-box"></i> <span class="text-label">Thống kê kho</span>
             </a>
 
             <a class="nav-link @Active("SupportChat")" href="/SupportChat/AdminInbox">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Nhắn tin</span>
+                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý tin nhắn</span>
+            </a>
+
+            <a class="nav-link @Active("User")" href="/User/Index">
+                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý tài khoản</span>
             </a>
 
             <hr />
@@ -312,28 +308,6 @@
             </a>
         </div>
     </aside>
-
-    <div class="offcanvas offcanvas-start" id="mobileSidebar">
-        <div class="offcanvas-header">
-            <h5 class="fw-bold text-primary">Menu</h5>
-            <button class="btn-close" data-bs-dismiss="offcanvas"></button>
-        </div>
-        <div class="offcanvas-body">
-            <a class="nav-link @Active("Dashboard")" href="/Dashboard/Index"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-            <a class="nav-link @Active("Order")" href="/Order/Index"><i class="fa-solid fa-box"></i> Đơn hàng</a>
-            <a class="nav-link @Active("Customer")" href="/Customer/Index"><i class="fa-solid fa-users"></i> Khách hàng</a>
-            <a class="nav-link @Active("Product")" href="/Product/Index"><i class="fa-solid fa-tags"></i> Sản phẩm</a>
-
-            @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_StockManager))
-            {
-                <a class="nav-link @Active("Warehouse")" href="/Warehouse/Index"><i class="fa-solid fa-warehouse"></i> Kho hàng</a>
-            }
-
-            <hr />
-            <a class="nav-link @Active("Manage")" href="/Identity/Account/Manage"><i class="fa-solid fa-user-gear"></i> Tài khoản</a>
-            <a class="nav-link text-danger" href="/Identity/Account/Logout"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
-        </div>
-    </div>
 
     <main id="mainContent" class="admin-main">
         @RenderBody()

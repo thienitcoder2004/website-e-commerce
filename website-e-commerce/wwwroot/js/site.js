@@ -77,3 +77,4 @@ document.querySelectorAll(".slot-btn").forEach(slot => {
         });
     };
 });
+

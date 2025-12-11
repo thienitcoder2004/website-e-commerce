@@ -1,0 +1,78 @@
+﻿@model website_e_commerce.Models.UserEditVM
+@{
+    ViewData["Title"] = "Sửa tài khoản";
+    Layout = "/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<section class="py-4">
+    <div class="container-fluid">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-primary text-white border-0 py-3">
+                <h5 class="mb-1 text-uppercase fw-bold">
+                    ✏️ Sửa tài khoản
+                </h5>
+                <small>Chỉnh sửa thông tin người dùng và quyền trong hệ thống.</small>
+            </div>
+
+            <div class="card-body bg-light">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8">
+
+                        <form asp-action="Edit" method="post">
+                            <input asp-for="Id" type="hidden" />
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+                            <div class="form-floating mb-3">
+                                <input asp-for="Ho" class="form-control" placeholder="Họ" />
+                                <label asp-for="Ho"></label>
+                                <span asp-validation-for="Ho" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input asp-for="Ten" class="form-control" placeholder="Tên" />
+                                <label asp-for="Ten"></label>
+                                <span asp-validation-for="Ten" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input asp-for="Email" class="form-control" placeholder="Email" />
+                                <label asp-for="Email"></label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input asp-for="SoDienThoai" class="form-control" placeholder="Số điện thoại" />
+                                <label asp-for="SoDienThoai"></label>
+                                <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Role" class="form-label"></label>
+                                <select asp-for="Role" asp-items="Model.RoleList" class="form-select">
+                                    <option value="">-- Chọn quyền --</option>
+                                </select>
+                                <span asp-validation-for="Role" class="text-danger"></span>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <a asp-action="Index" class="btn btn-outline-secondary">
+                                    Quay lại
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    Lưu thay đổi
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

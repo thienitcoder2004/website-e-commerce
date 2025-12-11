@@ -921,731 +921,710 @@ namespace website_e_commerce.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1001,
+                            Id = 10001,
                             FilterGroupId = 11,
                             Label = "4 GB",
                             Value = "ram=4"
                         },
                         new
                         {
-                            Id = 1002,
+                            Id = 10002,
                             FilterGroupId = 11,
                             Label = "6 GB",
                             Value = "ram=6"
                         },
                         new
                         {
-                            Id = 1003,
+                            Id = 10003,
                             FilterGroupId = 11,
                             Label = "8 GB",
                             Value = "ram=8"
                         },
                         new
                         {
-                            Id = 1004,
+                            Id = 10004,
                             FilterGroupId = 11,
                             Label = "12 GB",
                             Value = "ram=12"
                         },
                         new
                         {
-                            Id = 1011,
+                            Id = 10101,
                             FilterGroupId = 12,
                             Label = "64 GB",
                             Value = "rom=64"
                         },
                         new
                         {
-                            Id = 1012,
+                            Id = 10102,
                             FilterGroupId = 12,
                             Label = "128 GB",
                             Value = "rom=128"
                         },
                         new
                         {
-                            Id = 1013,
+                            Id = 10103,
                             FilterGroupId = 12,
                             Label = "256 GB",
                             Value = "rom=256"
                         },
                         new
                         {
-                            Id = 1014,
+                            Id = 10104,
                             FilterGroupId = 12,
                             Label = "512 GB",
                             Value = "rom=512"
                         },
                         new
                         {
-                            Id = 1015,
-                            FilterGroupId = 12,
-                            Label = "1 TB",
-                            Value = "rom=1024"
-                        },
-                        new
-                        {
-                            Id = 1021,
+                            Id = 10201,
                             FilterGroupId = 13,
                             Label = "Snapdragon",
-                            Value = "cpu=Snapdragon"
+                            Value = "cpu=snapdragon"
                         },
                         new
                         {
-                            Id = 1022,
+                            Id = 10202,
                             FilterGroupId = 13,
                             Label = "MediaTek",
-                            Value = "cpu=MediaTek"
+                            Value = "cpu=mediatek"
                         },
                         new
                         {
-                            Id = 1023,
+                            Id = 10203,
                             FilterGroupId = 13,
-                            Label = "Apple A Bionic",
-                            Value = "cpu=Apple"
+                            Label = "Apple Bionic",
+                            Value = "cpu=apple"
                         },
                         new
                         {
-                            Id = 1031,
+                            Id = 10301,
                             FilterGroupId = 14,
                             Label = "6.1 inch",
                             Value = "screen=6.1"
                         },
                         new
                         {
-                            Id = 1032,
+                            Id = 10302,
                             FilterGroupId = 14,
                             Label = "6.5 inch",
                             Value = "screen=6.5"
                         },
                         new
                         {
-                            Id = 1033,
+                            Id = 10303,
                             FilterGroupId = 14,
                             Label = "6.7 inch",
                             Value = "screen=6.7"
                         },
                         new
                         {
-                            Id = 1041,
+                            Id = 10304,
+                            FilterGroupId = 14,
+                            Label = "AMOLED",
+                            Value = "screenTech=AMOLED"
+                        },
+                        new
+                        {
+                            Id = 10305,
+                            FilterGroupId = 14,
+                            Label = "OLED",
+                            Value = "screenTech=OLED"
+                        },
+                        new
+                        {
+                            Id = 10306,
+                            FilterGroupId = 14,
+                            Label = "IPS LCD",
+                            Value = "screenTech=IPS"
+                        },
+                        new
+                        {
+                            Id = 10401,
                             FilterGroupId = 15,
                             Label = "50 MP",
                             Value = "camera=50"
                         },
                         new
                         {
-                            Id = 1042,
+                            Id = 10402,
                             FilterGroupId = 15,
                             Label = "64 MP",
                             Value = "camera=64"
                         },
                         new
                         {
-                            Id = 1043,
+                            Id = 10403,
                             FilterGroupId = 15,
                             Label = "108 MP",
                             Value = "camera=108"
                         },
                         new
                         {
-                            Id = 1051,
+                            Id = 10501,
                             FilterGroupId = 16,
                             Label = "4000 mAh",
                             Value = "battery=4000"
                         },
                         new
                         {
-                            Id = 1052,
+                            Id = 10502,
                             FilterGroupId = 16,
                             Label = "5000 mAh",
                             Value = "battery=5000"
                         },
                         new
                         {
-                            Id = 1053,
+                            Id = 10503,
                             FilterGroupId = 16,
                             Label = "6000 mAh",
                             Value = "battery=6000"
                         },
                         new
                         {
-                            Id = 1061,
+                            Id = 10601,
                             FilterGroupId = 17,
                             Label = "Sạc nhanh",
                             Value = "feature=fastcharge"
                         },
                         new
                         {
-                            Id = 1062,
+                            Id = 10602,
                             FilterGroupId = 17,
                             Label = "Chống nước",
                             Value = "feature=waterproof"
                         },
                         new
                         {
-                            Id = 1063,
+                            Id = 10603,
                             FilterGroupId = 17,
                             Label = "5G",
                             Value = "feature=5g"
                         },
                         new
                         {
-                            Id = 2001,
+                            Id = 10604,
+                            FilterGroupId = 17,
+                            Label = "Sạc không dây",
+                            Value = "feature=wireless"
+                        },
+                        new
+                        {
+                            Id = 10605,
+                            FilterGroupId = 17,
+                            Label = "Face ID",
+                            Value = "feature=faceid"
+                        },
+                        new
+                        {
+                            Id = 20001,
                             FilterGroupId = 21,
                             Label = "Core i3",
                             Value = "cpu=i3"
                         },
                         new
                         {
-                            Id = 2002,
+                            Id = 20002,
                             FilterGroupId = 21,
                             Label = "Core i5",
                             Value = "cpu=i5"
                         },
                         new
                         {
-                            Id = 2003,
+                            Id = 20003,
                             FilterGroupId = 21,
                             Label = "Core i7",
                             Value = "cpu=i7"
                         },
                         new
                         {
-                            Id = 2004,
+                            Id = 20004,
                             FilterGroupId = 21,
                             Label = "Core i9",
                             Value = "cpu=i9"
                         },
                         new
                         {
-                            Id = 2011,
+                            Id = 20101,
                             FilterGroupId = 22,
                             Label = "RTX 3050",
                             Value = "gpu=3050"
                         },
                         new
                         {
-                            Id = 2012,
+                            Id = 20102,
                             FilterGroupId = 22,
                             Label = "RTX 4050",
                             Value = "gpu=4050"
                         },
                         new
                         {
-                            Id = 2013,
+                            Id = 20103,
                             FilterGroupId = 22,
                             Label = "RTX 4060",
                             Value = "gpu=4060"
                         },
                         new
                         {
-                            Id = 2014,
-                            FilterGroupId = 22,
-                            Label = "RTX 4070",
-                            Value = "gpu=4070"
-                        },
-                        new
-                        {
-                            Id = 2021,
+                            Id = 20201,
                             FilterGroupId = 23,
                             Label = "8 GB",
                             Value = "ram=8"
                         },
                         new
                         {
-                            Id = 2022,
+                            Id = 20202,
                             FilterGroupId = 23,
                             Label = "16 GB",
                             Value = "ram=16"
                         },
                         new
                         {
-                            Id = 2023,
-                            FilterGroupId = 23,
-                            Label = "32 GB",
-                            Value = "ram=32"
-                        },
-                        new
-                        {
-                            Id = 2024,
-                            FilterGroupId = 23,
-                            Label = "64 GB",
-                            Value = "ram=64"
-                        },
-                        new
-                        {
-                            Id = 2031,
+                            Id = 20301,
                             FilterGroupId = 24,
-                            Label = "256 GB SSD",
+                            Label = "256 GB",
                             Value = "ssd=256"
                         },
                         new
                         {
-                            Id = 2032,
+                            Id = 20302,
                             FilterGroupId = 24,
-                            Label = "512 GB SSD",
+                            Label = "512 GB",
                             Value = "ssd=512"
                         },
                         new
                         {
-                            Id = 2033,
-                            FilterGroupId = 24,
-                            Label = "1 TB SSD",
-                            Value = "ssd=1024"
-                        },
-                        new
-                        {
-                            Id = 2041,
+                            Id = 20401,
                             FilterGroupId = 25,
                             Label = "13 inch",
                             Value = "screen=13"
                         },
                         new
                         {
-                            Id = 2042,
+                            Id = 20402,
                             FilterGroupId = 25,
-                            Label = "14 inch",
-                            Value = "screen=14"
+                            Label = "15 inch",
+                            Value = "screen=15"
                         },
                         new
                         {
-                            Id = 2043,
-                            FilterGroupId = 25,
-                            Label = "15.6 inch",
-                            Value = "screen=15.6"
-                        },
-                        new
-                        {
-                            Id = 2051,
-                            FilterGroupId = 26,
-                            Label = "Dưới 1.2 kg",
-                            Value = "weight=1.2"
-                        },
-                        new
-                        {
-                            Id = 2052,
-                            FilterGroupId = 26,
-                            Label = "1.2 – 1.8 kg",
-                            Value = "weight=1.8"
-                        },
-                        new
-                        {
-                            Id = 2053,
-                            FilterGroupId = 26,
-                            Label = "Trên 2 kg",
-                            Value = "weight=2"
-                        },
-                        new
-                        {
-                            Id = 2061,
+                            Id = 20701,
                             FilterGroupId = 27,
                             Label = "Học tập – Văn phòng",
                             Value = "need=office"
                         },
                         new
                         {
-                            Id = 2062,
+                            Id = 20702,
                             FilterGroupId = 27,
                             Label = "Đồ họa – Kỹ thuật",
                             Value = "need=design"
                         },
                         new
                         {
-                            Id = 2063,
+                            Id = 20703,
                             FilterGroupId = 27,
                             Label = "Gaming",
                             Value = "need=gaming"
                         },
                         new
                         {
-                            Id = 3001,
+                            Id = 30001,
                             FilterGroupId = 31,
                             Label = "4 GB",
                             Value = "ram=4"
                         },
                         new
                         {
-                            Id = 3002,
+                            Id = 30002,
                             FilterGroupId = 31,
                             Label = "8 GB",
                             Value = "ram=8"
                         },
                         new
                         {
-                            Id = 3003,
-                            FilterGroupId = 31,
-                            Label = "16 GB",
-                            Value = "ram=16"
-                        },
-                        new
-                        {
-                            Id = 3011,
+                            Id = 30101,
                             FilterGroupId = 32,
                             Label = "8 inch",
                             Value = "screen=8"
                         },
                         new
                         {
-                            Id = 3012,
-                            FilterGroupId = 32,
-                            Label = "10 inch",
-                            Value = "screen=10"
-                        },
-                        new
-                        {
-                            Id = 3013,
+                            Id = 30102,
                             FilterGroupId = 32,
                             Label = "11 inch",
                             Value = "screen=11"
                         },
                         new
                         {
-                            Id = 3021,
+                            Id = 30201,
                             FilterGroupId = 33,
                             Label = "64 GB",
                             Value = "rom=64"
                         },
                         new
                         {
-                            Id = 3022,
+                            Id = 30202,
                             FilterGroupId = 33,
                             Label = "128 GB",
                             Value = "rom=128"
                         },
                         new
                         {
-                            Id = 3023,
-                            FilterGroupId = 33,
-                            Label = "256 GB",
-                            Value = "rom=256"
-                        },
-                        new
-                        {
-                            Id = 4001,
+                            Id = 40001,
                             FilterGroupId = 41,
                             Label = "32 inch",
                             Value = "size=32"
                         },
                         new
                         {
-                            Id = 4002,
+                            Id = 40002,
                             FilterGroupId = 41,
                             Label = "43 inch",
                             Value = "size=43"
                         },
                         new
                         {
-                            Id = 4003,
+                            Id = 40003,
                             FilterGroupId = 41,
                             Label = "55 inch",
                             Value = "size=55"
                         },
                         new
                         {
-                            Id = 4004,
+                            Id = 40004,
                             FilterGroupId = 41,
                             Label = "65 inch",
                             Value = "size=65"
                         },
                         new
                         {
-                            Id = 4005,
-                            FilterGroupId = 41,
-                            Label = "75 inch",
-                            Value = "size=75"
-                        },
-                        new
-                        {
-                            Id = 4011,
+                            Id = 40101,
                             FilterGroupId = 42,
                             Label = "Full HD",
-                            Value = "res=FHD"
+                            Value = "resolution=FHD"
                         },
                         new
                         {
-                            Id = 4012,
+                            Id = 40102,
                             FilterGroupId = 42,
                             Label = "4K",
-                            Value = "res=4K"
+                            Value = "resolution=4K"
                         },
                         new
                         {
-                            Id = 4013,
+                            Id = 40103,
                             FilterGroupId = 42,
                             Label = "8K",
-                            Value = "res=8K"
+                            Value = "resolution=8K"
                         },
                         new
                         {
-                            Id = 4021,
+                            Id = 40201,
                             FilterGroupId = 43,
                             Label = "OLED",
                             Value = "tech=OLED"
                         },
                         new
                         {
-                            Id = 4022,
+                            Id = 40202,
                             FilterGroupId = 43,
                             Label = "QLED",
                             Value = "tech=QLED"
                         },
                         new
                         {
-                            Id = 4023,
+                            Id = 40203,
                             FilterGroupId = 43,
                             Label = "MiniLED",
                             Value = "tech=MiniLED"
                         },
                         new
                         {
-                            Id = 5001,
+                            Id = 50001,
                             FilterGroupId = 51,
                             Label = "Bluetooth",
                             Value = "connect=bluetooth"
                         },
                         new
                         {
-                            Id = 5002,
+                            Id = 50002,
                             FilterGroupId = 51,
                             Label = "Có dây",
                             Value = "connect=wire"
                         },
                         new
                         {
-                            Id = 5011,
+                            Id = 50101,
                             FilterGroupId = 52,
                             Label = "Tai nghe",
                             Value = "type=headphone"
                         },
                         new
                         {
-                            Id = 5012,
+                            Id = 50102,
                             FilterGroupId = 52,
                             Label = "Loa",
                             Value = "type=speaker"
                         },
                         new
                         {
-                            Id = 6001,
+                            Id = 60001,
                             FilterGroupId = 61,
                             Label = "41 mm",
                             Value = "size=41"
                         },
                         new
                         {
-                            Id = 6002,
+                            Id = 60002,
                             FilterGroupId = 61,
                             Label = "45 mm",
                             Value = "size=45"
                         },
                         new
                         {
-                            Id = 6011,
+                            Id = 60101,
                             FilterGroupId = 62,
                             Label = "GPS",
                             Value = "feature=gps"
                         },
                         new
                         {
-                            Id = 6012,
+                            Id = 60102,
                             FilterGroupId = 62,
                             Label = "LTE",
                             Value = "feature=lte"
                         },
                         new
                         {
-                            Id = 6013,
+                            Id = 60103,
                             FilterGroupId = 62,
                             Label = "SpO2",
                             Value = "feature=spo2"
                         },
                         new
                         {
-                            Id = 6014,
+                            Id = 60104,
                             FilterGroupId = 62,
                             Label = "ECG",
                             Value = "feature=ecg"
                         },
                         new
                         {
-                            Id = 7001,
+                            Id = 70001,
                             FilterGroupId = 71,
                             Label = "Core i5",
                             Value = "cpu=i5"
                         },
                         new
                         {
-                            Id = 7002,
+                            Id = 70002,
                             FilterGroupId = 71,
                             Label = "Core i7",
                             Value = "cpu=i7"
                         },
                         new
                         {
-                            Id = 7011,
+                            Id = 70101,
                             FilterGroupId = 72,
                             Label = "GTX 1660",
                             Value = "gpu=1660"
                         },
                         new
                         {
-                            Id = 7012,
+                            Id = 70102,
                             FilterGroupId = 72,
                             Label = "RTX 2060",
                             Value = "gpu=2060"
                         },
                         new
                         {
-                            Id = 7021,
+                            Id = 70201,
                             FilterGroupId = 73,
                             Label = "8 GB",
                             Value = "ram=8"
                         },
                         new
                         {
-                            Id = 7022,
+                            Id = 70202,
                             FilterGroupId = 73,
                             Label = "16 GB",
                             Value = "ram=16"
                         },
                         new
                         {
-                            Id = 7031,
+                            Id = 70301,
                             FilterGroupId = 74,
                             Label = "24 inch",
                             Value = "size=24"
                         },
                         new
                         {
-                            Id = 7032,
+                            Id = 70302,
                             FilterGroupId = 74,
                             Label = "27 inch",
                             Value = "size=27"
                         },
                         new
                         {
-                            Id = 7033,
+                            Id = 70303,
                             FilterGroupId = 74,
                             Label = "32 inch",
                             Value = "size=32"
                         },
                         new
                         {
-                            Id = 8001,
+                            Id = 80001,
                             FilterGroupId = 81,
                             Label = "Nồi chiên",
                             Value = "type=airfryer"
                         },
                         new
                         {
-                            Id = 8002,
+                            Id = 80002,
                             FilterGroupId = 81,
                             Label = "Robot hút bụi",
                             Value = "type=robot"
                         },
                         new
                         {
-                            Id = 8003,
+                            Id = 80003,
                             FilterGroupId = 81,
                             Label = "Máy lọc nước",
                             Value = "type=water"
                         },
                         new
                         {
-                            Id = 8011,
+                            Id = 80101,
                             FilterGroupId = 82,
                             Label = "1500W",
                             Value = "power=1500"
                         },
                         new
                         {
-                            Id = 8012,
+                            Id = 80102,
                             FilterGroupId = 82,
                             Label = "2000W",
                             Value = "power=2000"
                         },
                         new
                         {
-                            Id = 9001,
+                            Id = 90001,
                             FilterGroupId = 91,
                             Label = "Cáp",
                             Value = "type=cable"
                         },
                         new
                         {
-                            Id = 9002,
+                            Id = 90002,
                             FilterGroupId = 91,
                             Label = "Sạc",
                             Value = "type=charger"
                         },
                         new
                         {
-                            Id = 9003,
+                            Id = 90003,
                             FilterGroupId = 91,
                             Label = "Ốp lưng",
                             Value = "type=case"
                         },
                         new
                         {
-                            Id = 9011,
+                            Id = 90004,
+                            FilterGroupId = 91,
+                            Label = "Tai nghe",
+                            Value = "type=headphone"
+                        },
+                        new
+                        {
+                            Id = 90101,
                             FilterGroupId = 92,
                             Label = "Lightning",
                             Value = "port=lightning"
                         },
                         new
                         {
-                            Id = 9012,
+                            Id = 90102,
                             FilterGroupId = 92,
                             Label = "USB-C",
                             Value = "port=usb-c"
                         },
                         new
                         {
-                            Id = 9013,
+                            Id = 90103,
                             FilterGroupId = 92,
                             Label = "Micro USB",
                             Value = "port=micro-usb"
                         },
                         new
                         {
-                            Id = 10001,
+                            Id = 90104,
+                            FilterGroupId = 92,
+                            Label = "HDMI",
+                            Value = "port=hdmi"
+                        },
+                        new
+                        {
+                            Id = 90105,
+                            FilterGroupId = 92,
+                            Label = "Thunderbolt",
+                            Value = "port=thunderbolt"
+                        },
+                        new
+                        {
+                            Id = 100001,
                             FilterGroupId = 101,
                             Label = "Router",
                             Value = "type=router"
                         },
                         new
                         {
-                            Id = 10002,
+                            Id = 100002,
                             FilterGroupId = 101,
                             Label = "Camera IP",
                             Value = "type=camera"
                         },
                         new
                         {
-                            Id = 10003,
+                            Id = 100003,
                             FilterGroupId = 101,
                             Label = "Repeater",
                             Value = "type=repeater"
                         },
                         new
                         {
-                            Id = 10011,
+                            Id = 100011,
                             FilterGroupId = 102,
                             Label = "WiFi 6",
                             Value = "feature=wifi6"
                         },
                         new
                         {
-                            Id = 10012,
+                            Id = 100012,
                             FilterGroupId = 102,
                             Label = "Theo dõi chuyển động",
                             Value = "feature=motion"
                         },
                         new
                         {
-                            Id = 10013,
+                            Id = 100013,
                             FilterGroupId = 102,
                             Label = "Lưu trữ đám mây",
                             Value = "feature=cloud"
+                        },
+                        new
+                        {
+                            Id = 100014,
+                            FilterGroupId = 102,
+                            Label = "AI nhận diện người",
+                            Value = "feature=ai"
+                        },
+                        new
+                        {
+                            Id = 100015,
+                            FilterGroupId = 102,
+                            Label = "Góc rộng 360°",
+                            Value = "feature=360"
                         });
                 });
 
@@ -1776,6 +1755,10 @@ namespace website_e_commerce.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OrderDate")
@@ -1940,300 +1923,700 @@ namespace website_e_commerce.Migrations
                             Id = 1,
                             BrandId = 1,
                             CategoryId = 1,
-                            Description = "Flagship cao cấp của Apple",
                             DiscountPercent = 12,
-                            ImageUrl = "/images/products/iphone15.jpg",
+                            ImageUrl = "/images/products/iphone15.png",
                             Name = "iPhone 15 Pro Max",
                             NewPrice = 34990000m,
                             OldPrice = 39990000m,
-                            Specifications = "Chip A17 Pro, RAM 8GB, 256GB",
-                            StockQuantity = 15,
-                            WebQuantity = 20
+                            Specifications = "ram=8;rom=256;cpu=apple;screen=6.7;camera=48;battery=4422;feature=5g;feature=fastcharge",
+                            StockQuantity = 20,
+                            WebQuantity = 10
                         },
                         new
                         {
                             Id = 2,
                             BrandId = 1,
-                            CategoryId = 2,
-                            Description = "Máy tính bảng cao cấp",
-                            DiscountPercent = 8,
-                            ImageUrl = "/images/products/ipadprom2.jpg",
-                            Name = "iPad Pro M2 12.9",
-                            NewPrice = 32990000m,
-                            OldPrice = 35990000m,
-                            Specifications = "Chip M2, 12.9 inch, 256GB",
-                            StockQuantity = 25,
-                            WebQuantity = 10
+                            CategoryId = 1,
+                            DiscountPercent = 12,
+                            ImageUrl = "/images/products/iphone15.jpg",
+                            Name = "iPhone 15",
+                            NewPrice = 21990000m,
+                            OldPrice = 24990000m,
+                            Specifications = "ram=6;rom=128;cpu=apple;screen=6.1;camera=48;battery=3500;feature=5g",
+                            StockQuantity = 30,
+                            WebQuantity = 15
                         },
                         new
                         {
                             Id = 3,
                             BrandId = 1,
-                            CategoryId = 3,
-                            Description = "Laptop mỏng nhẹ",
-                            DiscountPercent = 14,
-                            ImageUrl = "/images/products/macbookairm2.jpg",
-                            Name = "MacBook Air M2",
-                            NewPrice = 24990000m,
-                            OldPrice = 28990000m,
-                            Specifications = "Chip M2, RAM 8GB, SSD 256GB",
-                            StockQuantity = 7,
-                            WebQuantity = 15
+                            CategoryId = 1,
+                            DiscountPercent = 12,
+                            ImageUrl = "/images/products/ip14pm.jpg",
+                            Name = "iPhone 14 Pro Max",
+                            NewPrice = 28990000m,
+                            OldPrice = 32990000m,
+                            Specifications = "ram=6;rom=256;cpu=apple;screen=6.7;camera=48;battery=4323;feature=5g",
+                            StockQuantity = 20,
+                            WebQuantity = 10
                         },
                         new
                         {
                             Id = 4,
-                            BrandId = 4,
-                            CategoryId = 4,
-                            Description = "Màn hình đồ họa chuyên nghiệp",
-                            DiscountPercent = 13,
-                            ImageUrl = "/images/products/asusproart27.jpg",
-                            Name = "Màn hình Asus ProArt 27\"",
-                            NewPrice = 6990000m,
-                            OldPrice = 7990000m,
-                            Specifications = "27 inch, 4K UHD",
-                            StockQuantity = 15,
-                            WebQuantity = 10
+                            BrandId = 2,
+                            CategoryId = 1,
+                            DiscountPercent = 12,
+                            ImageUrl = "/images/products/s23u.jpg",
+                            Name = "Samsung Galaxy S23 Ultra",
+                            NewPrice = 28990000m,
+                            OldPrice = 32990000m,
+                            Specifications = "ram=12;rom=256;cpu=snapdragon;screen=6.8;camera=200;battery=5000;feature=fastcharge",
+                            StockQuantity = 25,
+                            WebQuantity = 14
                         },
                         new
                         {
                             Id = 5,
-                            BrandId = 3,
-                            CategoryId = 5,
-                            Description = "PC hiệu năng cao",
-                            DiscountPercent = 11,
-                            ImageUrl = "/images/products/dellxpsdesktop.jpg",
-                            Name = "Dell XPS Tower 8960",
-                            NewPrice = 23990000m,
-                            OldPrice = 26990000m,
-                            Specifications = "Core i9, RTX 4070",
-                            StockQuantity = 10,
-                            WebQuantity = 5
-                        },
-                        new
-                        {
-                            Id = 6,
-                            BrandId = 1,
-                            CategoryId = 6,
-                            Description = "Tai nghe chống ồn",
-                            DiscountPercent = 12,
-                            ImageUrl = "/images/products/airpodspro2.jpg",
-                            Name = "AirPods Pro 2",
-                            NewPrice = 6590000m,
-                            OldPrice = 7490000m,
-                            Specifications = "Chip H2, Bluetooth 5.3",
-                            StockQuantity = 20,
+                            BrandId = 2,
+                            CategoryId = 1,
+                            DiscountPercent = 10,
+                            ImageUrl = "/images/products/a54.jpg",
+                            Name = "Samsung Galaxy A54",
+                            NewPrice = 8990000m,
+                            OldPrice = 9990000m,
+                            Specifications = "ram=8;rom=128;cpu=mediatek;screen=6.4;camera=50;battery=5000",
+                            StockQuantity = 40,
                             WebQuantity = 20
                         },
                         new
                         {
-                            Id = 7,
-                            BrandId = 2,
-                            CategoryId = 7,
-                            Description = "Tivi QLED hiển thị 4K HDR",
-                            DiscountPercent = 15,
-                            ImageUrl = "/images/products/tiviqled65.jpg",
-                            Name = "Samsung QLED 65\"",
-                            NewPrice = 21990000m,
-                            OldPrice = 25990000m,
-                            Specifications = "Smart TV, 120Hz",
-                            StockQuantity = 15,
-                            WebQuantity = 8
-                        },
-                        new
-                        {
-                            Id = 8,
-                            BrandId = 1,
-                            CategoryId = 8,
-                            Description = "Đồng hồ thông minh",
-                            DiscountPercent = 8,
-                            ImageUrl = "/images/products/watchultra2.jpg",
-                            Name = "Apple Watch Ultra 2",
-                            NewPrice = 21990000m,
-                            OldPrice = 23990000m,
-                            Specifications = "Chip S9, 49mm",
-                            StockQuantity = 25,
-                            WebQuantity = 10
-                        },
-                        new
-                        {
-                            Id = 9,
-                            BrandId = 2,
-                            CategoryId = 9,
-                            Description = "Tủ lạnh tiết kiệm điện",
-                            DiscountPercent = 11,
-                            ImageUrl = "/images/products/fridge550l.jpg",
-                            Name = "Tủ lạnh Samsung 550L",
-                            NewPrice = 15990000m,
-                            OldPrice = 17990000m,
-                            Specifications = "Inverter, 2 cửa",
-                            StockQuantity = 6,
-                            WebQuantity = 6
-                        },
-                        new
-                        {
-                            Id = 10,
+                            Id = 6,
                             BrandId = 5,
-                            CategoryId = 10,
-                            Description = "Nấu ăn tiện lợi",
-                            DiscountPercent = 13,
-                            ImageUrl = "/images/products/airfryer.jpg",
-                            Name = "Nồi chiên không dầu Xiaomi",
-                            NewPrice = 2590000m,
-                            OldPrice = 2990000m,
-                            Specifications = "Công suất 1700W",
-                            StockQuantity = 40,
-                            WebQuantity = 15
-                        },
-                        new
-                        {
-                            Id = 11,
-                            BrandId = 4,
-                            CategoryId = 11,
-                            Description = "Loa di động chống nước",
-                            DiscountPercent = 14,
-                            ImageUrl = "/images/products/jblcharge5.jpg",
-                            Name = "Loa JBL Charge 5",
-                            NewPrice = 4290000m,
-                            OldPrice = 4990000m,
-                            Specifications = "Bluetooth 5.3, 20h pin",
-                            StockQuantity = 35,
-                            WebQuantity = 15
-                        },
-                        new
-                        {
-                            Id = 12,
-                            BrandId = 4,
-                            CategoryId = 12,
-                            Description = "Bàn phím gaming RGB",
-                            DiscountPercent = 14,
-                            ImageUrl = "/images/products/rogkeyboard.jpg",
-                            Name = "Bàn phím ROG Strix Flare II",
-                            NewPrice = 4290000m,
-                            OldPrice = 4990000m,
-                            Specifications = "Switch NX Red",
-                            StockQuantity = 20,
-                            WebQuantity = 10
-                        },
-                        new
-                        {
-                            Id = 13,
-                            BrandId = 5,
-                            CategoryId = 13,
-                            Description = "Bộ định tuyến Wi-Fi 6",
-                            DiscountPercent = 17,
-                            ImageUrl = "/images/products/tplinkax3000.jpg",
-                            Name = "Router TP-Link AX3000",
-                            NewPrice = 2490000m,
-                            OldPrice = 2990000m,
-                            Specifications = "Tốc độ 3Gbps",
-                            StockQuantity = 30,
-                            WebQuantity = 12
-                        },
-                        new
-                        {
-                            Id = 14,
-                            BrandId = 5,
-                            CategoryId = 14,
-                            Description = "Camera xoay 360°",
-                            DiscountPercent = 20,
-                            ImageUrl = "/images/products/xiaomicamera.jpg",
-                            Name = "Camera Xiaomi C400",
-                            NewPrice = 1190000m,
-                            OldPrice = 1490000m,
-                            Specifications = "Full HD, Hồng ngoại",
+                            CategoryId = 1,
+                            DiscountPercent = 16,
+                            ImageUrl = "/images/products/redmi13.jpg",
+                            Name = "Xiaomi Redmi Note 13 Pro",
+                            NewPrice = 7490000m,
+                            OldPrice = 8990000m,
+                            Specifications = "ram=8;rom=256;cpu=mediatek;screen=6.7;camera=200;battery=5100;feature=fastcharge",
                             StockQuantity = 50,
                             WebQuantity = 25
                         },
                         new
                         {
-                            Id = 15,
-                            BrandId = 2,
-                            CategoryId = 15,
-                            Description = "Tai nghe chống ồn",
+                            Id = 7,
+                            BrandId = 5,
+                            CategoryId = 1,
                             DiscountPercent = 12,
-                            ImageUrl = "/images/products/sonywh1000xm5.jpg",
-                            Name = "Tai nghe Sony WH-1000XM5",
-                            NewPrice = 8790000m,
-                            OldPrice = 9990000m,
-                            Specifications = "Bluetooth 5.3, pin 30h",
-                            StockQuantity = 25,
+                            ImageUrl = "/images/products/13tpro.jpg",
+                            Name = "Xiaomi 13T Pro",
+                            NewPrice = 13990000m,
+                            OldPrice = 15990000m,
+                            Specifications = "ram=12;rom=256;cpu=mediatek;screen=6.7;camera=108;battery=5000;feature=5g",
+                            StockQuantity = 35,
+                            WebQuantity = 18
+                        },
+                        new
+                        {
+                            Id = 8,
+                            BrandId = 6,
+                            CategoryId = 1,
+                            DiscountPercent = 15,
+                            ImageUrl = "/images/products/reno10.jpg",
+                            Name = "Oppo Reno 10",
+                            NewPrice = 10990000m,
+                            OldPrice = 12990000m,
+                            Specifications = "ram=8;rom=256;cpu=snapdragon;screen=6.7;camera=64;battery=4800",
+                            StockQuantity = 20,
                             WebQuantity = 10
                         },
                         new
                         {
-                            Id = 16,
-                            BrandId = 5,
-                            CategoryId = 16,
-                            Description = "Điều khiển qua app",
-                            DiscountPercent = 17,
-                            ImageUrl = "/images/products/smartplug.jpg",
-                            Name = "Ổ cắm thông minh Xiaomi",
-                            NewPrice = 490000m,
-                            OldPrice = 590000m,
-                            Specifications = "Hẹn giờ, đo điện năng",
-                            StockQuantity = 80,
-                            WebQuantity = 30
+                            Id = 9,
+                            BrandId = 6,
+                            CategoryId = 1,
+                            DiscountPercent = 15,
+                            ImageUrl = "/images/products/a77s.jpg",
+                            Name = "Oppo A77s",
+                            NewPrice = 5990000m,
+                            OldPrice = 6990000m,
+                            Specifications = "ram=8;rom=128;cpu=mediatek;screen=6.6;camera=50;battery=5000",
+                            StockQuantity = 40,
+                            WebQuantity = 18
                         },
                         new
                         {
-                            Id = 17,
-                            BrandId = 3,
-                            CategoryId = 17,
-                            Description = "Ép hoa quả giữ dưỡng chất",
+                            Id = 10,
+                            BrandId = 8,
+                            CategoryId = 1,
                             DiscountPercent = 12,
-                            ImageUrl = "/images/products/juicer.jpg",
-                            Name = "Máy ép chậm Panasonic",
-                            NewPrice = 4390000m,
-                            OldPrice = 4990000m,
-                            Specifications = "Công suất 150W",
+                            ImageUrl = "/images/products/xperia1v.jpg",
+                            Name = "Sony Xperia 1 V",
+                            NewPrice = 28990000m,
+                            OldPrice = 32990000m,
+                            Specifications = "ram=12;rom=256;cpu=snapdragon;screen=6.5;camera=52;battery=5000",
+                            StockQuantity = 10,
+                            WebQuantity = 5
+                        },
+                        new
+                        {
+                            Id = 11,
+                            BrandId = 2,
+                            CategoryId = 1,
+                            DiscountPercent = 12,
+                            ImageUrl = "/images/products/flip5.jpg",
+                            Name = "Samsung Galaxy Z Flip 5",
+                            NewPrice = 22990000m,
+                            OldPrice = 25990000m,
+                            Specifications = "ram=8;rom=256;cpu=snapdragon;screen=6.7;camera=50;battery=3700",
                             StockQuantity = 20,
                             WebQuantity = 8
                         },
                         new
                         {
-                            Id = 18,
-                            BrandId = 4,
-                            CategoryId = 18,
-                            Description = "Lọc nước RO 9 lõi",
-                            DiscountPercent = 12,
-                            ImageUrl = "/images/products/waterpurifier.jpg",
-                            Name = "Máy lọc nước Karofi",
-                            NewPrice = 6990000m,
-                            OldPrice = 7890000m,
-                            Specifications = "Công suất 20L/h",
-                            StockQuantity = 25,
+                            Id = 12,
+                            BrandId = 2,
+                            CategoryId = 1,
+                            DiscountPercent = 7,
+                            ImageUrl = "/images/products/fold5.jpg",
+                            Name = "Samsung Galaxy Z Fold 5",
+                            NewPrice = 37990000m,
+                            OldPrice = 40990000m,
+                            Specifications = "ram=12;rom=512;cpu=snapdragon;screen=7.6;camera=50;battery=4400",
+                            StockQuantity = 15,
+                            WebQuantity = 5
+                        },
+                        new
+                        {
+                            Id = 13,
+                            BrandId = 1,
+                            CategoryId = 2,
+                            DiscountPercent = 8,
+                            ImageUrl = "/images/products/ipadpro11.jpg",
+                            Name = "iPad Pro M2 11",
+                            NewPrice = 22990000m,
+                            OldPrice = 24990000m,
+                            Specifications = "ram=8;rom=256;screen=11;cpu=apple",
+                            StockQuantity = 15,
                             WebQuantity = 10
                         },
                         new
                         {
+                            Id = 14,
+                            BrandId = 1,
+                            CategoryId = 2,
+                            DiscountPercent = 8,
+                            ImageUrl = "/images/products/ipad10.jpg",
+                            Name = "iPad Gen 10",
+                            NewPrice = 9990000m,
+                            OldPrice = 10990000m,
+                            Specifications = "ram=4;rom=64;screen=10;cpu=apple",
+                            StockQuantity = 20,
+                            WebQuantity = 12
+                        },
+                        new
+                        {
+                            Id = 15,
+                            BrandId = 2,
+                            CategoryId = 2,
+                            DiscountPercent = 10,
+                            ImageUrl = "/images/products/tabs9.jpg",
+                            Name = "Samsung Tab S9",
+                            NewPrice = 18990000m,
+                            OldPrice = 20990000m,
+                            Specifications = "ram=8;rom=256;screen=11;cpu=snapdragon",
+                            StockQuantity = 18,
+                            WebQuantity = 10
+                        },
+                        new
+                        {
+                            Id = 16,
+                            BrandId = 2,
+                            CategoryId = 2,
+                            DiscountPercent = 8,
+                            ImageUrl = "/images/products/s9fe.jpg",
+                            Name = "Samsung Tab S9 FE",
+                            NewPrice = 11990000m,
+                            OldPrice = 12990000m,
+                            Specifications = "ram=6;rom=128;screen=10.9;cpu=exynos",
+                            StockQuantity = 22,
+                            WebQuantity = 12
+                        },
+                        new
+                        {
+                            Id = 17,
+                            BrandId = 5,
+                            CategoryId = 2,
+                            DiscountPercent = 10,
+                            ImageUrl = "/images/products/pad6.jpg",
+                            Name = "Xiaomi Pad 6",
+                            NewPrice = 7990000m,
+                            OldPrice = 8990000m,
+                            Specifications = "ram=8;rom=256;screen=11;cpu=snapdragon",
+                            StockQuantity = 25,
+                            WebQuantity = 15
+                        },
+                        new
+                        {
+                            Id = 18,
+                            BrandId = 9,
+                            CategoryId = 2,
+                            DiscountPercent = 10,
+                            ImageUrl = "/images/products/m10.jpg",
+                            Name = "Lenovo Tab M10",
+                            NewPrice = 4990000m,
+                            OldPrice = 5990000m,
+                            Specifications = "ram=4;rom=64;screen=10;cpu=mediatek",
+                            StockQuantity = 30,
+                            WebQuantity = 20
+                        },
+                        new
+                        {
                             Id = 19,
+                            BrandId = 1,
+                            CategoryId = 3,
+                            DiscountPercent = 10,
+                            ImageUrl = "/images/products/macairm2.jpg",
+                            Name = "MacBook Air M2",
+                            NewPrice = 25990000m,
+                            OldPrice = 28990000m,
+                            Specifications = "cpu=i5;gpu=integrated;ram=8;ssd=256;screen=13;need=office",
+                            StockQuantity = 15,
+                            WebQuantity = 10
+                        },
+                        new
+                        {
+                            Id = 20,
+                            BrandId = 1,
+                            CategoryId = 3,
+                            DiscountPercent = 8,
+                            ImageUrl = "/images/products/macprom2.jpg",
+                            Name = "MacBook Pro M2",
+                            NewPrice = 32990000m,
+                            OldPrice = 35990000m,
+                            Specifications = "cpu=i7;gpu=integrated;ram=16;ssd=512;screen=14;need=design",
+                            StockQuantity = 10,
+                            WebQuantity = 5
+                        },
+                        new
+                        {
+                            Id = 21,
+                            BrandId = 4,
+                            CategoryId = 3,
+                            DiscountPercent = 9,
+                            ImageUrl = "/images/products/tuf15.jpg",
+                            Name = "Asus TUF Gaming F15",
+                            NewPrice = 19990000m,
+                            OldPrice = 21990000m,
+                            Specifications = "cpu=i7;gpu=4060;ram=16;ssd=512;screen=15;need=gaming",
+                            StockQuantity = 20,
+                            WebQuantity = 10
+                        },
+                        new
+                        {
+                            Id = 22,
+                            BrandId = 3,
+                            CategoryId = 3,
+                            DiscountPercent = 8,
+                            ImageUrl = "/images/products/xps13.jpg",
+                            Name = "Dell XPS 13 Plus",
+                            NewPrice = 34990000m,
+                            OldPrice = 37990000m,
+                            Specifications = "cpu=i7;gpu=integrated;ram=16;ssd=512;screen=13;need=design",
+                            StockQuantity = 8,
+                            WebQuantity = 5
+                        },
+                        new
+                        {
+                            Id = 23,
+                            BrandId = 10,
+                            CategoryId = 3,
+                            DiscountPercent = 13,
+                            ImageUrl = "/images/products/victus16.jpg",
+                            Name = "HP Victus 16",
+                            NewPrice = 19990000m,
+                            OldPrice = 22990000m,
+                            Specifications = "cpu=i5;gpu=3050;ram=16;ssd=512;screen=16;need=gaming",
+                            StockQuantity = 16,
+                            WebQuantity = 10
+                        },
+                        new
+                        {
+                            Id = 24,
+                            BrandId = 9,
+                            CategoryId = 3,
+                            DiscountPercent = 11,
+                            ImageUrl = "/images/products/legion5.jpg",
+                            Name = "Lenovo Legion 5",
+                            NewPrice = 24990000m,
+                            OldPrice = 27990000m,
+                            Specifications = "cpu=i7;gpu=4060;ram=16;ssd=512;screen=15;need=gaming",
+                            StockQuantity = 14,
+                            WebQuantity = 8
+                        },
+                        new
+                        {
+                            Id = 25,
+                            BrandId = 4,
+                            CategoryId = 3,
+                            DiscountPercent = 7,
+                            ImageUrl = "/images/products/vivobook14.jpg",
+                            Name = "Asus Vivobook 14",
+                            NewPrice = 11990000m,
+                            OldPrice = 12990000m,
+                            Specifications = "cpu=i5;gpu=integrated;ram=8;ssd=256;screen=14;need=office",
+                            StockQuantity = 35,
+                            WebQuantity = 20
+                        },
+                        new
+                        {
+                            Id = 26,
+                            BrandId = 3,
+                            CategoryId = 3,
+                            DiscountPercent = 10,
+                            ImageUrl = "/images/products/inspiron15.jpg",
+                            Name = "Dell Inspiron 15",
+                            NewPrice = 12990000m,
+                            OldPrice = 14990000m,
+                            Specifications = "cpu=i3;gpu=integrated;ram=8;ssd=256;screen=15;need=office",
+                            StockQuantity = 20,
+                            WebQuantity = 12
+                        },
+                        new
+                        {
+                            Id = 27,
+                            BrandId = 2,
+                            CategoryId = 7,
+                            DiscountPercent = 20,
+                            ImageUrl = "/images/products/qled55.jpg",
+                            Name = "Samsung QLED 55",
+                            NewPrice = 15990000m,
+                            OldPrice = 19990000m,
+                            Specifications = "size=55;resolution=4K;tech=QLED",
+                            StockQuantity = 20,
+                            WebQuantity = 12
+                        },
+                        new
+                        {
+                            Id = 28,
+                            BrandId = 7,
+                            CategoryId = 7,
+                            DiscountPercent = 14,
+                            ImageUrl = "/images/products/oled65.jpg",
+                            Name = "LG OLED 65",
+                            NewPrice = 30990000m,
+                            OldPrice = 35990000m,
+                            Specifications = "size=65;resolution=4K;tech=OLED",
+                            StockQuantity = 10,
+                            WebQuantity = 6
+                        },
+                        new
+                        {
+                            Id = 29,
+                            BrandId = 8,
+                            CategoryId = 7,
+                            DiscountPercent = 10,
+                            ImageUrl = "/images/products/bravia43.jpg",
+                            Name = "Sony Bravia 43",
+                            NewPrice = 9990000m,
+                            OldPrice = 11990000m,
+                            Specifications = "size=43;resolution=4K;tech=LED",
+                            StockQuantity = 18,
+                            WebQuantity = 12
+                        },
+                        new
+                        {
+                            Id = 30,
+                            BrandId = 9,
+                            CategoryId = 7,
+                            DiscountPercent = 13,
+                            ImageUrl = "/images/products/tcl55.jpg",
+                            Name = "TCL QLED 55C755",
+                            NewPrice = 12990000m,
+                            OldPrice = 14990000m,
+                            Specifications = "size=55;resolution=4K;tech=QLED",
+                            StockQuantity = 25,
+                            WebQuantity = 15
+                        },
+                        new
+                        {
+                            Id = 31,
+                            BrandId = 2,
+                            CategoryId = 7,
+                            DiscountPercent = 10,
+                            ImageUrl = "/images/products/crystal65.jpg",
+                            Name = "Samsung Crystal 65",
+                            NewPrice = 16990000m,
+                            OldPrice = 18990000m,
+                            Specifications = "size=65;resolution=4K;tech=LED",
+                            StockQuantity = 20,
+                            WebQuantity = 14
+                        },
+                        new
+                        {
+                            Id = 32,
+                            BrandId = 7,
+                            CategoryId = 7,
+                            DiscountPercent = 14,
+                            ImageUrl = "/images/products/nanocell50.jpg",
+                            Name = "LG NanoCell 50",
+                            NewPrice = 11990000m,
+                            OldPrice = 13990000m,
+                            Specifications = "size=50;resolution=4K;tech=NanoCell",
+                            StockQuantity = 16,
+                            WebQuantity = 10
+                        },
+                        new
+                        {
+                            Id = 33,
+                            BrandId = 8,
+                            CategoryId = 15,
+                            DiscountPercent = 12,
+                            ImageUrl = "/images/products/sonyxm5.jpg",
+                            Name = "Sony WH-1000XM5",
+                            NewPrice = 8790000m,
+                            OldPrice = 9990000m,
+                            Specifications = "connect=bluetooth;type=headphone",
+                            StockQuantity = 20,
+                            WebQuantity = 10
+                        },
+                        new
+                        {
+                            Id = 34,
+                            BrandId = 8,
+                            CategoryId = 15,
+                            DiscountPercent = 10,
+                            ImageUrl = "/images/products/wf1000xm5.jpg",
+                            Name = "Sony WF-1000XM5",
+                            NewPrice = 6290000m,
+                            OldPrice = 6990000m,
+                            Specifications = "connect=bluetooth;type=headphone",
+                            StockQuantity = 25,
+                            WebQuantity = 12
+                        },
+                        new
+                        {
+                            Id = 35,
+                            BrandId = 4,
+                            CategoryId = 11,
+                            DiscountPercent = 14,
+                            ImageUrl = "/images/products/jblcharge5.jpg",
+                            Name = "JBL Charge 5",
+                            NewPrice = 4290000m,
+                            OldPrice = 4990000m,
+                            Specifications = "connect=bluetooth;type=speaker",
+                            StockQuantity = 30,
+                            WebQuantity = 15
+                        },
+                        new
+                        {
+                            Id = 36,
+                            BrandId = 4,
+                            CategoryId = 11,
+                            DiscountPercent = 14,
+                            ImageUrl = "/images/products/partybox110.jpg",
+                            Name = "JBL PartyBox 110",
+                            NewPrice = 11990000m,
+                            OldPrice = 13990000m,
+                            Specifications = "connect=bluetooth;type=speaker",
+                            StockQuantity = 15,
+                            WebQuantity = 10
+                        },
+                        new
+                        {
+                            Id = 37,
+                            BrandId = 5,
+                            CategoryId = 14,
+                            DiscountPercent = 20,
+                            ImageUrl = "/images/products/c400.jpg",
+                            Name = "Camera Xiaomi C400",
+                            NewPrice = 1190000m,
+                            OldPrice = 1490000m,
+                            Specifications = "type=camera;feature=motion;feature=360",
+                            StockQuantity = 40,
+                            WebQuantity = 20
+                        },
+                        new
+                        {
+                            Id = 38,
+                            BrandId = 5,
+                            CategoryId = 14,
+                            DiscountPercent = 14,
+                            ImageUrl = "/images/products/c6n.jpg",
+                            Name = "Ezviz C6N",
+                            NewPrice = 599000m,
+                            OldPrice = 699000m,
+                            Specifications = "type=camera;feature=motion;feature=nightvision",
+                            StockQuantity = 50,
+                            WebQuantity = 30
+                        },
+                        new
+                        {
+                            Id = 39,
+                            BrandId = 5,
+                            CategoryId = 13,
+                            DiscountPercent = 13,
+                            ImageUrl = "/images/products/ax3000.jpg",
+                            Name = "Router TP-Link AX3000",
+                            NewPrice = 2590000m,
+                            OldPrice = 2990000m,
+                            Specifications = "type=router;feature=wifi6",
+                            StockQuantity = 30,
+                            WebQuantity = 15
+                        },
+                        new
+                        {
+                            Id = 40,
+                            BrandId = 4,
+                            CategoryId = 13,
+                            DiscountPercent = 8,
+                            ImageUrl = "/images/products/rtax86u.jpg",
+                            Name = "Router Asus RT-AX86U",
+                            NewPrice = 5490000m,
+                            OldPrice = 5990000m,
+                            Specifications = "type=router;feature=wifi6",
+                            StockQuantity = 20,
+                            WebQuantity = 12
+                        },
+                        new
+                        {
+                            Id = 41,
+                            BrandId = 5,
+                            CategoryId = 20,
+                            DiscountPercent = 15,
+                            ImageUrl = "/images/products/xs12.jpg",
+                            Name = "Robot hút bụi Xiaomi S12",
+                            NewPrice = 8490000m,
+                            OldPrice = 9990000m,
+                            Specifications = "type=robot;power=2000",
+                            StockQuantity = 20,
+                            WebQuantity = 10
+                        },
+                        new
+                        {
+                            Id = 42,
+                            BrandId = 5,
+                            CategoryId = 20,
+                            DiscountPercent = 12,
+                            ImageUrl = "/images/products/robos7.jpg",
+                            Name = "Robot hút bụi Roborock S7",
+                            NewPrice = 13990000m,
+                            OldPrice = 15990000m,
+                            Specifications = "type=robot;power=2500",
+                            StockQuantity = 15,
+                            WebQuantity = 10
+                        },
+                        new
+                        {
+                            Id = 43,
+                            BrandId = 9,
+                            CategoryId = 10,
+                            DiscountPercent = 20,
+                            ImageUrl = "/images/products/noichien.jpg",
+                            Name = "Nồi chiên không dầu Kangaroo KG55AF1",
+                            NewPrice = 1590000m,
+                            OldPrice = 1990000m,
+                            Specifications = "type=airfryer;power=1500",
+                            StockQuantity = 60,
+                            WebQuantity = 30
+                        },
+                        new
+                        {
+                            Id = 44,
+                            BrandId = 4,
+                            CategoryId = 18,
+                            DiscountPercent = 12,
+                            ImageUrl = "/images/products/karofi.jpg",
+                            Name = "Máy lọc nước Karofi 9 lõi",
+                            NewPrice = 6990000m,
+                            OldPrice = 7990000m,
+                            Specifications = "type=water;power=200",
+                            StockQuantity = 25,
+                            WebQuantity = 12
+                        },
+                        new
+                        {
+                            Id = 45,
                             BrandId = 2,
                             CategoryId = 19,
-                            Description = "Giặt tiết kiệm điện",
                             DiscountPercent = 13,
-                            ImageUrl = "/images/products/washingmachine.jpg",
-                            Name = "Máy giặt LG 10.5Kg",
+                            ImageUrl = "/images/products/lg105.jpg",
+                            Name = "Máy giặt LG AI DD 10.5kg",
                             NewPrice = 9590000m,
                             OldPrice = 10990000m,
-                            Specifications = "AI DD, TurboWash",
+                            Specifications = "type=washer;power=2000",
                             StockQuantity = 18,
                             WebQuantity = 7
                         },
                         new
                         {
-                            Id = 20,
-                            BrandId = 5,
-                            CategoryId = 20,
-                            Description = "Robot hút bụi thông minh",
-                            DiscountPercent = 15,
-                            ImageUrl = "/images/products/xiaomirobot.jpg",
-                            Name = "Robot hút bụi Xiaomi S12",
-                            NewPrice = 8490000m,
+                            Id = 46,
+                            BrandId = 2,
+                            CategoryId = 19,
+                            DiscountPercent = 10,
+                            ImageUrl = "/images/products/lgsay.jpg",
+                            Name = "Máy sấy LG Dual Inverter 9kg",
+                            NewPrice = 8990000m,
                             OldPrice = 9990000m,
-                            Specifications = "Laser, tự động sạc",
-                            StockQuantity = 25,
-                            WebQuantity = 10
+                            Specifications = "type=dryer;power=1800",
+                            StockQuantity = 15,
+                            WebQuantity = 8
+                        },
+                        new
+                        {
+                            Id = 47,
+                            BrandId = 1,
+                            CategoryId = 8,
+                            DiscountPercent = 12,
+                            ImageUrl = "/images/products/watchs9.jpg",
+                            Name = "Apple Watch Series 9",
+                            NewPrice = 11490000m,
+                            OldPrice = 12990000m,
+                            Specifications = "size=45;feature=gps;feature=ecg",
+                            StockQuantity = 30,
+                            WebQuantity = 20
+                        },
+                        new
+                        {
+                            Id = 48,
+                            BrandId = 1,
+                            CategoryId = 8,
+                            DiscountPercent = 11,
+                            ImageUrl = "/images/products/watchse.jpg",
+                            Name = "Apple Watch SE 2023",
+                            NewPrice = 7990000m,
+                            OldPrice = 8990000m,
+                            Specifications = "size=41;feature=gps",
+                            StockQuantity = 35,
+                            WebQuantity = 15
+                        },
+                        new
+                        {
+                            Id = 49,
+                            BrandId = 2,
+                            CategoryId = 8,
+                            DiscountPercent = 11,
+                            ImageUrl = "/images/products/watch6.jpg",
+                            Name = "Samsung Galaxy Watch 6",
+                            NewPrice = 7990000m,
+                            OldPrice = 8990000m,
+                            Specifications = "size=41;feature=spo2;feature=gps",
+                            StockQuantity = 30,
+                            WebQuantity = 20
+                        },
+                        new
+                        {
+                            Id = 50,
+                            BrandId = 5,
+                            CategoryId = 8,
+                            DiscountPercent = 20,
+                            ImageUrl = "/images/products/watchs1.jpg",
+                            Name = "Xiaomi Watch S1 Active",
+                            NewPrice = 3990000m,
+                            OldPrice = 4990000m,
+                            Specifications = "size=45;feature=gps",
+                            StockQuantity = 40,
+                            WebQuantity = 20
                         });
                 });
 

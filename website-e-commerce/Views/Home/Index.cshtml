@@ -19,118 +19,6 @@
 }
 
 
-<style>
-    .flash-title {
-        font-size: 26px;
-        font-weight: 800;
-        color: #ff4500;
-        text-transform: uppercase;
-        margin-bottom: 10px;
-    }
-
-    .flash-slots {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-
-    .flash-slot {
-        min-width: 90px;
-        padding: 10px 14px;
-        border: 1px solid #ffd0b3;
-        border-radius: 999px;
-        cursor: pointer;
-        background: #fff5ee;
-        transition: 0.25s;
-        text-align: center;
-        font-size: 13px;
-    }
-
-        .flash-slot:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-        }
-
-        .flash-slot.active {
-            border-color: #ff5722;
-            background: #ffe1d5;
-        }
-
-    .slot-hour {
-        font-weight: 700;
-        font-size: 15px;
-    }
-
-    .slot-status {
-        font-size: 12px;
-    }
-
-    .flash-img {
-        width: 100%;
-        height: 150px;
-        object-fit: contain;
-    }
-
-    .flash-card {
-        padding: 10px;
-        background: #ffffff;
-        border-radius: 16px;
-        transition: 0.3s;
-        min-height: 270px;
-    }
-
-        .flash-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
-        }
-
-    .flash-name {
-        font-size: 14px;
-        min-height: 36px;
-        margin-top: 8px;
-        margin-bottom: 4px;
-    }
-
-    .flash-price {
-        color: #d32f2f;
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    .flash-progress {
-        width: 100%;
-        background: #ffe5e5;
-        border-radius: 10px;
-        margin-top: 6px;
-        overflow: hidden;
-    }
-
-    .flash-progress-bar {
-        background: #ff0000;
-        padding: 3px 0;
-        color: white;
-        font-size: 11px;
-        border-radius: 10px;
-        text-align: center;
-        white-space: nowrap;
-    }
-
-    .flash-countdown {
-        font-size: 14px;
-        font-weight: bold;
-        color: #e53935;
-        text-align: center;
-        margin-top: 6px;
-    }
-
-    @@media (max-width: 768px) {
-        .flash-card {
-            min-height: 260px;
-        }
-    }
-</style>
-
-
 @if (User.IsInRole(SD.Role_Admin)
 || User.IsInRole(SD.Role_StockManager)
 || User.IsInRole(SD.Role_Employee))
@@ -329,179 +217,160 @@ else
             </h3>
 
             <div class="category-list">
-                <!-- 1 -->
-                <a href="/Product/Category?name=Điện thoại" class="category-item text-center">
+                <a href="/Product/Index?categoryId=1" class="category-item text-center">
                     <img src="~/images/category/icon4-category.png" alt="Điện thoại">
                     <p>Điện thoại</p>
                 </a>
 
-                <!-- 2 -->
-                <a href="/Product/Category?name=Tablet" class="category-item text-center">
+                <a href="/Product/Index?categoryId=2" class="category-item text-center">
                     <img src="~/images/category/icon5-category.png" alt="Tablet">
                     <p>Máy tính bảng</p>
                 </a>
 
-                <!-- 3 -->
-                <a href="/Product/Category?name=Laptop" class="category-item text-center">
+                <a href="/Product/Index?categoryId=3" class="category-item text-center">
                     <img src="~/images/category/icon1-category.png" alt="Laptop">
                     <p>Laptop</p>
                 </a>
 
-                <!-- 4 -->
-                <a href="/Product/Category?name=Màn hình" class="category-item text-center">
+                <a href="/Product/Index?categoryId=4" class="category-item text-center">
                     <img src="~/images/category/icon3-category.png" alt="Màn hình">
                     <p>Màn hình</p>
                 </a>
 
-                <!-- 5 -->
-                <a href="/Product/Category?name=PC - Máy tính để bàn" class="category-item text-center">
+                <a href="/Product/Index?categoryId=5" class="category-item text-center">
                     <img src="~/images/category/icon2-category.png" alt="PC">
                     <p>PC - Máy tính để bàn</p>
                 </a>
 
-                <!-- 6 -->
-                <a href="/Product/Category?name=Phụ kiện" class="category-item text-center">
+                <a href="/Product/Index?categoryId=6" class="category-item text-center">
                     <img src="~/images/category/icon18-product.png" alt="Phụ kiện">
                     <p>Phụ kiện</p>
                 </a>
 
-                <!-- 7 -->
-                <a href="/Product/Category?name=Tivi" class="category-item text-center">
+                <a href="/Product/Index?categoryId=7" class="category-item text-center">
                     <img src="~/images/category/icon6-category.png" alt="Tivi">
                     <p>Tivi</p>
                 </a>
 
-                <!-- 8 -->
-                <a href="/Product/Category?name=Đồng hồ" class="category-item text-center">
+                <a href="/Product/Index?categoryId=8" class="category-item text-center">
                     <img src="~/images/category/icon7-category.png" alt="Đồng hồ">
                     <p>Đồng hồ</p>
                 </a>
 
-                <!-- 9 -->
-                <a href="/Product/Category?name=Điện tử, điện lạnh" class="category-item text-center">
-                    <img src="~/images/category/icon8-category.png" alt="Điện tử, điện lạnh">
+                <a href="/Product/Index?categoryId=9" class="category-item text-center">
+                    <img src="~/images/category/icon8-category.png" alt="Điện tử - điện lạnh">
                     <p>Điện tử, điện lạnh</p>
                 </a>
 
-                <!-- 10 -->
-                <a href="/Product/Category?name=Gia dụng" class="category-item text-center">
+                <a href="/Product/Index?categoryId=10" class="category-item text-center">
                     <img src="~/images/category/icon9-category.png" alt="Gia dụng">
                     <p>Gia dụng</p>
                 </a>
 
-                <!-- 11 -->
-                <a href="/Product/Category?name=Kết nối và giải trí" class="category-item text-center">
+                <a href="/Product/Index?categoryId=11" class="category-item text-center">
                     <img src="~/images/category/icon10-category.png" alt="Kết nối và giải trí">
                     <p>Kết nối & giải trí</p>
                 </a>
 
-                <!-- 12 -->
-                <a href="/Product/Category?name=Gaming Gear" class="category-item text-center">
+                <a href="/Product/Index?categoryId=12" class="category-item text-center">
                     <img src="~/images/category/icon11-category.png" alt="Gaming Gear">
                     <p>Gaming Gear</p>
                 </a>
 
-                <!-- 13 -->
-                <a href="/Product/Category?name=Thiết bị mạng" class="category-item text-center">
+                <a href="/Product/Index?categoryId=13" class="category-item text-center">
                     <img src="~/images/category/icon12-category.png" alt="Thiết bị mạng">
                     <p>Thiết bị mạng</p>
                 </a>
 
-                <!-- 14 -->
-                <a href="/Product/Category?name=Camera" class="category-item text-center">
+                <a href="/Product/Index?categoryId=14" class="category-item text-center">
                     <img src="~/images/category/icon13-category.png" alt="Camera">
                     <p>Camera</p>
                 </a>
 
-                <!-- 15 -->
-                <a href="/Product/Category?name=Âm thanh" class="category-item text-center">
+                <a href="/Product/Index?categoryId=15" class="category-item text-center">
                     <img src="~/images/category/icon14-category.png" alt="Âm thanh">
                     <p>Âm thanh</p>
                 </a>
 
-                <!-- 16 -->
-                <a href="/Product/Category?name=Thiết bị nhà thông minh" class="category-item text-center">
-                    <img src="~/images/category/icon15-category.png" alt="Thiết bị nhà thông minh">
+                <a href="/Product/Index?categoryId=16" class="category-item text-center">
+                    <img src="~/images/category/icon15-category.png" alt="Nhà thông minh">
                     <p>Nhà thông minh</p>
                 </a>
 
-                <!-- 17 -->
-                <a href="/Product/Category?name=Thiết bị bếp" class="category-item text-center">
+                <a href="/Product/Index?categoryId=17" class="category-item text-center">
                     <img src="~/images/category/icon16-category.png" alt="Thiết bị bếp">
                     <p>Thiết bị bếp</p>
                 </a>
 
-                <!-- 18 -->
-                <a href="/Product/Category?name=Máy lọc nước" class="category-item text-center">
+                <a href="/Product/Index?categoryId=18" class="category-item text-center">
                     <img src="~/images/category/icon17-category.png" alt="Máy lọc nước">
                     <p>Máy lọc nước</p>
                 </a>
 
-                <!-- 19 -->
-                <a href="/Product/Category?name=Máy giặt" class="category-item text-center">
+                <a href="/Product/Index?categoryId=19" class="category-item text-center">
                     <img src="~/images/category/icon19-product.png" alt="Máy giặt">
                     <p>Máy giặt</p>
                 </a>
 
-                <!-- 20 -->
-                <a href="/Product/Category?name=Robot" class="category-item text-center">
+                <a href="/Product/Index?categoryId=20" class="category-item text-center">
                     <img src="~/images/category/icon20-category.png" alt="Robot">
                     <p>Robot hút bụi</p>
                 </a>
+
             </div>
+
         </div>
     </section>
 
-    <section class="flash-sale mt-5 mb-5">
+    <section class="section-product-flashsale mb-5 mt-5">
         <div class="container">
-
-            <h3 class="flash-title">
-                <i class="fa-solid fa-bolt text-warning"></i>
-                FLASH SALE GIỜ VÀNG
+            <h3 class="title-index">
+                <span class="title-name">Flash Sale Ưu Đãi Lớn</span>
             </h3>
 
-            @* Nếu không có Flash Sale nào *@
-            @if (!flashSales.Any())
+            <!-- SLOT THỜI GIAN -->
+            @if (slots.Any())
             {
-                <div class="alert alert-warning mt-3 mb-0">
-                    Chưa có Flash Sale
+                <div class="flash-slots mt-3">
+                    @foreach (var startTime in slots)
+                    {
+                        var fsSlot = flashSales.FirstOrDefault(x => x.StartTime == startTime);
+
+                        bool isCurrent = fsSlot != null &&
+                        DateTime.Now >= fsSlot.StartTime &&
+                        DateTime.Now <= fsSlot.EndTime;
+
+                        var startKey = startTime.ToString("yyyy-MM-ddTHH:mm");
+
+                        <div class="flash-slot @(isCurrent ? "active" : "")" data-start="@startKey">
+                            <div class="slot-hour">@startTime.ToString("HH:mm")</div>
+                            <div class="slot-status">
+                                @(isCurrent ? "Đang diễn ra" : "Sắp diễn ra")
+                            </div>
+                        </div>
+                    }
                 </div>
             }
-            else
-            {
-                @* Các khung giờ *@
-                @if (slots.Any())
-                {
-                    <div class="flash-slots mt-3">
-                        @foreach (var startTime in slots)
-                        {
-                            bool isCurrent = DateTime.Now >= startTime && DateTime.Now <= startTime.AddHours(2);
-                            var startKey = startTime.ToString("yyyy-MM-ddTHH:mm"); // key dùng chung cho slot & item
 
-                            <div class="flash-slot @(isCurrent ? "active" : "")"
-                                 data-start="@startKey">
-                                <div class="slot-hour">@startTime.ToString("HH:mm")</div>
-                                <div class="slot-status @(isCurrent ? "text-danger" : "text-muted")">
-                                    @(isCurrent ? "Đang diễn ra" : "Sắp diễn ra")
-                                </div>
-                            </div>
-                        }
-                    </div>
-                }
+            <!-- SWIPER -->
+            <div class="swiper flash-swiper mt-4">
+                <div class="swiper-wrapper">
 
-                @* Slider sản phẩm *@
-                <div class="swiper flash-swiper mt-4">
-                    <div class="swiper-wrapper">
+                    @foreach (var fs in flashSales)
+                    {
+                        var itemKey = fs.StartTime.ToString("yyyy-MM-ddTHH:mm");
+                        int percent = fs.FlashQuantity > 0
+                        ? (int)Math.Round((double)fs.SoldQuantity / fs.FlashQuantity * 100)
+                        : 0;
+                        if (percent > 100) percent = 100;
 
-                        @foreach (var fs in flashSales)
-                        {
-                            var itemStartKey = fs.StartTime.ToString("yyyy-MM-ddTHH:mm");
+                        <div class="swiper-slide flash-item" data-start="@itemKey">
+                            <a href="/Product/Details/@fs.Product.Id" class="flash-link">
 
-                            <div class="swiper-slide flash-item"
-                                 data-start="@itemStartKey">
-
-                                <div class="flash-card shadow">
-                                    <img src="@fs.Product.ImageUrl" class="flash-img" alt="@fs.Product.Name" />
+                                <div class="flash-card">
+                                    <div class="flash-img-wrap">
+                                        <img src="@fs.Product.ImageUrl" class="flash-img" alt="@fs.Product.Name" />
+                                    </div>
 
                                     <h5 class="flash-name">@fs.Product.Name</h5>
 
@@ -509,17 +378,8 @@ else
                                         @fs.FlashPrice.ToString("N0") đ
                                     </div>
 
-                                    @{
-                                        int percent = 0;
-                                        if (fs.FlashQuantity > 0)
-                                        {
-                                            percent = (int)Math.Round((double)fs.SoldQuantity / fs.FlashQuantity * 100);
-                                        }
-                                        if (percent > 100) percent = 100;
-                                    }
-
                                     <div class="flash-progress">
-                                        <div class="flash-progress-bar" style="width:@percent%">
+                                        <div class="flash-progress-bar">
                                             @percent% đã bán
                                         </div>
                                     </div>
@@ -529,17 +389,159 @@ else
                                         00:00:00
                                     </div>
                                 </div>
-                            </div>
-                        }
-                    </div>
 
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
+                            </a>
+                        </div>
+                    }
+
                 </div>
-            }
+
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+
         </div>
     </section>
+
 }
+
+<style>
+    .flash-slots {
+        display: flex;
+        gap: 15px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+    }
+
+    .flash-slot {
+        padding: 10px 18px;
+        border-radius: 8px;
+        background: #f8f8f8;
+        text-align: center;
+        cursor: pointer;
+        transition: .3s;
+        border: 2px solid transparent;
+    }
+
+        .flash-slot:hover {
+            transform: translateY(-3px);
+            border-color: #ff5722;
+        }
+
+        .flash-slot.active {
+            background: #ffdecf;
+            border-color: #ff5722;
+        }
+
+    .slot-hour {
+        font-size: 20px;
+        font-weight: bold;
+        color: #e53935;
+    }
+
+    .slot-status {
+        font-size: 13px;
+        margin-top: 2px;
+        color: #666;
+    }
+
+    /* FLASH CARD */
+    .flash-card {
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        text-align: center;
+        transition: .3s;
+        border: 1px solid #eee;
+    }
+
+        .flash-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(255, 79, 0, 0.25);
+        }
+
+    .flash-img-wrap {
+        width: 100%;
+        height: 170px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .flash-img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: .3s;
+    }
+
+    .flash-card:hover .flash-img {
+        transform: scale(1.05);
+    }
+
+    .flash-name {
+        font-size: 15px;
+        height: 40px;
+        margin-top: 10px;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .flash-price {
+        font-size: 22px;
+        font-weight: 800;
+        color: #ff2d0a;
+        margin: 5px 0 10px;
+    }
+
+    /* PROGRESS BAR */
+    .flash-progress {
+        width: 100%;
+        background: #ffeaea;
+        height: 22px;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        box-shadow: inset 0 0 3px rgba(0,0,0,0.15);
+    }
+
+    .flash-progress-bar {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #ff2d0a, #ffa726);
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* COUNTDOWN */
+    .flash-countdown {
+        background: #222;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        margin-top: 5px;
+    }
+
+    /* SWIPER */
+    .swiper-button-next,
+    .swiper-button-prev {
+        color: #ff5722 !important;
+        padding: 25px;
+    }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            color: #d84315 !important;
+        }
+
+</style>
 
 <script>
     // Khởi tạo Swiper nếu thư viện tồn tại

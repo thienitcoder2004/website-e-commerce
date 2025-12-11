@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using website_e_commerce.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization; // ⬅ cần cho DateTimeStyles
 
 namespace website_e_commerce.Areas.Identity.Pages.Account
 {
@@ -28,13 +29,24 @@ namespace website_e_commerce.Areas.Identity.Pages.Account
         {
             var otp = TempData["ResetOTP"]?.ToString();
             var email = TempData["ResetUser"]?.ToString();
+            var expiryStr = TempData["ResetOTPExpiry"]?.ToString();   // ⏰ lấy thời gian hết hạn
 
-            if (otp == null || email == null)
+            // Không có dữ liệu -> coi như phiên đã hết hạn
+            if (otp == null || email == null || expiryStr == null)
             {
                 ModelState.AddModelError("", "Phiên đặt lại mật khẩu đã hết hạn. Vui lòng thử lại.");
                 return Page();
             }
 
+            // ⏰ KIỂM TRA: OTP đã quá 5 phút chưa
+            if (!DateTime.TryParse(expiryStr, null, DateTimeStyles.RoundtripKind, out var expiry)
+                || DateTime.UtcNow > expiry)
+            {
+                ModelState.AddModelError("", "Mã xác nhận đã hết hạn. Vui lòng yêu cầu mã mới.");
+                return Page();
+            }
+
+            // Giữ logic cũ kiểm tra trùng OTP
             if (Otp != otp)
             {
                 ModelState.AddModelError("", "Mã xác nhận không chính xác!");
@@ -53,6 +65,11 @@ namespace website_e_commerce.Areas.Identity.Pages.Account
 
             if (result.Succeeded)
             {
+                // 🌟 THÊM: mở khóa & reset đếm sai sau khi đặt lại mật khẩu thành công
+                user.AccessFailedCount = 0;
+                user.LockoutEnd = null;
+                await _userManager.UpdateAsync(user);
+
                 TempData["SuccessMessage"] = "Đặt lại mật khẩu thành công!";
                 return RedirectToPage("Login");
             }

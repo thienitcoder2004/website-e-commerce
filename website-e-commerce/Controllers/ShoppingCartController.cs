@@ -32,23 +32,64 @@ namespace website_e_commerce.Controllers
         {
             var product = await _productRepository.GetByIdAsync(productId);
             if (product == null)
-                return NotFound();
+                return Json(new { success = false, message = "Không tìm thấy sản phẩm!" });
 
-            if (product.WebQuantity <= 0)
-                return Json(new { success = false, message = "San pham het hang!" });
+            // ============================
+            // 🔥 CHECK FLASH SALE
+            // ============================
+            var now = DateTime.Now;
+            var flashSale = _context.FlashSales
+                .FirstOrDefault(x =>
+                    x.ProductId == productId &&
+                    x.IsActive &&
+                    x.StartTime <= now &&
+                    x.EndTime > now);
 
-            if (quantity > product.WebQuantity)
-                return Json(new { success = false, message = $"Chi con {product.WebQuantity} san pham!" });
+            decimal finalPrice = product.NewPrice;
 
+            // =========================================
+            // 🔥 TRƯỜNG HỢP 1 — SẢN PHẨM ĐANG FLASH SALE
+            // =========================================
+            if (flashSale != null)
+            {
+                // Check tồn kho flash sale
+                int remainingFsQty = flashSale.FlashQuantity - flashSale.SoldQuantity;
+
+                if (remainingFsQty <= 0)
+                    return Json(new { success = false, message = "Flash Sale đã bán hết!" });
+
+                if (quantity > remainingFsQty)
+                    return Json(new { success = false, message = $"Flash Sale chỉ còn {remainingFsQty} sản phẩm!" });
+
+                // Giá đặc biệt
+                finalPrice = flashSale.FlashPrice;
+            }
+            // =========================================
+            // 🔥 TRƯỜNG HỢP 2 — KHÔNG FLASH SALE
+            // =========================================
+            else
+            {
+                if (product.WebQuantity <= 0)
+                    return Json(new { success = false, message = "Sản phẩm hiện đang hết hàng!" });
+
+                if (quantity > product.WebQuantity)
+                    return Json(new { success = false, message = $"Chỉ còn {product.WebQuantity} sản phẩm!" });
+            }
+
+            // ============================
+            // 🛒 ADD TO CART
+            // ============================
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
+
             cart.AddItem(new CartItem
             {
                 ProductId = product.Id,
                 Name = product.Name,
-                Price = product.NewPrice,
+                Price = finalPrice,    // <= TỰ ĐỘNG FLASH SALE / NORMAL
                 Quantity = quantity,
                 ImageUrl = product.ImageUrl
             });
+
             HttpContext.Session.SetObjectAsJson("Cart", cart);
 
             return RedirectToAction("Index");

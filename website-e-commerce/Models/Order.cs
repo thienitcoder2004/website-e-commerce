@@ -23,7 +23,7 @@ namespace website_e_commerce.Models
         public string? Notes { get; set; }
 
         public string OrderStatus { get; set; } = "Pending"; // Các trạng thái có thể: "Pending", "Packing", "Shipping", "Completed", "Cancelled"
-
+        public string OrderCode { get; set; } = Guid.NewGuid().ToString("N").Substring(0, 10).ToUpper();
         public List<OrderDetail> OrderDetails { get; set; } = new();
 
         [ValidateNever]

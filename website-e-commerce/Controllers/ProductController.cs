@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ExcelDataReader;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Security.Claims;
 using website_e_commerce.Extensions;
 using website_e_commerce.Models;
@@ -33,241 +35,237 @@ namespace website_e_commerce.Controllers
         }
 
         // ================================
-        // DANH SÁCH SẢN PHẨM + BỘ LỌC
+        // DANH SÁCH SẢN PHẨM + MULTI FILTER
         // ================================
-        public IActionResult Index(
-            string? query,
-            string? sortOrder,
-            int? categoryId,
-            string? filter,
-            int page = 1)
+        public async Task<IActionResult> Index(
+     string? query,
+     int? categoryId,
+     string? filter,
+     int? brand,
+     string? sortOrder,
+     int page = 1)
         {
             int pageSize = 12;
 
-            // Lấy toàn bộ sản phẩm
-            var products = _productRepository.GetAll().ToList();
+            // =====================================
+            // LẤY SẢN PHẨM BAN ĐẦU
+            // =====================================
+            var products = _context.Products
+                .Include(p => p.Brand)
+                .Where(p => p.WebQuantity > 0)
+                .AsQueryable();
 
-            // ==========================
-            // AUTO CATEGORY KHI SEARCH
-            // ==========================
-            if (!string.IsNullOrEmpty(query) && categoryId == null)
+            bool isQueryEmpty = (query != null && query.Trim() == "");
+            bool isHomePage = (query == null && categoryId == null);
+            // 📌 /Product/Index => HOME PAGE
+
+            // =====================================
+            // XỬ LÝ TÌM KIẾM
+            // =====================================
+            if (!string.IsNullOrWhiteSpace(query))
             {
-                string keyword = query.ToLower().Trim();
-
-                var first = products.FirstOrDefault(p =>
-                    p.Name.ToLower().Contains(keyword) ||
-                    (p.Category != null && p.Category.Name.ToLower().Contains(keyword)));
-
-                if (first != null)
-                    categoryId = first.CategoryId;
+                products = products.Where(p => p.Name.Contains(query));
             }
 
-            // ==========================
-            // LOAD BỘ LỌC (CATEGORY HOẶC MẶC ĐỊNH)
-            // ==========================
-            if (categoryId == null || categoryId == 0)
+            // =====================================
+            // XỬ LÝ CATEGORY
+            // TRƯỜNG HỢP TRANG CHÍNH → KHÔNG LẤY CATEGORY
+            // =====================================
+            if (isHomePage || isQueryEmpty)
             {
-                ViewBag.CategoryId = 0;
-
-                ViewBag.Filters = new
-                {
-                    CategoryId = 0,
-                    Groups = new List<object>
-                    {
-                        new {
-                            Id = 100,
-                            GroupName = "Hãng",
-                            Options = _context.Brands
-                                .Where(b => b.IsActive)
-                                .Select(b => new { Label = b.Name, Value = $"brand={b.Name}" })
-                                .ToList()
-                        },
-                        new {
-                            Id = 200,
-                            GroupName = "Giá tiền",
-                            Options = new List<object>
-                            {
-                                new { Label = "Dưới 5 triệu", Value = "price<5000000" },
-                                new { Label = "5 - 10 triệu", Value = "price=5-10" },
-                                new { Label = "10 - 20 triệu", Value = "price=10-20" },
-                                new { Label = "Trên 20 triệu", Value = "price>20000000" }
-                            }
-                        }
-                    }
-                };
+                categoryId = null;
+                ViewBag.CategoryId = null;
             }
             else
             {
-                // Có danh mục ⇒ load filter theo category
-                var filterCategory = _context.FilterCategories
-                    .Include(fc => fc.Groups)
-                    .ThenInclude(g => g.Options)
-                    .FirstOrDefault(fc => fc.CategoryId == categoryId);
-
-                ViewBag.CategoryId = categoryId;
-                ViewBag.Filters = filterCategory;
+                if (categoryId != null && categoryId > 0)
+                {
+                    products = products.Where(p => p.CategoryId == categoryId);
+                    ViewBag.CategoryId = categoryId;
+                }
             }
 
-            // ==========================
-            // ÁP DỤNG BỘ LỌC
-            // ==========================
+            // =====================================
+            // LỌC HÃNG
+            // =====================================
+            if (brand != null)
+            {
+                products = products.Where(p => p.BrandId == brand);
+            }
+
+            ViewBag.BrandId = brand;
+
+            // =====================================
+            // LỌC GIÁ TIỀN
+            // =====================================
             if (!string.IsNullOrEmpty(filter))
             {
-                // ==== BRAND ====
-                if (filter.StartsWith("brand="))
-                {
-                    var brandName = filter.Replace("brand=", "").ToLower();
-                    products = products.Where(p =>
-                        p.Brand != null &&
-                        p.Brand.Name.ToLower() == brandName
-                    ).ToList();
-                }
+                var filters = filter.Split(',', StringSplitOptions.RemoveEmptyEntries);
 
-                // ==== GIÁ: price<5000000 ====
-                if (filter.StartsWith("price<"))
+                foreach (var f in filters)
                 {
-                    decimal max = decimal.Parse(filter.Replace("price<", ""));
-                    products = products.Where(p => p.NewPrice < max).ToList();
-                }
-
-                // ==== GIÁ: price>20000000 ====
-                if (filter.StartsWith("price>"))
-                {
-                    decimal min = decimal.Parse(filter.Replace("price>", ""));
-                    products = products.Where(p => p.NewPrice > min).ToList();
-                }
-
-                // ==== GIÁ: price=5-10 ====
-                if (filter.StartsWith("price=") && filter.Contains("-"))
-                {
-                    var parts = filter.Replace("price=", "").Split('-');
-                    decimal min = decimal.Parse(parts[0]) * 1_000_000;
-                    decimal max = decimal.Parse(parts[1]) * 1_000_000;
-
-                    products = products
-                        .Where(p => p.NewPrice >= min && p.NewPrice <= max)
-                        .ToList();
-                }
-
-                // ==== ROM ====
-                if (filter.StartsWith("rom="))
-                {
-                    var rom = filter.Replace("rom=", "");
-                    products = products.Where(p => p.Specifications?.Contains(rom) == true).ToList();
-                }
-
-                // ==== RAM ====
-                if (filter.StartsWith("ram="))
-                {
-                    var ram = filter.Replace("ram=", "");
-                    products = products.Where(p => p.Specifications?.Contains(ram) == true).ToList();
-                }
-
-                // ==== CPU ====
-                if (filter.StartsWith("cpu="))
-                {
-                    var cpu = filter.Replace("cpu=", "");
-                    products = products.Where(p => p.Specifications?.Contains(cpu) == true).ToList();
-                }
-
-                // ==== GPU ====
-                if (filter.StartsWith("gpu="))
-                {
-                    var gpu = filter.Replace("gpu=", "");
-                    products = products.Where(p => p.Specifications?.Contains(gpu) == true).ToList();
-                }
-
-                // ==== SIZE ====
-                if (filter.StartsWith("size="))
-                {
-                    var size = filter.Replace("size=", "");
-                    products = products.Where(p => p.Specifications?.Contains(size) == true).ToList();
+                    if (f.StartsWith("price="))
+                    {
+                        var range = f.Replace("price=", "").Split('-');
+                        int min = int.Parse(range[0]);
+                        int max = int.Parse(range[1]);
+                        products = products.Where(p => p.NewPrice >= min && p.NewPrice <= max);
+                    }
                 }
             }
 
-            // ==========================
-            // TÌM KIẾM
-            // ==========================
-            if (!string.IsNullOrEmpty(query))
+            // =====================================
+            // LỌC SPECIFICATIONS — CHỈ ÁP DỤNG KHI CÓ CATEGORY VÀ QUERY KHÔNG RỖNG
+            // =====================================
+            if (!string.IsNullOrEmpty(filter) && categoryId != null && !isQueryEmpty)
             {
-                string keyword = query.ToLower().Trim();
+                var specs = filter.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                products = products.Where(p => specs.All(s => p.Specifications.Contains(s)));
+            }
 
-                products = products
-                    .Where(p =>
-                        p.Name.ToLower().Contains(keyword) ||
-                        (p.Brand != null && p.Brand.Name.ToLower().Contains(keyword)) ||
-                        (p.Category != null && p.Category.Name.ToLower().Contains(keyword))
-                    )
-                    .ToList();
+            ViewBag.Filter = filter;
 
-                ViewBag.SearchKeyword = query;
+            // =====================================
+            // SẮP XẾP
+            // =====================================
+            products = sortOrder switch
+            {
+                "price_asc" => products.OrderBy(p => p.NewPrice),
+                "price_desc" => products.OrderByDescending(p => p.NewPrice),
+                "name_asc" => products.OrderBy(p => p.Name),
+                "name_desc" => products.OrderByDescending(p => p.Name),
+                _ => products.OrderBy(p => p.Id)
+            };
+
+            ViewBag.SortOrder = sortOrder;
+
+            // =====================================
+            // FILTER NÂNG CAO (Dynamic Filters)
+            // CHỈ HIỆN KHI:
+            // 1) categoryId != null
+            // 2) query KHÔNG RỖNG
+            // =====================================
+            if (categoryId != null && !isQueryEmpty)
+            {
+                var dynamicFilters = new Dictionary<string, DynamicFilterVM>();
+
+                foreach (var p in products.ToList())
+                {
+                    if (string.IsNullOrEmpty(p.Specifications)) continue;
+
+                    foreach (var s in p.Specifications.Split(';'))
+                    {
+                        var kv = s.Split('=');
+                        if (kv.Length != 2) continue;
+
+                        string key = kv[0];
+                        string val = kv[1];
+
+                        string label = key switch
+                        {
+                            "ram" => "RAM",
+                            "rom" => "Bộ nhớ trong",
+                            "cpu" => "Vi xử lý",
+                            "gpu" => "Card đồ họa",
+                            "ssd" => "Ổ cứng SSD",
+                            "screen" => "Màn hình",
+                            "camera" => "Camera",
+                            "battery" => "Pin",
+                            "feature" => "Tính năng",
+                            "size" => "Kích thước",
+                            "resolution" => "Độ phân giải",
+                            "tech" => "Công nghệ",
+                            "connect" => "Kết nối",
+                            "type" => "Loại",
+                            "power" => "Công suất",
+                            "need" => "Nhu cầu",
+                            _ => key.ToUpper()
+                        };
+
+                        if (!dynamicFilters.ContainsKey(key))
+                            dynamicFilters[key] = new DynamicFilterVM { Key = key, Label = label };
+
+                        if (!dynamicFilters[key].Values.Contains(val))
+                            dynamicFilters[key].Values.Add(val);
+                    }
+                }
+
+                ViewBag.DynamicFilters = dynamicFilters.Values.ToList();
             }
             else
             {
-                ViewBag.SearchKeyword = "Tất cả sản phẩm";
+                ViewBag.DynamicFilters = null; // ❗Trang chính hoặc query="" → không có filter nâng cao
             }
 
-            // ==========================
-            // SẮP XẾP
-            // ==========================
-            switch (sortOrder)
-            {
-                case "price_asc":
-                    products = products.OrderBy(p => p.NewPrice).ToList();
-                    break;
-                case "price_desc":
-                    products = products.OrderByDescending(p => p.NewPrice).ToList();
-                    break;
-                case "name_asc":
-                    products = products.OrderBy(p => p.Name).ToList();
-                    break;
-                case "name_desc":
-                    products = products.OrderByDescending(p => p.Name).ToList();
-                    break;
-                default:
-                    products = products.OrderBy(p => p.Id).ToList();
-                    break;
-            }
-
-            // ==========================
-            // PHÂN TRANG
-            // ==========================
-            int totalProducts = products.Count();
-            int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
-
-            var paginated = products
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+            // =====================================
+            // HÃNG — luôn hiển thị
+            // =====================================
+            ViewBag.Brands = _context.Products
+                .Select(p => p.Brand)
+                .Distinct()
                 .ToList();
 
+            // =====================================
+            // PHÂN TRANG
+            // =====================================
+            int totalItems = await products.CountAsync();
+            ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
             ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-            ViewBag.SortOrder = sortOrder;
-            ViewBag.Filter = filter;
+            ViewBag.SearchKeyword = query;
 
-            // ==========================
-            // YÊU THÍCH
-            // ==========================
-            List<int> favoriteIds = new();
-            if (User.Identity != null && User.Identity.IsAuthenticated)
+            var result = await products
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return View(result);
+        }
+
+
+
+        // AUTO MAP Specifications -> ProductFilterOption (CHẠY 1 LẦN)
+        public IActionResult GenerateProductFilters()
+        {
+            var products = _context.Products.ToList();
+
+            foreach (var p in products)
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(p.Specifications)) continue;
 
-                if (!string.IsNullOrEmpty(userId))
+                var specs = p.Specifications.Split(';');
+
+                foreach (var s in specs)
                 {
-                    favoriteIds = _context.FavoriteProducts
-                        .Where(fp => fp.UserId == userId)
-                        .Select(fp => fp.ProductId)
-                        .ToList();
+                    var kv = s.Split('=');
+                    if (kv.Length != 2) continue;
+
+                    string value = $"{kv[0]}={kv[1]}";
+
+                    var option = _context.FilterOptions
+                        .FirstOrDefault(o => o.Value == value);
+
+                    if (option == null) continue;
+
+                    bool exists = _context.ProductFilterOptions.Any(x =>
+                        x.ProductId == p.Id && x.FilterOptionId == option.Id);
+
+                    if (!exists)
+                    {
+                        _context.ProductFilterOptions.Add(new ProductFilterOption
+                        {
+                            ProductId = p.Id,
+                            FilterOptionId = option.Id
+                        });
+                    }
                 }
             }
-            ViewBag.FavoriteIds = favoriteIds;
 
-            return View(paginated);
+            _context.SaveChanges();
+            return Content("Đã tạo xong ProductFilterOptions!");
         }
 
         // ================================
-        // SEARCH SUGGESTIONS (API GỢI Ý)
+        // SEARCH SUGGESTIONS
         // ================================
         [HttpGet]
         public async Task<IActionResult> SearchSuggestions(string term)
@@ -283,7 +281,7 @@ namespace website_e_commerce.Controllers
                 {
                     id = p.Id,
                     name = p.Name,
-                    price = p.NewPrice,      // ⚠ Nếu bạn muốn giá khuyến mãi
+                    price = p.NewPrice,
                     image = p.ImageUrl
                 })
                 .ToListAsync();
@@ -291,9 +289,8 @@ namespace website_e_commerce.Controllers
             return Json(result);
         }
 
-
         // ================================
-        // FAVORITE LIST
+        // FAVORITES
         // ================================
         [Authorize]
         public IActionResult Favorites()
@@ -312,9 +309,6 @@ namespace website_e_commerce.Controllers
             return View(favoriteProducts);
         }
 
-        // ================================
-        // TOGGLE FAVORITE
-        // ================================
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -357,17 +351,41 @@ namespace website_e_commerce.Controllers
         }
 
         // ================================
-        // CATEGORY = REDIRECT INDEX
+        // CATEGORY REDIRECT
         // ================================
         public IActionResult Category(string name)
         {
             if (string.IsNullOrEmpty(name))
                 return RedirectToAction("Index");
 
-            string key = name.Trim().ToLower().Replace(" ", "");
+            string Normalize(string s)
+            {
+                if (string.IsNullOrWhiteSpace(s))
+                    return "";
+
+                string formD = s.Normalize(System.Text.NormalizationForm.FormD);
+                var chars = formD.Where(c =>
+                    System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c) !=
+                    System.Globalization.UnicodeCategory.NonSpacingMark);
+
+                string cleaned = new string(chars.ToArray());
+
+                return cleaned
+                    .ToLower()
+                    .Replace(" ", "")
+                    .Replace("-", "")
+                    .Replace(",", "")
+                    .Replace("&", "")
+                    .Replace(".", "")
+                    .Replace("/", "")
+                    .Trim();
+            }
+
+            string key = Normalize(name);
 
             var category = _context.Categories
-                .FirstOrDefault(c => c.Name.ToLower().Replace(" ", "") == key);
+                .AsEnumerable()
+                .FirstOrDefault(c => Normalize(c.Name) == key);
 
             if (category == null)
                 return RedirectToAction("Index", new { query = name });
@@ -376,7 +394,7 @@ namespace website_e_commerce.Controllers
         }
 
         // ================================
-        // ADD (FPTSHOP STYLE)
+        // ADD PRODUCT
         // ================================
         public IActionResult Add()
         {
@@ -388,10 +406,10 @@ namespace website_e_commerce.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(
-     Product product,
-     IFormFile? thumbnail,
-     List<IFormFile>? galleryImages,
-     List<int>? SelectedFilterOptions)
+            Product product,
+            IFormFile? thumbnail,
+            List<IFormFile>? galleryImages,
+            List<int>? SelectedFilterOptions)
         {
             if (!ModelState.IsValid)
             {
@@ -400,7 +418,6 @@ namespace website_e_commerce.Controllers
                 return View(product);
             }
 
-            // ============== ẢNH CHÍNH ==============
             if (thumbnail == null)
             {
                 ModelState.AddModelError("", "Bạn phải chọn ảnh đại diện.");
@@ -409,7 +426,6 @@ namespace website_e_commerce.Controllers
 
             product.ImageUrl = await SaveImage(thumbnail);
 
-            // ============== GIÁ SAU GIẢM ==============
             if (product.OldPrice > 0 && product.DiscountPercent > 0)
             {
                 product.NewPrice = product.OldPrice - (product.OldPrice * product.DiscountPercent / 100);
@@ -419,11 +435,9 @@ namespace website_e_commerce.Controllers
 
             product.WebQuantity = Math.Max(0, product.WebQuantity);
 
-            // ============== LƯU SẢN PHẨM ==============
             _context.Products.Add(product);
-            await _context.SaveChangesAsync(); // <== để có product.Id
+            await _context.SaveChangesAsync();
 
-            // ============== ẢNH GALLERY (nhiều ảnh) ==============
             if (galleryImages != null)
             {
                 foreach (var img in galleryImages)
@@ -442,7 +456,6 @@ namespace website_e_commerce.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            // ============== LƯU FILTER ==============
             if (SelectedFilterOptions != null)
             {
                 foreach (var opt in SelectedFilterOptions)
@@ -459,9 +472,6 @@ namespace website_e_commerce.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            // =====================================================
-            // 🔥🔥🔥  PHẦN QUAN TRỌNG: GHI LỊCH SỬ NHẬP KHO  🔥🔥🔥
-            // =====================================================
             if (product.StockQuantity > 0)
             {
                 var history = new StockHistory
@@ -476,12 +486,14 @@ namespace website_e_commerce.Controllers
                 _context.StockHistory.Add(history);
                 await _context.SaveChangesAsync();
             }
-            // =====================================================
 
             TempData["success"] = "Đã thêm sản phẩm thành công!";
             return RedirectToAction(nameof(Index));
         }
 
+        // ================================
+        // AJAX: Get Filters By Category
+        // ================================
         [HttpGet]
         public IActionResult GetFiltersByCategory(int categoryId)
         {
@@ -513,7 +525,6 @@ namespace website_e_commerce.Controllers
 
             return Json(new { ok = true, groups });
         }
-
 
         // ================================
         // STOCK IMPORT
@@ -620,9 +631,19 @@ namespace website_e_commerce.Controllers
                 .Take(8)
                 .ToList();
 
+            var now = DateTime.Now;
+
+            var flashSale = _context.FlashSales
+                .Where(x => x.ProductId == id
+                    && x.IsActive
+                    && x.StartTime <= now
+                    && x.EndTime > now)
+                .FirstOrDefault();
+
+            ViewBag.FlashSale = flashSale;
+
             return View(product);
         }
-
 
         // ================================
         // DELETE
@@ -643,7 +664,7 @@ namespace website_e_commerce.Controllers
         }
 
         // ================================
-        // SO SÁNH
+        // COMPARE
         // ================================
         private List<int> GetCompareList()
         {
@@ -721,7 +742,86 @@ namespace website_e_commerce.Controllers
         }
 
         // ================================
-        // LƯU ẢNH
+        // IMPORT EXCEL
+        // ================================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ImportExcel(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                TempData["error"] = "Vui lòng chọn file Excel!";
+                return RedirectToAction(nameof(Index));
+            }
+
+            using var stream = file.OpenReadStream();
+            using var reader = ExcelReaderFactory.CreateReader(stream);
+
+            var result = reader.AsDataSet(new ExcelDataSetConfiguration()
+            {
+                ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
+                {
+                    UseHeaderRow = true
+                }
+            });
+
+            var table = result.Tables[0];
+
+            int updatedCount = 0;
+            int createdCount = 0;
+
+            foreach (DataRow row in table.Rows)
+            {
+                string name = row["Name"]?.ToString()?.Trim();
+                int brandId = string.IsNullOrEmpty(row["BrandId"]?.ToString())
+                              ? 0 : Convert.ToInt32(row["BrandId"]);
+
+                var existing = _context.Products
+                    .FirstOrDefault(p => p.Name == name && p.BrandId == brandId);
+
+                int stockAdd = Convert.ToInt32(row["StockQuantity"]);
+                int webAdd = Convert.ToInt32(row["WebQuantity"]);
+
+                if (existing != null)
+                {
+                    existing.StockQuantity += stockAdd;
+                    existing.WebQuantity += webAdd;
+
+                    _context.Products.Update(existing);
+                    updatedCount++;
+                }
+                else
+                {
+                    var product = new Product
+                    {
+                        Name = name,
+                        OldPrice = Convert.ToDecimal(row["OldPrice"]),
+                        NewPrice = Convert.ToDecimal(row["NewPrice"]),
+                        DiscountPercent = Convert.ToInt32(row["DiscountPercent"]),
+                        Description = row["Description"]?.ToString(),
+                        Specifications = row["Specifications"]?.ToString(),
+                        GiftPromotion = row["GiftPromotion"]?.ToString(),
+                        SalePromotion = row["SalePromotion"]?.ToString(),
+                        CategoryId = Convert.ToInt32(row["CategoryId"]),
+                        BrandId = brandId,
+                        StockQuantity = stockAdd,
+                        WebQuantity = webAdd,
+                        ImageUrl = row["ImageUrl"]?.ToString()
+                    };
+
+                    _context.Products.Add(product);
+                    createdCount++;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            TempData["success"] = $"Đã cập nhật {updatedCount} sản phẩm, tạo mới {createdCount} sản phẩm.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        // ================================
+        // SAVE IMAGE
         // ================================
         private async Task<string> SaveImage(IFormFile image)
         {
