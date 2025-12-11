@@ -66,7 +66,9 @@ wwwroot\images\news\25558-paqq3i3mrvft8p4zdr8h8m-1200-80-png-11zon.png
 wwwroot\images\news\25560-wtjsjem9ovszcdvbzutpms-1200-80-png-11zon.png
 wwwroot\images\news\790972b8-3ba7-4944-92d3-f94b5dd71bff.png
 wwwroot\images\news\bcbe32a6-ecc4-47c1-ad30-9240e82fe366.png
+wwwroot\images\products\0d4881b5-d0c8-4bf0-b951-a3aa61596b81.png
 wwwroot\images\products\0fcc3b01-224e-4a53-aaa9-2df8ed4e19ce.jpg
+wwwroot\images\products\101d14a7-af00-46d0-9dce-7ebfe2298542.png
 wwwroot\images\products\10c560bd-5fb5-448a-b8a1-214bef9b09d1.png
 wwwroot\images\products\14561-cpu-intel-core-ultra-9-285k-1.png
 wwwroot\images\products\14576-mainboard-gigabyte-z890-aorus-elite-wifi7-ddr5-1.png
@@ -74,10 +76,30 @@ wwwroot\images\products\14672-ban-phim-co-quang-g-net-gk312s-1.png
 wwwroot\images\products\14673-tai-nghe-gaming-dareu-eh930-1.png
 wwwroot\images\products\14686-laptop-asus-zenbook-14-oled-ux3405ma-pp152w-8.png
 wwwroot\images\products\14700-mainboard-asus-tuf-gaming-b650m-1.png
+wwwroot\images\products\1a9a8814-0416-466e-af6e-f75ff5a8b46f.png
+wwwroot\images\products\2202b5cc-92be-4f60-92e0-711ba6736a50.png
+wwwroot\images\products\23ff3907-6e50-4681-8515-112854e6f2d7.png
+wwwroot\images\products\29661c05-bdb3-40ff-b6fc-15134fae1415.png
+wwwroot\images\products\2c1253fd-1044-4810-8e1a-72eef60a9295.jpg
 wwwroot\images\products\435133f1-acaf-4c14-bae5-9e6f2a6c347f.png
+wwwroot\images\products\4850f77f-7ec4-4ef7-8891-d5aab16a03e4.png
+wwwroot\images\products\516de257-9fea-4ca4-bdce-a6acf40656bb.png
+wwwroot\images\products\61354fb3-ea50-4c59-aaaa-ea87ad94fd96.png
+wwwroot\images\products\68754937-cc91-42f3-be3f-673bc97fb04b.png
+wwwroot\images\products\82b0cbee-ab37-457e-afd9-fa9c85322aed.png
 wwwroot\images\products\92312e8b-e90d-455f-84f6-916579913fb7.png
+wwwroot\images\products\99a6ca3e-be83-46ac-8c37-82121fb74438.png
+wwwroot\images\products\9e95ef9b-cd02-441e-9a60-b0c1a1af5516.png
+wwwroot\images\products\a6b06fb4-5e35-43f2-bcf9-e1036a1b4daf.png
+wwwroot\images\products\adc13fb8-69ac-48e2-81f2-d6fd87e492d2.png
 wwwroot\images\products\apex5-white.png
+wwwroot\images\products\ca183048-fdac-44b9-ad0d-4c00e05ad01e.png
 wwwroot\images\products\cbfaf100-fffa-41bd-bcae-f69e0bcbac8e.png
+wwwroot\images\products\d91c5411-93f8-4219-98c9-3198e3131973.png
+wwwroot\images\products\e6f1391c-3e90-47ef-a19b-29bc4c7fb9d9.png
+wwwroot\images\products\efcde569-7d39-4067-b51e-5372dfb6af1f.png
+wwwroot\images\products\f0339fec-4332-41ed-8460-3043fdc869fe.png
+wwwroot\images\products\f67b3cc1-eb62-48cf-835d-7a9797891833.png
 wwwroot\images\products\iphone15.png
 wwwroot\images\products\OIP (1).jpg
 wwwroot\images\products\OIP (10).jpg

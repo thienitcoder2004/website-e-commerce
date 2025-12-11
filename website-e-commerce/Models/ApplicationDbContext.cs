@@ -25,12 +25,12 @@ namespace website_e_commerce.Models
         public DbSet<FavoriteProduct> FavoriteProducts { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<FlashSale> FlashSales { get; set; }
+        public DbSet<ReviewReply> ReviewReplies { get; set; }
         public DbSet<FilterCategory> FilterCategories { get; set; }
         public DbSet<FilterGroup> FilterGroups { get; set; }
         public DbSet<FilterOption> FilterOptions { get; set; }
         public DbSet<ProductFilterOption> ProductFilterOptions { get; set; }
-        public DbSet<FlashSale> FlashSales { get; set; }
-        public DbSet<ReviewReply> ReviewReplies { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -203,8 +203,6 @@ namespace website_e_commerce.Models
  new Product { Id = 50, Name = "Xiaomi Watch S1 Active", OldPrice = 4990000, NewPrice = 3990000, DiscountPercent = 20, CategoryId = 8, BrandId = 5, StockQuantity = 40, WebQuantity = 20, ImageUrl = "/images/products/watchs1.jpg", Specifications = "size=45;feature=gps" }
 
  );
-
-
             // FILTER CATEGORY SEED (10 nhóm lớn như FPTShop)
             modelBuilder.Entity<FilterCategory>().HasData(
                 new FilterCategory { Id = 1, CategoryId = 1, Name = "Điện thoại" },
@@ -237,7 +235,6 @@ namespace website_e_commerce.Models
                 new FilterGroup { Id = 23, FilterCategoryId = 2, GroupName = "RAM" },
                 new FilterGroup { Id = 24, FilterCategoryId = 2, GroupName = "Ổ cứng" },
                 new FilterGroup { Id = 25, FilterCategoryId = 2, GroupName = "Màn hình" },
-                new FilterGroup { Id = 26, FilterCategoryId = 2, GroupName = "Trọng lượng" },
                 new FilterGroup { Id = 27, FilterCategoryId = 2, GroupName = "Nhu cầu" },
 
                 // ========== TABLET ==========

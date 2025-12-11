@@ -1698,10 +1698,10 @@ D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\staticwebassets.build.
 D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\staticwebassets.build.json.cache
 D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\staticwebassets.development.json
 D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\website-.C6558603.Up2Date
 D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\website-e-commerce.dll
 D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\refint\website-e-commerce.dll
 D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\website-e-commerce.pdb
 D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\website-e-commerce.genruntimeconfig.cache
 D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\ref\website-e-commerce.dll
+D:\website-e-commerce\website-e-commerce\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

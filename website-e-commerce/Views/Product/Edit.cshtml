@@ -1,71 +1,270 @@
 ﻿@model website_e_commerce.Models.Product
 
 @{
-    ViewData["Title"] = "Thêm sản phẩm";
+    ViewData["Title"] = "Sửa sản phẩm";
 }
 
-<div class="container mt-4">
-    <h2 class="fw-bold mb-4 text-center">➕ Sửa sản phẩm</h2>
+<style>
+    .section-title {
+        font-weight: 700;
+        font-size: 17px;
+        margin-bottom: 15px;
+        padding-left: 8px;
+        border-left: 4px solid #0d6efd;
+    }
 
-    <form asp-action="Edit" enctype="multipart/form-data" method="post" class="shadow p-4 rounded bg-light">
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label asp-for="Name" class="form-label"></label>
-                <input asp-for="Name" class="form-control" />
-            </div>
-            <div class="col-md-3">
-                <label asp-for="OldPrice" class="form-label"></label>
-                <input asp-for="OldPrice" class="form-control" />
-            </div>
-            <div class="col-md-3">
-                <label asp-for="NewPrice" class="form-label"></label>
-                <input asp-for="NewPrice" class="form-control" />
-            </div>
+    .form-card {
+        background: #fff;
+        padding: 25px;
+        border-radius: 14px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        margin-bottom: 25px;
+    }
 
-            <div class="col-md-4">
-                <label asp-for="DiscountPercent" class="form-label"></label>
-                <input asp-for="DiscountPercent" class="form-control" />
-            </div>
+    .preview-img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
 
-            <div class="col-md-4">
-                <label asp-for="CategoryId" class="form-label"></label>
-                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select"></select>
-            </div>
+    .gallery-thumb {
+        width: 95px;
+        height: 95px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #bbb;
+        margin-right: 10px;
+    }
 
-            <div class="col-md-4">
-                <label class="form-label">Ảnh chính</label>
-                <input type="file" name="imageUrl" class="form-control" />
-            </div>
+    .del-btn {
+        display: inline-block;
+        margin-left: 3px;
+        color: red;
+        cursor: pointer;
+        font-size: 18px;
+    }
+</style>
 
-            <div class="col-md-12">
-                <label class="form-label">Ảnh phụ (nhiều ảnh)</label>
-                <input type="file" name="extraImages" class="form-control" multiple />
-            </div>
 
-            <div class="col-md-12">
-                <label asp-for="Description" class="form-label"></label>
-                <textarea asp-for="Description" rows="3" class="form-control"></textarea>
-            </div>
+<div class="container py-4">
 
-            <div class="col-md-12">
-                <label asp-for="Specifications" class="form-label"></label>
-                <textarea asp-for="Specifications" rows="3" class="form-control"></textarea>
-            </div>
+    <h2 class="fw-bold text-primary text-center mb-4">
+        <i class="fa-solid fa-pen-to-square"></i> Sửa sản phẩm
+    </h2>
 
-            <div class="col-md-6">
-                <label asp-for="GiftPromotion" class="form-label"></label>
-                <textarea asp-for="GiftPromotion" class="form-control"></textarea>
-            </div>
+    <form asp-action="Edit" enctype="multipart/form-data" method="post">
 
-            <div class="col-md-6">
-                <label asp-for="SalePromotion" class="form-label"></label>
-                <textarea asp-for="SalePromotion" class="form-control"></textarea>
+        <input type="hidden" asp-for="Id" />
+
+        <!-- ==========================
+             THÔNG TIN CƠ BẢN
+        =========================== -->
+        <div class="form-card">
+            <div class="section-title">📌 Thông tin sản phẩm</div>
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Tên sản phẩm</label>
+                    <input asp-for="Name" class="form-control shadow-sm" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Danh mục</label>
+                    <select asp-for="CategoryId" asp-items="ViewBag.Categories"
+                            class="form-select shadow-sm"></select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Thương hiệu</label>
+                    <select asp-for="BrandId" asp-items="ViewBag.Brands"
+                            class="form-select shadow-sm"></select>
+                </div>
+
             </div>
         </div>
 
-        <div class="mt-4 text-center">
-            <button type="submit" class="btn btn-primary px-4">💾 Lưu</button>
-            <a asp-action="Index" class="btn btn-secondary px-4">⬅ Quay lại</a>
+
+        <!-- ==========================
+             GIÁ & KHUYẾN MÃI
+        =========================== -->
+        <div class="form-card">
+            <div class="section-title">💰 Giá & Khuyến mãi</div>
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Giá cũ</label>
+                    <input asp-for="OldPrice" id="oldPrice" type="number" class="form-control shadow-sm" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">% Giảm giá</label>
+                    <input asp-for="DiscountPercent" id="discountPercent" type="number" class="form-control shadow-sm" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Giá sau giảm</label>
+                    <input asp-for="NewPrice" id="newPrice" type="number" readonly
+                           class="form-control bg-light fw-bold shadow-sm" />
+                </div>
+
+            </div>
+
         </div>
+
+
+        <!-- ==========================
+             KHO HÀNG
+        =========================== -->
+        <div class="form-card">
+            <div class="section-title">📦 Kho hàng</div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Tồn kho</label>
+                    <input asp-for="StockQuantity" type="number" class="form-control shadow-sm" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Đang hiển thị Web</label>
+                    <input asp-for="WebQuantity" type="number" class="form-control shadow-sm" />
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ==========================
+             ẢNH SẢN PHẨM
+        =========================== -->
+        <div class="form-card">
+            <div class="section-title">🖼 Hình ảnh sản phẩm</div>
+
+            <div class="row g-4">
+
+                <!-- Ảnh đại diện -->
+                <div class="col-md-6">
+                    <label class="fw-bold">Ảnh chính</label>
+                    <input type="file" name="thumbnail" class="form-control shadow-sm" onchange="previewMain(event)" />
+                    <img id="main-preview" class="preview-img mt-2"
+                         src="@Model.ImageUrl" />
+                </div>
+
+                <!-- Ảnh phụ -->
+                <div class="col-md-6">
+                    <label class="fw-bold">Ảnh phụ (gallery)</label>
+                    <input type="file" name="galleryImages" multiple class="form-control shadow-sm"
+                           onchange="previewGallery(event)" />
+
+                    <div class="mt-2 d-flex flex-wrap" id="gallery-preview">
+                        @foreach (var img in ViewBag.Gallery)
+                        {
+                            <div class="position-relative me-2 mb-2">
+                                <img src="@img.ImageUrl" class="gallery-thumb" />
+
+                                <a class="del-btn"
+                                   href="/Product/DeleteImage?imageId=@img.Id"
+                                   onclick="return confirm('Xóa ảnh này?');">
+                                    ×
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================
+             MÔ TẢ & SPEC
+        =========================== -->
+        <div class="form-card">
+            <div class="section-title">📝 Mô tả</div>
+            <textarea asp-for="Description" rows="4" class="form-control shadow-sm"></textarea>
+        </div>
+
+        <div class="form-card">
+            <div class="section-title">⚙️ Thông số kỹ thuật</div>
+            <textarea asp-for="Specifications" rows="5" class="form-control shadow-sm"
+                      placeholder="ram=8;rom=256;cpu=snapdragon;feature=5g"></textarea>
+        </div>
+
+
+        <!-- ==========================
+             PROMOTION
+        =========================== -->
+        <div class="form-card">
+            <div class="section-title">🎁 Khuyến mãi</div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Quà tặng</label>
+                    <textarea asp-for="GiftPromotion" rows="3" class="form-control shadow-sm"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Khuyến mãi</label>
+                    <textarea asp-for="SalePromotion" rows="3" class="form-control shadow-sm"></textarea>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- BUTTON -->
+        <div class="text-end mt-4">
+            <button class="btn btn-primary px-4 py-2">
+                <i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi
+            </button>
+
+            <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2">Quay lại</a>
+        </div>
+
     </form>
 </div>
+
+
+<!-- ==========================
+     AUTO TÍNH GIÁ
+========================== -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const o = document.getElementById("oldPrice");
+        const d = document.getElementById("discountPercent");
+        const n = document.getElementById("newPrice");
+
+        function calc() {
+            let old = parseFloat(o.value) || 0;
+            let dis = parseFloat(d.value) || 0;
+            n.value = old > 0 ? (old - old * dis / 100).toFixed(0) : 0;
+        }
+
+        o.addEventListener("input", calc);
+        d.addEventListener("input", calc);
+    });
+</script>
+
+
+<!-- ==========================
+     PREVIEW ẢNH
+========================== -->
+<script>
+    function previewMain(evt) {
+        let img = document.getElementById("main-preview");
+        img.src = URL.createObjectURL(evt.target.files[0]);
+    }
+
+    function previewGallery(evt) {
+        let container = document.getElementById("gallery-preview");
+        container.innerHTML = "";
+
+        Array.from(evt.target.files).forEach(f => {
+            let img = document.createElement("img");
+            img.src = URL.createObjectURL(f);
+            img.classList.add("gallery-thumb");
+            container.appendChild(img);
+        });
+    }
+</script>
