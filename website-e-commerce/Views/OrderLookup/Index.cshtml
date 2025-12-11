@@ -1,0 +1,250 @@
+﻿@model website_e_commerce.Models.ViewModels.OrderLookupViewModel
+
+@{
+    ViewData["Title"] = "Tra cứu đơn hàng";
+}
+
+@functions {
+    string GetStatusText(string status)
+    {
+        return status switch
+        {
+            "Pending" => "Chờ xác nhận",
+            "Packing" => "Đang chuẩn bị hàng",
+            "Shipping" => "Đang giao hàng",
+            "Completed" => "Đã giao thành công",
+            "Cancelled" => "Đã hủy",
+            _ => status
+        };
+    }
+}
+
+<style>
+    .order-tracking .step {
+        padding: 10px 15px;
+        border-left: 4px solid #dee2e6;
+        background: #fff;
+        margin-bottom: 5px;
+    }
+
+        .order-tracking .step.done {
+            border-left-color: #28a745;
+            background: #e9f7ef;
+        }
+
+        .order-tracking .step.cancelled {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .order-tracking .step:last-child {
+            margin-bottom: 0;
+        }
+</style>
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <h2 class="text-center mb-4">Tra cứu đơn hàng</h2>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form asp-action="Index" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Mã đơn hàng</label>
+                            <input asp-for="OrderCode" class="form-control" placeholder="Nhập mã đơn hàng (ví dụ: A1B2C3D4E5)" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại hoặc Email</label>
+                            <input asp-for="PhoneOrEmail" class="form-control" placeholder="SĐT hoặc Email đã dùng khi đặt hàng" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Tra cứu</button>
+                    </form>
+
+                    @if (!string.IsNullOrEmpty(Model.Message))
+                    {
+                        <div class="alert alert-warning mt-3">@Model.Message</div>
+                    }
+                </div>
+            </div>
+
+            @if (Model.Order != null)
+            {
+                var o = Model.Order;
+
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Thông tin đơn hàng</strong>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Mã đơn hàng:</strong> @o.OrderCode</p>
+                        <p><strong>Ngày đặt:</strong> @o.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+                        <p>
+                            <strong>Trạng thái:</strong>
+                            <span class="badge bg-info" id="order-status">@GetStatusText(o.OrderStatus)</span>
+                        </p>
+                        <p><strong>Tổng tiền:</strong> @o.TotalPrice.ToString("N0") đ</p>
+                        <p><strong>Địa chỉ giao hàng:</strong> @o.ShippingAddress</p>
+                        <p><strong>Ghi chú:</strong> @o.Notes</p>
+
+                        <hr />
+
+                        <h5>Sản phẩm trong đơn</h5>
+                        <table class="table table-bordered table-sm mt-2">
+                            <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn giá</th>
+                                    <th>Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in o.OrderDetails)
+                                {
+                                    var lineTotal = item.Quantity * item.Price;
+                                    <tr>
+                                        <td>@item.Product?.Name</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Price.ToString("N0") đ</td>
+                                        <td>@lineTotal.ToString("N0") đ</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <hr />
+                        <h5>Tiến trình đơn hàng</h5>
+                        <ul class="order-tracking list-unstyled">
+                            @{
+
+                                var step1Class = "step done";
+                                var step2Class = "step";
+                                var step3Class = "step";
+                                var step4Class = "step";
+
+                                switch (o.OrderStatus)
+                                {
+                                    case "Pending":
+                                        break;
+
+                                    case "Packing":
+                                        step2Class = "step done";
+                                        break;
+
+                                    case "Shipping":
+                                        step2Class = "step done";
+                                        step3Class = "step done";
+                                        break;
+
+                                    case "Completed":
+                                        step2Class = "step done";
+                                        step3Class = "step done";
+                                        step4Class = "step done";
+                                        break;
+
+                                    case "Cancelled":
+                                        step1Class = "step cancelled";
+                                        step2Class = "step cancelled";
+                                        step3Class = "step cancelled";
+                                        step4Class = "step cancelled";
+                                        break;
+                                }
+                            }
+
+                            <li id="step1" class="@step1Class">Đặt hàng thành công</li>
+                            <li id="step2" class="@step2Class">Đang chuẩn bị hàng</li>
+                            <li id="step3" class="@step3Class">Đang giao hàng</li>
+                            <li id="step4" class="@step4Class">Giao hàng thành công</li>
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@if (Model.Order != null)
+{
+    <script>
+        // ===========================
+        // 1. Kết nối SignalR
+        // ===========================
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/orderStatusHub")
+            .build();
+
+        // ===========================
+        // 2. Hàm cập nhật tiến trình
+        // ===========================
+        function updateSteps(status) {
+            let step1 = document.querySelector("#step1");
+            let step2 = document.querySelector("#step2");
+            let step3 = document.querySelector("#step3");
+            let step4 = document.querySelector("#step4");
+
+            // Reset
+            [step1, step2, step3, step4].forEach(s => {
+                s.className = "step";
+            });
+
+            switch (status) {
+                case "Pending":
+                    step1.classList.add("done");
+                    break;
+
+                case "Packing":
+                    step1.classList.add("done");
+                    step2.classList.add("done");
+                    break;
+
+                case "Shipping":
+                    step1.classList.add("done");
+                    step2.classList.add("done");
+                    step3.classList.add("done");
+                    break;
+
+                case "Completed":
+                    step1.classList.add("done");
+                    step2.classList.add("done");
+                    step3.classList.add("done");
+                    step4.classList.add("done");
+                    break;
+
+                case "Cancelled":
+                    [step1, step2, step3, step4].forEach(s => s.classList.add("cancelled"));
+                    break;
+            }
+        }
+
+        // ===========================
+        // 3. Nhận trạng thái mới từ Server
+        // ===========================
+        connection.on("ReceiveOrderStatus", function (orderId, status) {
+            if (orderId === @Model.Order.Id) {
+
+                // Cập nhật badge
+                document.getElementById('order-status').innerText = status;
+
+                // Cập nhật tiến trình
+                updateSteps(status);
+            }
+        });
+
+        // ===========================
+        // 4. Bắt đầu kết nối
+        // ===========================
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        // ===========================
+        // 5. Load trạng thái lần đầu
+        // ===========================
+        updateSteps("@Model.Order.OrderStatus");
+
+    </script>
+}

@@ -1,13 +1,20 @@
 ﻿@model IEnumerable<website_e_commerce.Models.Product>
+@inject website_e_commerce.Models.ApplicationDbContext _context
+
 @{
     ViewData["Title"] = "Danh sách sản phẩm";
-    int? categoryId = ViewBag.CategoryId;
-    var favoriteIds = ViewBag.FavoriteIds as List<int> ?? new List<int>();
-    string currentFilter = ViewBag.Filter as string;
+
+    string currentFilter = ViewBag.Filter as string ?? "";
     string currentSort = ViewBag.SortOrder as string ?? "";
-    string searchKeyword = ViewBag.SearchKeyword as string;
+    string searchKeyword = ViewBag.SearchKeyword as string ?? "";
+    int? brandId = ViewBag.BrandId as int?;
     int? catId = ViewBag.CategoryId as int?;
+
+    var favoriteIds = ViewBag.FavoriteIds as List<int> ?? new List<int>();
+
+    bool showDynamic = ViewBag.DynamicFilters != null;   // ❗ CHỈ TRUE khi query != "" && category != null
 }
+
 
 @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_StockManager))
 {
@@ -26,7 +33,12 @@
         <div class="text-end mb-3">
             <a asp-action="Add" class="btn btn-outline-danger fw-bold">➕ Thêm sản phẩm</a>
         </div>
-
+        <form asp-action="ImportExcel" enctype="multipart/form-data" method="post" class="d-inline">
+            <input type="file" name="file" class="form-control d-inline" style="width:250px;" />
+            <button type="submit" class="btn btn-success ms-2">
+                <i class="fa fa-file-excel"></i> Nhập Excel
+            </button>
+        </form>
         <table class="table table-hover text-center align-middle shadow-sm">
             <thead class="table-danger">
                 <tr>
@@ -55,21 +67,21 @@
                             @(available <= 0 ? "Hết hàng" :
                                                 available < 10 ? "Sắp hết" :
                                                 "Còn hàng")
-                        </td>
-                        <td>
-                            <form asp-action="ImportToStock" method="post" class="d-inline-flex gap-1">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="id" value="@p.Id" />
-                                <input type="number" name="importQuantity" class="form-control form-control-sm" min="1"
-                                    placeholder="SL" style="width:90px;" />
-                                <button type="submit" class="btn btn-sm btn-outline-success">Nhập</button>
-                            </form>
+                </td>
+                <td>
+                    <form asp-action="ImportToStock" method="post" class="d-inline-flex gap-1">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@p.Id" />
+                        <input type="number" name="importQuantity" class="form-control form-control-sm" min="1"
+                               placeholder="SL" style="width:90px;" />
+                        <button type="submit" class="btn btn-sm btn-outline-success">Nhập</button>
+                    </form>
 
                             <form asp-action="ExportToWeb" method="post" class="d-inline-flex gap-1">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@p.Id" />
                                 <input type="number" name="exportQuantity" class="form-control form-control-sm" min="1"
-                                    placeholder="SL" style="width:90px;" />
+                                       placeholder="SL" style="width:90px;" />
                                 <button type="submit" class="btn btn-sm btn-outline-primary">Xuất</button>
                             </form>
 
@@ -77,13 +89,13 @@
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@p.Id" />
                                 <button type="submit" class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')">
+                                        onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')">
                                     Xóa
                                 </button>
                             </form>
                         </td>
                     </tr>
-                }
+                        }
             </tbody>
         </table>
 
@@ -96,7 +108,7 @@
                         var active = i == ViewBag.CurrentPage ? "active" : "";
                         <li class="page-item @active">
                             <a class="page-link"
-                                href="?page=@i@(ViewBag.CategoryId != null ? $"&categoryId={ViewBag.CategoryId}" : "")">
+                               href="?page=@i@(ViewBag.CategoryId != null ? $"&categoryId={ViewBag.CategoryId}" : "")">
                                 @i
                             </a>
                         </li>
@@ -138,9 +150,9 @@ else if (User.IsInRole(SD.Role_Employee))
                             @(available <= 0 ? "Hết hàng" :
                                                 available < 10 ? "Sắp hết" :
                                                 "Còn hàng")
-                        </td>
-                    </tr>
-                }
+                </td>
+            </tr>
+                        }
             </tbody>
         </table>
 
@@ -153,7 +165,7 @@ else if (User.IsInRole(SD.Role_Employee))
                         var active = i == ViewBag.CurrentPage ? "active" : "";
                         <li class="page-item @active">
                             <a class="page-link"
-                                href="?page=@i@(ViewBag.CategoryId != null ? $"&categoryId={ViewBag.CategoryId}" : "")">
+                               href="?page=@i@(ViewBag.CategoryId != null ? $"&categoryId={ViewBag.CategoryId}" : "")">
                                 @i
                             </a>
                         </li>
@@ -168,174 +180,318 @@ else
     <div class="container mt-4">
         <div class="row">
 
-            <!-- BỘ LỌC -->
+            <!-- ------------------------------------------------------------
+                 BỘ LỌC BÊN TRÁI
+            ------------------------------------------------------------- -->
             <div class="col-lg-3 col-md-4">
-                <style>
-                    .filter-sidebar {
-                        background: #fff;
-                        border: 1px solid #eee;
-                        border-radius: 12px;
-                    }
-
-                    .filter-option a {
-                        display: block;
-                        padding: 6px 10px;
-                        border-radius: 6px;
-                        color: #333;
-                        font-size: 14px;
-                        transition: 0.2s;
-                    }
-
-                    .filter-option.active a {
-                        color: red !important;
-                        font-weight: 600;
-                    }
-                </style>
 
                 <div class="filter-sidebar p-3 shadow-sm">
-                    <h5 class="fw-bold mb-3">
-                        <i class="fas fa-filter me-2"></i> Bộ lọc tìm kiếm
-                    </h5>
 
-                    @if (ViewBag.Filters != null)
-                    {
-                        var selectedFilter = ViewBag.Filter as string;
+                    <!-- ==========================
+                         ACCORDION
+                    =========================== -->
+                    <div class="accordion" id="filterAccordion">
 
-                        <div class="accordion" id="productFilters">
+                        <!-- ==========================
+                             FILTER HÃNG
+                        =========================== -->
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header" id="brandHeading">
+                                <button class="accordion-button collapsed fw-bold"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#brandCollapse">
+                                    Hãng
+                                </button>
+                            </h2>
 
-                            @foreach (var group in ViewBag.Filters.Groups)
-                            {
-                                <div class="accordion-item mb-2">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed py-2" data-bs-toggle="collapse"
-                                            data-bs-target="#g-@group.Id">
-                                            @group.GroupName
-                                        </button>
-                                    </h2>
+                            <div id="brandCollapse"
+                                 class="accordion-collapse collapse"
+                                 data-bs-parent="#filterAccordion">
 
-                                    <div id="g-@group.Id" class="accordion-collapse collapse">
-                                        <div class="accordion-body">
+                                <div class="accordion-body">
 
-                                            @foreach (var option in group.Options)
-                                            {
-                                                bool isActive = selectedFilter != null &&
-                                                selectedFilter.ToString().ToLower() == option.Value.ToLower();
+                                    @if (ViewBag.Brands != null)
+                                    {
+                                        foreach (var b in ViewBag.Brands)
+                                        {
+                                            bool active = (brandId == b.Id);
 
-                                                var url =
-                                                $"?query={searchKeyword}&categoryId={catId}&filter={option.Value}&sortOrder={currentSort}";
+                                            string url =
+                                            $"?query={searchKeyword}&brand={b.Id}&filter={currentFilter}&sortOrder={currentSort}";
 
-                                                <div class="filter-option @(isActive ? "active" : "")">
-                                                    <a href="@url">@option.Label</a>
-                                                </div>
-                                            }
+                                            <div class="filter-option @(active ? "active" : "")">
+                                                <a href="@url">@b.Name</a>
+                                            </div>
+                                        }
+                                    }
 
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ==========================
+                             FILTER GIÁ TIỀN
+                        =========================== -->
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header" id="priceHeading">
+                                <button class="accordion-button collapsed fw-bold"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#priceCollapse">
+                                    Giá tiền
+                                </button>
+                            </h2>
+
+                            <div id="priceCollapse"
+                                 class="accordion-collapse collapse"
+                                 data-bs-parent="#filterAccordion">
+
+                                <div class="accordion-body">
+
+                                    @{
+                                        var ranges = new List<(string label, int min, int max)>
+                                                                {
+                                                                ("Dưới 5 triệu", 0, 5000000),
+                                                                ("5 - 10 triệu", 5000000, 10000000),
+                                                                ("10 - 15 triệu", 10000000, 15000000),
+                                                                ("15 - 20 triệu", 15000000, 20000000),
+                                                                ("20 - 30 triệu", 20000000, 30000000),
+                                                                ("30 - 40 triệu", 30000000, 40000000),
+                                                                ("40 - 50 triệu", 40000000, 50000000),
+                                                                ("Trên 50 triệu", 50000000, 999999999),
+                                                                };
+                                    }
+
+                                    @foreach (var r in ranges)
+                                    {
+                                        string priceTag = $"price={r.min}-{r.max}";
+                                        bool active = currentFilter.Contains(priceTag);
+
+                                        string next =
+                                        active
+                                        ? currentFilter.Replace(priceTag, "").Trim(',')
+                                        : ((currentFilter + "," + priceTag).Trim(','));
+
+                                        string url =
+                                        $"?query={searchKeyword}&brand={brandId}&filter={next}&sortOrder={currentSort}";
+
+                                        <div class="filter-option @(active ? "active" : "")">
+                                            <a href="@url">@r.label</a>
                                         </div>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- ==========================
+                            BỘ LỌC NÂNG CAO
+                        =========================== -->
+                        @if (showDynamic)
+                        {
+                            <div class="accordion-item mb-3">
+
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#advCollapse">
+                                        Bộ lọc nâng cao
+                                    </button>
+                                </h2>
+
+                                <div id="advCollapse"
+                                     class="accordion-collapse collapse"
+                                     data-bs-parent="#filterAccordion">
+
+                                    <div class="accordion-body">
+
+                                        @foreach (var g in ViewBag.DynamicFilters)
+                                        {
+                                            <div class="mb-2">
+                                                <div class="fw-bold">@g.Label</div>
+
+                                                @foreach (var v in g.Values)
+                                                {
+                                                    string opt = $"{g.Key}={v}";
+                                                    bool active = currentFilter.Contains(opt);
+
+                                                    string next =
+                                                    active
+                                                    ? currentFilter.Replace(opt, "").Trim(',')
+                                                    : ((currentFilter + "," + opt).Trim(','));
+
+                                                    string url =
+                                                    $"?query={searchKeyword}&categoryId={catId}&brand={brandId}&filter={next}&sortOrder={currentSort}";
+
+                                                    <div class="filter-option @(active ? "active" : "")">
+                                                        <a href="@url">@v</a>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+
                                     </div>
                                 </div>
-                            }
+                            </div>
+                        }
 
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="text-muted">Không có bộ lọc cho danh mục này.</p>
-                    }
+                    </div>
+
                 </div>
+
             </div>
 
-            <!-- DANH SÁCH SẢN PHẨM -->
+
+            <!-- ------------------------------------------------------------
+                 DANH SÁCH SẢN PHẨM
+            ------------------------------------------------------------- -->
             <div class="col-lg-9 col-md-8">
+
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold">Kết quả tìm kiếm</h5>
-                    <div>
-                        <select class="form-select form-select-sm" onchange="location = this.value;">
 
-                            <option
-                                value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=")">
+                    <div style="min-width:180px;">
+                        <select class="form-select form-select-sm"
+                                onchange="location = this.value;">
+
+                            @{
+                                string baseUrl =
+                                $"?query={searchKeyword}&categoryId={(catId > 0 ? catId : "")}&brand={brandId}&filter={currentFilter}";
+                            }
+
+                            <!-- Default -->
+                            <option value="@($"{baseUrl}&sortOrder=")">
                                 Sắp xếp theo
                             </option>
 
-                            <option
-                                value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=price_asc")"
-                                selected="@(currentSort == "price_asc" ? "selected" : null)">
+                            <!-- Giá tăng dần -->
+                            <option value="@($"{baseUrl}&sortOrder=price_asc")"
+                                    selected="@(currentSort == "price_asc")">
                                 Giá tăng dần
                             </option>
 
-                            <option
-                                value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=price_desc")"
-                                selected="@(currentSort == "price_desc" ? "selected" : null)">
+                            <!-- Giá giảm dần -->
+                            <option value="@($"{baseUrl}&sortOrder=price_desc")"
+                                    selected="@(currentSort == "price_desc")">
                                 Giá giảm dần
                             </option>
 
-                            <option
-                                value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=name_asc")"
-                                selected="@(currentSort == "name_asc" ? "selected" : null)">
+                            <!-- Tên A-Z -->
+                            <option value="@($"{baseUrl}&sortOrder=name_asc")"
+                                    selected="@(currentSort == "name_asc")">
                                 Tên A-Z
                             </option>
 
-                            <option
-                                value="@($"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder=name_desc")"
-                                selected="@(currentSort == "name_desc" ? "selected" : null)">
+                            <!-- Tên Z-A -->
+                            <option value="@($"{baseUrl}&sortOrder=name_desc")"
+                                    selected="@(currentSort == "name_desc")">
                                 Tên Z-A
                             </option>
+
                         </select>
                     </div>
                 </div>
 
+
+
+                <!-- ----------------------------------------------------------------
+                     TAG FILTER ĐANG CHỌN
+                ---------------------------------------------------------------- -->
+                @if (brandId != null || !string.IsNullOrEmpty(currentFilter))
+                {
+                    <div class="mb-3">
+                        <strong class="me-2">Đang lọc:</strong>
+
+                        <!-- BRAND TAG -->
+                        @if (brandId != null)
+                        {
+                            var brands = ViewBag.Brands as List<Brand>;
+                            var brandName = brands?.FirstOrDefault(x => x.Id == brandId)?.Name;
+
+                            string removeBrand =
+                            $"?query={searchKeyword}&filter={currentFilter}&sortOrder={currentSort}";
+
+                            <span class="badge bg-primary me-2">
+                                Hãng: @brandName
+                                <a href="@removeBrand" class="text-white ms-1">×</a>
+                            </span>
+                        }
+
+                        <!-- FILTER TAGS -->
+                        @if (!string.IsNullOrEmpty(currentFilter))
+                        {
+                            var items = currentFilter.Split(",", StringSplitOptions.RemoveEmptyEntries);
+
+                            foreach (var f in items)
+                            {
+                                string newFilter = string.Join(",", items.Where(x => x != f));
+                                string url =
+                                $"?query={searchKeyword}&categoryId={catId}&brand={brandId}&filter={newFilter}&sortOrder={currentSort}";
+
+                                <span class="badge bg-secondary me-2">
+                                    @f
+                                    <a href="@url" class="text-white ms-1">×</a>
+                                </span>
+                            }
+                        }
+                    </div>
+                }
+
+
+                <!-- ------------------------------------------------------------
+                     LIST SẢN PHẨM
+                ------------------------------------------------------------- -->
                 <div class="row g-3 mb-lg-5">
+
                     @foreach (var p in Model)
                     {
                         <div class="col-md-4 col-sm-6">
                             <div class="product-card text-center p-3 rounded shadow-sm position-relative">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <!-- NÚT YÊU THÍCH -->
+
+                                <!-- YÊU THÍCH -->
+                                <div class="d-flex">
                                     <div class="position-absolute top-0 end-0 mt-2 me-2">
                                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                                         {
                                             bool isFavorite = favoriteIds.Contains(p.Id);
 
-                                            <form asp-controller="Product" asp-action="ToggleFavorite" method="post"
-                                                class="d-inline">
+                                            <form asp-controller="Product" asp-action="ToggleFavorite" method="post">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="productId" value="@p.Id" />
-                                                <button type="submit" class="btn btn-sm btn-light rounded-circle shadow-sm">
-                                                    <i
-                                                        class="@(isFavorite ? "fa-solid fa-heart text-danger" : "fa-regular fa-heart")"></i>
+                                                <button class="btn btn-sm btn-light rounded-circle shadow-sm">
+                                                    <i class="@(isFavorite ? "fa-solid fa-heart text-danger" : "fa-regular fa-heart")"></i>
                                                 </button>
                                             </form>
                                         }
                                         else
                                         {
                                             <a asp-area="Identity" asp-page="/Account/Login"
-                                                class="btn btn-sm btn-light rounded-circle shadow-sm">
+                                               class="btn btn-sm btn-light rounded-circle shadow-sm">
                                                 <i class="fa-regular fa-heart"></i>
                                             </a>
                                         }
                                     </div>
 
-                                    <!-- SO SÁNH -->
-                                    <form asp-controller="Product" asp-action="AddToCompare" method="post" class="d-inline">
+                                    <!-- So sánh -->
+                                    <form asp-controller="Product" asp-action="AddToCompare" method="post">
                                         @Html.AntiForgeryToken()
                                         <input type="hidden" name="id" value="@p.Id" />
-                                        <button type="submit" class="btn btn-outline-primary btn-sm mb-2">
+                                        <button class="btn btn-outline-primary btn-sm mb-2">
                                             <i class="fa-solid fa-code-compare me-1"></i> So sánh
                                         </button>
                                     </form>
                                 </div>
 
-                                <!-- ẢNH + TÊN -->
+                                <!-- Ảnh + tên -->
                                 <a asp-action="Details" asp-route-id="@p.Id" class="text-decoration-none text-dark">
                                     <img src="@p.ImageUrl" class="img-fluid mb-2" />
                                     <h6 class="fw-semibold">@p.Name</h6>
                                 </a>
 
-                                <div class="text-green fw-medium">
-                                    @p.GiftPromotion
-                                </div>
+                                <div class="text-danger fw-bold">@p.NewPrice.ToString("N0") ₫</div>
 
-                                <div class="text-danger fw-bold">
-                                    @p.NewPrice.ToString("N0") ₫
-                                </div>
                             </div>
                         </div>
                     }
@@ -348,26 +504,32 @@ else
                     }
                 </div>
 
-                <!-- PHÂN TRANG -->
+                <!-- ------------------------------------------------------------
+                     PHÂN TRANG
+                ------------------------------------------------------------- -->
                 @if (ViewBag.TotalPages > 1)
                 {
                     <nav class="mt-4">
                         <ul class="pagination justify-content-center">
+
                             @for (int i = 1; i <= ViewBag.TotalPages; i++)
                             {
                                 bool active = i == ViewBag.CurrentPage;
 
-                                string pageUrl =
-                                $"?query={searchKeyword}&categoryId={catId}&filter={currentFilter}&sortOrder={currentSort}&page={i}";
+                                string url =
+                                $"?query={searchKeyword}&categoryId={catId}&brand={brandId}&filter={currentFilter}&sortOrder={currentSort}&page={i}";
 
                                 <li class="page-item @(active ? "active" : "")">
-                                    <a class="page-link" href="@pageUrl">@i</a>
+                                    <a class="page-link" href="@url">@i</a>
                                 </li>
                             }
+
                         </ul>
                     </nav>
                 }
+
             </div>
+
         </div>
     </div>
 }
@@ -375,47 +537,26 @@ else
 <style>
     .filter-sidebar {
         background: #fff;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        border: 1px solid #eee;
+        border-radius: 12px;
     }
 
-    .accordion-button {
-        font-weight: 600;
-        background: #f9f9f9;
-    }
-
-    .accordion-body a {
+    .filter-option a {
         display: block;
+        padding: 6px 10px;
+        font-size: 14px;
         color: #333;
-        padding: 4px 0;
-        text-decoration: none;
-    }
-
-    .accordion-body a:hover {
-        color: #d10000;
-    }
-
-    .product-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
         transition: 0.2s;
     }
 
-    .pagination .page-link {
-        color: #d10000;
-        font-weight: 500;
+        .filter-option a:hover {
+            background: #f2f2f2;
+        }
+
+    .filter-option.active a {
+        color: #e40004 !important;
+        font-weight: 600;
     }
 
-    .pagination .active .page-link {
-        background-color: #d10000;
-        border-color: #d10000;
-        color: #fff;
-    }
-
-    .table-warning {
-        background-color: #fff3cd !important;
-    }
-
-    .table-danger {
-        background-color: #f8d7da !important;
-    }
 </style>

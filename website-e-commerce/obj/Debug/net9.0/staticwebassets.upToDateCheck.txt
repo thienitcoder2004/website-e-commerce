@@ -65,30 +65,39 @@ wwwroot\images\news\25418-halo-mcc-star-wars-space-battles-mod-battlefront-pack-
 wwwroot\images\news\25558-paqq3i3mrvft8p4zdr8h8m-1200-80-png-11zon.png
 wwwroot\images\news\25560-wtjsjem9ovszcdvbzutpms-1200-80-png-11zon.png
 wwwroot\images\news\790972b8-3ba7-4944-92d3-f94b5dd71bff.png
-wwwroot\images\products\03acac37-ea5e-46b5-9e65-037cf22cb028.png
-wwwroot\images\products\0ea57480-c0d1-42c8-b256-336263eb7eef.png
-wwwroot\images\products\14557-laptop-asus-tuf-gaming-a15-fa507nvr-lp091w-1.png
+wwwroot\images\news\bcbe32a6-ecc4-47c1-ad30-9240e82fe366.png
+wwwroot\images\products\0fcc3b01-224e-4a53-aaa9-2df8ed4e19ce.jpg
+wwwroot\images\products\10c560bd-5fb5-448a-b8a1-214bef9b09d1.png
 wwwroot\images\products\14561-cpu-intel-core-ultra-9-285k-1.png
 wwwroot\images\products\14576-mainboard-gigabyte-z890-aorus-elite-wifi7-ddr5-1.png
 wwwroot\images\products\14672-ban-phim-co-quang-g-net-gk312s-1.png
 wwwroot\images\products\14673-tai-nghe-gaming-dareu-eh930-1.png
 wwwroot\images\products\14686-laptop-asus-zenbook-14-oled-ux3405ma-pp152w-8.png
 wwwroot\images\products\14700-mainboard-asus-tuf-gaming-b650m-1.png
-wwwroot\images\products\14701-mainboard-gigabyte-x870-eagle-wifi7-ddr5-1.png
-wwwroot\images\products\1f60ae39-888d-4c7b-a691-7ea87f59f49b.png
-wwwroot\images\products\379f44bb-0aef-48f8-89b5-2193e0ad5268.png
-wwwroot\images\products\3ffd3495-5894-4373-adf8-5201912d5a87.png
-wwwroot\images\products\4f7e0376-0051-46c1-b3a5-41fafeae68ed.png
-wwwroot\images\products\5442c0c0-a753-4fc2-85be-836ea7e235d5.png
-wwwroot\images\products\56f54c5e-639a-4abb-a72b-cd535d1bea35.png
-wwwroot\images\products\625b1307-9e2b-4075-a058-1937fed290e9.png
-wwwroot\images\products\a88120a4-2f68-40b0-bdff-d8ecf3044775.png
+wwwroot\images\products\435133f1-acaf-4c14-bae5-9e6f2a6c347f.png
+wwwroot\images\products\92312e8b-e90d-455f-84f6-916579913fb7.png
 wwwroot\images\products\apex5-white.png
-wwwroot\images\products\bfccad31-2342-4084-8c62-da0e40e837ca.png
 wwwroot\images\products\cbfaf100-fffa-41bd-bcae-f69e0bcbac8e.png
-wwwroot\images\products\cf13a942-c1f3-4555-99ad-720d8dab104e.png
-wwwroot\images\products\e9218af8-c968-4fc1-8c0e-3abf2fcb89df.png
-wwwroot\images\products\iphone15promax.png
+wwwroot\images\products\iphone15.png
+wwwroot\images\products\OIP (1).jpg
+wwwroot\images\products\OIP (10).jpg
+wwwroot\images\products\OIP (11).jpg
+wwwroot\images\products\OIP (12).jpg
+wwwroot\images\products\OIP (13).jpg
+wwwroot\images\products\OIP (14).jpg
+wwwroot\images\products\OIP (15).jpg
+wwwroot\images\products\OIP (16).jpg
+wwwroot\images\products\OIP (17).jpg
+wwwroot\images\products\OIP (2).jpg
+wwwroot\images\products\OIP (3).jpg
+wwwroot\images\products\OIP (4).jpg
+wwwroot\images\products\OIP (5).jpg
+wwwroot\images\products\OIP (6).jpg
+wwwroot\images\products\OIP (7).jpg
+wwwroot\images\products\OIP (8).jpg
+wwwroot\images\products\OIP (9).jpg
+wwwroot\images\products\OIP.jpg
+wwwroot\images\products\router-ax3000.jpg
 wwwroot\images\thu_cu_doi_moi_banner_web_slider_800x400.png
 wwwroot\js\filter.js
 wwwroot\js\news.js
@@ -154,67 +163,67 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\LICENSE.txt
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\dist\jquery.slim.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\dist\jquery.slim.min.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\dist\jquery.slim.min.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\dist\jquery.js
 D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation\LICENSE.md
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\dist\jquery.min.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\dist\jquery.min.map
-D:\website-e-commerce\website-e-commerce\wwwroot\css\site.css
-D:\website-e-commerce\website-e-commerce\wwwroot\js\filter.js
-D:\website-e-commerce\website-e-commerce\wwwroot\js\search.js
-D:\website-e-commerce\website-e-commerce\wwwroot\js\site.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation\dist\additional-methods.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
-D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation\dist\jquery.validate.js
 D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation\dist\jquery.validate.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation\dist\additional-methods.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+D:\website-e-commerce\website-e-commerce\wwwroot\js\site.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\dist\jquery.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\dist\jquery.slim.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\dist\jquery.min.map
+D:\website-e-commerce\website-e-commerce\wwwroot\js\search.js
+D:\website-e-commerce\website-e-commerce\wwwroot\js\filter.js
+D:\website-e-commerce\website-e-commerce\wwwroot\css\site.css
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\dist\jquery.min.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\LICENSE.txt
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\dist\jquery.slim.min.js
 D:\website-e-commerce\website-e-commerce\wwwroot\js\news.js
+D:\website-e-commerce\website-e-commerce\wwwroot\lib\jquery\dist\jquery.slim.min.map

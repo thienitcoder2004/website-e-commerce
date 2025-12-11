@@ -1,0 +1,77 @@
+﻿@page
+@model website_e_commerce.Areas.Identity.Pages.Account.LockoutModel
+
+@{
+    ViewData["Title"] = "Tài khoản bị khóa";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<section class="section-login">
+    <!-- Breadcrumb -->
+    <div class="bread-cumb">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li class="home">
+                    <a href="/" class="text-black">
+                        <span>Trang chủ</span>
+                    </a>
+                    <span class="mr-lr">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </span>
+                </li>
+                <li>
+                    <strong><span>Tài khoản bị khóa</span></strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Form box giống login -->
+    <div class="section-form-register">
+        <div class="container">
+            <!-- Tabs giống trang Đăng nhập -->
+            <div class="tabs">
+                <a href="/Identity/Account/Login" class="tab">ĐĂNG NHẬP</a>
+                <a href="/Identity/Account/Register" class="tab">ĐĂNG KÝ</a>
+            </div>
+
+            <div class="form-box">
+                <h2>TÀI KHOẢN BỊ KHÓA</h2>
+
+                <p class="mt-3 mb-2 text-center">
+                    Vì lý do bảo mật, tài khoản của bạn tạm thời đã bị khóa
+                    sau nhiều lần đăng nhập thất bại hoặc hoạt động bất thường.
+                </p>
+
+                <p class="text-center mb-3 text-muted" style="font-size: 14px;">
+                    Nếu bạn quên mật khẩu, hãy sử dụng chức năng
+                    <strong>Quên mật khẩu</strong> để đặt lại và mở khóa tài khoản.
+                </p>
+
+                <!-- Nút hành động -->
+                <div class="d-flex flex-column gap-2 mt-4">
+
+                    <a asp-page="./ForgotPassword" class="btn btn-warning w-100">
+                        <i class="fa-solid fa-key me-1"></i>
+                        Quên mật khẩu
+                    </a>
+
+                    <a asp-page="./Login" class="btn btn-primary w-100">
+                        <i class="fa-solid fa-arrow-right-to-bracket me-1"></i>
+                        Quay lại đăng nhập
+                    </a>
+
+                    <a href="/" class="btn btn-outline-secondary w-100">
+                        <i class="fa-solid fa-house me-1"></i>
+                        Về trang chủ
+                    </a>
+                </div>
+
+                <div class="mt-4 text-center text-muted" style="font-size: 13px;">
+                    Nếu bạn nghi ngờ tài khoản bị xâm nhập, hãy liên hệ quản trị viên
+                    hoặc bộ phận hỗ trợ của cửa hàng để được trợ giúp thêm.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

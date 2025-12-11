@@ -1,28 +1,120 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Profile";
-    ViewData["ActivePage"] = ManageNavPages.Index;
+    ViewData["Title"] = "Hồ sơ của tôi";
+    // ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
+<style>
+    .profile-header h5 {
+        font-weight: 600;
+        margin-bottom: 4px;
+        font-size: 18px;
+    }
+
+    .profile-header small {
+        color: #999;
+        font-size: 13px;
+    }
+
+    .profile-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 18px;
+        font-size: 14px;
+    }
+
+    .profile-row-label {
+        width: 150px;
+        color: #757575;
+        text-align: right;
+        padding-right: 24px;
+        white-space: nowrap;
+    }
+
+    .profile-row-control {
+        flex: 1;
+    }
+
+        .profile-row-control .form-control {
+            max-width: 360px;
+            height: 36px;
+            font-size: 14px;
+            padding: 6px 10px;
+        }
+
+    .btn-profile-save {
+        margin-left: 150px;
+        padding: 6px 32px;
+        font-size: 14px;
+        border-radius: 2px;
+        background-color: #ee4d2d;
+        border-color: #ee4d2d;
+    }
+
+        .btn-profile-save:hover {
+            background-color: #d73211;
+            border-color: #d73211;
+        }
+
+    @@media (max-width: 992px) {
+        .profile-row
+
+    {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .profile-row-label {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 4px;
+    }
+
+    .btn-profile-save {
+        margin-left: 0;
+    }
+
+    }
+</style>
+
 <partial name="_StatusMessage" for="StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
-                <label asp-for="Username" class="form-label"></label>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-        </form>
-    </div>
+
+<div class="profile-header mb-4">
+    <h5>Hồ Sơ Của Tôi</h5>
+    <small>Quản lý thông tin hồ sơ để bảo mật tài khoản</small>
 </div>
+
+<form id="profile-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2" role="alert"></div>
+
+    <!-- Tên đăng nhập -->
+    <div class="profile-row">
+        <div class="profile-row-label">Tên đăng nhập</div>
+        <div class="profile-row-control">
+            <input asp-for="Username"
+                   class="form-control"
+                   disabled />
+        </div>
+    </div>
+
+    <!-- Số điện thoại -->
+    <div class="profile-row">
+        <div class="profile-row-label">Số điện thoại</div>
+        <div class="profile-row-control">
+            <input asp-for="Input.PhoneNumber"
+                   class="form-control"
+                   placeholder="Nhập số điện thoại..." />
+            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button id="update-profile-button"
+            type="submit"
+            class="btn btn-primary btn-profile-save">
+        Lưu
+    </button>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -23,7 +23,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Cấu hình Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>( options =>
+    {
+        // Tắt cơ chế lockout mặc định, để mình tự xử lý
+        options.Lockout.AllowedForNewUsers = true;
+        options.Lockout.MaxFailedAccessAttempts = int.MaxValue;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.Zero;
+    })
                 .AddDefaultTokenProviders()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -65,6 +71,7 @@ builder.Services.AddSingleton<MomoService>();
 builder.Services.AddSingleton<VnPayService>();
 
 builder.Services.AddAuthorization();
+System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
 var app = builder.Build();
 

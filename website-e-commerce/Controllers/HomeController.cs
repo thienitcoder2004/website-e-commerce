@@ -57,8 +57,6 @@ namespace website_e_commerce.Controllers
          .Take(8)
          .ToList();
 
-            ViewBag.LatestProducts = latestProducts;
-
             var latestNews = _newsRepo.GetAllNews()
                 .OrderByDescending(n => n.PublishedDate)
                 .Take(5)

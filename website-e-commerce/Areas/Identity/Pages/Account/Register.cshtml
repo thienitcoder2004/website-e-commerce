@@ -2,78 +2,125 @@
 @using website_e_commerce.Models
 @model RegisterModel
 @{
-    Layout = User.IsInRole("Admin")
+    // Dùng hằng SD.Role_Admin cho đồng nhất
+    Layout = User.IsInRole(SD.Role_Admin)
         ? "/Views/Shared/_LayoutAdmin.cshtml"
         : "/Views/Shared/_Layout.cshtml";
 }
 
 @if (User.IsInRole(SD.Role_Admin))
 {
-    <section class="section-login">
-        <div class="section-form-register">
+    @if (User.IsInRole(SD.Role_Admin))
+    {
+        <!-- ========= GIAO DIỆN ĐĂNG KÝ CHO ADMIN (LAYOUT ADMIN) ========= -->
+        <section class="py-4">
             <div class="container">
-                <div class="form-box">
-                    <h2>ĐĂNG KÝ</h2>
+                <div class="row justify-content-center">
+                    <div class="col-xl-9 col-lg-10">
+                        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
 
-                    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                            <!-- Header -->
+                            <div class="card-header bg-primary text-white border-0 py-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-2 fs-4">
+                                        <i class="fa-solid fa-user-plus"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-1 text-uppercase fw-bold">Đăng ký tài khoản mới</h5>
+                                        <small class="fw-normal">
+                                            Tạo tài khoản cho khách hàng, nhân viên hoặc quản trị viên.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.Ho" class="form-control" placeholder="Họ" />
-                            <label asp-for="Input.Ho">Họ</label>
-                            <span asp-validation-for="Input.Ho" class="text-danger"></span>
+                            <!-- Body -->
+                            <div class="card-body bg-light">
+                                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input asp-for="Input.Ho" class="form-control" placeholder="Họ" />
+                                                <label asp-for="Input.Ho">Họ</label>
+                                                <span asp-validation-for="Input.Ho" class="text-danger small"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input asp-for="Input.Ten" class="form-control" placeholder="Tên" />
+                                                <label asp-for="Input.Ten">Tên</label>
+                                                <span asp-validation-for="Input.Ten" class="text-danger small"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input asp-for="Input.Email" class="form-control" autocomplete="username"
+                                                       placeholder="name@example.com" />
+                                                <label asp-for="Input.Email">Email</label>
+                                                <span asp-validation-for="Input.Email" class="text-danger small"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input asp-for="Input.SoDienThoai" class="form-control" placeholder="Số điện thoại" />
+                                                <label asp-for="Input.SoDienThoai">Số điện thoại</label>
+                                                <span asp-validation-for="Input.SoDienThoai" class="text-danger small"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input asp-for="Input.Password" class="form-control" autocomplete="new-password"
+                                                       placeholder="Mật khẩu" />
+                                                <label asp-for="Input.Password">Mật khẩu</label>
+                                                <span asp-validation-for="Input.Password" class="text-danger small"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password"
+                                                       placeholder="Xác nhận mật khẩu" />
+                                                <label asp-for="Input.ConfirmPassword">Xác nhận mật khẩu</label>
+                                                <span asp-validation-for="Input.ConfirmPassword" class="text-danger small"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <select asp-for="Input.Role" asp-items="Model.Input.RoleList" class="form-select">
+                                                    <option value="">-- Mặc định: Khách hàng --</option>
+                                                </select>
+                                                <label asp-for="Input.Role">Quyền (Role)</label>
+                                                <span asp-validation-for="Input.Role" class="text-danger small"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4 d-flex justify-content-end">
+                                        <button id="registerSubmit" type="submit" class="btn btn-primary px-5 fw-semibold">
+                                            Đăng ký
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
                         </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.Ten" class="form-control" placeholder="Tên" />
-                            <label asp-for="Input.Ten">Tên</label>
-                            <span asp-validation-for="Input.Ten" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.Email" class="form-control" autocomplete="username"
-                                   placeholder="name@example.com" />
-                            <label asp-for="Input.Email">Email</label>
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.SoDienThoai" class="form-control" placeholder="Số điện thoại" />
-                            <label asp-for="Input.SoDienThoai">Số điện thoại</label>
-                            <span asp-validation-for="Input.SoDienThoai" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.Password" class="form-control" autocomplete="new-password"
-                                   placeholder="Mật khẩu" />
-                            <label asp-for="Input.Password">Mật khẩu</label>
-                            <span asp-validation-for="Input.Password" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password"
-                                   placeholder="Xác nhận mật khẩu" />
-                            <label asp-for="Input.ConfirmPassword">Xác nhận mật khẩu</label>
-                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="Input.Role"></label>
-                            <select asp-for="Input.Role" asp-items="Model.Input.RoleList" class="form-control">
-                                <option value="">-- Mặc định: Customer --</option>
-                            </select>
-                            <span asp-validation-for="Input.Role" class="text-danger"></span>
-                        </div>
-
-                        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Đăng ký</button>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    }
+
 }
 else
 {
+    <!-- ========= GIAO DIỆN ĐĂNG KÝ CHO NGƯỜI DÙNG (GIỐNG GEAR5) ========= -->
     <section class="section-login">
         <div class="bread-cumb">
             <div class="container">
@@ -145,14 +192,18 @@ else
                             <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                         </div>
 
+                        <!-- Người dùng thường: ROLE CUSTOMER  -->
+                        <input type="hidden" asp-for="Input.Role" value="@SD.Role_Customer" />
+
                         <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Đăng ký</button>
                     </form>
+
                     <p class="text-center mt-3">
                         <a asp-page="./ForgotPassword" class="text-decoration-none text-primary">Quên mật khẩu?</a>
                     </p>
                     <hr />
                     <div class="text-center">
-                        <form asp-page="./ExternalLogin" method="post" asp-route-provider="Google">
+                        <form asp-page="./ExternalLogin" method="post" asp-route-provider="Google" asp-route-returnUrl="@Model.ReturnUrl">
                             <button type="submit" class="btn btn-outline-danger w-100 mb-2">
                                 <i class="fab fa-google"></i> Đăng nhập bằng Google
                             </button>
@@ -163,12 +214,12 @@ else
         </div>
     </section>
 }
-)
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
     <script>
+        // Nếu bạn muốn giữ validate JS cũ, có thể thêm thuộc tính required vào input
         document.getElementById("registerForm").addEventListener("submit", function (e) {
             const inputs = document.querySelectorAll("#registerForm input[required]");
             let valid = true;

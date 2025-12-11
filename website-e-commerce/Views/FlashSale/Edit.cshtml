@@ -1,38 +1,36 @@
 ﻿@model FlashSale
-@{
-    var products = ViewBag.Products as List<Product>;
-}
 
-<h2 class="mb-3">Chỉnh sửa Flash Sale</h2>
+<form asp-action="Edit" method="post">
 
-<form method="post" class="card p-4 w-50">
+    <input type="hidden" asp-for="Id" />
 
-    <!-- SẢN PHẨM -->
-    <label>Sản phẩm</label>
-    <select asp-for="ProductId"
-            class="form-control mb-3"
-            asp-items="@(new SelectList(products, "Id", "Name", Model.ProductId))">
-    </select>
+    <div class="mb-3">
+        <label>Sản phẩm</label>
+        <select asp-for="ProductId"
+                asp-items="@(new SelectList(ViewBag.Products, "Id", "Name"))"
+                class="form-control">
+        </select>
+    </div>
 
-    <!-- GIÁ FLASH -->
-    <label>Giá Flash</label>
-    <input asp-for="FlashPrice" type="number" step="0.01" class="form-control mb-3" />
+    <div class="mb-3">
+        <label>Giá Flash Sale</label>
+        <input asp-for="FlashPrice" class="form-control" />
+    </div>
 
-    <!-- SỐ LƯỢNG -->
-    <label>Số lượng</label>
-    <input asp-for="FlashQuantity" type="number" class="form-control mb-3" />
+    <div class="mb-3">
+        <label>Số lượng</label>
+        <input asp-for="FlashQuantity" class="form-control" />
+    </div>
 
-    <!-- BẮT ĐẦU -->
-    <label>Bắt đầu</label>
-    <input asp-for="StartTime" type="datetime-local"
-           value="@Model.StartTime.ToString("yyyy-MM-ddTHH:mm")"
-           class="form-control mb-3" />
+    <div class="mb-3">
+        <label>Thời gian bắt đầu</label>
+        <input asp-for="StartTime" type="datetime-local" class="form-control" />
+    </div>
 
-    <!-- KẾT THÚC -->
-    <label>Kết thúc</label>
-    <input asp-for="EndTime" type="datetime-local"
-           value="@Model.EndTime.ToString("yyyy-MM-ddTHH:mm")"
-           class="form-control mb-3" />
+    <div class="mb-3">
+        <label>Thời gian kết thúc</label>
+        <input asp-for="EndTime" type="datetime-local" class="form-control" />
+    </div>
 
-    <button class="btn btn-success">Cập nhật</button>
+    <button class="btn btn-primary">Cập nhật</button>
 </form>
