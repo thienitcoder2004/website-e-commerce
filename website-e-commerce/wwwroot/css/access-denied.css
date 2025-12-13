@@ -1,0 +1,103 @@
+﻿.access-wrapper {
+    min-height: 100vh;
+    width: 100vw;
+    background: radial-gradient(circle at top left, #2b2a4c, #1f1c2c 60%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+    .access-wrapper::before {
+        content: "";
+        position: absolute;
+        width: 450px;
+        height: 450px;
+        background: radial-gradient(circle, rgba(255,107,107,0.25), transparent 70%);
+        top: -120px;
+        left: -120px;
+        filter: blur(80px);
+    }
+
+    .access-wrapper::after {
+        content: "";
+        position: absolute;
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, rgba(102,126,234,0.25), transparent 70%);
+        bottom: -120px;
+        right: -120px;
+        filter: blur(80px);
+    }
+
+.access-box {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px);
+    border-radius: 22px;
+    padding: 55px 65px;
+    text-align: center;
+    color: #fff;
+    max-width: 540px;
+    width: 92%;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255,255,255,0.08);
+    animation: fadeUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+    .access-box .icon {
+        font-size: 90px;
+        margin-bottom: 10px;
+    }
+
+    .access-box h1 {
+        font-size: 86px;
+        font-weight: 900;
+        background: linear-gradient(135deg, #ff6b6b, #ff9f43);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .access-box h2 {
+        font-size: 22px;
+        letter-spacing: 2px;
+        margin-bottom: 18px;
+    }
+
+    .access-box p {
+        font-size: 15.5px;
+        line-height: 1.75;
+        margin-bottom: 35px;
+    }
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+    .buttons .btn {
+        padding: 12px 26px;
+        border-radius: 999px;
+        min-width: 160px;
+        transition: 0.3s;
+    }
+
+        .buttons .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+        }
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

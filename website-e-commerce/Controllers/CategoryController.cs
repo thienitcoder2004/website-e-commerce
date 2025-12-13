@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using website_e_commerce.Models;
 using website_e_commerce.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace website_e_commerce.Controllers
 {
+    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
@@ -33,7 +35,6 @@ namespace website_e_commerce.Controllers
             return View(categories);
         }
 
-
         // GET: /Category/Add
         public IActionResult Add()
         {
@@ -48,8 +49,14 @@ namespace website_e_commerce.Controllers
             if (ModelState.IsValid)
             {
                 _categoryRepository.Add(category);
+
+                // ✅ Thông báo thành công (Toast + Alert đều dùng key này)
+                TempData["SuccessMessage"] = $"Đã thêm danh mục \"{category.Name}\" thành công.";
                 return RedirectToAction(nameof(Index));
             }
+
+            // Có lỗi validate
+            TempData["ErrorMessage"] = "Thêm danh mục thất bại. Vui lòng kiểm tra lại thông tin.";
             return View(category);
         }
 
@@ -71,8 +78,13 @@ namespace website_e_commerce.Controllers
             if (ModelState.IsValid)
             {
                 _categoryRepository.Update(category);
+
+                // ✅ Thông báo thành công
+                TempData["SuccessMessage"] = $"Đã cập nhật danh mục \"{category.Name}\".";
                 return RedirectToAction(nameof(Index));
             }
+
+            TempData["ErrorMessage"] = "Cập nhật danh mục thất bại. Vui lòng kiểm tra lại.";
             return View(category);
         }
 
@@ -91,7 +103,18 @@ namespace website_e_commerce.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            _categoryRepository.Delete(id);
+            var category = _categoryRepository.GetById(id);
+            if (category != null)
+            {
+                string name = category.Name;
+                _categoryRepository.Delete(id);
+                TempData["SuccessMessage"] = $"Đã xóa danh mục \"{name}\".";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Danh mục không tồn tại hoặc đã bị xóa.";
+            }
+
             return RedirectToAction(nameof(Index));
         }
 

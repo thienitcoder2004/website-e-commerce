@@ -9,10 +9,9 @@
     string searchKeyword = ViewBag.SearchKeyword as string ?? "";
     int? brandId = ViewBag.BrandId as int?;
     int? catId = ViewBag.CategoryId as int?;
-
     var favoriteIds = ViewBag.FavoriteIds as List<int> ?? new List<int>();
-         int totalProducts = Model?.Count() ?? 0;
-    bool showDynamic = ViewBag.DynamicFilters != null;   // ❗ CHỈ TRUE khi query != "" && category != null
+    int totalProducts = Model?.Count() ?? 0;
+    bool showDynamic = ViewBag.DynamicFilters != null;  
 }
 
 

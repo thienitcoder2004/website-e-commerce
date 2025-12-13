@@ -145,7 +145,7 @@ static async Task SeedRolesAndAdmin(IApplicationBuilder app)
             Ho = adminHo,
             Ten = adminTen,
             PhoneNumber = "0123456789",
-            EmailConfirmed = true
+            EmailConfirmed = true,
         };
 
         var result = await userManager.CreateAsync(adminUser, adminPassword);

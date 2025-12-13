@@ -79,9 +79,9 @@
         color: #374151;
     }
 
-        .country-pill i {
-            font-size: 11px;
-        }
+    .country-pill i {
+        font-size: 11px;
+    }
 
     .status-badge {
         font-size: 12px;
@@ -108,6 +108,27 @@
         max-width: 260px;
         border-radius: 999px;
         font-size: 14px;
+    }
+
+    .toast-notif {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #28a745, #4cd964);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        opacity: 0;
+        transform: translateX(40px);
+        transition: all .4s ease;
+    }
+
+    .toast-notif.show {
+        opacity: 1;
+        transform: translateX(0);
     }
 
     @@media (max-width: 768px) {
@@ -146,13 +167,10 @@
             </div>
         </div>
 
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success alert-dismissible fade show mb-4">
-                @TempData["SuccessMessage"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        }
+        <!-- TOAST -->
+        <div id="toastNotif" class="toast-notif">
+            <span id="toastMessage"></span>
+        </div>
 
         <!-- Thanh công cụ: Tìm kiếm -->
         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -164,10 +182,8 @@
                 <span class="input-group-text">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
-                <input type="text"
-                       id="brandSearch"
-                       class="form-control brand-search-input"
-                       placeholder="Tìm kiếm thương hiệu..." />
+                <input type="text" id="brandSearch" class="form-control brand-search-input"
+                    placeholder="Tìm kiếm thương hiệu..." />
             </div>
         </div>
 
@@ -236,12 +252,12 @@
 
                                     <td>
                                         <a asp-action="Edit" asp-route-id="@brand.Id" class="btn btn-sm btn-warning me-1"
-                                           title="Chỉnh sửa">
+                                            title="Chỉnh sửa">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
                                         <a asp-action="Delete" asp-route-id="@brand.Id" class="btn btn-sm btn-danger"
-                                           onclick="return confirm('Bạn có chắc muốn xóa thương hiệu này?');"
-                                           title="Xóa thương hiệu">
+                                            onclick="return confirm('Bạn có chắc muốn xóa thương hiệu này?');"
+                                            title="Xóa thương hiệu">
                                             <i class="fa-solid fa-trash"></i>
                                         </a>
                                     </td>
@@ -267,9 +283,7 @@
             <nav class="mt-4">
                 <ul class="pagination justify-content-center">
                     <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-                        <a class="page-link"
-                           asp-action="Index"
-                           asp-route-page="@(ViewBag.CurrentPage - 1)">
+                        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">
                             Trước
                         </a>
                     </li>
@@ -277,18 +291,14 @@
                     @for (int i = 1; i <= ViewBag.TotalPages; i++)
                     {
                         <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                            <a class="page-link"
-                               asp-action="Index"
-                               asp-route-page="@i">
+                            <a class="page-link" asp-action="Index" asp-route-page="@i">
                                 @i
                             </a>
                         </li>
                     }
 
                     <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-                        <a class="page-link"
-                           asp-action="Index"
-                           asp-route-page="@(ViewBag.CurrentPage + 1)">
+                        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">
                             Sau
                         </a>
                     </li>
@@ -300,25 +310,57 @@
 
 @section Scripts {
     <script>
-        // Tìm kiếm theo tên thương hiệu (client-side)
         document.addEventListener("DOMContentLoaded", function () {
+
+            // =============================
+            // 🔍 Tìm kiếm thương hiệu
+            // =============================
             const searchInput = document.getElementById("brandSearch");
             const rows = document.querySelectorAll("#brandTable tbody tr[data-brand-name]");
 
-            if (!searchInput) return;
+            if (searchInput) {
+                searchInput.addEventListener("input", function () {
+                    const keyword = this.value.trim().toLowerCase();
 
-            searchInput.addEventListener("input", function () {
-                const keyword = this.value.trim().toLowerCase();
-
-                rows.forEach(row => {
-                    const name = row.getAttribute("data-brand-name") || "";
-                    if (name.includes(keyword)) {
-                        row.style.display = "";
-                    } else {
-                        row.style.display = "none";
-                    }
+                    rows.forEach(row => {
+                        const name = row.getAttribute("data-brand-name") || "";
+                        row.style.display = name.includes(keyword) ? "" : "none";
+                    });
                 });
-            });
-        });
+            }
+
+            // =============================
+            // 🔔 HÀM HIỂN THỊ TOAST
+            // =============================
+            function showToast(message) {
+                const toast = document.getElementById("toastNotif");
+                const msg = document.getElementById("toastMessage");
+
+                if (!toast || !msg) return;
+
+                msg.innerText = message;
+                toast.classList.add("show");
+
+                setTimeout(() => toast.classList.remove("show"), 2500);
+            }
+
+            // =============================
+            // 📌 KIỂM TRA TEMPDATA MẶC ĐỊNH
+            // =============================
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <text>
+                    showToast(@Html.Raw(Json.Serialize(TempData["SuccessMessage"])));
+                </text>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <text>
+                    showToast("@TempData["ErrorMessage"]");
+                </text>
+            }
+
+        }); // END DOMContentLoaded
     </script>
 }

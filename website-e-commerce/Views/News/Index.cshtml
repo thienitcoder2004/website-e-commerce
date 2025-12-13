@@ -5,6 +5,28 @@
 }
 
 <style>
+    #toastNotif {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        padding: 14px 26px;
+        background: linear-gradient(135deg, #28a745, #42d67c);
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all .4s ease;
+        z-index: 9999;
+        pointer-events: none;
+    }
+    #toastNotif.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
+<style>
     .news-card {
         transition: all 0.3s ease;
         border-radius: 16px;
@@ -13,18 +35,15 @@
         border: 1px solid #eee;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
     }
-
-        .news-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .news-card img {
-            height: 220px;
-            object-fit: cover;
-            width: 100%;
-        }
-
+    .news-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    .news-card img {
+        height: 220px;
+        object-fit: cover;
+        width: 100%;
+    }
     .news-title {
         font-size: 1.05rem;
         font-weight: 600;
@@ -32,124 +51,78 @@
         color: #222;
         transition: color 0.2s;
     }
-
-        .news-title:hover {
-            color: #0d6efd;
-        }
-
-    .news-meta {
-        font-size: 0.9rem;
-        color: #777;
-        margin-bottom: 10px;
-    }
-
-    .news-summary {
-        color: #555;
-        font-size: 0.95rem;
-        min-height: 70px;
-    }
+    .news-title:hover { color: #0d6efd; }
+    .news-meta { font-size: 0.9rem; color: #777; margin-bottom: 10px; }
+    .news-summary { color: #555; font-size: 0.95rem; min-height: 70px; }
 
     .btn-group-sm .btn {
         font-size: 0.85rem;
         padding: 4px 10px;
         border-radius: 8px;
     }
-
-    .add-button {
-        background-color: #198754;
-        color: #fff;
-        border-radius: 8px;
-        padding: 8px 14px;
-        text-decoration: none;
-        transition: 0.2s;
-    }
-
-        .add-button:hover {
-            background-color: #157347;
-        }
 </style>
 
 @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
 {
     <style>
-    .news-page-wrapper {
-        background: radial-gradient(circle at top left, #eef2ff, #ffffff);
-        border-radius: 18px;
-        padding: 28px 24px;
-        margin-top: 20px;
-        box-shadow: 0 8px 24px rgba(15,23,42,0.12);
-    }
-
-    .news-title {
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: .06em;
-        font-size: 18px;
-    }
-
-    .news-subtitle {
-        font-size: 13px;
-        color: #6b7280;
-    }
-
-    .news-badge-summary {
-        font-size: 13px;
-        padding: 6px 14px;
-        border-radius: 999px;
-        background: #f9fafb;
-        border: 1px solid #e5e7eb;
-        color: #4b5563;
-    }
-
-    .btn-news-add {
-        border-radius: 999px;
-        padding: 8px 18px;
-        font-size: 14px;
-    }
-
-    .news-table-wrapper {
-        border-radius: 16px;
-        overflow: hidden;
-        background: #fff;
-        box-shadow: 0 4px 18px rgba(15,23,42,0.08);
-    }
-
-    .table thead th {
-        background: #0d6efd;
-        color: white;
-        border-bottom: none;
-        font-size: 14px;
-        text-transform: uppercase;
-    }
-
-    .table tbody tr:hover {
-        background: #f3f4ff;
-    }
-
-    .news-thumb {
-        width: 110px;
-        height: 70px;
-        object-fit: cover;
-        border-radius: 6px;
-        border: 1px solid #e5e7eb;
-    }
-
-    .status-pill {
-        font-size: 12px;
-        padding: 6px 12px;
-        border-radius: 999px;
-        font-weight: 600;
-        display: inline-block;
-    }
-
-    .st-published { background: #e6ffed; color: #0f8a39; border: 1px solid #9ef8c2; }
-    .st-draft { background: #ececec; color: #6b7280; border: 1px solid #bdbdbd; }
-
-    @@media(max-width: 768px) {
-        .news-page-wrapper { padding: 20px 16px; border-radius: 12px; }
-        .table-responsive { font-size: 13px; }
-    }
-</style>
+        .news-page-wrapper {
+            background: radial-gradient(circle at top left, #eef2ff, #ffffff);
+            border-radius: 18px;
+            padding: 28px 24px;
+            margin-top: 20px;
+            box-shadow: 0 8px 24px rgba(15,23,42,0.12);
+        }
+        .news-title {
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            font-size: 18px;
+        }
+        .news-subtitle { font-size: 13px; color: #6b7280; }
+        .news-badge-summary {
+            font-size: 13px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+        .btn-news-add {
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-size: 14px;
+        }
+        .news-table-wrapper {
+            border-radius: 16px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 4px 18px rgba(15,23,42,0.08);
+        }
+        .table thead th {
+            background: #0d6efd;
+            color: white;
+            border-bottom: none;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .table tbody tr:hover { background: #f3f4ff; }
+        .news-thumb {
+            width: 110px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        .status-pill {
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .st-published { background: #e6ffed; color: #0f8a39; border: 1px solid #9ef8c2; }
+        .st-draft { background: #ececec; color: #6b7280; border: 1px solid #bdbdbd; }
+    </style>
 
 <div class="container">
     <div class="news-page-wrapper">
@@ -157,16 +130,14 @@
         <!-- HEADER -->
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
             <div>
-                <h2 class="news-title text-primary mb-1">
-                    📰 Quản lý tin tức
-                </h2>
+                <h2 class="news-title text-primary mb-1">📰 Quản lý tin tức</h2>
                 <p class="news-subtitle mb-0">Theo dõi các bài viết tin tức và cập nhật nội dung trang Blog.</p>
             </div>
 
             <div class="d-flex align-items-center gap-2">
                 <span class="news-badge-summary">
-                    <i class="fa-solid fa-newspaper me-1"></i>
-                    Tổng tin tức: <strong>@totalNews</strong>
+                    <i class="fa-solid fa-newspaper me-1"></i> Tổng tin tức:
+                    <strong>@totalNews</strong>
                 </span>
 
                 <a asp-action="Add" class="btn btn-success btn-news-add">
@@ -175,6 +146,7 @@
             </div>
         </div>
 
+        <!-- ALERT CŨ (nếu muốn bỏ thì nói mình) -->
         @if (TempData["Message"] != null)
         {
             <div class="alert alert-success alert-dismissible fade show mb-4">
@@ -205,10 +177,7 @@
                             foreach (var news in Model)
                             {
                                 <tr>
-                                    <td>
-                                        <img src="@news.ImageUrl" class="news-thumb" />
-                                    </td>
-
+                                    <td><img src="@news.ImageUrl" class="news-thumb" /></td>
                                     <td class="fw-semibold text-start">@news.Title</td>
                                     <td>@news.Author</td>
                                     <td>@news.PublishedDate.ToString("dd/MM/yyyy")</td>
@@ -231,13 +200,11 @@
 
                                     <td>
                                         <div class="d-flex justify-content-center gap-1">
-                                            <a asp-action="Detail" asp-route-id="@news.Id"
-                                               class="btn btn-sm btn-info">
+                                            <a asp-action="Detail" asp-route-id="@news.Id" class="btn btn-sm btn-info">
                                                 <i class="fa-solid fa-circle-info"></i>
                                             </a>
 
-                                            <a asp-action="Edit" asp-route-id="@news.Id"
-                                               class="btn btn-sm btn-warning">
+                                            <a asp-action="Edit" asp-route-id="@news.Id" class="btn btn-sm btn-warning">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
 
@@ -254,51 +221,65 @@
                         }
                         else
                         {
-                            <tr>
-                                <td colspan="7" class="py-4 text-muted">Không có tin tức nào.</td>
-                            </tr>
+                            <tr><td colspan="7" class="py-4 text-muted">Không có tin tức nào.</td></tr>
                         }
                     </tbody>
+
                 </table>
             </div>
         </div>
 
-        <!-- PAGINATION -->
+        <!-- PHÂN TRANG -->
         @if (ViewBag.TotalPages > 1)
-{
-    <nav class="mt-4">
-        <ul class="pagination justify-content-center">
+        {
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Trước</a>
+                    </li>
 
-            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-                <a class="page-link"
-                   asp-action="Index"
-                   asp-route-page="@(ViewBag.CurrentPage - 1)">Trước</a>
-            </li>
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                        </li>
+                    }
 
-            @for (int i = 1; i <= ViewBag.TotalPages; i++)
-            {
-                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                    <a class="page-link"
-                       asp-action="Index"
-                       asp-route-page="@i">@i</a>
-                </li>
-            }
-
-            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-                <a class="page-link"
-                   asp-action="Index"
-                   asp-route-page="@(ViewBag.CurrentPage + 1)">Sau</a>
-            </li>
-
-        </ul>
-    </nav>
-}
+                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Sau</a>
+                    </li>
+                </ul>
+            </nav>
+        }
 
     </div>
 </div>
+
+<div id="toastNotif"><span id="toastMessage"></span></div>
+
+@section Scripts {
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById("toastNotif");
+            document.getElementById("toastMessage").innerText = message;
+
+            toast.classList.add("show");
+
+            setTimeout(() => toast.classList.remove("show"), 2500);
+        }
+
+        @if (TempData["Message"] != null)
+        {
+            <text>
+                showToast(@Json.Serialize(TempData["Message"]));
+            </text>
+        }
+    </script>
+}
 }
 else
 {
+    <!-- Giao diện Client giữ nguyên -->
     <section class="container mt-5">
         <div class="row g-4">
             @if (Model != null && Model.Any())
@@ -328,4 +309,3 @@ else
         </div>
     </section>
 }
-

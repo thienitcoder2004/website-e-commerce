@@ -40,7 +40,10 @@
 
 <body>
     <div id="page-loader">
-        <div class="loader"></div>
+        <div class="pig-wrapper">
+            <div class="pig"></div>
+            <div class="loading-text">Đợi xíu nha...</div>
+        </div>
     </div>
 
     <div class="banner-top d-none d-md-block" style="background: #d62828">
@@ -63,7 +66,8 @@
 
                 <!-- Ô tìm kiếm -->
                 <form action="/Product/Index" method="get" class="search-bar position-relative">
-                    <input type="text" name="query" class="search-auto" placeholder="Bạn cần tìm gì..." autocomplete="off">
+                    <input type="text" name="query" class="search-auto" placeholder="Bạn cần tìm gì..."
+                        autocomplete="off">
 
                     <div class="suggestion-box"></div>
 
@@ -96,7 +100,7 @@
                     <!-- 🔗 CÁC NÚT KHÁC -->
                     <a href="/Product/Compare">
                         <i class="fa-solid fa-code-compare"></i> So sánh
-                    </a> 
+                    </a>
                     <a href="/Product/Favorites"><i class="fa-regular fa-heart"></i><span>Yêu thích</span></a>
                     <a href="/Contact/Add"><i class="fas fa-headset"></i><span>Liên hệ</span></a>
                     <a href="/OrderLookup/Index">
@@ -121,18 +125,20 @@
                             <div>
                                 <h6>Hãng nổi bật</h6>
                                 <ul>
-                                    <li><a href="#">iPhone</a></li>
-                                    <li><a href="#">Samsung</a></li>
-                                    <li><a href="#">Xiaomi</a></li>
-                                    <li><a href="#">OPPO</a></li>
+                                    <li><a href="http://localhost:5223/Product/Index?query=iphone">iPhone</a></li>
+                                    <li><a href="http://localhost:5223/Product/Index?query=samsum">Samsung</a></li>
+                                    <li><a href="http://localhost:5223/Product/Index?query=xiaomi">Xiaomi</a></li>
+                                    <li><a href="http://localhost:5223/Product/Index?query=oppo">OPPO</a></li>
                                 </ul>
                             </div>
                             <div>
                                 <h6>Phân khúc giá</h6>
                                 <ul>
-                                    <li><a href="#">Dưới 5 triệu</a></li>
-                                    <li><a href="#">5 - 10 triệu</a></li>
-                                    <li><a href="#">Trên 10 triệu</a></li>
+                                    <li><a href="http://localhost:5223/Product/Index?query=&filter=price%3D0-5000000&page=1">Dưới 5 triệu</a></li>
+                                    <li><a href="http://localhost:5223/Product/Index?query=&filter=price%3D5000000-10000000&page=1">5 - 10 triệu</a></li>
+                                    <li><a href="http://localhost:5223/Product/Index?query=&page=1&filter=price%3D10000000-15000000">10 - 15 triệu</a></li>
+                                    <li><a href="http://localhost:5223/Product/Index?query=&page=1&filter=price%3D15000000-20000000">15 - 20 triệu</a></li>
+                                    <li><a href="http://localhost:5223/Product/Index?query=&page=1&filter=price%3D20000000-30000000">20 - 30 triệu</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -144,9 +150,9 @@
                             <div>
                                 <h6>Thương hiệu</h6>
                                 <ul>
-                                    <li><a href="#">MacBook</a></li>
-                                    <li><a href="#">ASUS</a></li>
-                                    <li><a href="#">HP</a></li>
+                                    <li><a href="http://localhost:5223/Product/Index?query=Macbook">MacBook</a></li>
+                                    <li><a href="http://localhost:5223/Product/Index?query=Asus">ASUS</a></li>
+                                    <li><a href="http://localhost:5223/Product/Index?query=HP">HP</a></li>
                                 </ul>
                             </div>
                             <div>
@@ -164,9 +170,9 @@
                         <a href="#"><i class="fas fa-headphones"></i> Phụ kiện</a>
                         <div class="submenu">
                             <ul>
-                                <li><a href="#">Tai nghe</a></li>
-                                <li><a href="#">Sạc dự phòng</a></li>
-                                <li><a href="#">Ốp lưng</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=tai+nghe">Tai nghe</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=s%E1%BA%A1c+d%E1%BB%B1+ph%C3%B2ng">Sạc dự phòng</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=%E1%BB%91p+l%C6%B0ng">Ốp lưng</a></li>
                             </ul>
                         </div>
                     </li>
@@ -175,9 +181,9 @@
                         <a href="#"><i class="fas fa-tablet-alt"></i> Tablet</a>
                         <div class="submenu">
                             <ul>
-                                <li><a href="#">iPad</a></li>
-                                <li><a href="#">Samsung</a></li>
-                                <li><a href="#">Xiaomi</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=ipad">iPad</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=samsum">Samsung</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=xiaomi">Xiaomi</a></li>
                             </ul>
                         </div>
                     </li>
@@ -186,8 +192,8 @@
                         <a href="#"><i class="fas fa-tv"></i> Tivi</a>
                         <div class="submenu">
                             <ul>
-                                <li><a href="#">Smart Tivi</a></li>
-                                <li><a href="#">Android Tivi</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=smart+tivi">Smart Tivi</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=android+tivi">Android Tivi</a></li>
                             </ul>
                         </div>
                     </li>
@@ -196,9 +202,9 @@
                         <a href="#"><i class="fas fa-clock"></i> Đồng hồ</a>
                         <div class="submenu">
                             <ul>
-                                <li><a href="#">Đồng hồ nam</a></li>
-                                <li><a href="#">Đồng hồ nữ</a></li>
-                                <li><a href="#">Smartwatch</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=%C4%91%E1%BB%93ng+h%E1%BB%93">Đồng hồ nam</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=%C4%91%E1%BB%93ng+h%E1%BB%93">Đồng hồ nữ</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=Smartwatch">Smartwatch</a></li>
                             </ul>
                         </div>
                     </li>
@@ -209,7 +215,7 @@
                             <ul>
                                 <li><a href="#">Quạt, điều hòa, máy lọc nước</a></li>
                                 <li><a href="#">Tủ lạnh - điều hòa</a></li>
-                                <li><a href="#">Máy giặt, máy sấy</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=m%C3%A1y+gi%E1%BA%B7t">Máy giặt, máy sấy</a></li>
                             </ul>
                         </div>
                     </li>
@@ -230,7 +236,7 @@
                         <a href="#"><i class="fas fa-blender"></i> Kết nối và giải trí</a>
                         <div class="submenu">
                             <ul>
-                                <li><a href="#">Camera, Thiết bị mạng</a></li>
+                                <li><a href="http://localhost:5223/Product/Index?query=camera">Camera, Thiết bị mạng</a></li>
                                 <li><a href="#">Thiết bị chơi game, Máy chiếu, Bàn, Ghế</a></li>
                             </ul>
                         </div>
@@ -244,6 +250,7 @@
     <main class="container">
         @RenderBody()
     </main>
+    
     <!-- policy -->
     <section class="section_policy py-10">
         <div class="container">
@@ -753,6 +760,22 @@
 
 
         });
+
+        function togglePassword(el) {
+            const input = el.parentElement.querySelector(".password-input");
+            const icon = el.querySelector("i");
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+
         // Loader
         window.addEventListener("load", function () {
             const loader = document.getElementById("page-loader");
@@ -839,4 +862,5 @@
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
+
 </html>

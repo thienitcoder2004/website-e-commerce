@@ -235,7 +235,19 @@
         <div class="container-fluid">
 
             <div class="d-flex ms-auto align-items-center gap-3">
+                <div class="nav-item dropdown me-3" id="newsWrapper" style="position:relative;">
+                    <a class="nav-link position-relative" href="javascript:void(0);" id="newsToggle">
+                        <i class="fa-solid fa-bell" id="bellIcon"></i>
+                        <span class="badge bg-danger position-absolute" id="newsCount"
+                              style="top:-6px; right:-12px; font-size:.7rem;">0</span>
+                    </a>
+                    <div id="newsPopup"
+                         class="shadow bg-white border rounded position-absolute end-0 mt-2"
+                         style="display:none; width:340px; max-height:420px; overflow-y:auto;">
+                        <ul id="newsList" class="list-group list-group-flush"></ul>
+                    </div>
 
+                </div>
                 <!-- Avatar -->
                 <div class="d-flex align-items-center gap-2">
                     <img src="https://ui-avatars.com/api/?name=@User.Identity.Name" class="rounded-circle" width="38"
@@ -383,6 +395,86 @@
             sidebar.classList.toggle('collapsed');
             main.classList.toggle('expanded');
         };
+
+        const newsPopup = document.getElementById("newsPopup");
+        const newsToggle = document.getElementById("newsToggle");
+        const newsWrapper = document.getElementById("newsWrapper");
+        const newsCount = document.getElementById("newsCount");
+        const newsList = document.getElementById("newsList");
+        const bellIcon = document.getElementById("bellIcon");
+
+        newsToggle.addEventListener("click", () => {
+            const visible = newsPopup.style.display === "block";
+            newsPopup.style.display = visible ? "none" : "block";
+            if (!visible) loadLatestNews();
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!newsWrapper.contains(e.target)) {
+                newsPopup.style.display = "none";
+            }
+        });
+
+        // 🔄 Hàm load tin tức
+        function loadLatestNews() {
+            fetch("/News/GetLatest")
+                .then(res => res.json())
+                .then(data => {
+                    newsList.innerHTML = "";
+                    if (data.length === 0) {
+                        newsList.innerHTML = `<li class="list-group-item text-center text-muted">Không có tin mới</li>`;
+                    } else {
+                        data.forEach(n => {
+                            newsList.innerHTML += `
+                                <li class="list-group-item">
+                                    <a href="/News/Detail/${n.id}" class="text-decoration-none text-dark d-block">
+                                        <div class="fw-semibold">${n.title}</div>
+                                        <small class="text-muted">${n.publishedDate}</small>
+                                    </a>
+                                </li>`;
+                        });
+                    }
+                    newsCount.innerText = data.length;
+                })
+                .catch(() => {
+                    newsList.innerHTML = `<li class="list-group-item text-center text-danger">Lỗi tải dữ liệu</li>`;
+                });
+        }
+
+        // 🕒 Auto reload mỗi 30s
+        setInterval(loadLatestNews, 30000);
+        loadLatestNews();
+
+        // 🔔 Kết nối SignalR
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/newsHub")
+            .build();
+
+        // Khi nhận tin mới từ server
+        connection.on("ReceiveNews", (title) => {
+            // Rung chuông
+            bellIcon.classList.add("ring");
+            setTimeout(() => bellIcon.classList.remove("ring"), 2000);
+
+            // Cập nhật danh sách tin mới nhất
+            loadLatestNews();
+
+            // Hiển thị thông báo nhỏ
+            const toast = document.createElement("div");
+            toast.className = "position-fixed top-0 end-0 p-3";
+            toast.innerHTML = `
+                <div class="toast align-items-center text-bg-primary border-0 show" style="z-index:2000">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            📰 Tin mới: <strong>${title}</strong>
+                        </div>
+                    </div>
+                </div>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        });
+
+        connection.start().catch(err => console.error(err.toString()));
     </script>
 
     @RenderSection("Scripts", required: false)

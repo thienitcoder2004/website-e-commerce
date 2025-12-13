@@ -739,7 +739,6 @@ namespace website_e_commerce.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
-
         // ================================
         // DELETE
         // ================================

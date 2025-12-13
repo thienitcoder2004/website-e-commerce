@@ -81,9 +81,9 @@
                                         <!-- Khóa / mở khóa -->
                                         <form asp-action="LockUnlock" asp-route-id="@u.Id" method="post" class="d-inline">
                                             <button type="submit"
-                                                    class="btn btn-sm @(u.IsLocked ? "btn-success" : "btn-warning")"
+                                                    class="btn btn-sm @(u.IsLocked ? "btn-warning" : "btn-success")"
                                                     title="Khóa / Mở khóa">
-                                                <i class="fa-solid @(u.IsLocked ? "fa-lock-open" : "fa-lock")"></i>
+                                                <i class="fa-solid @(u.IsLocked ? "fa-lock" : "fa-lock-open")"></i>
                                             </button>
                                         </form>
 

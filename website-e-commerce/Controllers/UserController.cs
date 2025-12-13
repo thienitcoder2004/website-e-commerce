@@ -7,8 +7,7 @@ using website_e_commerce.Models;
 
 namespace website_e_commerce.Controllers
 {
-    //[Area("Admin")]
-    //[Authorize(Roles = SD.Role_Admin)]
+    [Authorize(Roles = SD.Role_Admin)]
     public class UserController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

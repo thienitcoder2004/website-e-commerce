@@ -70,6 +70,29 @@
     .st-soon { background: #e6f6ff; color: #0d6efd; border: 1px solid #96d5ff; }
     .st-ended { background: #ffe6e6; color: #c0392b; border: 1px solid #ffb3b3; }
 
+    /* =============================
+        TOAST GÓC PHẢI
+    ============================== */
+    #toastNotif {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        padding: 14px 26px;
+        background: linear-gradient(135deg, #28a745, #42d67c);
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all .4s ease;
+        z-index: 9999;
+        pointer-events: none;
+    }
+        #toastNotif.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
     @@media(max-width: 768px) {
         .flash-page-wrapper { padding: 20px 16px; border-radius: 12px; }
         .table-responsive { font-size: 13px; }
@@ -85,9 +108,7 @@
                 <h2 class="flash-title text-danger mb-1">
                     ⚡ Quản lý Flash Sale
                 </h2>
-                <p class="flash-subtitle mb-0">
-                    Kiểm soát chương trình Flash Sale đang diễn ra hoặc sắp tới.
-                </p>
+                <p class="flash-subtitle mb-0">Kiểm soát chương trình Flash Sale đang diễn ra hoặc sắp tới.</p>
             </div>
 
             <div class="d-flex align-items-center gap-2">
@@ -203,3 +224,44 @@
 
     </div>
 </div>
+
+<!-- TOAST -->
+<div id="toastNotif">
+    <span id="toastMessage"></span>
+</div>
+
+@section Scripts {
+
+    <script>
+        // ======================
+        // HÀM HIỂN THỊ TOAST
+        // ======================
+        function showToast(message) {
+            const toast = document.getElementById("toastNotif");
+            const msg = document.getElementById("toastMessage");
+
+            msg.innerText = message;
+            toast.classList.add("show");
+
+            setTimeout(() => toast.classList.remove("show"), 2500);
+        }
+
+        // ======================
+        // HIỂN THỊ TỪ TEMPDATA
+        // ======================
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                showToast(@Json.Serialize(TempData["SuccessMessage"]));
+            </text>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>
+                showToast(@Json.Serialize(TempData["ErrorMessage"]));
+            </text>
+        }
+    </script>
+
+}

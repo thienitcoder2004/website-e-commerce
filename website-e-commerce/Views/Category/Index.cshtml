@@ -37,14 +37,14 @@
 
     .btn-category-add {
         border-radius: 999px;
-        font-size: 14px;
         padding: 8px 18px;
+        font-size: 14px;
     }
 
     .category-table-wrapper {
         border-radius: 16px;
         overflow: hidden;
-        background: #fff;
+        background: white;
         box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
     }
 
@@ -52,17 +52,36 @@
         background: #0d6efd;
         color: white;
         border-bottom: none;
-        font-size: 14px;
     }
 
     .table tbody tr:hover {
         background: #f3f4ff;
     }
 
-    @@media(max-width: 768px) {
-        .category-page-wrapper { padding: 20px 16px; border-radius: 12px; }
-        .table-responsive { font-size: 13px; }
+    /* ===========================
+       TOAST GÓC PHẢI
+    ============================ */
+    #toastNotif {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        padding: 14px 26px;
+        background: linear-gradient(135deg, #28a745, #42d67c);
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all .4s ease;
+        z-index: 9999;
+        pointer-events: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
+
+        #toastNotif.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
 </style>
 
 <div class="container">
@@ -91,10 +110,18 @@
             </div>
         </div>
 
+        @* Giữ nguyên alert cũ nếu bạn muốn *@
         @if (TempData["SuccessMessage"] != null)
         {
             <div class="alert alert-success alert-dismissible fade show mb-4">
                 @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mb-4">
+                @TempData["ErrorMessage"]
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         }
@@ -146,7 +173,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="3" class="py-4 text-muted">Không có danh mục nào.</td>
+                                <td colspan="3" class="py-4 text-muted fst-italic">Không có danh mục nào.</td>
                             </tr>
                         }
                     </tbody>
@@ -178,3 +205,46 @@
         }
     </div>
 </div>
+
+<!-- TOAST -->
+<div id="toastNotif">
+    <span id="toastMessage"></span>
+</div>
+
+@section Scripts {
+    <script>
+        // ============================
+        // HÀM HIỂN THỊ TOAST
+        // ============================
+        function showToast(message) {
+            const toast = document.getElementById("toastNotif");
+            const msgSpan = document.getElementById("toastMessage");
+
+            if (!toast || !msgSpan) return;
+
+            msgSpan.innerText = message;
+            toast.classList.add("show");
+
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2500);
+        }
+
+        // ============================
+        // GỌI TOAST TỪ TEMPDATA
+        // ============================
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                showToast(@Json.Serialize(TempData["SuccessMessage"]));
+            </text>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>
+                showToast(@Json.Serialize(TempData["ErrorMessage"]));
+            </text>
+        }
+    </script>
+}

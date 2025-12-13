@@ -13,7 +13,7 @@
                 <!-- Ảnh chính -->
                 <div class="main-image text-center mb-2">
                     <img id="mainProductImage" src="@Model.ImageUrl" class="img-fluid rounded shadow-sm"
-                         style="max-height: 450px; object-fit: contain; width: 100%" />
+                        style="max-height: 450px; object-fit: contain; width: 100%" />
                 </div>
 
                 <!-- nút trượt -->
@@ -86,15 +86,16 @@
             </div>
             <div class="mt-3 text-center">
                 <form id="addToCartForm" asp-controller="ShoppingCart" asp-action="AddToCart" method="post"
-                      class="d-flex flex-column align-items-start gap-3">
+                    class="d-flex flex-column align-items-start gap-3">
 
                     <input type="hidden" name="productId" value="@Model.Id" />
 
                     <!-- Bộ chọn số lượng -->
-                    <div class="quantity-selector d-flex justify-content-center align-items-center border rounded-pill px-3 py-2">
+                    <div
+                        class="quantity-selector d-flex justify-content-center align-items-center border rounded-pill px-3 py-2">
                         <button type="button" class="btn-qty minus">−</button>
                         <input type="text" name="quantity" value="1" readonly
-                               class="qty-input text-center border-0 mx-2" />
+                            class="qty-input text-center border-0 mx-2" />
                         <button type="button" class="btn-qty plus">+</button>
                     </div>
 
@@ -203,7 +204,17 @@
                     <div class="bg-white p-3 rounded-3 border">
                         @if (!string.IsNullOrEmpty(Model.Specifications))
                         {
-                            @Html.Raw(Model.Specifications.Replace("\\n", "<br/>"))
+                            var specs = Model.Specifications.Split(';');
+
+                            <ul class="list-unstyled mb-0">
+                                @foreach (var s in specs)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(s))
+                                    {
+                                        <li class="py-1">• @s.Trim()</li>
+                                    }
+                                }
+                            </ul>
                         }
                         else
                         {
@@ -321,7 +332,8 @@
                                 <div>
                                     @for (int i = 1; i <= 5; i++)
                                     {
-                                        <i class="fa@((i <= r.Rating) ? " fa-solid fa-star text-warning" : " fa-regular fa-star text-secondary")"></i>
+                                        <i
+                                            class="fa@((i <= r.Rating) ? " fa-solid fa-star text-warning" : " fa-regular fa-star text-secondary")"></i>
                                     }
                                 </div>
                             </div>
@@ -345,18 +357,15 @@
 
                             <!-- FORM TRẢ LỜI -->
                             <div class="reply-form-wrapper ms-4 mt-2">
-                                <button type="button"
-                                        class="btn btn-link p-0 small text-primary toggle-reply"
-                                        data-review-id="@r.Id">
+                                <button type="button" class="btn btn-link p-0 small text-primary toggle-reply"
+                                    data-review-id="@r.Id">
                                     💬 Trả lời
                                 </button>
 
                                 <form class="reply-form d-none mt-2" data-review-id="@r.Id">
                                     <input type="hidden" name="ReviewId" value="@r.Id" />
-                                    <textarea name="Content"
-                                      class="form-control form-control-sm mb-2"
-                                      rows="2"
-                                      placeholder="Nhập nội dung trả lời..."></textarea>
+                                    <textarea name="Content" class="form-control form-control-sm mb-2" rows="2"
+                                placeholder="Nhập nội dung trả lời..."></textarea>
                                     <button type="submit" class="btn btn-sm btn-outline-primary">
                                         Gửi trả lời
                                     </button>
@@ -391,11 +400,11 @@
         transition: all 0.3s ease;
     }
 
-        .thumb-image.active,
-        .thumb-image:hover {
-            border-color: #ff4d4f;
-            transform: scale(1.05);
-        }
+    .thumb-image.active,
+    .thumb-image:hover {
+        border-color: #ff4d4f;
+        transform: scale(1.05);
+    }
 
     /* NÚT TRƯỢT */
     .carousel-btn {
@@ -412,18 +421,18 @@
         transition: 0.3s;
     }
 
-        .carousel-btn:hover {
-            background: #ff4d4f;
-            color: white;
-        }
+    .carousel-btn:hover {
+        background: #ff4d4f;
+        color: white;
+    }
 
-        .carousel-btn.left {
-            left: -15px;
-        }
+    .carousel-btn.left {
+        left: -15px;
+    }
 
-        .carousel-btn.right {
-            right: -15px;
-        }
+    .carousel-btn.right {
+        right: -15px;
+    }
 
     /* ==== QUANTITY ==== */
     .quantity-selector {
@@ -450,10 +459,10 @@
         transition: all 0.2s ease;
     }
 
-        .btn-qty:hover {
-            background-color: #ff4d4f;
-            color: white;
-        }
+    .btn-qty:hover {
+        background-color: #ff4d4f;
+        color: white;
+    }
 
     /* TOAST */
     .toast-cart {
@@ -473,10 +482,10 @@
         pointer-events: none;
     }
 
-        .toast-cart.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .toast-cart.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
     /* TAB */
     .tab-header {
@@ -494,25 +503,25 @@
         transition: all 0.3s ease;
     }
 
-        .tab-btn:hover {
-            color: #ff4d4f;
-            background-color: #fceaea;
-        }
+    .tab-btn:hover {
+        color: #ff4d4f;
+        background-color: #fceaea;
+    }
 
-        .tab-btn.active {
-            background-color: #ff4d4f;
-            color: #fff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        }
+    .tab-btn.active {
+        background-color: #ff4d4f;
+        color: #fff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
 
     .tab-pane {
         display: none;
         animation: fadeIn 0.4s ease;
     }
 
-        .tab-pane.active {
-            display: block;
-        }
+    .tab-pane.active {
+        display: block;
+    }
 
     .product-reviews {
         font-family: 'Roboto', sans-serif;
@@ -537,9 +546,9 @@
         border: none;
     }
 
-        .btn-primary:hover {
-            background-color: #004c99;
-        }
+    .btn-primary:hover {
+        background-color: #004c99;
+    }
 
     /* ==== ĐÁNH GIÁ SAO ==== */
     .rating-stars {
@@ -549,21 +558,21 @@
         gap: 5px;
     }
 
-        .rating-stars input {
-            display: none;
-        }
+    .rating-stars input {
+        display: none;
+    }
 
-        .rating-stars label {
-            color: #ccc;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
+    .rating-stars label {
+        color: #ccc;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
 
-            .rating-stars label:hover,
-            .rating-stars label:hover ~ label,
-            .rating-stars input:checked ~ label {
-                color: #ffcc00;
-            }
+    .rating-stars label:hover,
+    .rating-stars label:hover~label,
+    .rating-stars input:checked~label {
+        color: #ffcc00;
+    }
 
     /* ==== ĐÁNH GIÁ SAO (FORM) ==== */
     .rating-stars {
@@ -572,21 +581,21 @@
         gap: 5px;
     }
 
-        .rating-stars input {
-            display: none;
-        }
+    .rating-stars input {
+        display: none;
+    }
 
-        .rating-stars label {
-            color: #ccc;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
+    .rating-stars label {
+        color: #ccc;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
 
-            .rating-stars label:hover,
-            .rating-stars label:hover ~ label,
-            .rating-stars input:checked ~ label {
-                color: #ffcc00;
-            }
+    .rating-stars label:hover,
+    .rating-stars label:hover~label,
+    .rating-stars input:checked~label {
+        color: #ffcc00;
+    }
 
     .review-replies {
         border-left: 2px solid #ffe0e0;
@@ -599,7 +608,6 @@
         padding: 4px 8px;
         margin-bottom: 4px;
     }
-
 </style>
 
 <script>

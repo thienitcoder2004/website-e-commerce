@@ -71,6 +71,29 @@
     .st-active { background: #e6ffed; color: #0f8a39; border: 1px solid #9ef8c2; }
     .st-inactive { background: #ececec; color: #6b7280; border: 1px solid #bdbdbd; }
 
+    /* ========================
+          TOAST GÓC PHẢI
+       ======================== */
+    #toastNotif {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        padding: 14px 26px;
+        background: linear-gradient(135deg, #28a745, #42d67c);
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all .4s ease;
+        z-index: 9999;
+        pointer-events: none;
+    }
+    #toastNotif.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     @@media(max-width: 768px) {
         .promo-page-wrapper { padding: 20px 16px; }
         .table-responsive { font-size: 13px; }
@@ -99,7 +122,7 @@
             </div>
         </div>
 
-        <!-- ALERT -->
+        <!-- ALERT (giữ nguyên nếu bạn muốn xem debug) -->
         @if (TempData["Success"] != null)
         {
             <div class="alert alert-success alert-dismissible fade show mb-4">
@@ -153,15 +176,12 @@
                                     <td>@item.UsageCount / @item.MaxUsage</td>
 
                                     <td>
-                                        <span class="status-pill @stClass">
-                                            @stText
-                                        </span>
+                                        <span class="status-pill @stClass">@stText</span>
                                     </td>
 
                                     <td>
                                         <div class="d-flex justify-content-center gap-1">
-                                            <a asp-action="Edit" asp-route-id="@item.Id"
-                                               class="btn btn-sm btn-warning">
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
 
@@ -212,3 +232,33 @@
 
     </div>
 </div>
+
+<!-- TOAST -->
+<div id="toastNotif">
+    <span id="toastMessage"></span>
+</div>
+
+@section Scripts {
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById("toastNotif");
+            document.getElementById("toastMessage").innerText = message;
+
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 2500);
+        }
+
+        // Hiển thị từ TempData
+        @if (TempData["Success"] != null)
+        {
+            <text>
+                showToast(@Json.Serialize(TempData["Success"]));
+            </text>
+        }else if (TempData["Error"] != null)
+        {
+            <text>
+                showToast(@Json.Serialize(TempData["Error"]));
+            </text>
+        }
+    </script>
+}

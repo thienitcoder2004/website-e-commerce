@@ -2,9 +2,11 @@
 using website_e_commerce.Models;
 using website_e_commerce.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace website_e_commerce.Areas.Admin.Controllers
 {
+    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
     public class FlashSaleController : Controller
     {
         private readonly IFlashSaleRepository _repo;
@@ -41,6 +43,8 @@ namespace website_e_commerce.Areas.Admin.Controllers
             }
 
             _repo.Add(fs);
+
+            TempData["SuccessMessage"] = "Tạo Flash Sale thành công!";
             return RedirectToAction("Index");
         }
 
@@ -65,6 +69,8 @@ namespace website_e_commerce.Areas.Admin.Controllers
             }
 
             _repo.Update(fs);
+
+            TempData["SuccessMessage"] = "Cập nhật Flash Sale thành công!";
             return RedirectToAction("Index");
         }
 
@@ -72,6 +78,8 @@ namespace website_e_commerce.Areas.Admin.Controllers
         public IActionResult Delete(int id)
         {
             _repo.Delete(id);
+
+            TempData["SuccessMessage"] = "Đã xóa Flash Sale!";
             return RedirectToAction("Index");
         }
     }
