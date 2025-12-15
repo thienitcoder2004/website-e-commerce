@@ -40,6 +40,7 @@ namespace website_e_commerce.Models
 
         [Display(Name = "Ảnh đại diện")]
         public string? ImageUrl { get; set; }
+        public List<ProductFilterOption>? ProductFilterOptions { get; set; }
 
         // 🧩 Quản lý kho
         [Display(Name = "Số lượng tồn kho")]
@@ -60,6 +61,5 @@ namespace website_e_commerce.Models
         public List<Reviews>? Reviews { get; set; }
         public List<OrderDetail>? OrderDetails { get; set; }
         public List<FavoriteProduct>? FavoriteProducts { get; set; }
-        public List<ProductFilterOption>? ProductFilterOptions { get; set; }
     }
 }

@@ -1,95 +1,267 @@
 @model List<FlashSale>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold text-danger">
-        <i class="fa-solid fa-bolt"></i> Quản lý Flash Sale
-    </h2>
+@{
+    ViewData["Title"] = "Quản lý Flash Sale";
+    int totalFlash = Model?.Count ?? 0;
+}
 
-    <a href="/FlashSale/Add" class="btn btn-primary">
-        <i class="fa-solid fa-plus"></i> Tạo Flash Sale
-    </a>
-</div>
+<style>
+    .flash-page-wrapper {
+        background: radial-gradient(circle at top left, #eef2ff, #ffffff);
+        border-radius: 18px;
+        padding: 28px 24px;
+        margin-top: 20px;
+        box-shadow: 0 8px 24px rgba(15,23,42,0.12);
+    }
 
-<table class="table table-hover table-bordered align-middle text-center shadow-sm">
-    <thead class="table-dark">
-        <tr>
-            <th>STT</th>
-            <th>Sản phẩm</th>
-            <th>Giá Flash</th>
-            <th>Tồn kho</th>
-            <th>Đã bán</th>
-            <th>Bắt đầu</th>
-            <th>Kết thúc</th>
-            <th>Trạng thái</th>
-            <th style="width:160px">Hành động</th>
-        </tr>
-    </thead>
+    .flash-title {
+        font-weight: 800;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        font-size: 18px;
+    }
 
-    <tbody>
-        @if (!Model.Any())
-        {
-            <tr>
-                <td colspan="9" class="text-muted py-4">
-                    <i class="fa-solid fa-circle-exclamation"></i> Chưa có Flash Sale nào
-                </td>
-            </tr>
+    .flash-subtitle {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .flash-badge-summary {
+        font-size: 13px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        color: #4b5563;
+    }
+
+    .btn-flash-add {
+        border-radius: 999px;
+        padding: 8px 18px;
+        font-size: 14px;
+    }
+
+    .flash-table-wrapper {
+        border-radius: 16px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 4px 18px rgba(15,23,42,0.08);
+    }
+
+    .table thead th {
+        background: #0d6efd;
+        color: white;
+        border-bottom: none;
+        font-size: 14px;
+    }
+
+    .table tbody tr:hover {
+        background: #f3f4ff;
+    }
+
+    .status-pill {
+        font-size: 12px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-weight: 600;
+    }
+
+    .st-active { background: #e6ffed; color: #0f8a39; border: 1px solid #a8f7c8; }
+    .st-soon { background: #e6f6ff; color: #0d6efd; border: 1px solid #96d5ff; }
+    .st-ended { background: #ffe6e6; color: #c0392b; border: 1px solid #ffb3b3; }
+
+    /* =============================
+        TOAST GÓC PHẢI
+    ============================== */
+    #toastNotif {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        padding: 14px 26px;
+        background: linear-gradient(135deg, #28a745, #42d67c);
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all .4s ease;
+        z-index: 9999;
+        pointer-events: none;
+    }
+        #toastNotif.show {
+            opacity: 1;
+            transform: translateY(0);
         }
-        else
-        {
-            @for (int i = 0; i < Model.Count; i++)
-            {
-                var fs = Model[i];
 
-                bool ended = DateTime.Now > fs.EndTime;
-                bool soon = DateTime.Now < fs.StartTime;
-                bool active = !ended && !soon;
+    @@media(max-width: 768px) {
+        .flash-page-wrapper { padding: 20px 16px; border-radius: 12px; }
+        .table-responsive { font-size: 13px; }
+    }
+</style>
 
-                <tr class="@(active ? "table-warning" : "")">
-                    <td>@(i + 1)</td>
+<div class="container">
+    <div class="flash-page-wrapper">
 
-                    <td class="text-start">
-                        <b>@fs.Product?.Name</b> <br />
-                        <span class="text-muted small">ID: @fs.ProductId</span>
-                    </td>
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h2 class="flash-title text-danger mb-1">
+                    ⚡ Quản lý Flash Sale
+                </h2>
+                <p class="flash-subtitle mb-0">Kiểm soát chương trình Flash Sale đang diễn ra hoặc sắp tới.</p>
+            </div>
 
-                    <td class="text-danger fw-bold">
-                        @fs.FlashPrice.ToString("N0") đ
-                    </td>
+            <div class="d-flex align-items-center gap-2">
+                <span class="flash-badge-summary">
+                    <i class="fa-solid fa-bolt me-1"></i>
+                    Tổng Flash Sale: <strong>@totalFlash</strong>
+                </span>
 
-                    <td>@fs.FlashQuantity</td>
-                    <td>@fs.SoldQuantity</td>
+                <a href="/FlashSale/Add" class="btn btn-primary btn-flash-add">
+                    <i class="fa-solid fa-plus"></i> Tạo Flash Sale
+                </a>
+            </div>
+        </div>
 
-                    <td>@fs.StartTime.ToString("HH:mm dd/MM/yyyy")</td>
-                    <td>@fs.EndTime.ToString("HH:mm dd/MM/yyyy")</td>
+        <!-- TABLE -->
+        <div class="flash-table-wrapper">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle text-center mb-0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Sản phẩm</th>
+                            <th>Giá Flash</th>
+                            <th>Tồn kho</th>
+                            <th>Đã bán</th>
+                            <th>Bắt đầu</th>
+                            <th>Kết thúc</th>
+                            <th>Trạng thái</th>
+                            <th style="width:160px">Hành động</th>
+                        </tr>
+                    </thead>
 
-                    <td>
-                        @if (ended)
+                    <tbody>
+                        @if (!Model.Any())
                         {
-                            <span class="badge bg-danger px-3 py-2"><i class="fa-solid fa-xmark"></i> Hết hạn</span>
-                        }
-                        else if (soon)
-                        {
-                            <span class="badge bg-info px-3 py-2"><i class="fa-solid fa-clock"></i> Sắp diễn ra</span>
+                            <tr>
+                                <td colspan="9" class="text-muted py-4">
+                                    <i class="fa-solid fa-circle-exclamation"></i> Chưa có Flash Sale nào
+                                </td>
+                            </tr>
                         }
                         else
                         {
-                            <span class="badge bg-success px-3 py-2"><i class="fa-solid fa-bolt"></i> Đang diễn ra</span>
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                var fs = Model[i];
+
+                                bool ended = DateTime.Now > fs.EndTime;
+                                bool soon = DateTime.Now < fs.StartTime;
+                                bool active = !ended && !soon;
+
+                                string rowClass = active ? "table-warning" : "";
+
+                                <tr class="@rowClass">
+                                    <td>@(i + 1)</td>
+
+                                    <td class="text-start">
+                                        <strong>@fs.Product?.Name</strong><br />
+                                        <span class="text-muted small">ID: @fs.ProductId</span>
+                                    </td>
+
+                                    <td class="fw-bold text-danger">
+                                        @fs.FlashPrice.ToString("N0") đ
+                                    </td>
+
+                                    <td>@fs.FlashQuantity</td>
+                                    <td>@fs.SoldQuantity</td>
+
+                                    <td>@fs.StartTime.ToString("HH:mm dd/MM/yyyy")</td>
+                                    <td>@fs.EndTime.ToString("HH:mm dd/MM/yyyy")</td>
+
+                                    <td>
+                                        @if (ended)
+                                        {
+                                            <span class="status-pill st-ended">
+                                                <i class="fa-solid fa-xmark"></i> Hết hạn
+                                            </span>
+                                        }
+                                        else if (soon)
+                                        {
+                                            <span class="status-pill st-soon">
+                                                <i class="fa-solid fa-clock"></i> Sắp diễn ra
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-pill st-active">
+                                                <i class="fa-solid fa-bolt"></i> Đang diễn ra
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-1">
+                                            <a class="btn btn-warning btn-sm" href="/FlashSale/Edit/@fs.Id">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+
+                                            <a class="btn btn-danger btn-sm"
+                                               href="/FlashSale/Delete/@fs.Id"
+                                               onclick="return confirm('Bạn có chắc muốn xóa Flash Sale này?')">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         }
-                    </td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-                    <td>
-                        <a class="btn btn-warning btn-sm me-1" href="/FlashSale/Edit/@fs.Id">
-                            <i class="fa-solid fa-pen-to-square"></i> Sửa
-                        </a>
+    </div>
+</div>
 
-                        <a class="btn btn-danger btn-sm"
-                           href="/FlashSale/Delete/@fs.Id"
-                           onclick="return confirm('Bạn có chắc muốn xóa Flash Sale này?')">
-                            <i class="fa-solid fa-trash"></i> Xóa
-                        </a>
-                    </td>
-                </tr>
-            }
+<!-- TOAST -->
+<div id="toastNotif">
+    <span id="toastMessage"></span>
+</div>
+
+@section Scripts {
+
+    <script>
+        // ======================
+        // HÀM HIỂN THỊ TOAST
+        // ======================
+        function showToast(message) {
+            const toast = document.getElementById("toastNotif");
+            const msg = document.getElementById("toastMessage");
+
+            msg.innerText = message;
+            toast.classList.add("show");
+
+            setTimeout(() => toast.classList.remove("show"), 2500);
         }
-    </tbody>
-</table>
+
+        // ======================
+        // HIỂN THỊ TỪ TEMPDATA
+        // ======================
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                showToast(@Json.Serialize(TempData["SuccessMessage"]));
+            </text>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>
+                showToast(@Json.Serialize(TempData["ErrorMessage"]));
+            </text>
+        }
+    </script>
+
+}

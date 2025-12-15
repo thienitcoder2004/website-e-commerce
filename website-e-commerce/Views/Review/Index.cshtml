@@ -1,187 +1,293 @@
 ﻿@model IEnumerable<website_e_commerce.Models.Reviews>
+
 @{
     ViewData["Title"] = "Danh sách đánh giá sản phẩm";
+    int totalReviews = Model?.Count() ?? 0;
 }
 
-<div class="container mt-4">
-    <h3 class="fw-bold text-danger mb-4">📋 Danh sách đánh giá sản phẩm</h3>
-
-    @if (!string.IsNullOrEmpty(ViewBag.ProductName))
-    {
-        <p class="text-muted mb-3">Sản phẩm: <strong>@ViewBag.ProductName</strong></p>
-    }
-
-    <div class="table-responsive shadow-sm rounded">
-        <table class="table table-striped table-bordered align-middle">
-            <thead class="table-danger text-center align-middle">
-                <tr>
-                    <th style="width: 50px;">#</th>
-                    <th style="width: 200px;">Tên sản phẩm</th>
-                    <th style="width: 140px;">Số sao</th>
-                    <th style="width: 220px;">Tiêu đề</th>
-                    <th>Nội dung</th>
-                    <th style="width: 160px;">Ngày tạo</th>
-                    <th style="width: 130px;">Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int i = 1;
-                }
-                @foreach (var r in Model)
-                {
-                    <tr id="row-@r.Id">
-                        <td class="text-center">@i</td>
-                        <td>@r.Product?.Name</td>
-                        <td class="text-center align-middle">
-                            <span class="fw-bold text-dark">@r.Rating / 5</span>
-                        </td>
-                        <td>@r.Title</td>
-                        <td>@r.Body</td>
-                        <td class="text-center">@r.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-primary me-1" onclick="replyReview(@r.Id)">
-                                <i class="fa-solid fa-reply"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteReview(@r.Id)">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-
-                    @* Hàng hiển thị các câu trả lời *@
-                    @if (r.Replies != null && r.Replies.Any())
-                    {
-                        <tr class="bg-light">
-                            <td></td>
-                            <td colspan="6">
-                                @foreach (var rep in r.Replies.OrderBy(x => x.CreatedAt))
-                                {
-                                    <div class="small mb-1">
-                                        <span class="badge bg-primary me-1">
-                                            @(rep.IsAuto
-                                                                            ? "HTM Shop"
-                                                                            : (string.IsNullOrEmpty(rep.UserName) ? "Nhân viên HTM Shop" : rep.UserName))
-                            </span>
-                            @rep.Content
-                            <span class="text-muted ms-1">(@rep.CreatedAt.ToString("dd/MM/yyyy HH:mm"))</span>
-                        </div>
-                                                }
-                            </td>
-                        </tr>
-                    }
-
-                    i++;
-                }
-            </tbody>
-        </table>
-    </div>
-
-    @if (!Model.Any())
-    {
-        <p class="text-muted text-center mt-3">Chưa có đánh giá nào được ghi nhận.</p>
-    }
-</div>
-
-<script>
-    function deleteReview(id) {
-        if (!confirm("🗑️ Bạn có chắc muốn xóa đánh giá này không?")) return;
-
-        const formData = new FormData();
-        formData.append("id", id);
-
-        fetch('/Review/Delete', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => {
-                if (!response.ok) throw new Error("HTTP error " + response.status);
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    const row = document.getElementById("row-" + id);
-                    if (row) row.remove();
-                    alert("✅ Đã xóa đánh giá thành công!");
-                    location.reload();
-                } else {
-                    alert("❌ " + (data.message || "Không thể xóa đánh giá!"));
-                }
-            })
-            .catch(err => alert("⚠️ Lỗi: " + err.message));
-    }
-
-    function replyReview(id) {
-        const content = prompt("Nhập nội dung trả lời cho đánh giá #" + id + ":");
-        if (!content || !content.trim()) return;
-
-        const formData = new FormData();
-        formData.append("reviewId", id);
-        formData.append("content", content);
-
-        fetch('/Review/AddReply', {
-            method: 'POST',
-            body: formData
-        })
-            .then(r => {
-                if (!r.ok) throw new Error("HTTP " + r.status);
-                return r.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    alert("✅ Đã gửi trả lời!");
-                    location.reload();
-                } else {
-                    alert("❌ " + (data.message || "Không thể gửi trả lời!"));
-                }
-            })
-            .catch(err => alert("⚠️ Lỗi: " + err.message));
-    }
-</script>
-
 <style>
-    .table {
-        width: 100%;
-        table-layout: auto;
-        word-wrap: break-word;
+    .review-page-wrapper {
+        background: radial-gradient(circle at top left, #eef2ff, #ffffff);
+        padding: 28px 24px;
+        border-radius: 18px;
+        margin-top: 20px;
+        box-shadow: 0 8px 24px rgba(15,23,42,0.12);
     }
 
-        .table td,
-        .table th {
-            white-space: normal !important;
-        }
-
-        .table th {
-            background-color: #ffccd5 !important;
-            color: #333;
-            font-weight: 600;
-        }
-
-    .btn-danger {
-        background-color: #dc3545;
-        border: none;
-        font-weight: 500;
+    .review-title {
+        font-weight: 800;
+        font-size: 20px;
+        color: #d00000;
+        letter-spacing: .06em;
+        text-transform: uppercase;
     }
 
-        .btn-danger:hover {
-            background-color: #bb2d3b;
-        }
-
-    .table tbody tr:hover {
-        background-color: #fff5f5;
-        transition: background-color 0.3s ease;
+    .review-subtitle {
+        font-size: 13px;
+        color: #6b7280;
     }
 
-    .table-responsive {
-        overflow-x: hidden !important;
-        overflow-y: auto;
-        max-height: 600px;
+    .review-badge-summary {
+        background: #f9fafb;
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid #e5e7eb;
+        font-size: 13px;
+        color: #374151;
+    }
+
+    .review-table-wrapper {
+        border-radius: 16px;
+        background: #fff;
+        overflow: hidden;
+        box-shadow: 0 4px 18px rgba(15,23,42,0.08);
+        margin-top: 20px;
     }
 
     .table thead th {
-        position: sticky;
-        top: 0;
-        background: #ffccd5;
-        z-index: 2;
+        background: #dc3545 !important;
+        color: white;
+        text-transform: uppercase;
+        font-size: 13px;
+        border-bottom: none;
+    }
+
+    .table tbody tr:hover {
+        background: #fff2f2;
+    }
+
+    .reply-box {
+        background: #f3f4ff;
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 6px;
+        font-size: 13px;
+    }
+
+    .reply-author {
+        font-weight: bold;
+        color: #1d4ed8;
+    }
+
+    .badge-auto { background: #3b82f6; }
+    .badge-staff { background: #6366f1; }
+    .badge-user { background: #10b981; }
+
+    .btn-action {
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    /* ===================== TOAST ===================== */
+    #toastNotif {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        padding: 14px 26px;
+        background: linear-gradient(135deg, #28a745, #42d67c);
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all .4s ease;
+        z-index: 9999;
+        pointer-events: none;
+    }
+    #toastNotif.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @@media (max-width: 768px) {
+        .review-page-wrapper { padding: 20px 16px; }
+        .table-responsive { font-size: 13px; }
     }
 </style>
+
+
+<div class="container">
+    <div class="review-page-wrapper">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+            <div>
+                <h3 class="review-title mb-1">📋 Danh sách đánh giá sản phẩm</h3>
+                <p class="review-subtitle">Xem đánh giá - phản hồi - xử lý nội dung người dùng.</p>
+            </div>
+
+            <div>
+                <span class="review-badge-summary">
+                    <i class="fa-solid fa-star-half-stroke me-1"></i>
+                    Tổng đánh giá: <strong>@totalReviews</strong>
+                </span>
+            </div>
+        </div>
+
+        <!-- TÊN SẢN PHẨM -->
+        @if (!string.IsNullOrEmpty(ViewBag.ProductName))
+        {
+            <div class="mb-2">
+                <span class="fw-bold">🛒 Sản phẩm:</span>
+                <span class="text-primary fw-semibold">@ViewBag.ProductName</span>
+            </div>
+        }
+
+        <div class="review-table-wrapper">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle">
+                    <thead class="text-center">
+                        <tr>
+                            <th>#</th>
+                            <th>Sản phẩm</th>
+                            <th>Số sao</th>
+                            <th>Tiêu đề</th>
+                            <th>Nội dung</th>
+                            <th>Ngày tạo</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            int index = 1;
+                        }
+                        @foreach (var r in Model)
+                        {
+                            <tr id="row-@r.Id">
+                                <td class="text-center">@index</td>
+                                <td>@r.Product?.Name</td>
+                                <td class="text-center fw-bold">@r.Rating ⭐</td>
+                                <td>@r.Title</td>
+                                <td>@r.Body</td>
+                                <td class="text-center">@r.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-primary btn-action me-1"
+                                            onclick="replyReview(@r.Id)">
+                                        <i class="fa-solid fa-reply"></i>
+                                    </button>
+
+                                    <button class="btn btn-sm btn-danger btn-action"
+                                            onclick="deleteReview(@r.Id)">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            @* HIỂN THỊ REPLY *@
+                            @if (r.Replies != null && r.Replies.Any())
+                            {
+                                <tr class="bg-light">
+                                    <td></td>
+                                    <td colspan="6">
+                                        @foreach (var rep in r.Replies.OrderBy(x => x.CreatedAt))
+                                        {
+                                            <div class="reply-box">
+                                                <span class="badge 
+                                                    @(rep.IsAuto ? "badge-auto" :
+                                                      string.IsNullOrEmpty(rep.UserName) ? "badge-staff" : "badge-user")">
+                                                    @(rep.IsAuto
+                                                        ? "HTM Shop"
+                                                        : (string.IsNullOrEmpty(rep.UserName) ? "Nhân viên HTM Shop" : rep.UserName))
+                                                </span>
+
+                                                <span class="ms-2">@rep.Content</span>
+
+                                                <span class="text-muted ms-2">
+                                                    (@rep.CreatedAt.ToString("dd/MM/yyyy HH:mm"))
+                                                </span>
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+                            index++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <p class="text-muted text-center mt-3">Chưa có đánh giá nào được ghi nhận.</p>
+        }
+
+    </div>
+</div>
+
+
+<!-- ====================== TOAST HTML ====================== -->
+<div id="toastNotif"><span id="toastMessage"></span></div>
+
+
+<!-- ====================== SCRIPT ACTIONS ====================== -->
+<script>
+
+    function showToast(message) {
+        const toast = document.getElementById("toastNotif");
+        const msg = document.getElementById("toastMessage");
+
+        msg.innerText = message;
+        toast.classList.add("show");
+
+        setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+
+    function deleteReview(id) {
+        if (!confirm("🗑️ Bạn có chắc muốn xóa đánh giá này không?")) return;
+
+        const fd = new FormData();
+        fd.append("id", id);
+
+        fetch('/Review/Delete', { method: 'POST', body: fd })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById("row-" + id)?.remove();
+                    showToast("🗑️ Đã xóa đánh giá!");
+                    setTimeout(() => location.reload(), 800);
+                } else {
+                    showToast("❌ " + data.message);
+                }
+            });
+    }
+
+    function replyReview(id) {
+        const content = prompt("Nhập nội dung phản hồi:");
+
+        if (!content || !content.trim()) return;
+
+        const fd = new FormData();
+        fd.append("reviewId", id);
+        fd.append("content", content);
+
+        fetch('/Review/AddReply', { method: 'POST', body: fd })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    showToast("✅ Đã gửi phản hồi!");
+                    setTimeout(() => location.reload(), 800);
+                } else {
+                    showToast("❌ " + data.message);
+                }
+            });
+    }
+
+    // HIỂN THỊ TEMPDATA (NẾU CÓ)
+    @if (TempData["Success"] != null)
+    {
+        <text>
+            showToast(@Html.Raw(Json.Serialize(TempData["Success"])));
+        </text>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <text>
+            showToast(@Html.Raw(Json.Serialize(TempData["Error"])));
+        </text>
+    }
+
+</script>

@@ -5,6 +5,7 @@
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,14 +13,16 @@
 
     <link rel="icon" type="image/png" href="/images/logo-wb.png" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <style>
         body {
             background: #f2f4f7;
         }
 
+        /* ---------------------
+           SIDEBAR BASE
+        --------------------- */
         .admin-sidebar {
             width: 240px;
             position: fixed;
@@ -30,28 +33,35 @@
             border-right: 1px solid #e3e6ea;
             transition: width .25s ease;
             z-index: 1035;
+            overflow-y: auto;
         }
 
-            .admin-sidebar.collapsed {
-                width: 72px;
-            }
+        .admin-sidebar.collapsed {
+            width: 72px !important;
+        }
 
+        /* Logo */
         .brand {
-            height: 56px;
+            height: 60px;
+            padding: 0 16px;
             border-bottom: 1px solid #e3e6ea;
-            padding: 0 12px;
             display: flex;
             align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #0d6efd;
             position: relative;
         }
 
+        /* Collapse button */
         #btnCollapseGhost {
             position: absolute;
             right: -18px;
             top: 50%;
             transform: translateY(-50%);
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             background: white;
             border: 1px solid #ddd;
@@ -59,165 +69,177 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,.15);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .15);
+            transition: .3s;
         }
 
+        /* Link style */
         .admin-sidebar .nav-link {
             color: #444;
-            padding: .6rem 1rem;
-            border-radius: .45rem;
+            padding: .65rem 1rem;
+            border-radius: .55rem;
             display: flex;
             align-items: center;
-            gap: .7rem;
+            gap: .85rem;
+            font-size: 15px;
+            transition: .25s ease;
             position: relative;
         }
 
-            .admin-sidebar .nav-link:hover {
-                background: #eef4ff;
-                color: #0d6efd;
-                font-weight: 600;
-            }
-
-            .admin-sidebar .nav-link.active {
-                background: #e7f0ff;
-                color: #0d6efd;
-                font-weight: 700;
-            }
-
-        .admin-sidebar.collapsed .nav-link {
-            padding: .6rem .8rem !important;
-            justify-content: center;
-        }
-
-            .admin-sidebar.collapsed .nav-link .text-label {
-                width: 0 !important;
-                overflow: hidden !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                opacity: 0 !important;
-            }
-
-            .admin-sidebar.collapsed .nav-link span.text-label::after {
-                left: 80px !important;
-            }
-
         .admin-sidebar .nav-link i {
             font-size: 18px;
-            min-width: 24px;
+            width: 22px;
             text-align: center;
         }
 
-
-        .text-label {
-            transition: opacity .2s;
-            white-space: nowrap;
+        .admin-sidebar .nav-link:hover {
+            background: #eef6ff;
+            color: #0d6efd;
+            transform: translateX(4px);
+            font-weight: 600;
         }
 
+        .admin-sidebar .nav-link.active {
+            background: #e1ecff;
+            color: #0d6efd;
+            font-weight: 700;
+            border-left: 4px solid #0d6efd;
+            transform: translateX(4px);
+        }
+
+        /* Collapse hide text */
         .admin-sidebar.collapsed .text-label {
-            opacity: 0;
+            opacity: 0 !important;
+            width: 0 !important;
+            margin-left: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
         }
 
-        .admin-sidebar.collapsed .nav-link span.text-label::after {
+        .admin-sidebar.collapsed .nav-link {
+            justify-content: center !important;
+        }
+
+        /* Tooltip */
+        .admin-sidebar.collapsed .nav-link:hover::after {
             content: attr(data-title);
             position: absolute;
             left: 70px;
-            padding: 4px 10px;
             background: #111;
             color: #fff;
-            border-radius: 5px;
+            padding: 4px 10px;
+            border-radius: 6px;
             white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: .2s;
-        }
-
-        .admin-sidebar.collapsed .nav-link:hover span.text-label::after {
             opacity: 1;
+            z-index: 10;
         }
 
         .admin-main {
             margin-left: 240px;
             padding: 24px;
-            transition: margin-left .25s;
+            transition: margin-left .25s ease;
         }
 
-            .admin-main.expanded {
-                margin-left: 72px;
-            }
+        .admin-main.expanded {
+            margin-left: 72px;
+        }
 
-        @@media (max-width: 991.98px) {
+        /* GROUP TITLE */
+        .menu-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #999;
+            margin: 18px 0 6px 12px;
+        }
+
+        /* Brand Section */
+        .brand {
+            height: 64px;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+        }
+
+        .brand a {
+            color: #0d6efd;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
+        /* Icon Gear */
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: #e7f1ff;
+            color: #0d6efd;
+            font-size: 18px;
+            box-shadow: inset 0 0 4px rgba(0, 0, 0, .05);
+        }
+
+        /* Brand text */
+        .brand-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0d6efd;
+            transition: .2s ease;
+        }
+
+        /* Hover effect */
+        .brand:hover .brand-title {
+            color: #0b5ed7;
+            letter-spacing: .8px;
+        }
+
+        .brand:hover .brand-icon {
+            background: #d9e9ff;
+        }
+
+        /* Collapse - hidden text */
+        .admin-sidebar.collapsed .brand-title {
+            opacity: 0 !important;
+            width: 0 !important;
+            overflow: hidden !important;
+            padding: 0 !important;
+        }
+
+        @@media (max-width: 991px) {
             .admin-sidebar {
                 display: none !important;
             }
 
             .admin-main {
                 margin-left: 0 !important;
-                padding: 16px;
-            }
-
-            nav.navbar {
-                padding: .6rem 1rem;
-            }
-
-            nav .nav-item img {
-                width: 32px !important;
-                height: 32px !important;
-            }
-
-            .nav-link {
-                padding: 10px 20px;
-            }
-
-            #newsWrapper {
-                margin-right: 10px;
-            }
-
-            .navbar .btn {
-                padding: .4rem .6rem;
-                border-radius: 6px;
-            }
-
-            .nav-right-user {
-                display: flex !important;
-                flex-direction: row !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-                gap: 10px;
-            }
-
-            .navbar-nav {
-                flex-direction: row !important;
             }
         }
     </style>
+
     @functions {
         string Active(string controller, string action = "Index")
         {
-            var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
-            var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-
-            return (string.Equals(currentController, controller, System.StringComparison.OrdinalIgnoreCase)
-            && string.Equals(currentAction, action, System.StringComparison.OrdinalIgnoreCase))
-            ? "active"
-            : "";
+            var cc = ViewContext.RouteData.Values["controller"]?.ToString();
+            var ca = ViewContext.RouteData.Values["action"]?.ToString();
+            return (cc == controller && ca == action) ? "active" : "";
         }
     }
 
 </head>
+
 <body>
+
+    <!-- ------------------------------
+         NAVBAR (CÓ NÚT ĐĂNG XUẤT)
+    ------------------------------- -->
     <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
         <div class="container-fluid">
-            <button class="btn btn-outline-primary d-lg-none me-2" type="button"
-                    data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
-                <i class="fa-solid fa-bars"></i>
-            </button>
 
-            <ul class="nav-right-user navbar-nav ms-auto align-items-center">
-                <li class="nav-item dropdown me-3" id="newsWrapper" style="position:relative;">
+            <div class="d-flex ms-auto align-items-center gap-3">
+                <div class="nav-item dropdown me-3" id="newsWrapper" style="position:relative;">
                     <a class="nav-link position-relative" href="javascript:void(0);" id="newsToggle">
                         <i class="fa-solid fa-bell" id="bellIcon"></i>
                         <span class="badge bg-danger position-absolute" id="newsCount"
-                              style="top:-6px; right:-6px; font-size:.7rem;">0</span>
+                              style="top:-6px; right:-12px; font-size:.7rem;">0</span>
                     </a>
                     <div id="newsPopup"
                          class="shadow bg-white border rounded position-absolute end-0 mt-2"
@@ -225,104 +247,155 @@
                         <ul id="newsList" class="list-group list-group-flush"></ul>
                     </div>
 
-                </li>
+                </div>
+                <!-- Avatar -->
+                <div class="d-flex align-items-center gap-2">
+                    <img src="https://ui-avatars.com/api/?name=@User.Identity.Name" class="rounded-circle" width="38"
+                        height="38" />
 
-                <li class="nav-item d-flex align-items-center">
-                    <img src="https://ui-avatars.com/api/?name=@User.Identity.Name"
-                         class="rounded-circle me-2" width="36" />
-                    <span class="fw-semibold d-none d-sm-inline">@User.Identity.Name</span>
-                </li>
-            </ul>
+                    <div class="d-none d-md-block">
+                        <div class="fw-semibold">@User.Identity.Name</div>
+                        <div class="small text-muted">@User.Identity.Name</div>
+                    </div>
+                </div>
+
+                <!-- BUTTON ĐĂNG XUẤT -->
+                <a href="/Identity/Account/Logout" class="btn btn-outline-danger btn-sm fw-semibold">
+                    <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                </a>
+
+            </div>
         </div>
     </nav>
 
+
+    <!-- ------------------------------
+            SIDEBAR
+    ------------------------------- -->
     <aside id="sidebar" class="admin-sidebar d-none d-lg-flex flex-column">
-        <div class="brand">
-            <button id="btnCollapseGhost"><i class="fa-solid fa-angles-left"></i></button>
+
+        <div class="brand d-flex align-items-center gap-2 px-3">
+            <a href="/" class="d-flex align-items-center text-decoration-none">
+
+                <!-- ICON (Gear đẹp màu xanh) -->
+                <div class="brand-icon d-flex align-items-center justify-content-center">
+                    <i class="fa-solid fa-gear"></i>
+                </div>
+
+                <!-- TEXT LABEL -->
+                <span class="brand-title text-label ms-2">Gear 5 Admin</span>
+            </a>
         </div>
 
         <div class="p-3 nav flex-column">
-            <a class="nav-link @Active("AdminOrder", "Dashboard")" href="/AdminOrder/Dashboard">
-                <i class="fa-solid fa-chart-line"></i> <span class="text-label">Dashboard</span>
+
+            <div class="menu-title">Tổng quan</div>
+
+            <a class="nav-link @Active("AdminOrder", "Dashboard")" href="/AdminOrder/Dashboard" data-title="Dashboard">
+                <i class="fa-solid fa-chart-line text-primary"></i>
+                <span class="text-label">Dashboard</span>
             </a>
 
-            <a class="nav-link @Active("AdminOrder", "Index")" href="/AdminOrder/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý đơn hàng</span>
+            <a class="nav-link @Active("AdminOrder", "Index")" href="/AdminOrder/Index" data-title="Đơn hàng">
+                <i class="fa-solid fa-receipt text-info"></i>
+                <span class="text-label">Đơn hàng</span>
             </a>
 
-            <a class="nav-link @Active("Brand")" href="/Brand/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý thương hiệu</span>
+            <div class="menu-title">Sản phẩm</div>
+
+            <a class="nav-link @Active("Brand")" href="/Brand/Index" data-title="Thương hiệu">
+                <i class="fa-solid fa-copyright text-warning"></i>
+                <span class="text-label">Thương hiệu</span>
             </a>
 
-            <a class="nav-link @Active("Category")" href="/Category/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý danh mục</span>
+            <a class="nav-link @Active("Category")" href="/Category/Index" data-title="Danh mục">
+                <i class="fa-solid fa-layer-group text-success"></i>
+                <span class="text-label">Danh mục</span>
             </a>
 
-            <a class="nav-link @Active("Contact")" href="/Contact/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý liên hệ</span>
+            <a class="nav-link @Active("Product")" href="/Product/Index" data-title="Sản phẩm">
+                <i class="fa-solid fa-box-open text-primary"></i>
+                <span class="text-label">Sản phẩm</span>
             </a>
 
-            <a class="nav-link @Active("FlashSale")" href="/FlashSale/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý giảm giá</span>
+            <a class="nav-link @Active("FlashSale")" href="/FlashSale/Index" data-title="Flash Sale">
+                <i class="fa-solid fa-bolt text-warning"></i>
+                <span class="text-label">Flash Sale</span>
             </a>
 
-            <a class="nav-link @Active("News")" href="/News/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý tin Tức</span>
+            <a class="nav-link @Active("Promotion")" href="/Promotion/Index" data-title="Khuyến mãi">
+                <i class="fa-solid fa-gift text-danger"></i>
+                <span class="text-label">Mã khuyến mãi</span>
             </a>
 
-            <a class="nav-link @Active("Product")" href="/Product/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý sản phẩm</span>
+
+            <div class="menu-title">Nội dung</div>
+
+            <a class="nav-link @Active("News")" href="/News/Index" data-title="Tin tức">
+                <i class="fa-solid fa-newspaper text-primary"></i>
+                <span class="text-label">Tin tức</span>
             </a>
 
-            <a class="nav-link @Active("Promotion")" href="/Promotion/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý khuyến Mãi</span>
+            <a class="nav-link @Active("Contact")" href="/Contact/Index" data-title="Liên hệ">
+                <i class="fa-solid fa-envelope text-success"></i>
+                <span class="text-label">Liên hệ</span>
             </a>
 
-            <a class="nav-link @Active("Review")" href="/Review/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý đánh giá</span>
+            <a class="nav-link @Active("Review")" href="/Review/Index" data-title="Đánh giá">
+                <i class="fa-solid fa-star text-warning"></i>
+                <span class="text-label">Đánh giá</span>
             </a>
 
-            <a class="nav-link @Active("StockHistory", "Index")" href="/StockHistory/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Lịch sử kho</span>
+
+            <div class="menu-title">Kho hàng</div>
+
+            <a class="nav-link @Active("StockHistory", "Index")" href="/StockHistory/Index" data-title="Lịch sử kho">
+                <i class="fa-solid fa-clock-rotate-left text-info"></i>
+                <span class="text-label">Lịch sử kho</span>
             </a>
 
-            <a class="nav-link @Active("StockHistory", "Statistics")" href="/StockHistory/Statistics">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Thống kê kho</span>
+            <a class="nav-link @Active("StockHistory", "Statistics")" href="/StockHistory/Statistics"
+                data-title="Thống kê kho">
+                <i class="fa-solid fa-chart-column text-primary"></i>
+                <span class="text-label">Thống kê kho</span>
             </a>
 
-            <a class="nav-link @Active("SupportChat")" href="/SupportChat/AdminInbox">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý tin nhắn</span>
+
+            <div class="menu-title">Hệ thống</div>
+
+            <a class="nav-link @Active("SupportChat")" href="/SupportChat/AdminInbox" data-title="Tin nhắn">
+                <i class="fa-solid fa-comments text-success"></i>
+                <span class="text-label">Tin nhắn</span>
             </a>
 
-            <a class="nav-link @Active("User")" href="/User/Index">
-                <i class="fa-solid fa-box"></i> <span class="text-label">Quản lý tài khoản</span>
+            <a class="nav-link @Active("User")" href="/User/Index" data-title="Tài khoản">
+                <i class="fa-solid fa-users-gear text-primary"></i>
+                <span class="text-label">Tài khoản</span>
             </a>
 
-            <hr />
-
-            <a class="nav-link @Active("Manage")" href="/Identity/Account/Manage">
-                <i class="fa-solid fa-user-gear"></i> <span class="text-label" data-title="Tài khoản">Tài khoản</span>
-            </a>
-            <a class="nav-link text-danger" href="/Identity/Account/Logout">
-                <i class="fa-solid fa-right-from-bracket"></i> <span class="text-label" data-title="Đăng xuất">Đăng xuất</span>
-            </a>
         </div>
     </aside>
 
+
+    <!-- ------------------------------
+            MAIN CONTENT
+    ------------------------------- -->
     <main id="mainContent" class="admin-main">
         @RenderBody()
     </main>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script>
-        const s = document.getElementById('sidebar');
-        const m = document.getElementById('mainContent');
-        const g = document.getElementById('btnCollapseGhost');
-        g.onclick = () => { s.classList.toggle('collapsed'); m.classList.toggle('expanded'); };
-    </script>
-    <script>
+        const sidebar = document.getElementById('sidebar');
+        const main = document.getElementById('mainContent');
+        const btn = document.getElementById('btnCollapseGhost');
+
+        btn.onclick = () => {
+            sidebar.classList.toggle('collapsed');
+            main.classList.toggle('expanded');
+        };
+
         const newsPopup = document.getElementById("newsPopup");
         const newsToggle = document.getElementById("newsToggle");
         const newsWrapper = document.getElementById("newsWrapper");
@@ -403,7 +476,9 @@
 
         connection.start().catch(err => console.error(err.toString()));
     </script>
+
     @RenderSection("Scripts", required: false)
 
 </body>
+
 </html>

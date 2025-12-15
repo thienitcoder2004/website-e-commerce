@@ -6,7 +6,7 @@ using website_e_commerce.Models;
 
 namespace website_e_commerce.Controllers
 {
-    [Authorize] // Đảm bảo chỉ người dùng đã đăng nhập mới truy cập các trang này
+    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
     public class AdminOrderController : Controller
     {
         private readonly ApplicationDbContext _context;

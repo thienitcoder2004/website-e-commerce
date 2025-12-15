@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 
 public class VnPayService
 {
@@ -25,7 +26,7 @@ public class VnPayService
             { "vnp_Amount", ((long)amount * 100).ToString() },
             { "vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss") },
             { "vnp_CurrCode", "VND" },
-            { "vnp_IpAddr", context.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1" },
+            { "vnp_IpAddr", GetIpAddress(context) },
             { "vnp_Locale", "vn" },
             { "vnp_OrderInfo", $"Thanh toán đơn hàng {paymentId}" },
             { "vnp_OrderType", "other" },
@@ -33,13 +34,28 @@ public class VnPayService
             { "vnp_TxnRef", paymentId.ToString() }
         };
 
-        string rawData = string.Join("&", vnpParams.Select(x => $"{x.Key}={x.Value}"));
+        // 🔥 BẮT BUỘC phải encode trước khi ký
+        string rawData = string.Join("&", vnpParams.Select(k =>
+            $"{k.Key}={HttpUtility.UrlEncode(k.Value)}"));
 
-        using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(hashSecret));
-        string hash = BitConverter.ToString(
-            hmac.ComputeHash(Encoding.UTF8.GetBytes(rawData))
-        ).Replace("-", "").ToLower();
+        string secureHash = HmacSHA512(hashSecret, rawData);
 
-        return $"{baseUrl}?{rawData}&vnp_SecureHash={hash}";
+        // Build final payment URL
+        string queryString = string.Join("&", vnpParams.Select(k =>
+            $"{k.Key}={HttpUtility.UrlEncode(k.Value)}"));
+
+        return $"{baseUrl}?{queryString}&vnp_SecureHash={secureHash}";
+    }
+
+    private static string HmacSHA512(string key, string data)
+    {
+        using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(key));
+        byte[] hashValue = hmac.ComputeHash(Encoding.UTF8.GetBytes(data));
+        return BitConverter.ToString(hashValue).Replace("-", "").ToLower();
+    }
+
+    private static string GetIpAddress(HttpContext context)
+    {
+        return context.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1";
     }
 }

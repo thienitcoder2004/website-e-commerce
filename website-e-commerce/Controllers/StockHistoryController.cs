@@ -6,9 +6,11 @@ using System.Linq;
 using System.Collections.Generic;
 using website_e_commerce.Models;
 using website_e_commerce.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace website_e_commerce.Controllers
 {
+    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
     public class StockHistoryController : Controller
     {
         private readonly IStockHistoryRepository _repo;

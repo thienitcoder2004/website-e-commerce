@@ -20,231 +20,277 @@
 }
 
 <style>
-    .order-tracking .step {
-        padding: 10px 15px;
-        border-left: 4px solid #dee2e6;
-        background: #fff;
-        margin-bottom: 5px;
+    /* =========================================================
+       PHONG CÁCH TỔNG – GIỐNG THE GRAND HỒ TRÀM
+       ========================================================= */
+    .lux-title {
+        font-size: 32px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 25px;
+        color: #1a1a1a;
+        letter-spacing: 1px;
     }
 
-        .order-tracking .step.done {
-            border-left-color: #28a745;
-            background: #e9f7ef;
-        }
+    .lux-form {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 18px;
+        border: 1px solid #ececec;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+    }
 
-        .order-tracking .step.cancelled {
-            border-left-color: #dc3545;
-            background: #f8d7da;
-        }
+    .lux-label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 6px;
+    }
 
-        .order-tracking .step:last-child {
-            margin-bottom: 0;
-        }
+    .lux-input {
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid #ccc;
+    }
+
+    .lux-btn {
+        background: #c70404;
+        border: none;
+        width: 100%;
+        padding: 13px;
+        font-size: 17px;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+    .lux-btn:hover {
+        background: #a70202;
+    }
+
+    /* =========================================================
+       CARD THÔNG TIN ĐƠN HÀNG – SANG TRỌNG
+       ========================================================= */
+    .lux-card {
+        background: white;
+        padding: 25px;
+        border-radius: 18px;
+        border: 1px solid #e8e8e8;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+        margin-top: 25px;
+    }
+
+    .lux-section-title {
+        font-weight: 700;
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    /* =========================================================
+       TRACKING – DẠNG DỌC CAO CẤP
+       ========================================================= */
+    .tracking-vertical {
+        margin-top: 20px;
+        border-left: 3px solid #e0e0e0;
+        padding-left: 20px;
+    }
+
+    .track-item {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    .track-icon {
+        position: absolute;
+        left: -35px;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        color: white;
+    }
+
+    .track-item.done .track-icon {
+        background: #28a745;
+        box-shadow: 0 0 8px rgba(40,167,69,0.4);
+    }
+
+    .track-item.cancelled .track-icon {
+        background: #dc3545;
+        box-shadow: 0 0 8px rgba(220,53,69,0.4);
+    }
+
+    .track-label {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .track-desc {
+        font-size: 14px;
+        color: #777;
+    }
+
+    .badge-status {
+        padding: 7px 14px;
+        border-radius: 12px;
+        font-size: 14px;
+    }
 </style>
 
-<div class="container mt-5 mb-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+<div class="container mt-5 mb-5" style="max-width: 900px;">
 
-            <h2 class="text-center mb-4">Tra cứu đơn hàng</h2>
+    <h2 class="lux-title">Tra cứu đơn hàng của bạn</h2>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <form asp-action="Index" method="post">
-                        <div class="mb-3">
-                            <label class="form-label">Mã đơn hàng</label>
-                            <input asp-for="OrderCode" class="form-control" placeholder="Nhập mã đơn hàng (ví dụ: A1B2C3D4E5)" />
-                        </div>
+    <!-- ================= FORM ================= -->
+    <div class="lux-form">
 
-                        <div class="mb-3">
-                            <label class="form-label">Số điện thoại hoặc Email</label>
-                            <input asp-for="PhoneOrEmail" class="form-control" placeholder="SĐT hoặc Email đã dùng khi đặt hàng" />
-                        </div>
+        <form asp-action="Index" method="post">
+            <label class="lux-label">Mã đơn hàng</label>
+            <input asp-for="OrderCode" class="form-control lux-input mb-3"
+                   placeholder="VD: A1B2C3D4E5" />
 
-                        <button type="submit" class="btn btn-primary w-100">Tra cứu</button>
-                    </form>
+            <label class="lux-label">Số điện thoại hoặc Email</label>
+            <input asp-for="PhoneOrEmail" class="form-control lux-input mb-3"
+                   placeholder="Thông tin đã sử dụng khi đặt hàng" />
 
-                    @if (!string.IsNullOrEmpty(Model.Message))
-                    {
-                        <div class="alert alert-warning mt-3">@Model.Message</div>
-                    }
-                </div>
-            </div>
+            <button type="submit" class="lux-btn">
+                Tra cứu ngay
+            </button>
+        </form>
 
-            @if (Model.Order != null)
-            {
-                var o = Model.Order;
-
-                <div class="card">
-                    <div class="card-header">
-                        <strong>Thông tin đơn hàng</strong>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Mã đơn hàng:</strong> @o.OrderCode</p>
-                        <p><strong>Ngày đặt:</strong> @o.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
-                        <p>
-                            <strong>Trạng thái:</strong>
-                            <span class="badge bg-info" id="order-status">@GetStatusText(o.OrderStatus)</span>
-                        </p>
-                        <p><strong>Tổng tiền:</strong> @o.TotalPrice.ToString("N0") đ</p>
-                        <p><strong>Địa chỉ giao hàng:</strong> @o.ShippingAddress</p>
-                        <p><strong>Ghi chú:</strong> @o.Notes</p>
-
-                        <hr />
-
-                        <h5>Sản phẩm trong đơn</h5>
-                        <table class="table table-bordered table-sm mt-2">
-                            <thead>
-                                <tr>
-                                    <th>Sản phẩm</th>
-                                    <th>Số lượng</th>
-                                    <th>Đơn giá</th>
-                                    <th>Thành tiền</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in o.OrderDetails)
-                                {
-                                    var lineTotal = item.Quantity * item.Price;
-                                    <tr>
-                                        <td>@item.Product?.Name</td>
-                                        <td>@item.Quantity</td>
-                                        <td>@item.Price.ToString("N0") đ</td>
-                                        <td>@lineTotal.ToString("N0") đ</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-
-                        <hr />
-                        <h5>Tiến trình đơn hàng</h5>
-                        <ul class="order-tracking list-unstyled">
-                            @{
-
-                                var step1Class = "step done";
-                                var step2Class = "step";
-                                var step3Class = "step";
-                                var step4Class = "step";
-
-                                switch (o.OrderStatus)
-                                {
-                                    case "Pending":
-                                        break;
-
-                                    case "Packing":
-                                        step2Class = "step done";
-                                        break;
-
-                                    case "Shipping":
-                                        step2Class = "step done";
-                                        step3Class = "step done";
-                                        break;
-
-                                    case "Completed":
-                                        step2Class = "step done";
-                                        step3Class = "step done";
-                                        step4Class = "step done";
-                                        break;
-
-                                    case "Cancelled":
-                                        step1Class = "step cancelled";
-                                        step2Class = "step cancelled";
-                                        step3Class = "step cancelled";
-                                        step4Class = "step cancelled";
-                                        break;
-                                }
-                            }
-
-                            <li id="step1" class="@step1Class">Đặt hàng thành công</li>
-                            <li id="step2" class="@step2Class">Đang chuẩn bị hàng</li>
-                            <li id="step3" class="@step3Class">Đang giao hàng</li>
-                            <li id="step4" class="@step4Class">Giao hàng thành công</li>
-                        </ul>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</div>
-
-@if (Model.Order != null)
-{
-    <script>
-        // ===========================
-        // 1. Kết nối SignalR
-        // ===========================
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/orderStatusHub")
-            .build();
-
-        // ===========================
-        // 2. Hàm cập nhật tiến trình
-        // ===========================
-        function updateSteps(status) {
-            let step1 = document.querySelector("#step1");
-            let step2 = document.querySelector("#step2");
-            let step3 = document.querySelector("#step3");
-            let step4 = document.querySelector("#step4");
-
-            // Reset
-            [step1, step2, step3, step4].forEach(s => {
-                s.className = "step";
-            });
-
-            switch (status) {
-                case "Pending":
-                    step1.classList.add("done");
-                    break;
-
-                case "Packing":
-                    step1.classList.add("done");
-                    step2.classList.add("done");
-                    break;
-
-                case "Shipping":
-                    step1.classList.add("done");
-                    step2.classList.add("done");
-                    step3.classList.add("done");
-                    break;
-
-                case "Completed":
-                    step1.classList.add("done");
-                    step2.classList.add("done");
-                    step3.classList.add("done");
-                    step4.classList.add("done");
-                    break;
-
-                case "Cancelled":
-                    [step1, step2, step3, step4].forEach(s => s.classList.add("cancelled"));
-                    break;
-            }
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div class="alert alert-warning mt-3">@Model.Message</div>
         }
 
-        // ===========================
-        // 3. Nhận trạng thái mới từ Server
-        // ===========================
-        connection.on("ReceiveOrderStatus", function (orderId, status) {
-            if (orderId === @Model.Order.Id) {
+    </div>
 
-                // Cập nhật badge
-                document.getElementById('order-status').innerText = status;
 
-                // Cập nhật tiến trình
-                updateSteps(status);
-            }
+    <!-- ================= HIỂN THỊ ĐƠN HÀNG ================= -->
+    @if (Model.Order != null)
+    {
+        var o = Model.Order;
+
+        <div class="lux-card">
+
+            <h4 class="lux-section-title">Thông tin đơn hàng</h4>
+
+            <p><strong>Mã đơn hàng: </strong>@o.OrderCode</p>
+            <p><strong>Ngày đặt: </strong>@o.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+            <p>
+                <strong>Trạng thái: </strong>
+                <span class="badge bg-info badge-status" id="order-status">
+                    @GetStatusText(o.OrderStatus)
+                </span>
+            </p>
+            <p><strong>Tổng tiền: </strong>@o.TotalPrice.ToString("N0") đ</p>
+            <p><strong>Địa chỉ giao hàng: </strong>@o.ShippingAddress</p>
+            <p><strong>Ghi chú: </strong>@o.Notes</p>
+
+            <hr />
+
+            <h4 class="lux-section-title">Sản phẩm trong đơn</h4>
+
+            <table class="table table-bordered table-sm mt-2">
+                <thead class="table-light">
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in o.OrderDetails)
+                    {
+                        var lineTotal = item.Quantity * item.Price;
+                        <tr>
+                            <td>@item.Product?.Name</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price.ToString("N0") đ</td>
+                            <td>@lineTotal.ToString("N0") đ</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <hr />
+
+            <!-- ================= TRACKING DỌC ================= -->
+            <h4 class="lux-section-title">Tiến trình đơn hàng</h4>
+
+            <div class="tracking-vertical">
+
+                <div id="step1" class="track-item">
+                    <div class="track-icon"><i class="fa-solid fa-check"></i></div>
+                    <div class="track-label">Đặt hàng thành công</div>
+                </div>
+
+                <div id="step2" class="track-item">
+                    <div class="track-icon"><i class="fa-solid fa-box-open"></i></div>
+                    <div class="track-label">Đang chuẩn bị hàng</div>
+                </div>
+
+                <div id="step3" class="track-item">
+                    <div class="track-icon"><i class="fa-solid fa-truck"></i></div>
+                    <div class="track-label">Đang giao hàng</div>
+                </div>
+
+                <div id="step4" class="track-item">
+                    <div class="track-icon"><i class="fa-solid fa-check-double"></i></div>
+                    <div class="track-label">Giao hàng thành công</div>
+                </div>
+
+            </div>
+
+        </div>
+    }
+</div>
+
+<!-- ================= SIGNALR ================= -->
+@if (Model.Order != null)
+{
+<script>
+    function updateSteps(status) {
+        let steps = ["step1", "step2", "step3", "step4"];
+
+        steps.forEach(id => {
+            document.getElementById(id).classList.remove("done", "cancelled");
         });
 
-        // ===========================
-        // 4. Bắt đầu kết nối
-        // ===========================
-        connection.start().catch(function (err) {
-            return console.error(err.toString());
-        });
+        switch (status) {
+            case "Pending":
+                step1.classList.add("done");
+                break;
 
-        // ===========================
-        // 5. Load trạng thái lần đầu
-        // ===========================
-        updateSteps("@Model.Order.OrderStatus");
+            case "Packing":
+                step1.classList.add("done");
+                step2.classList.add("done");
+                break;
 
-    </script>
+            case "Shipping":
+                step1.classList.add("done");
+                step2.classList.add("done");
+                step3.classList.add("done");
+                break;
+
+            case "Completed":
+                steps.forEach(x => document.getElementById(x).classList.add("done"));
+                break;
+
+            case "Cancelled":
+                steps.forEach(x => document.getElementById(x).classList.add("cancelled"));
+                break;
+        }
+    }
+
+    updateSteps("@Model.Order.OrderStatus");
+</script>
 }

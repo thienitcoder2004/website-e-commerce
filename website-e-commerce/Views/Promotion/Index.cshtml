@@ -2,100 +2,263 @@
 
 @{
     ViewData["Title"] = "Quản lý mã khuyến mãi";
+    int totalCodes = Model?.Count() ?? 0;
 }
 
-<div class="container mt-5">
-    <h2 class="text-center text-primary mb-4">🎁 Quản lý mã khuyến mãi</h2>
+<style>
+    .promo-page-wrapper {
+        background: radial-gradient(circle at top left, #eef2ff, #ffffff);
+        border-radius: 18px;
+        padding: 28px 24px;
+        margin-top: 20px;
+        box-shadow: 0 8px 24px rgba(15,23,42,0.12);
+    }
 
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show">
-            @TempData["Success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    .promo-title {
+        font-weight: 800;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        font-size: 18px;
+    }
+
+    .promo-subtitle {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .promo-badge-summary {
+        font-size: 13px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        color: #4b5563;
+    }
+
+    .btn-promo-add {
+        border-radius: 999px;
+        padding: 8px 18px;
+        font-size: 14px;
+    }
+
+    .promo-table-wrapper {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 18px rgba(15,23,42,0.08);
+        overflow: hidden;
+    }
+
+    .table thead th {
+        background: #0d6efd;
+        color: #fff;
+        border-bottom: none;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+    .table tbody tr:hover {
+        background: #f3f4ff;
+    }
+
+    .status-pill {
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .st-active { background: #e6ffed; color: #0f8a39; border: 1px solid #9ef8c2; }
+    .st-inactive { background: #ececec; color: #6b7280; border: 1px solid #bdbdbd; }
+
+    /* ========================
+          TOAST GÓC PHẢI
+       ======================== */
+    #toastNotif {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        padding: 14px 26px;
+        background: linear-gradient(135deg, #28a745, #42d67c);
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all .4s ease;
+        z-index: 9999;
+        pointer-events: none;
+    }
+    #toastNotif.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @@media(max-width: 768px) {
+        .promo-page-wrapper { padding: 20px 16px; }
+        .table-responsive { font-size: 13px; }
+    }
+</style>
+
+<div class="container">
+    <div class="promo-page-wrapper">
+
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <div>
+                <h2 class="promo-title text-primary mb-1">🎁 Quản lý mã khuyến mãi</h2>
+                <p class="promo-subtitle mb-0">Theo dõi, tạo và quản lý mã giảm giá cho khách hàng.</p>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <span class="promo-badge-summary">
+                    <i class="fa-solid fa-ticket me-1"></i>
+                    Tổng mã giảm giá: <strong>@totalCodes</strong>
+                </span>
+
+                <a asp-action="Add" class="btn btn-success btn-promo-add">
+                    <i class="fa-solid fa-plus"></i> Thêm mã mới
+                </a>
+            </div>
         </div>
-    }
 
-    <div class="mb-3 text-end">
-        <a asp-action="Add" class="btn btn-success">
-            <i class="fa-solid fa-plus"></i> Thêm mã mới
-        </a>
-    </div>
+        <!-- ALERT (giữ nguyên nếu bạn muốn xem debug) -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show mb-4">
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
 
-    <table class="table table-bordered table-hover align-middle shadow-sm">
-        <thead class="table-primary text-center">
-            <tr>
-                <th style="width:60px;">ID</th>
-                <th>Mã</th>
-                <th>Giảm (%)</th>
-                <th>Giảm tiền</th>
-                <th>Thời gian áp dụng</th>
-                <th>Số lượt dùng</th>
-                <th>Trạng thái</th>
-                <th style="width:160px;">Hành động</th>
-            </tr>
-        </thead>
+        <!-- TABLE -->
+        <div class="promo-table-wrapper">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 text-center">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Mã</th>
+                            <th>Giảm (%)</th>
+                            <th>Giảm tiền</th>
+                            <th>Thời gian áp dụng</th>
+                            <th>Lượt dùng</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
 
-        <tbody class="text-center">
-            @if (Model != null && Model.Any())
-            {
-                foreach (var item in Model)
-                {
-                    var statusClass = item.IsActive ? "success" : "secondary";
-                    var statusText = item.IsActive ? "Hoạt động" : "Ngưng";
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                bool active = item.IsActive;
+                                string stClass = active ? "st-active" : "st-inactive";
+                                string stText = active ? "Hoạt động" : "Ngưng";
 
-                    <tr>
-                        <td class="fw-semibold">@item.Id</td>
-                        <td class="fw-bold">@item.Code</td>
-                        <td>@item.DiscountPercent %</td>
-                        <td class="text-danger fw-semibold">@String.Format("{0:N0} ₫", item.DiscountAmount)</td>
-                        <td>@item.StartDate.ToString("dd/MM/yyyy") - @item.EndDate.ToString("dd/MM/yyyy")</td>
-                        <td>@item.UsageCount / @item.MaxUsage</td>
-                        <td><span class="badge bg-@statusClass">@statusText</span></td>
+                                <tr>
+                                    <td class="fw-semibold">@item.Id</td>
+                                    <td class="fw-bold">@item.Code</td>
 
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-1">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
+                                    <td>@item.DiscountPercent %</td>
 
-                            <form asp-action="Delete" asp-route-id="@item.Id" method="post"
-                                  onsubmit="return confirm('⚠️ Bạn có chắc muốn xóa mã này?');"
-                                  style="display:inline;">
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="8" class="text-center text-muted">Không có mã khuyến mãi nào.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                                    <td class="text-danger fw-semibold">
+                                        @String.Format("{0:N0} ₫", item.DiscountAmount)
+                                    </td>
 
-    @if (ViewBag.TotalPages > 1)
-    {
-        <nav>
-            <ul class="pagination justify-content-center">
-                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Trước</a>
-                </li>
+                                    <td>
+                                        @item.StartDate.ToString("dd/MM/yyyy")
+                                        -
+                                        @item.EndDate.ToString("dd/MM/yyyy")
+                                    </td>
 
-                @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                {
-                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                        <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                                    <td>@item.UsageCount / @item.MaxUsage</td>
+
+                                    <td>
+                                        <span class="status-pill @stClass">@stText</span>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-1">
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+
+                                            <form asp-action="Delete" asp-route-id="@item.Id" method="post"
+                                                  onsubmit="return confirm('Bạn có chắc muốn xoá mã này?');">
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="py-4 text-muted">Không có mã khuyến mãi nào.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PAGINATION -->
+        @if (ViewBag.TotalPages > 1)
+        {
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Trước</a>
                     </li>
-                }
 
-                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Sau</a>
-                </li>
-            </ul>
-        </nav>
-    }
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                        </li>
+                    }
+
+                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Sau</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+
+    </div>
 </div>
+
+<!-- TOAST -->
+<div id="toastNotif">
+    <span id="toastMessage"></span>
+</div>
+
+@section Scripts {
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById("toastNotif");
+            document.getElementById("toastMessage").innerText = message;
+
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 2500);
+        }
+
+        // Hiển thị từ TempData
+        @if (TempData["Success"] != null)
+        {
+            <text>
+                showToast(@Json.Serialize(TempData["Success"]));
+            </text>
+        }else if (TempData["Error"] != null)
+        {
+            <text>
+                showToast(@Json.Serialize(TempData["Error"]));
+            </text>
+        }
+    </script>
+}

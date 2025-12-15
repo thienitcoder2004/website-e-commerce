@@ -1,147 +1,167 @@
 ﻿@page
 @using website_e_commerce.Models
 @model RegisterModel
+
 @{
-    // Dùng hằng SD.Role_Admin cho đồng nhất
     Layout = User.IsInRole(SD.Role_Admin)
-        ? "/Views/Shared/_LayoutAdmin.cshtml"
-        : "/Views/Shared/_Layout.cshtml";
+    ? "/Views/Shared/_LayoutAdmin.cshtml"
+    : "/Views/Shared/_Layout.cshtml";
 }
+
+<style>
+    /* Con mắt toggle password */
+    .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 18px;
+        color: #6c757d;
+    }
+
+    .toggle-password:hover {
+        color: #000;
+    }
+</style>
 
 @if (User.IsInRole(SD.Role_Admin))
 {
-    @if (User.IsInRole(SD.Role_Admin))
-    {
-        <!-- ========= GIAO DIỆN ĐĂNG KÝ CHO ADMIN (LAYOUT ADMIN) ========= -->
-        <section class="py-4">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-xl-9 col-lg-10">
-                        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+    <!-- ========================== GIAO DIỆN ADMIN =========================== -->
+    <section class="py-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-9 col-lg-10">
+                    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
 
-                            <!-- Header -->
-                            <div class="card-header bg-primary text-white border-0 py-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="me-2 fs-4">
-                                        <i class="fa-solid fa-user-plus"></i>
-                                    </div>
-                                    <div>
-                                        <h5 class="mb-1 text-uppercase fw-bold">Đăng ký tài khoản mới</h5>
-                                        <small class="fw-normal">
-                                            Tạo tài khoản cho khách hàng, nhân viên hoặc quản trị viên.
-                                        </small>
-                                    </div>
+                        <!-- Header -->
+                        <div class="card-header bg-primary text-white border-0 py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-2 fs-4">
+                                    <i class="fa-solid fa-user-plus"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1 text-uppercase fw-bold">Đăng ký tài khoản mới</h5>
+                                    <small>Tạo tài khoản cho khách hàng hoặc nhân viên.</small>
                                 </div>
                             </div>
-
-                            <!-- Body -->
-                            <div class="card-body bg-light">
-                                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
-
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input asp-for="Input.Ho" class="form-control" placeholder="Họ" />
-                                                <label asp-for="Input.Ho">Họ</label>
-                                                <span asp-validation-for="Input.Ho" class="text-danger small"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input asp-for="Input.Ten" class="form-control" placeholder="Tên" />
-                                                <label asp-for="Input.Ten">Tên</label>
-                                                <span asp-validation-for="Input.Ten" class="text-danger small"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input asp-for="Input.Email" class="form-control" autocomplete="username"
-                                                       placeholder="name@example.com" />
-                                                <label asp-for="Input.Email">Email</label>
-                                                <span asp-validation-for="Input.Email" class="text-danger small"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input asp-for="Input.SoDienThoai" class="form-control" placeholder="Số điện thoại" />
-                                                <label asp-for="Input.SoDienThoai">Số điện thoại</label>
-                                                <span asp-validation-for="Input.SoDienThoai" class="text-danger small"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input asp-for="Input.Password" class="form-control" autocomplete="new-password"
-                                                       placeholder="Mật khẩu" />
-                                                <label asp-for="Input.Password">Mật khẩu</label>
-                                                <span asp-validation-for="Input.Password" class="text-danger small"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password"
-                                                       placeholder="Xác nhận mật khẩu" />
-                                                <label asp-for="Input.ConfirmPassword">Xác nhận mật khẩu</label>
-                                                <span asp-validation-for="Input.ConfirmPassword" class="text-danger small"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <select asp-for="Input.Role" asp-items="Model.Input.RoleList" class="form-select">
-                                                    <option value="">-- Mặc định: Khách hàng --</option>
-                                                </select>
-                                                <label asp-for="Input.Role">Quyền (Role)</label>
-                                                <span asp-validation-for="Input.Role" class="text-danger small"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mt-4 d-flex justify-content-end">
-                                        <button id="registerSubmit" type="submit" class="btn btn-primary px-5 fw-semibold">
-                                            Đăng ký
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-
                         </div>
+
+                        <!-- Body -->
+                        <div class="card-body bg-light">
+                            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="Input.Ho" class="form-control" required placeholder="Họ" />
+                                            <label asp-for="Input.Ho">Họ</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="Input.Ten" class="form-control" required placeholder="Tên" />
+                                            <label asp-for="Input.Ten">Tên</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="Input.Email" class="form-control" required
+                                                autocomplete="username" />
+                                            <label asp-for="Input.Email">Email</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input asp-for="Input.SoDienThoai" class="form-control" required />
+                                            <label asp-for="Input.SoDienThoai">Số điện thoại</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Password -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating position-relative">
+                                            <input asp-for="Input.Password" class="form-control password-input" required
+                                                type="password" />
+
+                                            <label asp-for="Input.Password">Mật khẩu</label>
+
+                                            <span class="toggle-password" onclick="togglePassword(this)">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Confirm Password -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating position-relative">
+                                            <input asp-for="Input.ConfirmPassword" class="form-control password-input"
+                                                required type="password" />
+
+                                            <label asp-for="Input.ConfirmPassword">Xác nhận mật khẩu</label>
+
+                                            <span class="toggle-password" onclick="togglePassword(this)">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Role -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <select asp-for="Input.Role" asp-items="Model.Input.RoleList"
+                                                class="form-select">
+                                                <option value="">-- Mặc định: Khách hàng --</option>
+                                            </select>
+                                            <label asp-for="Input.Role">Quyền (Role)</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 d-flex justify-content-between align-items-center">
+                                    <button type="submit" class="btn btn-secondary px-5 fw-semibold">
+                                        <a href="http://localhost:5223/User/Index" class="text-white text-decoration-none">
+                                            Quay lại
+                                        </a>
+                                    </button>
+
+                                    <button id="registerSubmit" type="submit" class="btn btn-primary px-5 fw-semibold">
+                                        Đăng ký
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </section>
-    }
-
+        </div>
+    </section>
 }
 else
 {
-    <!-- ========= GIAO DIỆN ĐĂNG KÝ CHO NGƯỜI DÙNG (GIỐNG GEAR5) ========= -->
+    <!-- ========================== GIAO DIỆN KHÁCH HÀNG =========================== -->
     <section class="section-login">
         <div class="bread-cumb">
             <div class="container">
                 <ul class="breadcrumb">
                     <li class="home">
-                        <a href="/" class="text-black">
-                            <span>Trang chủ</span>
-                        </a>
-                        <span class="mr-lr">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </span>
+                        <a href="/" class="text-black"><span>Trang chủ</span></a>
+                        <span><i class="fa-solid fa-chevron-right"></i></span>
                     </li>
-                    <li>
-                        <strong><span>Đăng ký tài khoản</span></strong>
-                    </li>
+                    <li><strong>Đăng ký tài khoản</strong></li>
                 </ul>
             </div>
         </div>
 
         <div class="section-form-register">
             <div class="container">
+
                 <div class="tabs">
                     <a href="/Identity/Account/Login" class="tab">ĐĂNG NHẬP</a>
                     <a href="/Identity/Account/Register" class="tab active">ĐĂNG KÝ</a>
@@ -151,65 +171,55 @@ else
                     <h2>ĐĂNG KÝ</h2>
 
                     <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <div class="form-floating mb-3">
-                            <input asp-for="Input.Ho" class="form-control" placeholder="Họ" />
-                            <label asp-for="Input.Ho">Họ</label>
-                            <span asp-validation-for="Input.Ho" class="text-danger"></span>
+                            <input asp-for="Input.Ho" class="form-control" required />
+                            <label>Họ</label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input asp-for="Input.Ten" class="form-control" placeholder="Tên" />
-                            <label asp-for="Input.Ten">Tên</label>
-                            <span asp-validation-for="Input.Ten" class="text-danger"></span>
+                            <input asp-for="Input.Ten" class="form-control" required />
+                            <label>Tên</label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input asp-for="Input.Email" class="form-control" autocomplete="username"
-                                   placeholder="name@example.com" />
-                            <label asp-for="Input.Email">Email</label>
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            <input asp-for="Input.Email" class="form-control" required />
+                            <label>Email</label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input asp-for="Input.SoDienThoai" class="form-control" placeholder="Số điện thoại" />
-                            <label asp-for="Input.SoDienThoai">Số điện thoại</label>
-                            <span asp-validation-for="Input.SoDienThoai" class="text-danger"></span>
+                            <input asp-for="Input.SoDienThoai" class="form-control" required />
+                            <label>Số điện thoại</label>
                         </div>
 
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.Password" class="form-control" autocomplete="new-password"
-                                   placeholder="Mật khẩu" />
-                            <label asp-for="Input.Password">Mật khẩu</label>
-                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        <!-- Password -->
+                        <div class="form-floating mb-3 position-relative">
+                            <input asp-for="Input.Password" class="form-control password-input" required type="password" />
+                            <label>Mật khẩu</label>
+
+                            <span class="toggle-password" onclick="togglePassword(this)">
+                                <i class="fa-solid fa-eye"></i>
+                            </span>
                         </div>
 
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password"
-                                   placeholder="Xác nhận mật khẩu" />
-                            <label asp-for="Input.ConfirmPassword">Xác nhận mật khẩu</label>
-                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                        <!-- Confirm -->
+                        <div class="form-floating mb-3 position-relative">
+                            <input asp-for="Input.ConfirmPassword" class="form-control password-input" required
+                                type="password" />
+                            <label>Xác nhận mật khẩu</label>
+
+                            <span class="toggle-password" onclick="togglePassword(this)">+5
+                                <i class="fa-solid fa-eye"></i>
+                            </span>
                         </div>
 
-                        <!-- Người dùng thường: ROLE CUSTOMER  -->
                         <input type="hidden" asp-for="Input.Role" value="@SD.Role_Customer" />
 
-                        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Đăng ký</button>
+                        <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
                     </form>
-
-                    <p class="text-center mt-3">
-                        <a asp-page="./ForgotPassword" class="text-decoration-none text-primary">Quên mật khẩu?</a>
-                    </p>
-                    <hr />
-                    <div class="text-center">
-                        <form asp-page="./ExternalLogin" method="post" asp-route-provider="Google" asp-route-returnUrl="@Model.ReturnUrl">
-                            <button type="submit" class="btn btn-outline-danger w-100 mb-2">
-                                <i class="fab fa-google"></i> Đăng nhập bằng Google
-                            </button>
-                        </form>
-                    </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -218,31 +228,20 @@ else
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
+    <!-- Toggle Password -->
     <script>
-        // Nếu bạn muốn giữ validate JS cũ, có thể thêm thuộc tính required vào input
-        document.getElementById("registerForm").addEventListener("submit", function (e) {
-            const inputs = document.querySelectorAll("#registerForm input[required]");
-            let valid = true;
+        function togglePassword(el) {
+            const input = el.parentElement.querySelector(".password-input");
+            const icon = el.querySelector("i");
 
-            inputs.forEach(input => {
-                if (!input.value.trim()) {
-                    valid = false;
-                    input.classList.add("is-invalid");
-                } else {
-                    input.classList.remove("is-invalid");
-                }
-            });
-
-            if (!valid) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Thiếu thông tin!',
-                    text: 'Vui lòng điền đầy đủ tất cả các trường bắt buộc.',
-                    confirmButtonColor: '#3085d6'
-                });
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
             }
-        });
+        }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

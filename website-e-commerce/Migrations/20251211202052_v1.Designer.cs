@@ -12,7 +12,7 @@ using website_e_commerce.Models;
 namespace website_e_commerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251211054415_v1")]
+    [Migration("20251211202052_v1")]
     partial class v1
     {
         /// <inheritdoc />
@@ -732,13 +732,6 @@ namespace website_e_commerce.Migrations
                             Id = 25,
                             FilterCategoryId = 2,
                             GroupName = "Màn hình",
-                            Type = "select"
-                        },
-                        new
-                        {
-                            Id = 26,
-                            FilterCategoryId = 2,
-                            GroupName = "Trọng lượng",
                             Type = "select"
                         },
                         new

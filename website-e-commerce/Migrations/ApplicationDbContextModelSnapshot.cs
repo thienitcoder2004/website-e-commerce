@@ -733,13 +733,6 @@ namespace website_e_commerce.Migrations
                         },
                         new
                         {
-                            Id = 26,
-                            FilterCategoryId = 2,
-                            GroupName = "Trọng lượng",
-                            Type = "select"
-                        },
-                        new
-                        {
                             Id = 27,
                             FilterCategoryId = 2,
                             GroupName = "Nhu cầu",

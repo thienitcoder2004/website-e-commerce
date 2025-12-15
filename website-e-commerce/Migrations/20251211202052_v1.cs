@@ -707,7 +707,6 @@ namespace website_e_commerce.Migrations
                     { 23, 2, "RAM", "select" },
                     { 24, 2, "Ổ cứng", "select" },
                     { 25, 2, "Màn hình", "select" },
-                    { 26, 2, "Trọng lượng", "select" },
                     { 27, 2, "Nhu cầu", "select" },
                     { 31, 3, "RAM", "select" },
                     { 32, 3, "Màn hình", "select" },

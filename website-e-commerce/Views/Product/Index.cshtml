@@ -9,18 +9,108 @@
     string searchKeyword = ViewBag.SearchKeyword as string ?? "";
     int? brandId = ViewBag.BrandId as int?;
     int? catId = ViewBag.CategoryId as int?;
-
     var favoriteIds = ViewBag.FavoriteIds as List<int> ?? new List<int>();
-
-    bool showDynamic = ViewBag.DynamicFilters != null;   // ❗ CHỈ TRUE khi query != "" && category != null
+    int totalProducts = Model?.Count() ?? 0;
+    bool showDynamic = ViewBag.DynamicFilters != null;  
 }
 
 
 @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_StockManager))
 {
-    <div class="container py-5">
-        <h2 class="fw-bold text-danger text-center mb-4">📦 Quản lý sản phẩm & kho tồn</h2>
+    <style>
+    .product-page-wrapper {
+        background: radial-gradient(circle at top left, #eef2ff, #ffffff);
+        border-radius: 18px;
+        padding: 28px 24px;
+        margin-top: 20px;
+        box-shadow: 0 8px 24px rgba(15,23,42,0.12);
+    }
 
+    .product-title {
+        font-weight: 800;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        font-size: 18px;
+    }
+
+    .product-subtitle {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .product-badge-summary {
+        font-size: 13px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        color: #4b5563;
+    }
+
+    .btn-add-product {
+        border-radius: 999px;
+        padding: 8px 18px;
+        font-size: 14px;
+    }
+
+    .product-table-wrapper {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 18px rgba(15,23,42,0.08);
+        overflow: hidden;
+    }
+
+    .table thead th {
+        background: #dc3545;
+        color: #fff;
+        border-bottom: none;
+    }
+
+    .table tbody tr:hover {
+        background: #fff3f3;
+    }
+
+    .stock-badge {
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .st-out { background: #ffe6e6; color: #b40000; border: 1px solid #ffb3b3; }
+    .st-low { background: #fff4d6; color: #a86a00; border: 1px solid #ffd57e; }
+    .st-available { background: #e7ffe9; color: #0a8a27; border: 1px solid #a8eab3; }
+
+    @@media(max-width: 768px) {
+        .product-page-wrapper { padding: 20px 16px; }
+        .table-responsive { font-size: 13px; }
+    }
+</style>
+
+<div class="container">
+    <div class="product-page-wrapper">
+
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <div>
+                <h2 class="product-title text-danger mb-1">📦 Quản lý sản phẩm & Kho tồn</h2>
+                <p class="product-subtitle mb-0">Theo dõi số lượng tồn - sản phẩm sắp hết - điều chỉnh kho.</p>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <span class="product-badge-summary">
+                    <i class="fa-solid fa-boxes-stacked me-1"></i>
+                    Tổng sản phẩm: <strong>@totalProducts</strong>
+                </span>
+
+                <a asp-action="Add" class="btn btn-danger btn-add-product">
+                    <i class="fa-solid fa-plus"></i> Thêm sản phẩm
+                </a>
+            </div>
+        </div>
+
+        <!-- ALERT -->
         @if (TempData["success"] != null)
         {
             <div class="alert alert-success">@TempData["success"]</div>
@@ -30,85 +120,140 @@
             <div class="alert alert-danger">@TempData["error"]</div>
         }
 
-        <div class="text-end mb-3">
-            <a asp-action="Add" class="btn btn-outline-danger fw-bold">➕ Thêm sản phẩm</a>
+        <!-- SEARCH + IMPORT -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+
+            <!-- SEARCH -->
+            <form asp-action="Index" method="get" class="d-flex" style="max-width:350px;">
+                <input type="text" name="query"
+                       value="@ViewBag.SearchKeyword"
+                       class="form-control shadow-sm me-2"
+                       placeholder="🔍 Tìm sản phẩm...">
+                <button class="btn btn-outline-secondary shadow-sm">Tìm</button>
+            </form>
+
+            <!-- IMPORT EXCEL -->
+            <form asp-action="ImportExcel" enctype="multipart/form-data" method="post"
+                  class="d-flex align-items-center">
+                <input type="file" name="file"
+                       class="form-control shadow-sm" style="max-width:280px;">
+                <button type="submit" class="btn btn-success ms-2 shadow-sm">
+                    <i class="fa-solid fa-file-excel"></i> Nhập Excel
+                </button>
+            </form>
+
         </div>
-        <form asp-action="ImportExcel" enctype="multipart/form-data" method="post" class="d-inline">
-            <input type="file" name="file" class="form-control d-inline" style="width:250px;" />
-            <button type="submit" class="btn btn-success ms-2">
-                <i class="fa fa-file-excel"></i> Nhập Excel
-            </button>
-        </form>
-        <table class="table table-hover text-center align-middle shadow-sm">
-            <thead class="table-danger">
-                <tr>
-                    <th>Mã</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Giá</th>
-                    <th>Tồn kho</th>
-                    <th>Đang bán (Web)</th>
-                    <th>Trạng thái</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var p in Model)
-                {
-                    var available = p.StockQuantity - p.WebQuantity;
-                    var rowClass = available <= 0 ? "table-danger" : available < 10 ? "table-warning" : "";
 
-                    <tr class="@rowClass">
-                        <td>@p.Id</td>
-                        <td class="text-start fw-semibold">@p.Name</td>
-                        <td>@String.Format("{0:N0} đ", p.NewPrice)</td>
-                        <td>@p.StockQuantity</td>
-                        <td>@p.WebQuantity</td>
-                        <td>
-                            @(available <= 0 ? "Hết hàng" :
-                                                available < 10 ? "Sắp hết" :
-                                                "Còn hàng")
-                </td>
-                <td>
-                    <form asp-action="ImportToStock" method="post" class="d-inline-flex gap-1">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value="@p.Id" />
-                        <input type="number" name="importQuantity" class="form-control form-control-sm" min="1"
-                               placeholder="SL" style="width:90px;" />
-                        <button type="submit" class="btn btn-sm btn-outline-success">Nhập</button>
-                    </form>
+        <!-- TABLE -->
+        <div class="product-table-wrapper">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle text-center mb-0">
+                    <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th class="text-start ps-3">Tên sản phẩm</th>
+                            <th>Giá bán</th>
+                            <th>Tồn kho</th>
+                            <th>Đang bán</th>
+                            <th>Trạng thái</th>
+                            <th>Nhập / Xuất</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
 
-                            <form asp-action="ExportToWeb" method="post" class="d-inline-flex gap-1">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="id" value="@p.Id" />
-                                <input type="number" name="exportQuantity" class="form-control form-control-sm" min="1"
-                                       placeholder="SL" style="width:90px;" />
-                                <button type="submit" class="btn btn-sm btn-outline-primary">Xuất</button>
-                            </form>
+                    <tbody>
+                        @foreach (var p in Model)
+                        {
+                            var available = p.StockQuantity - p.WebQuantity;
 
-                            <form asp-action="DeleteConfirmed" method="post" class="d-inline">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="id" value="@p.Id" />
-                                <button type="submit" class="btn btn-sm btn-outline-danger"
-                                        onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')">
-                                    Xóa
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
+                            string statusClass =
+                                available <= 0 ? "st-out" :
+                                available < 10 ? "st-low" : "st-available";
+
+                            string statusText =
+                                available <= 0 ? "Hết hàng" :
+                                available < 10 ? "Sắp hết" : "Còn hàng";
+
+                            <tr>
+                                <td class="fw-bold">@p.Id</td>
+
+                                <td class="text-start fw-semibold">@p.Name</td>
+
+                                <td class="fw-bold text-danger">@p.NewPrice.ToString("N0") đ</td>
+
+                                <td>@p.StockQuantity</td>
+
+                                <td>@p.WebQuantity</td>
+
+                                <td>
+                                    <span class="stock-badge @statusClass">@statusText</span>
+                                </td>
+
+                                <!-- NHẬP XUẤT KHO -->
+                                <td>
+                                    <form asp-action="ImportToStock" method="post"
+                                          class="d-inline-flex align-items-center mb-1">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@p.Id" />
+                                        <input type="number" min="1"
+                                               name="importQuantity" placeholder="SL"
+                                               class="form-control form-control-sm me-1"
+                                               style="width:70px;">
+                                        <button class="btn btn-sm btn-outline-success shadow-sm">Nhập</button>
+                                    </form>
+
+                                    <form asp-action="ExportToWeb" method="post"
+                                          class="d-inline-flex align-items-center">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@p.Id" />
+                                        <input type="number" min="1"
+                                               name="exportQuantity" placeholder="SL"
+                                               class="form-control form-control-sm me-1"
+                                               style="width:70px;">
+                                        <button class="btn btn-sm btn-outline-primary shadow-sm">Xuất</button>
+                                    </form>
+                                </td>
+
+                                <!-- ACTION -->
+                                <td>
+                                    <div class="d-flex justify-content-center gap-1">
+                                        <a asp-action="Details" asp-route-id="@p.Id"
+                                           class="btn btn-sm btn-outline-secondary shadow-sm">
+                                            Chi tiết
+                                        </a>
+
+                                        <a asp-action="Edit" asp-route-id="@p.Id"
+                                           class="btn btn-sm btn-outline-warning shadow-sm">
+                                            Sửa
+                                        </a>
+
+                                        <form asp-action="DeleteConfirmed" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@p.Id" />
+                                            <button class="btn btn-sm btn-outline-danger shadow-sm"
+                                                    onclick="return confirm('Xóa sản phẩm này?')">
+                                                Xóa
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
                         }
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
+        <!-- PAGINATION -->
         @if (ViewBag.TotalPages > 1)
         {
-            <nav aria-label="Page navigation" class="mt-4">
+            <nav class="mt-4">
                 <ul class="pagination justify-content-center">
                     @for (int i = 1; i <= ViewBag.TotalPages; i++)
                     {
-                        var active = i == ViewBag.CurrentPage ? "active" : "";
-                        <li class="page-item @active">
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
                             <a class="page-link"
-                               href="?page=@i@(ViewBag.CategoryId != null ? $"&categoryId={ViewBag.CategoryId}" : "")">
+                               href="?page=@i&query=@ViewBag.SearchKeyword">
                                 @i
                             </a>
                         </li>
@@ -116,7 +261,9 @@
                 </ul>
             </nav>
         }
+
     </div>
+</div>
 }
 else if (User.IsInRole(SD.Role_Employee))
 {
@@ -220,8 +367,17 @@ else
                                             string url =
                                             $"?query={searchKeyword}&brand={b.Id}&filter={currentFilter}&sortOrder={currentSort}";
 
-                                            <div class="filter-option @(active ? "active" : "")">
-                                                <a href="@url">@b.Name</a>
+                                            <div class="filter-row mb-1">
+                                                <input id="brand_@b.Id"
+                                                       class="form-check-input filter-check"
+                                                       type="checkbox"
+                                                       value="@b.Id"
+                                                       @(brandId == b.Id ? "checked" : "")
+                                                       data-type="brand" />
+
+                                                <label for="brand_@b.Id" class="filter-label">
+                                                    @b.Name
+                                                </label>
                                             </div>
                                         }
                                     }
@@ -276,8 +432,14 @@ else
                                         string url =
                                         $"?query={searchKeyword}&brand={brandId}&filter={next}&sortOrder={currentSort}";
 
-                                        <div class="filter-option @(active ? "active" : "")">
-                                            <a href="@url">@r.label</a>
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input filter-check"
+                                                   type="checkbox"
+                                                   value="price=@r.min-@r.max"
+                                                   @(active ? "checked" : "")
+                                                   data-type="filter" />
+
+                                            <label class="form-check-label">@r.label</label>
                                         </div>
                                     }
 
@@ -325,8 +487,14 @@ else
                                                     string url =
                                                     $"?query={searchKeyword}&categoryId={catId}&brand={brandId}&filter={next}&sortOrder={currentSort}";
 
-                                                    <div class="filter-option @(active ? "active" : "")">
-                                                        <a href="@url">@v</a>
+                                                    <div class="form-check mb-1">
+                                                        <input class="form-check-input filter-check"
+                                                               type="checkbox"
+                                                               value="@($"{g.Key}={v}")"
+                                                               @(active ? "checked" : "")
+                                                               data-type="filter" />
+
+                                                        <label class="form-check-label">@v</label>
                                                     </div>
                                                 }
                                             </div>
@@ -402,40 +570,53 @@ else
                 @if (brandId != null || !string.IsNullOrEmpty(currentFilter))
                 {
                     <div class="mb-3">
-                        <strong class="me-2">Đang lọc:</strong>
-
-                        <!-- BRAND TAG -->
-                        @if (brandId != null)
-                        {
-                            var brands = ViewBag.Brands as List<Brand>;
-                            var brandName = brands?.FirstOrDefault(x => x.Id == brandId)?.Name;
-
-                            string removeBrand =
-                            $"?query={searchKeyword}&filter={currentFilter}&sortOrder={currentSort}";
-
-                            <span class="badge bg-primary me-2">
-                                Hãng: @brandName
-                                <a href="@removeBrand" class="text-white ms-1">×</a>
-                            </span>
-                        }
-
                         <!-- FILTER TAGS -->
-                        @if (!string.IsNullOrEmpty(currentFilter))
+                        @if (brandId != null || !string.IsNullOrEmpty(currentFilter))
                         {
-                            var items = currentFilter.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                            <div class="mb-3">
+                                <strong class="me-2">Đang lọc:</strong>
 
-                            foreach (var f in items)
-                            {
-                                string newFilter = string.Join(",", items.Where(x => x != f));
-                                string url =
-                                $"?query={searchKeyword}&categoryId={catId}&brand={brandId}&filter={newFilter}&sortOrder={currentSort}";
+                                <!-- Brand tag -->
+                                @if (brandId != null)
+                                {
+                                    var brands = ViewBag.Brands as List<Brand>;
+                                    var brandName = brands?.FirstOrDefault(x => x.Id == brandId)?.Name;
+                                    string removeBrand = $"?query={searchKeyword}&filter={currentFilter}&sortOrder={currentSort}";
 
-                                <span class="badge bg-secondary me-2">
-                                    @f
-                                    <a href="@url" class="text-white ms-1">×</a>
-                                </span>
-                            }
+                                    <span class="badge bg-primary me-2">
+                                        Hãng: @brandName
+                                        <a href="@removeBrand" class="text-white ms-1">×</a>
+                                    </span>
+                                }
+
+                                <!-- Filter tags -->
+                                @if (!string.IsNullOrEmpty(currentFilter))
+                                {
+                                    var items = currentFilter.Split(",", StringSplitOptions.RemoveEmptyEntries);
+
+                                    foreach (var f in items)
+                                    {
+                                        string newFilter = string.Join(",", items.Where(x => x != f));
+                                        string url = $"?query={searchKeyword}&categoryId={catId}&brand={brandId}&filter={newFilter}&sortOrder={currentSort}";
+
+                                        <span class="badge bg-secondary me-2">
+                                            @f
+                                            <a href="@url" class="text-white ms-1">×</a>
+                                        </span>
+                                    }
+                                }
+
+                                <!-- ⭐ NÚT XÓA TẤT CẢ BỘ LỌC -->
+                                @{
+                                    string clearAllUrl = $"?query={searchKeyword}";
+                                }
+                                <a href="@clearAllUrl" class="badge bg-danger ms-2 text-white"
+                                   style="cursor:pointer; padding:8px 12px; font-size:13px; border-radius:6px;">
+                                    <i class="fa-solid fa-xmark me-1"></i> Xóa bộ lọc
+                                </a>
+                            </div>
                         }
+
                     </div>
                 }
 
@@ -535,6 +716,28 @@ else
 }
 
 <style>
+    .filter-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 4px;
+        cursor: pointer;
+        border-radius: 6px;
+    }
+
+        .filter-row:hover {
+            background: #f5f5f5;
+        }
+
+    .filter-label {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .form-check-input {
+        cursor: pointer;
+    }
+
     .filter-sidebar {
         background: #fff;
         border: 1px solid #eee;
@@ -559,4 +762,53 @@ else
         font-weight: 600;
     }
 
+    .form-check-input:checked {
+        background-color: #ff424e;
+        border-color: #ff424e;
+    }
+
+    .form-check-label {
+        cursor: pointer;
+    }
+
+    .form-check {
+        margin-left: 2px;
+    }
+
 </style>
+
+<script>
+    document.querySelectorAll(".filter-check").forEach(chk => {
+        chk.addEventListener("change", () => {
+            let url = new URL(window.location.href);
+
+            let type = chk.dataset.type;
+            let val = chk.value;
+
+            if (type === "brand") {
+                if (chk.checked) url.searchParams.set("brand", val);
+                else url.searchParams.delete("brand");
+            }
+
+            if (type === "filter") {
+                let filters = url.searchParams.get("filter")?.split(",") || [];
+
+                if (chk.checked) {
+                    if (!filters.includes(val)) filters.push(val);
+                } else {
+                    filters = filters.filter(x => x !== val);
+                }
+
+                if (filters.length > 0)
+                    url.searchParams.set("filter", filters.join(","));
+                else
+                    url.searchParams.delete("filter");
+            }
+
+            // Reset về trang 1 mỗi lần filter
+            url.searchParams.set("page", 1);
+
+            window.location.href = url.toString();
+        });
+    });
+</script>

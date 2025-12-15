@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using website_e_commerce.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace website_e_commerce.Areas.Admin.Controllers
 {
+    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
     public class ContactController : Controller
     {
         private readonly ApplicationDbContext _context;

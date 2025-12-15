@@ -6,16 +6,16 @@
     var flashSales = ViewBag.FlashSales as List<FlashSale> ?? new List<FlashSale>();
 
     var slots = flashSales
-        .Select(x => new DateTime(
-            x.StartTime.Year,
-            x.StartTime.Month,
-            x.StartTime.Day,
-            x.StartTime.Hour,
-            x.StartTime.Minute,
-            0))
-        .Distinct()
-        .OrderBy(t => t)
-        .ToList();
+    .Select(x => new DateTime(
+    x.StartTime.Year,
+    x.StartTime.Month,
+    x.StartTime.Day,
+    x.StartTime.Hour,
+    x.StartTime.Minute,
+    0))
+    .Distinct()
+    .OrderBy(t => t)
+    .ToList();
 }
 
 
@@ -23,6 +23,205 @@
 || User.IsInRole(SD.Role_StockManager)
 || User.IsInRole(SD.Role_Employee))
 {
+    <style>
+        body {
+            background: #f2f5f7;
+        }
+
+        .card-mini {
+            border-radius: 12px;
+            padding: 18px;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-orange {
+            background: #ff6b2c;
+            color: white;
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .chart-box {
+            height: 220px;
+        }
+
+        .tasks-box,
+        .table-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .task-item {
+            font-size: 15px;
+            border-bottom: 1px solid #eee;
+            padding: 8px 0;
+        }
+    </style>
+
+    <div class="container-fluid p-4">
+
+        <h3 class="fw-bold mb-4">📊 Dashboard Quản Trị</h3>
+
+        <!-- DÒNG 1 -->
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="card-mini">
+                    <div class="fw-bold fs-4">256</div>
+                    <div>Doanh thu hôm nay</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-mini">
+                    <div class="fw-bold fs-4 text-success">8451</div>
+                    <div>Số lượng tồn kho</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-mini">
+                    <div class="fw-bold fs-4 text-danger">31%</div>
+                    <div>Khách hàng mới</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-mini">
+                    <div class="fw-bold fs-4 text-warning">158</div>
+                    <div>Lợi nhuận</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DÒNG 2 -->
+        <div class="row g-3 mt-1">
+            <div class="col-md-6">
+                <div class="card-mini">
+                    <div class="fw-bold">Thống kê doanh thu</div>
+                    <canvas id="chart1" class="chart-box"></canvas>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-orange">
+                    <div class="fw-bold fs-5">Doanh số bán</div>
+                    <div class="fs-3 fw-bold">2362</div>
+                    <canvas id="chart2" class="chart-box mt-2"></canvas>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-mini">
+                    <div class="fw-bold fs-5">Sản phẩm</div>
+                    <div class="fs-3 fw-bold text-danger">985</div>
+                    <canvas id="chart3" class="chart-box"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- DÒNG 3 -->
+        <div class="row g-3 mt-1">
+            <!-- TASKS -->
+            <div class="col-md-4">
+                <div class="tasks-box">
+                    <h5 class="fw-bold mb-3">Công việc cần làm</h5>
+
+                    <div class="task-item">Nhập hàng</div>
+                    <div class="task-item">Trả lời email</div>
+                    <div class="task-item">Viết bài đăng</div>
+                    <div class="task-item mb-3">Kho hàng</div>
+                </div>
+            </div>
+
+            <!-- CUSTOMER TABLE -->
+            <div class="col-md-8">
+                <div class="table-box">
+                    <h5 class="fw-bold mb-3">Chi tiết khách hàng</h5>
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Hạn</th>
+                                <th>Người dùng</th>
+                                <th>Mô tả</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>12 giờ</td>
+                                <td>John Deo</td>
+                                <td>[1183] Sửa lỗi in hoá đơn</td>
+                            </tr>
+                            <tr>
+                                <td>16 giờ</td>
+                                <td>James Wills</td>
+                                <td>[1749] Cập nhật giao diện</td>
+                            </tr>
+                            <tr>
+                                <td>1 giờ</td>
+                                <td>Jenns William</td>
+                                <td>[1254] Sửa lỗi phân trang bảng</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Biểu đồ chính
+        new Chart(document.getElementById("chart1"), {
+            type: 'line',
+            data: {
+                labels: ["2018", "2019", "2020", "2021", "2022", "2023"],
+                datasets: [{
+                    label: "Doanh thu",
+                    data: [50, 80, 40, 120, 90, 150],
+                    borderColor: "orange",
+                    fill: false,
+                    tension: 0.4
+                }]
+            }
+        });
+
+        // Biểu đồ Doanh số bán
+        new Chart(document.getElementById("chart2"), {
+            type: 'line',
+            data: {
+                labels: ["1", "2", "3", "4", "5", "6"],
+                datasets: [{
+                    data: [10, 20, 8, 30, 18, 25],
+                    borderColor: "white",
+                    fill: false,
+                    tension: 0.4
+                }]
+            },
+            options: { plugins: { legend: { display: false } } }
+        });
+
+        // Biểu đồ Sản phẩm
+        new Chart(document.getElementById("chart3"), {
+            type: 'line',
+            data: {
+                labels: ["1", "2", "3", "4", "5", "6"],
+                datasets: [{
+                    data: [5, 9, 6, 10, 4, 7],
+                    borderColor: "red",
+                    fill: false,
+                    tension: 0.4
+                }]
+            },
+            options: { plugins: { legend: { display: false } } }
+        });
+    </script>
 
 }
 else
@@ -33,11 +232,11 @@ else
                 <!-- Banner lớn (chiếm 8/12 cột) -->
                 <div class="col-md-8">
                     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel"
-                         data-bs-interval="2000">
+                        data-bs-interval="2000">
                         <!-- Dấu chấm điều hướng -->
                         <div class="carousel-indicators">
                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                                    class="active" aria-current="true"></button>
+                                class="active" aria-current="true"></button>
                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"></button>
@@ -55,7 +254,7 @@ else
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/thu_cu_doi_moi_banner_web_slider_800x400.png" class="d-block w-100"
-                                     alt="Slide 2">
+                                    alt="Slide 2">
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/gearvn-pc-gvn-t9-slider.png" class="d-block w-100" alt="Slide 3">
@@ -65,34 +264,34 @@ else
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/man_hinh_thang_04_banner_web_slider_800x400.png" class="d-block w-100"
-                                     alt="Slide 5">
+                                    alt="Slide 5">
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/gearvn-gaming-gear-deal-hoi-slider-t8-jpg.png" class="d-block w-100"
-                                     alt="Slide 6">
+                                    alt="Slide 6">
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/gearvn-laptop-nvidia-rtx-50-series-slider.png" class="d-block w-100"
-                                     alt="Slide 7">
+                                    alt="Slide 7">
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/gearvn-asus-sat-canh-nhe-ganh-hoc-choi-slider.png" class="d-block w-100"
-                                     alt="Slide 8">
+                                    alt="Slide 8">
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/gearvn-game-on-qua-ngon-back-to-school-2025-rog-x-tuf-gaming-slider.png"
-                                     class="d-block w-100" alt="Slide 9">
+                                    class="d-block w-100" alt="Slide 9">
                             </div>
                         </div>
 
                         <!-- Nút điều hướng -->
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                                data-bs-slide="prev">
+                            data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
                         <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                                data-bs-slide="next">
+                            data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </button>
@@ -102,9 +301,9 @@ else
                 <!-- 2 banner nhỏ bên phải (chiếm 4/12 cột) -->
                 <div class="col-md-4 d-flex flex-column justify-content-between">
                     <img src="~/images/gearvn-ban-phim-slider-right-t8.png" class="img-fluid rounded shadow mb-2"
-                         alt="Banner nhỏ 1">
+                        alt="Banner nhỏ 1">
                     <img src="~/images/gearvn-build-pc-slider-right-t8.png" class="img-fluid rounded shadow"
-                         alt="Banner nhỏ 2">
+                        alt="Banner nhỏ 2">
                 </div>
             </div>
 
@@ -112,11 +311,11 @@ else
             <div class="row mt-3">
                 <div class="col-md-4 col-6 mb-2">
                     <img src="~/images/gearvn-laptop-gaming-slider-bot-t8.png" class="img-fluid rounded shadow"
-                         alt="Promo 1">
+                        alt="Promo 1">
                 </div>
                 <div class="col-md-4 col-6 mb-2">
                     <img src="~/images/gearvn-laptop-van-phong-slider-bot-t8.png" class="img-fluid rounded shadow"
-                         alt="Promo 2">
+                        alt="Promo 2">
                 </div>
                 <div class="col-md-4 col-6 mb-2">
                     <img src="~/images/gearvn-pc-gvn-rtx-5060-t9-bottom.png" class="img-fluid rounded shadow" alt="Promo 3">
@@ -142,10 +341,10 @@ else
 
                             <picture>
                                 <source media="(max-width: 567px)"
-                                        srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-1.png?v=1741763279500">
+                                    srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-1.png?v=1741763279500">
                                 <img width="310" height="290"
-                                     src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-1.png?v=1741763279500"
-                                     alt="Bàn phím gaming">
+                                    src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-1.png?v=1741763279500"
+                                    alt="Bàn phím gaming">
                             </picture>
 
                             <h4 class="line-clamp line-clamp-1">Bàn phím gaming</h4>
@@ -158,10 +357,10 @@ else
 
                             <picture>
                                 <source media="(max-width: 567px)"
-                                        srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-2.png?v=1741763376460">
+                                    srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-2.png?v=1741763376460">
                                 <img width="310" height="290"
-                                     src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-2.png?v=1741763376460"
-                                     alt="Chuột gaming">
+                                    src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-2.png?v=1741763376460"
+                                    alt="Chuột gaming">
                             </picture>
 
                             <h4 class="line-clamp line-clamp-1">Chuột gaming</h4>
@@ -174,10 +373,10 @@ else
 
                             <picture>
                                 <source media="(max-width: 567px)"
-                                        srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-3.png?v=1741763478570">
+                                    srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-3.png?v=1741763478570">
                                 <img width="310" height="290"
-                                     src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-3.png?v=1741763478570"
-                                     alt="Tai nghe gaming">
+                                    src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-3.png?v=1741763478570"
+                                    alt="Tai nghe gaming">
                             </picture>
 
                             <h4 class="line-clamp line-clamp-1">Tai nghe gaming</h4>
@@ -190,10 +389,10 @@ else
 
                             <picture>
                                 <source media="(max-width: 567px)"
-                                        srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-4.png?v=1741763500397">
+                                    srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-4.png?v=1741763500397">
                                 <img width="310" height="290"
-                                     src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-4.png?v=1741763500397"
-                                     alt="Điều khiển gaming">
+                                    src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-4.png?v=1741763500397"
+                                    alt="Điều khiển gaming">
                             </picture>
 
                             <h4 class="line-clamp line-clamp-1">Điều khiển gaming</h4>
@@ -384,8 +583,7 @@ else
                                         </div>
                                     </div>
 
-                                    <div class="flash-countdown"
-                                         data-end="@fs.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")">
+                                    <div class="flash-countdown" data-end="@fs.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")">
                                         00:00:00
                                     </div>
                                 </div>
@@ -423,15 +621,15 @@ else
         border: 2px solid transparent;
     }
 
-        .flash-slot:hover {
-            transform: translateY(-3px);
-            border-color: #ff5722;
-        }
+    .flash-slot:hover {
+        transform: translateY(-3px);
+        border-color: #ff5722;
+    }
 
-        .flash-slot.active {
-            background: #ffdecf;
-            border-color: #ff5722;
-        }
+    .flash-slot.active {
+        background: #ffdecf;
+        border-color: #ff5722;
+    }
 
     .slot-hour {
         font-size: 20px;
@@ -455,10 +653,10 @@ else
         border: 1px solid #eee;
     }
 
-        .flash-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 25px rgba(255, 79, 0, 0.25);
-        }
+    .flash-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px rgba(255, 79, 0, 0.25);
+    }
 
     .flash-img-wrap {
         width: 100%;
@@ -502,7 +700,7 @@ else
         border-radius: 20px;
         overflow: hidden;
         margin-bottom: 10px;
-        box-shadow: inset 0 0 3px rgba(0,0,0,0.15);
+        box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.15);
     }
 
     .flash-progress-bar {
@@ -536,11 +734,10 @@ else
         padding: 25px;
     }
 
-        .swiper-button-next:hover,
-        .swiper-button-prev:hover {
-            color: #d84315 !important;
-        }
-
+    .swiper-button-next:hover,
+    .swiper-button-prev:hover {
+        color: #d84315 !important;
+    }
 </style>
 
 <script>
