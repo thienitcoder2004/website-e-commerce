@@ -39,32 +39,140 @@
                 break;
         }
     }
+
+    var currentStatus = payment?.Status ?? "Pending";
 }
 
+<style>
+    /* ===== ADDRESS ===== */
+    .address-box {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 14px;
+        margin-top: 10px;
+    }
+
+    .address-title {
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .address-detail {
+        color: #374151;
+        font-size: 14px;
+    }
+
+    /* ===== TIMELINE ===== */
+    .timeline {
+        position: relative;
+        padding-left: 28px;
+        margin-top: 10px;
+    }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: #e5e7eb;
+            border-radius: 4px;
+        }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 18px;
+    }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            background: #e5e7eb;
+            border-radius: 50%;
+        }
+
+        .timeline-item.active::before {
+            background: #0d6efd;
+        }
+
+        .timeline-item h6 {
+            margin-bottom: 2px;
+            font-weight: 600;
+        }
+
+        .timeline-item span {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+    /* ===== MAP ===== */
+    .map-box iframe {
+        width: 100%;
+        height: 200px;
+        border-radius: 10px;
+        border: none;
+    }
+
+    /* ===== TOAST ===== */
+    .toast-success {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #16a34a;
+        color: #fff;
+        padding: 12px 18px;
+        border-radius: 10px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 10px 25px rgba(0,0,0,.15);
+        z-index: 9999;
+        opacity: 0;
+        transform: translateY(-10px);
+        pointer-events: none;
+        transition: all .35s ease;
+    }
+
+        .toast-success.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+</style>
+
 <div class="container mt-4">
-    <a asp-action="Index" class="btn btn-outline-secondary mb-3">
-        <i class="fa-solid fa-arrow-left"></i> Quay lại danh sách
-    </a>
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between mb-3">
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại
+        </a>
+
+        <a asp-action="ExportPdf" asp-route-id="@Model.Id"
+           class="btn btn-danger">
+            <i class="fa-solid fa-file-pdf"></i> Xuất PDF
+        </a>
+    </div>
 
     <h2 class="mb-3">Chi tiết đơn hàng #@Model.Id</h2>
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show">
-            @TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
-
     <div class="row">
-        <!-- Thông tin đơn hàng & khách hàng -->
+        <!-- LEFT -->
         <div class="col-md-6 mb-3">
+
+            <!-- ORDER INFO -->
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
                     Thông tin đơn hàng
                 </div>
                 <div class="card-body">
-                    <p><strong>Mã đơn hàng:</strong> #@Model.Id</p>
+                    <p><strong>Mã đơn:</strong> #@Model.Id</p>
                     <p><strong>Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
                     <p>
                         <strong>Trạng thái:</strong>
@@ -76,9 +184,18 @@
                             @String.Format("{0:N0} đ", Model.TotalPrice)
                         </span>
                     </p>
+
+                    @if (!string.IsNullOrEmpty(Model.ShippingAddress))
+                    {
+                        <div class="address-box">
+                            <div class="address-title">📍 Địa chỉ giao hàng</div>
+                            <div class="address-detail">@Model.ShippingAddress</div>
+                        </div>
+                    }
                 </div>
             </div>
 
+            <!-- CUSTOMER -->
             <div class="card shadow-sm mt-3">
                 <div class="card-header bg-secondary text-white">
                     Thông tin khách hàng
@@ -86,116 +203,131 @@
                 <div class="card-body">
                     <p><strong>Họ tên:</strong> @Model.ApplicationUser?.HoTen</p>
                     <p><strong>Email:</strong> @Model.ApplicationUser?.Email</p>
-                    @* Nếu trong Order có địa chỉ / số điện thoại thì thêm vào đây *@
-                    @* <p><strong>Địa chỉ:</strong> @Model.Address</p> *@
-                    @* <p><strong>SĐT:</strong> @Model.PhoneNumber</p> *@
                 </div>
             </div>
+
+            <!-- MAP -->
+            @if (!string.IsNullOrEmpty(Model.ShippingAddress))
+            {
+                <div class="card shadow-sm mt-3">
+                    <div class="card-header bg-light">
+                        🗺 Bản đồ giao hàng
+                    </div>
+                    <div class="card-body map-box">
+                        <iframe src="https://www.google.com/maps?q=@Uri.EscapeDataString(Model.ShippingAddress)&output=embed">
+                        </iframe>
+                    </div>
+                </div>
+            }
         </div>
 
-        <!-- Cập nhật trạng thái đơn hàng -->
+        <!-- RIGHT -->
         <div class="col-md-6 mb-3">
-            <div class="card shadow-sm">
+
+            <!-- TIMELINE -->
+            <div class="card shadow-sm mb-3">
                 <div class="card-header bg-warning text-dark">
-                    Cập nhật trạng thái đơn hàng
+                    Trạng thái đơn hàng
                 </div>
                 <div class="card-body">
-                    <p class="mb-2">Chọn một trong các trạng thái sau:</p>
+                    <div class="timeline">
 
+                        <div class="timeline-item @(currentStatus == "Pending" ? "active" : "")">
+                            <h6>🕐 Chờ xác nhận</h6>
+                        </div>
+
+                        <div class="timeline-item @(currentStatus == "Shipping" ? "active" : "")">
+                            <h6>🚚 Đang giao hàng</h6>
+                        </div>
+
+                        <div class="timeline-item @(currentStatus == "Completed" ? "active" : "")">
+                            <h6>✅ Hoàn thành</h6>
+                        </div>
+
+                        <div class="timeline-item @(currentStatus == "Cancelled" ? "active" : "")">
+                            <h6>❌ Đã hủy</h6>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- UPDATE STATUS -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    Cập nhật trạng thái
+                </div>
+                <div class="card-body">
                     <form id="statusForm">
                         @Html.AntiForgeryToken()
                         <input type="hidden" id="orderId" value="@Model.Id" />
 
                         <div class="d-flex flex-wrap gap-2">
-                            <button type="button"
-                                    class="btn btn-sm btn-status @(payment?.Status == "Pending" ? "btn-warning" : "btn-outline-warning")"
-                                    data-status="Pending">
-                                Chờ xác nhận
-                            </button>
-
-                            <button type="button"
-                                    class="btn btn-sm btn-status @(payment?.Status == "Shipping" ? "btn-info text-white" : "btn-outline-info")"
-                                    data-status="Shipping">
-                                Đang giao hàng
-                            </button>
-
-                            <button type="button"
-                                    class="btn btn-sm btn-status @(payment?.Status == "Completed" ? "btn-success" : "btn-outline-success")"
-                                    data-status="Completed">
-                                Thành công
-                            </button>
-
-                            <button type="button"
-                                    class="btn btn-sm btn-status @(payment?.Status == "Cancelled" ? "btn-danger" : "btn-outline-danger")"
-                                    data-status="Cancelled">
-                                Đã hủy
-                            </button>
+                            <button type="button" class="btn btn-sm btn-status btn-outline-warning" data-status="Pending">Chờ xác nhận</button>
+                            <button type="button" class="btn btn-sm btn-status btn-outline-info" data-status="Shipping">Đang giao</button>
+                            <button type="button" class="btn btn-sm btn-status btn-outline-success" data-status="Completed">Hoàn thành</button>
+                            <button type="button" class="btn btn-sm btn-status btn-outline-danger" data-status="Cancelled">Hủy</button>
                         </div>
                     </form>
-
-                    <small class="text-muted d-block mt-2">
-                        Khi cập nhật, lịch sử đơn hàng của khách sẽ hiển thị đúng các tab
-                        <strong>Chờ xác nhận / Vận chuyển / Hoàn thành / Đã hủy</strong>.
-                    </small>
                 </div>
             </div>
+
         </div>
     </div>
 
-    <!-- Danh sách sản phẩm trong đơn hàng -->
+    <!-- PRODUCTS -->
     <div class="card shadow-sm mt-4">
         <div class="card-header bg-info text-white">
             Sản phẩm trong đơn hàng
         </div>
-        <div class="card-body">
-            @if (Model.OrderDetails == null || !Model.OrderDetails.Any())
-            {
-                <p class="text-muted">Không có sản phẩm nào trong đơn hàng.</p>
-            }
-            else
-            {
-                <div class="table-responsive">
-                    <table class="table table-bordered align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th style="width:80px;">Ảnh</th>
-                                <th>Tên sản phẩm</th>
-                                <th style="width:100px;">Số lượng</th>
-                                <th style="width:140px;">Đơn giá</th>
-                                <th style="width:160px;">Thành tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.OrderDetails)
-                            {
-                                if (item.Product != null && item.Quantity > 0)
-                                {
-                                    <tr>
-                                        <td>
-                                            <img src="@item.Product.ImageUrl" alt="Product"
-                                                 style="width:60px;height:60px;object-fit:cover;border-radius:6px;" />
-                                        </td>
-                                        <td>@item.Product.Name</td>
-                                        <td class="text-center">@item.Quantity</td>
-                                        <td class="text-end">
-                                            @String.Format("{0:N0} đ", item.Price)
-                                        </td>
-                                        <td class="text-end text-danger fw-semibold">
-                                            @String.Format("{0:N0} đ", item.Price * item.Quantity)
-                                        </td>
-                                    </tr>
-                                }
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
+        <div class="card-body table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Ảnh</th>
+                        <th>Tên</th>
+                        <th>SL</th>
+                        <th>Giá</th>
+                        <th>Tổng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderDetails)
+                    {
+                        <tr>
+                            <td style="width:80px">
+                                <img src="@item.Product.ImageUrl"
+                                     style="width:60px;height:60px;border-radius:6px;object-fit:cover" />
+                            </td>
+                            <td>@item.Product.Name</td>
+                            <td class="text-center">@item.Quantity</td>
+                            <td>@String.Format("{0:N0} đ", item.Price)</td>
+                            <td class="text-danger fw-bold">
+                                @String.Format("{0:N0} đ", item.Price * item.Quantity)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
+
+</div>
+
+<!-- TOAST -->
+<div id="toastSuccess" class="toast-success">
+    <i class="fa-solid fa-circle-check"></i>
+    Cập nhật trạng thái thành công
 </div>
 
 @section Scripts {
+
     <script>
+            function showToast() {
+            const toast = document.getElementById("toastSuccess");
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3000);
+        }
         document.addEventListener("DOMContentLoaded", function () {
             const buttons = document.querySelectorAll(".btn-status");
             const tokenInput = document.querySelector('input[name="__RequestVerificationToken"]');

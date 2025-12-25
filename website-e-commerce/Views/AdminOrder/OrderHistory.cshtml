@@ -160,6 +160,22 @@
         padding-top: 20px;
     }
 
+    .order-item {
+        position: relative;
+        z-index: 1;
+    }
+
+    .action-buttons a,
+    .action-buttons button {
+        position: relative;
+        z-index: 10;
+        pointer-events: auto;
+    }
+
+    .tab-pane {
+        pointer-events: auto !important;
+    }
+
 </style>
 
 <div class="order-history-container">
@@ -167,10 +183,10 @@
     <div class="tabs-container">
         <ul class="nav nav-pills">
             <li class="nav-item">
-                <a class="nav-link" id="tab5" data-bs-toggle="pill" href="#tatca">Tất cả</a>
+                <a class="nav-link active" id="tab5" data-bs-toggle="pill" href="#tatca">Tất cả</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" id="tab1" data-bs-toggle="pill" href="#choxacnhan">Chờ xác nhận</a>
+                <a class="nav-link" id="tab1" data-bs-toggle="pill" href="#choxacnhan">Chờ xác nhận</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="tab2" data-bs-toggle="pill" href="#vanchuyen">Vận chuyển</a>
@@ -235,8 +251,19 @@
                         <div class="order-footer">
                             <p class="total-label">Thành tiền: <span class="total-amount">@String.Format("{0:N0} đ", order.TotalPrice)</span></p>
                             <div class="action-buttons">
-                                <button class="btn btn-secondary btn-sm">Mua Lại</button>
-                                <button class="btn btn-primary btn-sm">Xem Chi Tiết Đơn Hàng</button>
+                                <a asp-controller="Product"
+                                   asp-action="Details"
+                                   asp-route-id="@order.OrderDetails.First().Product.Id"
+                                   class="btn btn-secondary btn-sm">
+                                    Mua lại
+                                </a>
+
+                                <a asp-controller="Order"
+                                   asp-action="Details"
+                                   asp-route-id="@order.Id"
+                                   class="btn btn-primary btn-sm">
+                                    Xem Chi Tiết Đơn Hàng
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -278,8 +305,21 @@
                         <div class="order-footer">
                             <p class="total-label">Thành tiền: <span class="total-amount">@String.Format("{0:N0} đ", order.TotalPrice)</span></p>
                             <div class="action-buttons">
-                                <button class="btn btn-secondary btn-sm">Mua Lại</button>
-                                <button class="btn btn-primary btn-sm">Xem Chi Tiết Đơn Hàng</button>
+                                <div class="action-buttons">
+                                    <a asp-controller="Product"
+                                       asp-action="Details"
+                                       asp-route-id="@order.OrderDetails.First().Product.Id"
+                                       class="btn btn-secondary btn-sm">
+                                        Mua lại
+                                    </a>
+
+                                    <a asp-controller="Order"
+                                       asp-action="Details"
+                                       asp-route-id="@order.Id"
+                                       class="btn btn-primary btn-sm">
+                                        Xem Chi Tiết Đơn Hàng
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -321,8 +361,19 @@
                         <div class="order-footer">
                             <p class="total-label">Thành tiền: <span class="total-amount">@String.Format("{0:N0} đ", order.TotalPrice)</span></p>
                             <div class="action-buttons">
-                                <button class="btn btn-secondary btn-sm">Mua Lại</button>
-                                <button class="btn btn-primary btn-sm">Xem Chi Tiết Đơn Hàng</button>
+                                <a asp-controller="Product"
+                                   asp-action="Details"
+                                   asp-route-id="@order.OrderDetails.First().Product.Id"
+                                   class="btn btn-secondary btn-sm">
+                                    Mua lại
+                                </a>
+
+                                <a asp-controller="Order"
+                                   asp-action="Details"
+                                   asp-route-id="@order.Id"
+                                   class="btn btn-primary btn-sm">
+                                    Xem Chi Tiết Đơn Hàng
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -364,8 +415,19 @@
                         <div class="order-footer">
                             <p class="total-label">Thành tiền: <span class="total-amount">@String.Format("{0:N0} đ", order.TotalPrice)</span></p>
                             <div class="action-buttons">
-                                <button class="btn btn-secondary btn-sm">Mua Lại</button>
-                                <button class="btn btn-primary btn-sm">Xem Chi Tiết Đơn Hàng</button>
+                                <a asp-controller="Product"
+                                   asp-action="Details"
+                                   asp-route-id="@order.OrderDetails.First().Product.Id"
+                                   class="btn btn-secondary btn-sm">
+                                    Mua lại
+                                </a>
+
+                                <a asp-controller="Order"
+                                   asp-action="Details"
+                                   asp-route-id="@order.Id"
+                                   class="btn btn-primary btn-sm">
+                                    Xem Chi Tiết Đơn Hàng
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -407,8 +469,19 @@
                         <div class="order-footer">
                             <p class="total-label">Thành tiền: <span class="total-amount">@String.Format("{0:N0} đ", order.TotalPrice)</span></p>
                             <div class="action-buttons">
-                                <button class="btn btn-secondary btn-sm">Mua Lại</button>
-                                <button class="btn btn-primary btn-sm">Xem Chi Tiết Hủy Đơn</button>
+                                <a asp-controller="Product"
+                                   asp-action="Details"
+                                   asp-route-id="@order.OrderDetails.First().Product.Id"
+                                   class="btn btn-secondary btn-sm">
+                                    Mua lại
+                                </a>
+
+                                <a asp-controller="Order"
+                                   asp-action="Details"
+                                   asp-route-id="@order.Id"
+                                   class="btn btn-primary btn-sm">
+                                    Xem Chi Tiết Đơn Hàng
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -417,3 +490,13 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const firstTab = document.querySelector('.nav-pills .nav-link[href="#tatca"]');
+            if (firstTab) {
+                new bootstrap.Tab(firstTab).show();
+            }
+        });
+    </script>
+}

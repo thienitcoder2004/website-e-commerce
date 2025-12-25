@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Quản lý đơn hàng";
-    string currentFilter = ViewBag.StatusFilter as string ?? "All";
     int totalOrders = Model?.Count() ?? 0;
 }
 
@@ -36,12 +35,6 @@
         padding: 6px 14px;
     }
 
-    .filter-select {
-        border-radius: 999px !important;
-        padding: 6px 14px;
-        font-size: 14px;
-    }
-
     .order-table-wrapper {
         border-radius: 16px;
         overflow: hidden;
@@ -67,18 +60,38 @@
         font-weight: 600;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        justify-content: center;
+        min-width: 120px;
     }
 
-    .status-pending { background: #fff7e6; color: #b55a00; border: 1px solid #ffd89b; }
-    .status-shipping { background: #e6f6ff; color: #0d6efd; border: 1px solid #9cd6ff; }
-    .status-success { background: #e6ffed; color: #0f8a39; border: 1px solid #9ef8c2; }
-    .status-cancel { background: #ffe6e6; color: #c0392b; border: 1px solid #ffb3b3; }
-    .status-none { background: #f0f0f0; color: #6c757d; border: 1px solid #cccccc; }
+    .status-pending {
+        background: #fff7e6;
+        color: #b55a00;
+        border: 1px solid #ffd89b;
+    }
 
-    @@media (max-width: 768px) {
-        .order-page-wrapper { padding: 20px 16px; border-radius: 12px; }
-        .table-responsive { font-size: 13px; }
+    .status-shipping {
+        background: #e6f6ff;
+        color: #0d6efd;
+        border: 1px solid #9cd6ff;
+    }
+
+    .status-success {
+        background: #e6ffed;
+        color: #0f8a39;
+        border: 1px solid #9ef8c2;
+    }
+
+    .status-cancel {
+        background: #ffe6e6;
+        color: #c0392b;
+        border: 1px solid #ffb3b3;
+    }
+
+    .status-none {
+        background: #f0f0f0;
+        color: #6c757d;
+        border: 1px solid #cccccc;
     }
 </style>
 
@@ -86,151 +99,101 @@
     <div class="order-page-wrapper">
 
         <!-- HEADER -->
-        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="order-title text-primary mb-1">
-                    📦 Quản lý đơn hàng
-                </h2>
+                <h2 class="order-title text-primary mb-1">📦 Quản lý đơn hàng</h2>
                 <p class="order-subtitle mb-0">
-                    Theo dõi trạng thái và xử lý đơn hàng của khách hàng.
+                    Theo dõi trạng thái và xử lý đơn hàng của khách hàng
                 </p>
             </div>
 
             <span class="order-badge-summary">
-                <i class="fa-solid fa-file-invoice me-1"></i>
                 Tổng đơn hàng: <strong>@totalOrders</strong>
             </span>
         </div>
 
-        <!-- BỘ LỌC -->
-        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-            <div class="text-muted small">
-                <i class="fa-regular fa-circle-question me-1"></i>
-                Gợi ý: Lọc theo trạng thái để xem đơn hàng nhanh hơn.
-            </div>
-
-            <form asp-action="Index" method="get" class="d-flex align-items-center gap-2 flex-wrap">
-                <select name="statusFilter"
-                        class="form-select filter-select"
-                        onchange="this.form.submit()">
-
-                    <option value="All" selected="@(currentFilter=="All")">Tất cả</option>
-                    <option value="Pending" selected="@(currentFilter=="Pending")">Chờ xác nhận</option>
-                    <option value="Shipping" selected="@(currentFilter=="Shipping")">Đang giao hàng</option>
-                    <option value="Completed" selected="@(currentFilter=="Completed")">Hoàn thành</option>
-                    <option value="Cancelled" selected="@(currentFilter=="Cancelled")">Đã hủy</option>
-                    <option value="Success" selected="@(currentFilter=="Success")">Thanh toán thành công</option>
-
-                </select>
-            </form>
-        </div>
-
-        <!-- BẢNG ĐƠN HÀNG -->
+        <!-- TABLE -->
         <div class="order-table-wrapper">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="text-center">
                         <tr>
-                            <th style="width:90px;">Mã đơn</th>
+                            <th>Mã đơn</th>
                             <th>Khách hàng</th>
                             <th>Ngày đặt</th>
                             <th>Tổng tiền</th>
                             <th>Trạng thái</th>
-                            <th style="width:160px;">Hành động</th>
+                            <th></th>
                         </tr>
                     </thead>
-
                     <tbody class="text-center">
-                        @if (Model == null || !Model.Any())
+                        @foreach (var order in Model)
                         {
+                            var payment = order.Payments.FirstOrDefault();
+
+                            string text;
+                            string cls;
+
+                            if (payment == null)
+                            {
+                                text = "Chưa thanh toán";
+                                cls = "status-none";
+                            }
+                            else
+                            {
+                                switch (payment.Status)
+                                {
+                                    case "Pending":
+                                        text = "Chờ xác nhận";
+                                        cls = "status-pending";
+                                        break;
+
+                                    case "Shipping":
+                                        text = "Đang giao hàng";
+                                        cls = "status-shipping";
+                                        break;
+
+                                    case "Completed":
+                                    case "Success":
+                                        text = "Hoàn thành";
+                                        cls = "status-success";
+                                        break;
+
+                                    case "Cancelled":
+                                        text = "Đã hủy";
+                                        cls = "status-cancel";
+                                        break;
+
+                                    default:
+                                        text = payment.Status;
+                                        cls = "status-none";
+                                        break;
+                                }
+                            }
+
                             <tr>
-                                <td colspan="6" class="text-muted py-4">
-                                    Không có đơn hàng nào phù hợp với bộ lọc hiện tại.
+                                <td class="fw-semibold">#@order.Id</td>
+                                <td>@order.ApplicationUser?.HoTen</td>
+                                <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="text-danger fw-bold">
+                                    @String.Format("{0:N0} đ", order.TotalPrice)
+                                </td>
+                                <td>
+                                    <span class="status-pill @cls">@text</span>
+                                </td>
+                                <td>
+                                    <a asp-action="Details"
+                                       asp-route-id="@order.Id"
+                                       class="btn btn-sm btn-primary">
+                                        Xem
+                                    </a>
                                 </td>
                             </tr>
-                        }
-                        else
-                        {
-                            foreach (var order in Model)
-                            {
-                                var payment = order.Payments.FirstOrDefault();
-                                string text = "Không xác định";
-                                string cls = "status-none";
-
-                                if (payment == null)
-                                {
-                                    text = "Chưa thanh toán";
-                                    cls = "status-none";
-                                }
-                                else
-                                {
-                                    switch (payment.Status)
-                                    {
-                                        case "Pending": text = "Chờ xác nhận"; cls = "status-pending"; break;
-                                        case "Shipping": text = "Đang giao hàng"; cls = "status-shipping"; break;
-                                        case "Completed": text = "Hoàn thành"; cls = "status-success"; break;
-                                        case "Cancelled": text = "Đã hủy"; cls = "status-cancel"; break;
-                                        case "Success": text = "Thanh toán thành công"; cls = "status-success"; break;
-                                    }
-                                }
-
-                                <tr>
-                                    <td class="fw-semibold">#@order.Id</td>
-                                    <td>@order.ApplicationUser?.HoTen</td>
-                                    <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
-                                    <td class="text-danger fw-bold">@String.Format("{0:N0} đ", order.TotalPrice)</td>
-                                    <td>
-                                        <span class="status-pill @cls">
-                                            <i class="fa-solid fa-circle"></i> @text
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <div class="d-flex justify-content-center gap-1">
-                                            <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-primary">
-                                                <i class="fa-solid fa-eye"></i>
-                                            </a>
-
-                                            <form asp-action="DeleteConfirmed" asp-route-id="@order.Id" method="post"
-                                                  onsubmit="return confirm('Bạn có chắc muốn xoá đơn hàng này?');">
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
                         }
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- PHÂN TRANG -->
-        @if (ViewBag.TotalPages > 1)
-        {
-            <nav class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-                        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)"
-                           asp-route-statusFilter="@currentFilter">Trước</a>
-                    </li>
-
-                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                    {
-                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                            <a class="page-link" asp-action="Index" asp-route-page="@i"
-                               asp-route-statusFilter="@currentFilter">@i</a>
-                        </li>
-                    }
-
-                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-                        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)"
-                           asp-route-statusFilter="@currentFilter">Sau</a>
-                    </li>
-                </ul>
-            </nav>
-        }
     </div>
 </div>

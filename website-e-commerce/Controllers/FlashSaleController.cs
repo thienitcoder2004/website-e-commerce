@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace website_e_commerce.Areas.Admin.Controllers
 {
-    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
     public class FlashSaleController : Controller
     {
         private readonly IFlashSaleRepository _repo;

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace website_e_commerce.Controllers
 {
-    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
     public class BrandController : Controller
     {
         private readonly IBrandRepository _brandRepo;

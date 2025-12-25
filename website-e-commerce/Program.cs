@@ -5,6 +5,7 @@ using website_e_commerce.Hubs;
 using website_e_commerce.Models;
 using website_e_commerce.Repositories;
 using website_e_commerce.Services;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +70,7 @@ builder.Services.AddScoped<IStockHistoryRepository, MockStockHistoryRepository>(
 builder.Services.AddScoped<IFlashSaleRepository, MockFlashSaleRepository>();
 builder.Services.AddSingleton<MomoService>();
 builder.Services.AddSingleton<VnPayService>();
+QuestPDF.Settings.License = LicenseType.Community;
 
 builder.Services.AddAuthorization();
 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -78,6 +80,7 @@ var app = builder.Build();
 // SignalR cho thông báo tin tức
 app.MapHub<website_e_commerce.Services.NewsHub>("/newsHub");
 app.MapHub<SupportChatHub>("/supportChatHub");
+app.MapHub<OrderHub>("/orderHub");
 
 // Pipeline cấu hình
 if (!app.Environment.IsDevelopment())

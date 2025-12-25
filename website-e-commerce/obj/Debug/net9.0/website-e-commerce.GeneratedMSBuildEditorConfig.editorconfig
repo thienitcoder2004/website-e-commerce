@@ -17,321 +17,329 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = website_e_commerce
 build_property.RootNamespace = website_e_commerce
-build_property.ProjectDir = D:\website-e-commerce\website-e-commerce\
+build_property.ProjectDir = C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\website-e-commerce\website-e-commerce
+build_property.MSBuildProjectDirectory = C:\Users\thien\Downloads\website-e-commerce\website-e-commerce
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/AccessDenied.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/AccessDenied.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/ConfirmEmail.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/ConfirmEmail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxDb25maXJtRW1haWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/ExternalLogin.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/ExternalLogin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxFeHRlcm5hbExvZ2luLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/ForgotPassword.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/ForgotPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Lockout.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Lockout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2Nrb3V0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Login.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Logout.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Logout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Manage/ChangePassword.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Manage/Address.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcQWRkcmVzcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Manage/ChangePassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcQ2hhbmdlUGFzc3dvcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Manage/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Manage/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcX01hbmFnZU5hdi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Manage/_ViewImports.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Manage/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Register.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/ResetPassword.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/ResetPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZXNldFBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/ResetPasswordByCode.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/ResetPasswordByCode.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZXNldFBhc3N3b3JkQnlDb2RlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/_Layout.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxfTGF5b3V0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/_ViewImports.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/Account/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxfVmlld0ltcG9ydHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/_ValidationScriptsPartial.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZhbGlkYXRpb25TY3JpcHRzUGFydGlhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/_ViewImports.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Areas/Identity/Pages/_ViewStart.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Areas/Identity/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/AdminOrder/Dashboard.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/AdminOrder/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5PcmRlclxEYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/AdminOrder/Details.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/AdminOrder/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5PcmRlclxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/AdminOrder/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/AdminOrder/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5PcmRlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/AdminOrder/OrderHistory.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/AdminOrder/OrderHistory.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5PcmRlclxPcmRlckhpc3RvcnkuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Brand/Create.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Brand/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Brand/Delete.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Brand/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Brand/Edit.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Brand/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Brand/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Brand/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Category/Add.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Category/Add.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcQWRkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Category/Delete.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Category/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Category/Details.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Category/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Category/Edit.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Category/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Category/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Category/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Contact/Add.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Contact/Add.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxBZGQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Contact/Delete.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Contact/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Contact/Edit.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Contact/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Contact/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Contact/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Error/404.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Error/404.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXJyb3JcNDA0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/FlashSale/Add.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/FlashSale/Add.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmxhc2hTYWxlXEFkZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/FlashSale/Edit.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/FlashSale/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmxhc2hTYWxlXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/FlashSale/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/FlashSale/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmxhc2hTYWxlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Home/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/News/Add.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/News/Add.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmV3c1xBZGQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/News/Delete.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/News/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmV3c1xEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/News/Detail.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/News/Detail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmV3c1xEZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/News/Edit.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/News/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmV3c1xFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/News/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/News/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmV3c1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/OrderLookup/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/OrderLookup/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJMb29rdXBcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Product/Add.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Order/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Product/Add.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxBZGQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Product/Compare.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Product/Compare.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxDb21wYXJlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Product/Delete.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Product/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Product/Details.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Product/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Product/Edit.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Product/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Product/Favorites.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Product/Favorites.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxGYXZvcml0ZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Product/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Product/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Promotion/Add.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Promotion/Add.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvbW90aW9uXEFkZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Promotion/Edit.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Promotion/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvbW90aW9uXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Promotion/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Promotion/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvbW90aW9uXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Review/Add.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Review/Add.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmV2aWV3XEFkZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Review/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Review/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmV2aWV3XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Shared/Error.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Shared/_LayoutAdmin.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Shared/_LayoutAdmin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRBZG1pbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Shared/_LoginPartial.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/ShoppingCart/Checkout.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/ShoppingCart/Checkout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvcHBpbmdDYXJ0XENoZWNrb3V0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/ShoppingCart/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/ShoppingCart/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvcHBpbmdDYXJ0XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/ShoppingCart/OrderSuccess.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/ShoppingCart/OrderSuccess.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvcHBpbmdDYXJ0XE9yZGVyU3VjY2Vzcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/StockHistory/Delete.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/StockHistory/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tIaXN0b3J5XERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/StockHistory/Details.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/StockHistory/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tIaXN0b3J5XERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/StockHistory/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/StockHistory/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tIaXN0b3J5XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/StockHistory/Statistics.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/StockHistory/Statistics.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tIaXN0b3J5XFN0YXRpc3RpY3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/SupportChat/AdminInbox.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/SupportChat/AdminInbox.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3VwcG9ydENoYXRcQWRtaW5JbmJveC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/SupportChat/ChatBox.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/SupportChat/ChatBox.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3VwcG9ydENoYXRcQ2hhdEJveC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/User/Edit.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/User/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/User/Index.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/User/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/_ViewImports.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/_ViewStart.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/website-e-commerce/website-e-commerce/Views/Shared/_Layout.cshtml]
+[C:/Users/thien/Downloads/website-e-commerce/website-e-commerce/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-97e3alt5f5

@@ -1,119 +1,236 @@
 ﻿@model website_e_commerce.Models.ShoppingCart
 @using website_e_commerce.Models
-@inject ApplicationDbContext _context
-
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger fw-bold">@TempData["Error"]</div>
-}
 
 @{
     ViewData["Title"] = "Thanh toán";
-
-    // ✅ Lấy mã giảm giá từ session
-    var promoCode = Context.Session.GetString("PromoCode");
-    double originalTotal = (double)Model.GetTotal();
-    double discountAmount = 0;
-    double finalTotal = originalTotal;
-
-    if (!string.IsNullOrEmpty(promoCode))
-    {
-        var promo = _context.PromotionCodes.FirstOrDefault(p => p.Code == promoCode);
-        if (promo != null)
-        {
-            if (promo.DiscountPercent.HasValue)
-            {
-                discountAmount = originalTotal * promo.DiscountPercent.Value / 100;
-                finalTotal = originalTotal - discountAmount;
-            }
-            else if (promo.DiscountAmount.HasValue)
-            {
-                discountAmount = promo.DiscountAmount.Value;
-                finalTotal = originalTotal - discountAmount;
-            }
-
-            if (finalTotal < 0) finalTotal = 0;
-        }
-    }
+    var addresses = ViewBag.Addresses as List<UserAddress>;
 }
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-center fw-bold text-danger">💳 Thanh toán</h2>
-
-    <form method="post">
-        <!-- 🔹 Địa chỉ giao hàng -->
-        <div class="mb-3">
-            <label class="form-label fw-semibold">Địa chỉ giao hàng</label>
-            <input type="text" name="shippingAddress" class="form-control" required />
-        </div>
-
-        <!-- 🔹 Ghi chú -->
-        <div class="mb-3">
-            <label class="form-label fw-semibold">Ghi chú</label>
-            <textarea name="notes" class="form-control" rows="3"></textarea>
-        </div>
-
-        <!-- 🔹 Phương thức thanh toán -->
-        <div class="mb-3">
-            <label class="form-label fw-semibold">Phương thức thanh toán</label>
-            <select name="paymentMethod" class="form-select" required>
-                <option value="COD">Thanh toán khi nhận hàng (COD)</option>
-                <option value="Momo">Ví MoMo</option>
-                <option value="VNPay">VNPay</option>
-            </select>
-        </div>
-
-        <!-- 🔹 Tóm tắt đơn hàng -->
-        <div class="border p-3 rounded bg-light mb-3">
-            <h5 class="fw-bold mb-3">🧾 Tóm tắt đơn hàng</h5>
-            <ul class="list-unstyled">
-                @foreach (var item in Model.Items)
-                {
-                    <li>
-                        @item.Name × @item.Quantity —
-                        <span class="text-danger fw-bold">@String.Format("{0:N0} đ", item.Total)</span>
-                    </li>
-                }
-            </ul>
-
-            <hr />
-
-            <!-- 🔹 Hiển thị mã khuyến mãi (nếu có) -->
-            @if (!string.IsNullOrEmpty(promoCode))
-            {
-                <div class="mb-2">
-                    <span class="text-success fw-bold">
-                        🎁 Mã giảm giá: @promoCode
-                    </span>
-                </div>
-                <div>
-                    <span class="text-muted">Giảm: </span>
-                    <span class="text-primary fw-bold">@String.Format("{0:N0} đ", discountAmount)</span>
-                </div>
-                <hr />
-            }
-
-            <!-- 🔹 Tổng tiền -->
-            <h5 class="fw-bold">
-                Tổng cộng:
-                <span class="text-danger">@String.Format("{0:N0} đ", finalTotal)</span>
-            </h5>
-        </div>
-
-        <!-- 🔹 Nút xác nhận -->
-        <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow">
-            Xác nhận đặt hàng
-        </button>
-    </form>
-</div>
-
-<!-- 🔹 CSS nhẹ cho form -->
 <style>
-    .form-label {
+    body {
+        background: #f5f5f5;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .checkout-wrapper {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 0 16px;
+    }
+
+    .checkout-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: #ee4d2d;
+        margin-bottom: 20px;
+    }
+
+    .checkout-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 6px;
+        padding: 20px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+        font-weight: 600;
+        margin-bottom: 12px;
+        font-size: 16px;
+    }
+
+    /* ADDRESS */
+    .address-item {
+        display: flex;
+        gap: 12px;
+        padding: 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+        .address-item:hover {
+            border-color: #ee4d2d;
+            background: #fff7f5;
+        }
+
+    .address-info {
+        font-size: 14px;
+    }
+
+    .address-name {
         font-weight: 600;
     }
 
-    .container {
-        max-width: 700px;
+    .badge-default {
+        background: #ee4d2d;
+        color: #fff;
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 3px;
+        margin-left: 6px;
+    }
+
+    .address-detail {
+        color: #6b7280;
+        margin-top: 4px;
+    }
+
+    .link {
+        color: #2563eb;
+        font-size: 14px;
+        text-decoration: none;
+    }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+    /* INPUT */
+    textarea, select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #d1d5db;
+        font-size: 14px;
+    }
+
+    /* ORDER SUMMARY */
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .summary-total {
+        font-size: 18px;
+        font-weight: 700;
+        color: #ee4d2d;
+    }
+
+    /* BUTTON */
+    .btn-order {
+        width: 100%;
+        padding: 14px;
+        background: #ee4d2d;
+        color: #fff;
+        border: none;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 12px;
+    }
+
+        .btn-order:hover {
+            background: #d73211;
+        }
+
+    @@media(max - width: 900px)
+
+    {
+        .checkout-grid
+
+    {
+        grid-template-columns: 1fr;
+    }
+
     }
 </style>
+
+<div class="checkout-wrapper">
+    <div class="checkout-title">💳 Thanh toán</div>
+
+    <form method="post">
+        <div class="checkout-grid">
+
+            <!-- LEFT -->
+            <div class="card">
+
+                <!-- ADDRESS -->
+                <div class="section">
+                    <div class="section-title">📍 Địa chỉ giao hàng</div>
+
+                    @foreach (var a in addresses)
+                    {
+                        <label class="address-item">
+                            <input type="radio"
+                                   name="SelectedAddressId"
+                                   value="@a.Id"
+                                   @(a.IsDefault ? "checked" : "") />
+
+                            <div class="address-info">
+                                <div class="address-name">
+                                    @a.HoTen | @a.DienThoai
+                                    @if (a.IsDefault)
+                                    {
+                                        <span class="badge-default">Mặc định</span>
+                                    }
+                                </div>
+                                <div class="address-detail">
+                                    @a.DiaChi, @a.PhuongXa, @a.QuanHuyen, @a.TinhThanh
+                                </div>
+                            </div>
+                        </label>
+                    }
+
+                    <a asp-page="/Address/Index" class="link">
+                        + Thêm / sửa địa chỉ
+                    </a>
+                </div>
+
+                <!-- NOTE -->
+                <div class="section">
+                    <div class="section-title">📝 Ghi chú</div>
+                    <textarea name="notes" rows="3"
+                              placeholder="Ghi chú cho người bán..."></textarea>
+                </div>
+
+                <!-- PAYMENT -->
+                <div class="section">
+                    <div class="section-title">💳 Phương thức thanh toán</div>
+                    <select name="paymentMethod" required>
+                        <option value="COD">Thanh toán khi nhận hàng</option>
+                        <option value="Momo">Ví MoMo</option>
+                        <option value="VNPay">VNPay</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- RIGHT -->
+            <div class="card">
+                <div class="section-title">🧾 Đơn hàng</div>
+
+                @foreach (var item in Model.Items)
+                {
+                    <div class="summary-item">
+                        <span>@item.Name × @item.Quantity</span>
+                        <span>@String.Format("{0:N0} đ", item.Total)</span>
+                    </div>
+                }
+
+                <hr />
+
+                <div class="summary-item">
+                    <span>Tổng cộng</span>
+                    <span class="summary-total">
+                        @String.Format("{0:N0} đ", Model.GetTotal())
+                    </span>
+                </div>
+
+                <button type="submit" class="btn-order">
+                    Đặt hàng
+                </button>
+            </div>
+
+        </div>
+    </form>
+</div>

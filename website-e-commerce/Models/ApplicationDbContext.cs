@@ -31,6 +31,8 @@ namespace website_e_commerce.Models
         public DbSet<FilterGroup> FilterGroups { get; set; }
         public DbSet<FilterOption> FilterOptions { get; set; }
         public DbSet<ProductFilterOption> ProductFilterOptions { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -46,6 +48,18 @@ namespace website_e_commerce.Models
                 .HasForeignKey(p => p.BrandId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.ApplicationUser)
+                .WithMany()
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // ❌ KHÔNG cascade Order khi xóa Address
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.UserAddress)
+                .WithMany(a => a.Orders)
+                .HasForeignKey(o => o.UserAddressId)
+                .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Product)
                 .WithMany()

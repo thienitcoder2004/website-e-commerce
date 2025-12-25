@@ -7,7 +7,6 @@ using website_e_commerce.Models;
 namespace website_e_commerce.Controllers
 {
     [Route("chat")]
-    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
     public class ChatController : Controller
     {
         private readonly GeminiChatService _chatService;
