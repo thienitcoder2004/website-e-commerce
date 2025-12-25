@@ -1,14 +1,9 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+﻿#nullable disable
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 using website_e_commerce.Models;
 
 namespace website_e_commerce.Areas.Identity.Pages.Account.Manage
@@ -26,61 +21,46 @@ namespace website_e_commerce.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string Username { get; set; }
+        public string AvatarUrl { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
+            [Required]
+            public string Ho { get; set; }
+
+            [Required]
+            public string Ten { get; set; }
+
             [Phone]
-            [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            public IFormFile AvatarFile { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
         {
-            var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
-            Username = userName;
+            Username = await _userManager.GetUserNameAsync(user);
+            AvatarUrl = user.AvatarUrl ?? "/images/avatar-default.png";
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                Ho = user.Ho,
+                Ten = user.Ten,
+                PhoneNumber = user.PhoneNumber
             };
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+            if (user == null) return NotFound();
 
             await LoadAsync(user);
             return Page();
@@ -89,10 +69,7 @@ namespace website_e_commerce.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+            if (user == null) return NotFound();
 
             if (!ModelState.IsValid)
             {
@@ -100,19 +77,35 @@ namespace website_e_commerce.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            // Cập nhật họ tên
+            user.Ho = Input.Ho;
+            user.Ten = Input.Ten;
+
+            // Cập nhật số điện thoại
+            if (Input.PhoneNumber != user.PhoneNumber)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
-                }
+                await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
             }
 
+            // Upload avatar
+            if (Input.AvatarFile != null)
+            {
+                var folder = Path.Combine("wwwroot", "uploads", "avatars");
+                Directory.CreateDirectory(folder);
+
+                var fileName = $"{user.Id}{Path.GetExtension(Input.AvatarFile.FileName)}";
+                var filePath = Path.Combine(folder, fileName);
+
+                using var stream = new FileStream(filePath, FileMode.Create);
+                await Input.AvatarFile.CopyToAsync(stream);
+
+                user.AvatarUrl = "/uploads/avatars/" + fileName;
+            }
+
+            await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+
+            StatusMessage = "✅ Cập nhật hồ sơ thành công";
             return RedirectToPage();
         }
     }

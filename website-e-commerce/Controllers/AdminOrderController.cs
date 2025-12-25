@@ -1,19 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Fluent;
+using Rotativa.AspNetCore;
 using System.Security.Claims;
+using website_e_commerce.Hubs;
 using website_e_commerce.Models;
 
 namespace website_e_commerce.Controllers
 {
-    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
     public class AdminOrderController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public AdminOrderController(ApplicationDbContext context)
+        private readonly IHubContext<OrderHub> _hub;
+
+        public AdminOrderController(ApplicationDbContext context,
+                                    IHubContext<OrderHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         // ✅ Danh sách đơn hàng + Phân trang
@@ -68,7 +75,6 @@ namespace website_e_commerce.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateStatus(int orderId, string status)
         {
-            // Kiểm tra và cập nhật trạng thái
             var order = await _context.Orders
                 .Include(o => o.Payments)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
@@ -76,17 +82,27 @@ namespace website_e_commerce.Controllers
             if (order == null)
                 return NotFound();
 
-            // Cập nhật trạng thái đơn hàng
-            var payment = order.Payments?.FirstOrDefault();
+            // ✅ cập nhật trạng thái đơn
+            order.OrderStatus = status;
+
+            // ✅ cập nhật thanh toán nếu COD
+            var payment = order.Payments.FirstOrDefault();
             if (payment != null)
             {
                 payment.Status = status;
-                await _context.SaveChangesAsync();
+                payment.PaymentDate = DateTime.Now;
             }
 
-            // Trả về kết quả
-            return Json(new { success = true, status = status });
+            await _context.SaveChangesAsync();
+
+            // 🚀 BẮN REALTIME CHO USER
+            await _hub.Clients
+                .Group($"ORDER_{orderId}")
+                .SendAsync("OrderStatusUpdated", status);
+
+            return Json(new { success = true });
         }
+
 
 
         // Lịch sử đơn hàng của người dùng
@@ -139,6 +155,24 @@ namespace website_e_commerce.Controllers
 
             TempData["SuccessMessage"] = $"Đã xoá đơn hàng #{id} thành công.";
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult ExportPdf(int id)
+        {
+            var order = _context.Orders
+                .Include(o => o.ApplicationUser)
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(d => d.Product)
+                .FirstOrDefault(o => o.Id == id);
+
+            if (order == null)
+                return NotFound();
+
+            var document = new OrderInvoicePdf(order);
+
+            var pdfBytes = document.GeneratePdf();
+
+            return File(pdfBytes, "application/pdf", $"Order_{id}.pdf");
         }
 
         // ✅ Trang thống kê doanh thu

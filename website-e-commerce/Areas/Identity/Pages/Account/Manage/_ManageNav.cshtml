@@ -1,133 +1,134 @@
 ﻿@using website_e_commerce.Models
-@inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-
+@inject SignInManager<ApplicationUser> SignInManager
 @{
-    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
-    ApplicationUser? currentUser = null;
+    ApplicationUser? user = null;
     if (User.Identity?.IsAuthenticated ?? false)
     {
-        currentUser = await UserManager.GetUserAsync(User);
+        user = await UserManager.GetUserAsync(User);
     }
-
-    var displayName = currentUser?.HoTen ?? User.Identity?.Name ?? "Tài khoản của tôi";
-    var avatar = currentUser?.AvatarUrl ?? Url.Content("~/images/avatar-default.png");
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    var name = user?.HoTen ?? "Tài khoản của tôi";
+    var avatar = user?.AvatarUrl ?? Url.Content("~/images/avatar-default.png");
 }
 
 <style>
     .account-sidebar {
         background: #fff;
-        border-radius: 4px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        padding: 16px 16px 8px;
-        font-size: 14px;
+        border-radius: 8px;
+        padding: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     }
 
-    .account-sidebar-header {
+    .account-header {
         display: flex;
         align-items: center;
-        margin-bottom: 12px;
+        gap: 12px;
+        margin-bottom: 16px;
     }
 
-    .account-sidebar-avatar {
-        width: 48px;
-        height: 48px;
+    .account-avatar {
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
         overflow: hidden;
-        margin-right: 12px;
+        border: 1px solid #eee;
     }
 
-        .account-sidebar-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .account-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-    .account-sidebar-name {
+    .account-name {
         font-weight: 600;
+        font-size: 15px;
     }
 
-    .account-sidebar-edit {
+    .account-edit {
         font-size: 12px;
-        color: #999;
-        cursor: pointer;
+        color: #888;
     }
 
-        .account-sidebar-edit i {
-            font-size: 12px;
-            margin-right: 4px;
-        }
+    .account-edit a {
+        color: #ee4d2d;
+        text-decoration: none;
+    }
 
-    .account-menu-title {
+    .account-section {
         font-size: 13px;
         color: #999;
-        margin: 8px 0;
+        margin: 12px 0 6px;
     }
 
     .account-sidebar .nav-link {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 8px 8px;
-        color: #333;
-        border-radius: 2px;
-        transition: background-color 0.2s, color 0.2s;
+        gap: 10px;
+        padding: 10px 8px;
         font-size: 14px;
+        color: #333;
+        border-radius: 6px;
     }
 
-        .account-sidebar .nav-link i {
-            width: 18px;
-            text-align: center;
-            color: #ee4d2d;
-            font-size: 15px;
-        }
+    .account-sidebar .nav-link i {
+        color: #ee4d2d;
+        width: 18px;
+    }
 
-        .account-sidebar .nav-link.active,
-        .account-sidebar .nav-link:hover {
-            background-color: rgba(238, 77, 45, 0.08);
-            color: #ee4d2d;
-        }
+    .account-sidebar .nav-link.active,
+    .account-sidebar .nav-link:hover {
+        background: rgba(238, 77, 45, 0.1);
+        color: #ee4d2d;
+    }
 </style>
 
-<div class="container">
-    <div class="account-sidebar">
-        <div class="account-sidebar-header">
-            <div class="account-sidebar-avatar">
-                <img src="@avatar" alt="avatar">
-            </div>
-            <div>
-                <div class="account-sidebar-name">@displayName</div>
-                <div class="account-sidebar-edit">
-                    <i class="fas fa-pen"></i> Sửa hồ sơ
-                </div>
+<div class="account-sidebar">
+    <div class="account-header">
+        <div class="account-avatar">
+            <img src="@avatar" />
+        </div>
+        <div>
+            <div class="account-name">@name</div>
+            <div class="account-edit">
+                <a href="#profile-form">Sửa hồ sơ</a>
             </div>
         </div>
-
-        <div class="account-menu-title">Tài Khoản Của Tôi</div>
-        <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-                <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">
-                    <i class="fas fa-user"></i> Hồ sơ
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">
-                    <i class="fas fa-envelope"></i> Email
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">
-                    <i class="fas fa-lock"></i> Đổi mật khẩu
-                </a>
-            </li>
-            @if (hasExternalLogins)
-            {
-                <li class="nav-item">
-                    <a class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" id="external-login" asp-page="./ExternalLogins">
-                        <i class="fas fa-share-alt"></i> Đăng nhập ngoài
-                    </a>
-                </li>
-            }
-        </ul>
     </div>
+
+    <div class="account-section">Tài khoản</div>
+
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" asp-page="./Index">
+                <i class="fas fa-user"></i> Hồ sơ
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" asp-page="./Email">
+                <i class="fas fa-envelope"></i> Email
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" asp-page="./ChangePassword">
+                <i class="fas fa-lock"></i> Đổi mật khẩu
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(ViewContext.ActionDescriptor.DisplayName.Contains("Address") ? "active" : "")"
+                asp-page="./Address">
+                <i class="fas fa-map-marker-alt"></i> Địa chỉ của tôi
+            </a>
+        </li>
+        @if (hasExternalLogins)
+        {
+            <li class="nav-item">
+                <a class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" id="external-login"
+                    asp-page="./ExternalLogins">
+                    <i class="fas fa-share-alt"></i> Đăng nhập ngoài
+                </a>
+            </li>
+        }
+    </ul>
 </div>

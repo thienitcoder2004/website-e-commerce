@@ -148,18 +148,7 @@ namespace website_e_commerce.Controllers
 
         // ========== CHECKOUT ==========
         [Authorize]
-        public IActionResult Checkout()
-        {
-            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
-            if (cart == null || !cart.Items.Any())
-                return RedirectToAction("Index");
-
-            return View(cart);
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Checkout(string shippingAddress, string notes, string paymentMethod)
+        public async Task<IActionResult> Checkout()
         {
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
             if (cart == null || !cart.Items.Any())
@@ -167,9 +156,44 @@ namespace website_e_commerce.Controllers
 
             var user = await _userManager.GetUserAsync(User);
 
+            ViewBag.Addresses = await _context.UserAddresses
+                .Where(x => x.UserId == user.Id)
+                .OrderByDescending(x => x.IsDefault)
+                .ToListAsync();
+
+            return View(cart);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Checkout(
+             int SelectedAddressId,
+             string notes,
+             string paymentMethod)
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
+            if (cart == null || !cart.Items.Any())
+                return RedirectToAction("Index");
+
+            var user = await _userManager.GetUserAsync(User);
+
+            var address = await _context.UserAddresses
+                .FirstOrDefaultAsync(x => x.Id == SelectedAddressId && x.UserId == user.Id);
+
+            if (address == null)
+            {
+                TempData["Error"] = "Vui lòng chọn địa chỉ giao hàng!";
+                return RedirectToAction("Checkout");
+            }
+
+            string shippingAddress =
+                $"{address.HoTen} | {address.DienThoai} | " +
+                $"{address.DiaChi}, {address.PhuongXa}, {address.QuanHuyen}, {address.TinhThanh}";
+
             var order = new Order
             {
                 UserId = user.Id,
+                UserAddressId = address.Id,
                 ShippingAddress = shippingAddress,
                 Notes = notes,
                 TotalPrice = (decimal)GetDiscountedTotal((double)cart.GetTotal()),
@@ -200,20 +224,12 @@ namespace website_e_commerce.Controllers
             await _context.SaveChangesAsync();
 
             if (paymentMethod == "Momo")
-            {
-                var url = await GenerateMomoPaymentUrl(order, payment);
-                return Redirect(url);
-            }
+                return Redirect(await GenerateMomoPaymentUrl(order, payment));
 
             if (paymentMethod == "VNPay")
-            {
-                var url = GenerateVNPayPaymentUrl(order, payment);
-                return Redirect(url);
-            }
+                return Redirect(GenerateVNPayPaymentUrl(order, payment));
 
-            await UpdatePromotionUsageAfterSuccess();
             HttpContext.Session.Remove("Cart");
-
             return RedirectToAction("OrderSuccess", new { orderId = order.Id });
         }
 

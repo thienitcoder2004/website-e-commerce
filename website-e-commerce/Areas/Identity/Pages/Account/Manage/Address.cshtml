@@ -1,0 +1,173 @@
+@page
+@model AddressModel
+<h4>Địa chỉ của tôi</h4>
+
+<button class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#addModal">
+    + Thêm địa chỉ mới
+</button>
+
+@foreach (var a in Model.Addresses)
+{
+    <div class="border rounded p-3 mb-3">
+        <b>@a.HoTen</b> | @a.DienThoai
+        <div class="text-muted">
+            @a.DiaChi, @a.PhuongXa, @a.QuanHuyen, @a.TinhThanh
+        </div>
+
+        <div class="mt-2 d-flex align-items-center">
+            @if (a.IsDefault)
+            {
+                <span class="badge border border-danger text-danger me-3">Mặc định</span>
+            }
+            else
+            {
+                <form method="post" asp-page-handler="SetDefault" class="me-3">
+                    <input type="hidden" name="id" value="@a.Id" />
+                    <button class="btn btn-outline-secondary btn-sm">Thiết lập mặc định</button>
+                </form>
+            }
+
+            <button class="btn btn-link p-0 me-3" onclick="openEditModal(
+                                @a.Id,
+                                '@a.HoTen',
+                                '@a.DienThoai',
+                                '@a.DiaChi',
+                                '@a.PhuongXa',
+                                '@a.QuanHuyen',
+                                '@a.TinhThanh',
+                                @(a.IsDefault.ToString().ToLower())
+                            )">
+                Cập nhật
+            </button>
+
+            @if (!a.IsDefault)
+            {
+                <form method="post" asp-page-handler="Delete">
+                    <input type="hidden" name="id" value="@a.Id" />
+                    <button class="btn btn-link text-danger p-0">Xóa</button>
+                </form>
+            }
+        </div>
+    </div>
+}
+
+<!-- ================= ADD MODAL ================= -->
+<div class="modal fade" id="addModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content p-4">
+            <form method="post" asp-page-handler="Create" id="addForm">
+                <input asp-for="Input.HoTen" class="form-control mb-2" placeholder="Họ tên" required />
+                <input asp-for="Input.DienThoai" class="form-control mb-2" placeholder="SĐT" required />
+
+                <select id="province" class="form-control mb-2" required></select>
+                <select id="district" class="form-control mb-2" disabled required></select>
+                <select id="ward" class="form-control mb-2" disabled required></select>
+
+                <input asp-for="Input.DiaChi" class="form-control mb-2" placeholder="Số nhà, tên đường" required />
+
+                <input type="hidden" asp-for="Input.TinhThanh" id="TinhThanh" />
+                <input type="hidden" asp-for="Input.QuanHuyen" id="QuanHuyen" />
+                <input type="hidden" asp-for="Input.PhuongXa" id="PhuongXa" />
+
+                <label><input asp-for="Input.IsDefault" /> Đặt mặc định</label>
+
+                <div class="text-end mt-3">
+                    <button class="btn btn-danger">Hoàn thành</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ================= EDIT MODAL ================= -->
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content p-4">
+            <form method="post" asp-page-handler="Edit" id="editForm">
+                <input type="hidden" name="id" id="editId" />
+
+                <input name="Input.HoTen" id="editHoTen" class="form-control mb-2" required />
+                <input name="Input.DienThoai" id="editPhone" class="form-control mb-2" required />
+
+                <select id="editProvince" class="form-control mb-2" required></select>
+                <select id="editDistrict" class="form-control mb-2" disabled required></select>
+                <select id="editWard" class="form-control mb-2" disabled required></select>
+
+                <input name="Input.DiaChi" id="editDiaChi" class="form-control mb-2" required />
+
+                <input type="hidden" name="Input.TinhThanh" id="editTinh" />
+                <input type="hidden" name="Input.QuanHuyen" id="editQuan" />
+                <input type="hidden" name="Input.PhuongXa" id="editPhuong" />
+
+                <label><input type="checkbox" name="Input.IsDefault" id="editDefault" /> Đặt mặc định</label>
+
+                <div class="text-end mt-3">
+                    <button class="btn btn-danger">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        async function loadProvinces(select, selected) {
+            const res = await fetch("https://provinces.open-api.vn/api/p/");
+            const data = await res.json();
+            select.innerHTML = `<option value="">Chọn Tỉnh</option>`;
+            data.forEach(p => {
+                select.innerHTML += `<option value="${p.code}" ${p.name == selected ? 'selected' : ''}>${p.name}</option>`;
+            });
+        }
+
+        async function loadDistricts(code, select, selected) {
+            const res = await fetch(`https://provinces.open-api.vn/api/p/${code}?depth=2`);
+            const data = await res.json();
+            select.innerHTML = `<option value="">Chọn Huyện</option>`;
+            data.districts.forEach(d => {
+                select.innerHTML += `<option value="${d.code}" ${d.name == selected ? 'selected' : ''}>${d.name}</option>`;
+            });
+            select.disabled = false;
+        }
+
+        async function loadWards(code, select, selected) {
+            const res = await fetch(`https://provinces.open-api.vn/api/d/${code}?depth=2`);
+            const data = await res.json();
+            select.innerHTML = `<option value="">Chọn Xã</option>`;
+            data.wards.forEach(w => {
+                select.innerHTML += `<option value="${w.name}" ${w.name == selected ? 'selected' : ''}>${w.name}</option>`;
+            });
+            select.disabled = false;
+        }
+
+        loadProvinces(province);
+        province.onchange = () => loadDistricts(province.value, district);
+        district.onchange = () => loadWards(district.value, ward);
+
+        addForm.onsubmit = () => {
+            TinhThanh.value = province.options[province.selectedIndex].text;
+            QuanHuyen.value = district.options[district.selectedIndex].text;
+            PhuongXa.value = ward.options[ward.selectedIndex].text;
+        };
+
+        async function openEditModal(id, name, phone, diachi, phuong, quan, tinh, isDefault) {
+            editId.value = id;
+            editHoTen.value = name;
+            editPhone.value = phone;
+            editDiaChi.value = diachi;
+            editDefault.checked = isDefault;
+
+            await loadProvinces(editProvince, tinh);
+            editProvince.onchange = () => loadDistricts(editProvince.value, editDistrict);
+            editDistrict.onchange = () => loadWards(editDistrict.value, editWard);
+
+            new bootstrap.Modal(editModal).show();
+        }
+
+        editForm.onsubmit = () => {
+            editTinh.value = editProvince.options[editProvince.selectedIndex].text;
+            editQuan.value = editDistrict.options[editDistrict.selectedIndex].text;
+            editPhuong.value = editWard.options[editWard.selectedIndex].text;
+        };
+    </script>
+}

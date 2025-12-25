@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using website_e_commerce.Models;
-using Microsoft.AspNetCore.Authorization;   
+using Microsoft.AspNetCore.Authorization;
 
 namespace website_e_commerce.Controllers
 {
-    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
     public class SupportChatController : Controller
     {
         private readonly ApplicationDbContext _db;

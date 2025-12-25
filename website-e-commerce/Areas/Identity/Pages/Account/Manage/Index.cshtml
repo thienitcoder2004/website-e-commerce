@@ -2,116 +2,52 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Hồ sơ của tôi";
-    // ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<style>
-    .profile-header h5 {
-        font-weight: 600;
-        margin-bottom: 4px;
-        font-size: 18px;
-    }
-
-    .profile-header small {
-        color: #999;
-        font-size: 13px;
-    }
-
-    .profile-row {
-        display: flex;
-        align-items: center;
-        margin-bottom: 18px;
-        font-size: 14px;
-    }
-
-    .profile-row-label {
-        width: 150px;
-        color: #757575;
-        text-align: right;
-        padding-right: 24px;
-        white-space: nowrap;
-    }
-
-    .profile-row-control {
-        flex: 1;
-    }
-
-        .profile-row-control .form-control {
-            max-width: 360px;
-            height: 36px;
-            font-size: 14px;
-            padding: 6px 10px;
-        }
-
-    .btn-profile-save {
-        margin-left: 150px;
-        padding: 6px 32px;
-        font-size: 14px;
-        border-radius: 2px;
-        background-color: #ee4d2d;
-        border-color: #ee4d2d;
-    }
-
-        .btn-profile-save:hover {
-            background-color: #d73211;
-            border-color: #d73211;
-        }
-
-    @@media (max-width: 992px) {
-        .profile-row
-
-    {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .profile-row-label {
-        width: 100%;
-        text-align: left;
-        margin-bottom: 4px;
-    }
-
-    .btn-profile-save {
-        margin-left: 0;
-    }
-
-    }
-</style>
+<!-- ❌ ĐÃ LOẠI BỎ:
+     - Manage your account
+     - Change your account settings
+-->
 
 <partial name="_StatusMessage" for="StatusMessage" />
 
 <div class="profile-header mb-4">
-    <h5>Hồ Sơ Của Tôi</h5>
-    <small>Quản lý thông tin hồ sơ để bảo mật tài khoản</small>
+    <h5>Hồ sơ của tôi</h5>
+    <small>Quản lý thông tin cá nhân để bảo mật tài khoản</small>
 </div>
 
-<form id="profile-form" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger mb-2" role="alert"></div>
+<form id="profile-form" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
 
-    <!-- Tên đăng nhập -->
-    <div class="profile-row">
-        <div class="profile-row-label">Tên đăng nhập</div>
-        <div class="profile-row-control">
-            <input asp-for="Username"
-                   class="form-control"
-                   disabled />
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Tên đăng nhập</label>
+        <input class="form-control" value="@Model.Username" disabled />
     </div>
 
-    <!-- Số điện thoại -->
-    <div class="profile-row">
-        <div class="profile-row-label">Số điện thoại</div>
-        <div class="profile-row-control">
-            <input asp-for="Input.PhoneNumber"
-                   class="form-control"
-                   placeholder="Nhập số điện thoại..." />
-            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Họ</label>
+        <input asp-for="Input.Ho" class="form-control" />
     </div>
 
-    <button id="update-profile-button"
-            type="submit"
-            class="btn btn-primary btn-profile-save">
+    <div class="mb-3">
+        <label class="form-label">Tên</label>
+        <input asp-for="Input.Ten" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Số điện thoại</label>
+        <input asp-for="Input.PhoneNumber" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ảnh đại diện</label><br />
+        <img src="@Model.AvatarUrl"
+            style="width:90px;height:90px;border-radius:50%;object-fit:cover;margin-bottom:8px;" />
+        <input asp-for="Input.AvatarFile" type="file" class="form-control" />
+        <small class="text-muted">JPEG / PNG • Tối đa 1MB</small>
+    </div>
+
+    <button type="submit" class="btn btn-danger px-4">
         Lưu
     </button>
 </form>

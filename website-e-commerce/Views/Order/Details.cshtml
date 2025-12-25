@@ -1,0 +1,200 @@
+﻿@model website_e_commerce.Models.Order
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+
+    var payment = Model.Payments.FirstOrDefault();
+    var status = payment?.Status ?? "Pending";
+    var method = payment?.PaymentMethod ?? "COD";
+
+    string statusText = status switch
+    {
+        "Pending" => "Chờ xác nhận",
+        "Shipping" => "Đang giao hàng",
+        "Completed" => "Đã giao thành công",
+        "Cancelled" => "Đã hủy",
+        "Failed" => "Thanh toán thất bại",
+        _ => "Chờ xác nhận"
+    };
+}
+
+<style>
+    .order-box {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+
+    .timeline-step {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        font-size: 15px;
+    }
+
+        .timeline-step.done {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .timeline-step.pending {
+            color: #aaa;
+        }
+
+        .timeline-step.cancelled {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+    .product-item {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+        .product-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+    .total {
+        font-size: 18px;
+        font-weight: bold;
+        color: #dc3545;
+    }
+</style>
+
+<div class="container mt-4">
+
+    <h4 class="fw-bold mb-3">📦 Chi tiết đơn hàng #@Model.Id</h4>
+
+    <!-- ===== TIMELINE ===== -->
+    <div class="order-box">
+        <h6 class="fw-bold mb-3">🚚 Trạng thái đơn hàng</h6>
+
+        <div id="step-ordered" class="timeline-step done">
+            ✔ Đã đặt hàng
+        </div>
+
+        <div id="step-confirm" class="timeline-step @(status != "Pending" ? "done" : "pending")">
+            ✔ Đã xác nhận
+        </div>
+
+        <div id="step-ship" class="timeline-step @(status == "Shipping" || status == "Completed" ? "done" : "pending")">
+            🚚 Đang giao hàng
+        </div>
+
+        <div id="step-done" class="timeline-step @(status == "Completed" ? "done" : "pending")">
+            📦 Giao hàng thành công
+        </div>
+
+        @if (status == "Cancelled")
+        {
+            <div class="timeline-step cancelled">❌ Đơn hàng đã bị hủy</div>
+        }
+    </div>
+
+
+    <!-- ===== ADDRESS ===== -->
+    <div class="order-box">
+        <h6 class="fw-bold mb-2">📍 Địa chỉ nhận hàng</h6>
+        <p class="mb-1">
+            <strong>@Model.UserAddress?.HoTen</strong> | @Model.UserAddress?.DienThoai
+        </p>
+        <p class="mb-0">
+            @Model.UserAddress?.DiaChi,
+            @Model.UserAddress?.PhuongXa,
+            @Model.UserAddress?.QuanHuyen,
+            @Model.UserAddress?.TinhThanh
+        </p>
+    </div>
+
+    <!-- ===== PRODUCTS ===== -->
+    <div class="order-box">
+        <h6 class="fw-bold mb-3">🛒 Sản phẩm</h6>
+
+        @foreach (var item in Model.OrderDetails)
+        {
+            <div class="product-item">
+                <img src="@item.Product.ImageUrl" />
+                <div>
+                    <div class="fw-bold">@item.Product.Name</div>
+                    <div>x @item.Quantity</div>
+                    <div class="text-danger fw-bold">
+                        @String.Format("{0:N0} đ", item.Price)
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- ===== PAYMENT ===== -->
+    <div class="order-box">
+        <h6 class="fw-bold mb-2">💳 Thanh toán</h6>
+        <p>Phương thức: <strong>@method</strong></p>
+        <p>Trạng thái: <strong>@statusText</strong></p>
+        <p class="total">
+            Tổng tiền: @String.Format("{0:N0} đ", Model.TotalPrice)
+        </p>
+    </div>
+
+    <!-- ===== ACTION ===== -->
+    <div class="d-flex gap-2">
+        @if (Model.OrderDetails.Any())
+        {
+            <a asp-controller="Product"
+               asp-action="Details"
+               asp-route-id="@Model.OrderDetails.First().Product.Id"
+               class="btn btn-outline-secondary">
+                🔁 Mua lại
+            </a>
+        }
+
+        <a asp-action="OrderHistory" class="btn btn-primary">
+            ⬅ Quay lại đơn hàng
+        </a>
+    </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+
+<script>
+    const orderId = "@Model.Id";
+
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/orderHub")
+        .build();
+
+    connection.start().then(() => {
+        connection.invoke("JoinOrder", orderId);
+    });
+
+    connection.on("OrderStatusUpdated", function (status) {
+
+        // Đã xác nhận
+        if (status !== "Pending") {
+            document.getElementById("step-confirm").className = "timeline-step done";
+        }
+
+        // Đang giao
+        if (status === "Shipping" || status === "Completed") {
+            document.getElementById("step-ship").className = "timeline-step done";
+        }
+
+        // Hoàn thành
+        if (status === "Completed") {
+            document.getElementById("step-done").className = "timeline-step done";
+        }
+
+        // Hủy
+        if (status === "Cancelled") {
+            alert("❌ Đơn hàng đã bị hủy");
+        }
+    });
+</script>
