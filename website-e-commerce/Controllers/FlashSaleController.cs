@@ -18,6 +18,7 @@ namespace website_e_commerce.Areas.Admin.Controllers
         }
 
         // LIST
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         public IActionResult Index()
         {
             var list = _repo.GetAll();
@@ -25,6 +26,7 @@ namespace website_e_commerce.Areas.Admin.Controllers
         }
 
         // ADD
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         public IActionResult Add()
         {
             ViewBag.Products = _db.Products.ToList();
@@ -48,6 +50,7 @@ namespace website_e_commerce.Areas.Admin.Controllers
         }
 
         // EDIT
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         public IActionResult Edit(int id)
         {
             var fs = _repo.GetById(id);
@@ -74,6 +77,7 @@ namespace website_e_commerce.Areas.Admin.Controllers
         }
 
         // DELETE
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         public IActionResult Delete(int id)
         {
             _repo.Delete(id);

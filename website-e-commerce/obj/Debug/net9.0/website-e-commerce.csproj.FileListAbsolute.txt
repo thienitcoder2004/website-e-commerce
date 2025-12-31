@@ -2078,7 +2078,6 @@ C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\v0zgfp0y55-87fc7y1x7t.gz
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\yfc7ypekbg-mlv21k5csn.gz
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\72umaqhjxd-s98fh1ojmi.gz
-C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\14cyci5ory-5oh4yoyuxd.gz
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\kz03mb1jar-pm8ud8z6bm.gz
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\dpx2m2aw6f-qqa3petx0x.gz
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\40byv2xw6g-kj8ylugjuw.gz
@@ -2148,7 +2147,6 @@ C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\website-.C6558603.Up2Date
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\website-e-commerce.dll
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\refint\website-e-commerce.dll
@@ -2198,3 +2196,4 @@ C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\bin\Debug\net9.0\
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\bin\Debug\net9.0\runtimes\win-x86\native\libwinpthread-1.dll
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\bin\Debug\net9.0\runtimes\win-x86\native\qpdf.dll
 C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\bin\Debug\net9.0\runtimes\win-x86\native\zlib1.dll
+C:\Users\thien\Downloads\website-e-commerce\website-e-commerce\obj\Debug\net9.0\compressed\14cyci5ory-vh1vji5zbv.gz

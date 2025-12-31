@@ -23,6 +23,7 @@ namespace website_e_commerce.Areas.Admin.Controllers
             return View(contacts);
         }
 
+        // [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         // 🔹 ADD (GET)
         public IActionResult Add()
         {
@@ -45,6 +46,7 @@ namespace website_e_commerce.Areas.Admin.Controllers
             return View(contact);
         }
 
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         // 🔹 EDIT (GET)
         public async Task<IActionResult> Edit(int id)
         {
@@ -70,6 +72,7 @@ namespace website_e_commerce.Areas.Admin.Controllers
             return View(contact);
         }
 
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         // 🔹 DELETE (GET)
         public async Task<IActionResult> Delete(int id)
         {

@@ -26,6 +26,71 @@ namespace website_e_commerce.Controllers
             _userManager = userManager;
         }
 
+        // ==========================
+        // ✅ PROMO UTILS (THÊM MỚI)
+        // ==========================
+        private (decimal original, decimal discount, decimal final, string? code, string? error) CalcPromo(decimal originalTotal)
+        {
+            var code = HttpContext.Session.GetString("PromoCode");
+            if (string.IsNullOrWhiteSpace(code))
+                return (originalTotal, 0m, originalTotal, null, null);
+
+            var promo = _context.PromotionCodes.AsNoTracking()
+                .FirstOrDefault(p => p.Code.ToUpper() == code.ToUpper());
+
+            if (promo == null)
+            {
+                HttpContext.Session.Remove("PromoCode");
+                return (originalTotal, 0m, originalTotal, null, "Mã giảm giá không tồn tại!");
+            }
+
+            var now = DateTime.Now;
+            if (now < promo.StartDate || now > promo.EndDate)
+            {
+                HttpContext.Session.Remove("PromoCode");
+                return (originalTotal, 0m, originalTotal, null, "Mã giảm giá đã hết hạn hoặc chưa được kích hoạt!");
+            }
+
+            if (!promo.IsActive)
+            {
+                HttpContext.Session.Remove("PromoCode");
+                return (originalTotal, 0m, originalTotal, null, "Mã khuyến mãi đã bị vô hiệu hóa!");
+            }
+
+            // ✅ MaxUsage = 0 hoặc null => không giới hạn
+            if (promo.MaxUsage.HasValue && promo.MaxUsage.Value > 0 && promo.UsageCount >= promo.MaxUsage.Value)
+            {
+                HttpContext.Session.Remove("PromoCode");
+                return (originalTotal, 0m, originalTotal, null, "Mã giảm giá đã đạt giới hạn sử dụng!");
+            }
+
+            decimal final = originalTotal;
+
+            if (promo.DiscountPercent.HasValue && promo.DiscountPercent.Value > 0)
+                final -= originalTotal * promo.DiscountPercent.Value / 100m;
+
+            if (promo.DiscountAmount.HasValue && promo.DiscountAmount.Value > 0)
+                final -= Convert.ToDecimal(promo.DiscountAmount.Value);
+
+            if (final < 0) final = 0;
+
+            var discount = originalTotal - final;
+            return (originalTotal, discount, final, promo.Code, null);
+        }
+
+        private void BindPromoViewBags(decimal cartTotal)
+        {
+            var promo = CalcPromo(cartTotal);
+            ViewBag.OriginalTotal = promo.original;
+            ViewBag.DiscountAmount = promo.discount;
+            ViewBag.FinalTotal = promo.final;
+            ViewBag.AppliedCode = promo.code;
+
+            // nếu mã invalid => auto remove + báo cho user
+            if (!string.IsNullOrWhiteSpace(promo.error))
+                TempData["Error"] = promo.error;
+        }
+
         // ========== CART ==========
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
@@ -98,6 +163,10 @@ namespace website_e_commerce.Controllers
         public IActionResult Index()
         {
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
+
+            // ✅ THÊM: bind số tiền sau giảm để hiển thị ra view
+            BindPromoViewBags(cart.GetTotal());
+
             return View(cart);
         }
 
@@ -118,14 +187,23 @@ namespace website_e_commerce.Controllers
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
             cart.IncreaseQuantity(productId);
             HttpContext.Session.SetObjectAsJson("Cart", cart);
+
             var item = cart.Items.FirstOrDefault(i => i.ProductId == productId);
+
+            // ✅ THÊM: trả về tổng tiền sau giảm
+            var promo = CalcPromo(cart.GetTotal());
 
             return Json(new
             {
                 success = true,
                 quantity = item?.Quantity ?? 0,
                 itemTotal = item?.Total ?? 0,
-                total = cart.GetTotal()
+
+                // thêm mới (không phá JS cũ)
+                originalTotal = promo.original,
+                discount = promo.discount,
+                total = promo.final,
+                appliedCode = promo.code
             });
         }
 
@@ -135,14 +213,23 @@ namespace website_e_commerce.Controllers
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
             cart.DecreaseQuantity(productId);
             HttpContext.Session.SetObjectAsJson("Cart", cart);
+
             var item = cart.Items.FirstOrDefault(i => i.ProductId == productId);
+
+            // ✅ THÊM: trả về tổng tiền sau giảm
+            var promo = CalcPromo(cart.GetTotal());
 
             return Json(new
             {
                 success = true,
                 quantity = item?.Quantity ?? 0,
                 itemTotal = item?.Total ?? 0,
-                total = cart.GetTotal()
+
+                // thêm mới (không phá JS cũ)
+                originalTotal = promo.original,
+                discount = promo.discount,
+                total = promo.final,
+                appliedCode = promo.code
             });
         }
 
@@ -160,6 +247,9 @@ namespace website_e_commerce.Controllers
                 .Where(x => x.UserId == user.Id)
                 .OrderByDescending(x => x.IsDefault)
                 .ToListAsync();
+
+            // ✅ THÊM: bind số tiền sau giảm để hiển thị ra view
+            BindPromoViewBags(cart.GetTotal());
 
             return View(cart);
         }
@@ -190,13 +280,19 @@ namespace website_e_commerce.Controllers
                 $"{address.HoTen} | {address.DienThoai} | " +
                 $"{address.DiaChi}, {address.PhuongXa}, {address.QuanHuyen}, {address.TinhThanh}";
 
+            // ✅ THÊM: tính tổng sau giảm (không dùng double nữa)
+            var promo = CalcPromo(cart.GetTotal());
+
             var order = new Order
             {
                 UserId = user.Id,
                 UserAddressId = address.Id,
                 ShippingAddress = shippingAddress,
                 Notes = notes,
-                TotalPrice = (decimal)GetDiscountedTotal((double)cart.GetTotal()),
+
+                // ✅ dùng tổng đã áp mã
+                TotalPrice = promo.final,
+
                 OrderDate = DateTime.Now,
                 OrderDetails = cart.Items.Select(i => new OrderDetail
                 {
@@ -405,13 +501,14 @@ namespace website_e_commerce.Controllers
             var code = HttpContext.Session.GetString("PromoCode");
             if (code == null) return;
 
-            var promo =
-                await _context.PromotionCodes.FirstOrDefaultAsync(p => p.Code == code);
+            var promo = await _context.PromotionCodes.FirstOrDefaultAsync(p => p.Code == code);
 
             if (promo != null)
             {
                 promo.UsageCount++;
-                if (promo.MaxUsage.HasValue && promo.UsageCount >= promo.MaxUsage)
+
+                // ✅ MaxUsage = 0 hoặc null => không giới hạn
+                if (promo.MaxUsage.HasValue && promo.MaxUsage.Value > 0 && promo.UsageCount >= promo.MaxUsage.Value)
                     promo.IsActive = false;
 
                 await _context.SaveChangesAsync();
@@ -452,6 +549,10 @@ namespace website_e_commerce.Controllers
             await _context.SaveChangesAsync();
         }
 
+        // ==========================
+        // ✅ GIỮ LẠI HÀM CŨ (KHÔNG XÓA)
+        // (bạn đang dùng trước đó - mình để nguyên)
+        // ==========================
         private double GetDiscountedTotal(double total)
         {
             var code = HttpContext.Session.GetString("PromoCode");
@@ -471,19 +572,19 @@ namespace website_e_commerce.Controllers
 
         // ========== ÁP DỤNG MÃ GIẢM GIÁ ==========
         [HttpPost]
-        public IActionResult ApplyCoupon(string code)
+        public IActionResult ApplyCoupon(string code, string? returnUrl = null)
         {
             if (string.IsNullOrWhiteSpace(code))
             {
                 TempData["Error"] = "Vui lòng nhập mã khuyến mãi!";
-                return RedirectToAction("Index");
+                return LocalRedirect(returnUrl ?? Url.Action("Index")!);
             }
 
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
             if (cart == null || !cart.Items.Any())
             {
                 TempData["Error"] = "Giỏ hàng đang trống!";
-                return RedirectToAction("Index");
+                return LocalRedirect(returnUrl ?? Url.Action("Index")!);
             }
 
             var promo = _context.PromotionCodes
@@ -492,7 +593,7 @@ namespace website_e_commerce.Controllers
             if (promo == null)
             {
                 TempData["Error"] = "Mã giảm giá không tồn tại!";
-                return RedirectToAction("Index");
+                return LocalRedirect(returnUrl ?? Url.Action("Index")!);
             }
 
             // Kiểm tra ngày hợp lệ
@@ -500,29 +601,37 @@ namespace website_e_commerce.Controllers
             if (now < promo.StartDate || now > promo.EndDate)
             {
                 TempData["Error"] = "Mã giảm giá đã hết hạn hoặc chưa được kích hoạt!";
-                return RedirectToAction("Index");
+                return LocalRedirect(returnUrl ?? Url.Action("Index")!);
             }
 
             // Check trạng thái
             if (!promo.IsActive)
             {
                 TempData["Error"] = "Mã khuyến mãi đã bị vô hiệu hóa!";
-                return RedirectToAction("Index");
+                return LocalRedirect(returnUrl ?? Url.Action("Index")!);
             }
 
-            // Check giới hạn sử dụng
-            if (promo.MaxUsage.HasValue && promo.UsageCount >= promo.MaxUsage.Value)
+            // ✅ MaxUsage: 0 hoặc null => không giới hạn
+            if (promo.MaxUsage.HasValue && promo.MaxUsage.Value > 0 && promo.UsageCount >= promo.MaxUsage.Value)
             {
                 TempData["Error"] = "Mã giảm giá đã đạt giới hạn sử dụng!";
-                return RedirectToAction("Index");
+                return LocalRedirect(returnUrl ?? Url.Action("Index")!);
             }
 
             // Lưu mã giảm giá vào Session
             HttpContext.Session.SetString("PromoCode", promo.Code);
 
             TempData["Success"] = "🎉 Áp dụng mã giảm giá thành công!";
-            return RedirectToAction("Index");
+            return LocalRedirect(returnUrl ?? Url.Action("Index")!);
         }
 
+        // ✅ THÊM MỚI: BỎ MÃ
+        [HttpPost]
+        public IActionResult RemoveCoupon(string? returnUrl = null)
+        {
+            HttpContext.Session.Remove("PromoCode");
+            TempData["Success"] = "Đã bỏ mã khuyến mãi.";
+            return LocalRedirect(returnUrl ?? Url.Action("Index")!);
+        }
     }
 }

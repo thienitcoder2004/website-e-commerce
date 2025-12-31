@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -123,12 +123,28 @@ public class AddressModel : PageModel
         var address = await _context.UserAddresses
             .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
 
-        if (address != null && !address.IsDefault)
+        if (address == null) return RedirectToPage();
+
+        // Không cho xóa địa chỉ mặc định
+        if (address.IsDefault)
         {
-            _context.UserAddresses.Remove(address);
-            await _context.SaveChangesAsync();
+            TempData["Msg"] = "Không thể xóa địa chỉ mặc định.";
+            return RedirectToPage();
         }
 
+        // ✅ THÊM: Nếu địa chỉ đã được dùng trong đơn hàng -> chặn xóa
+        var usedInOrders = await _context.Orders.AnyAsync(o => o.UserAddressId == id);
+        if (usedInOrders)
+        {
+            TempData["Msg"] = "Không thể xóa vì địa chỉ này đã được sử dụng trong đơn hàng.";
+            return RedirectToPage();
+        }
+
+        _context.UserAddresses.Remove(address);
+        await _context.SaveChangesAsync();
+
+        TempData["Msg"] = "Đã xóa địa chỉ thành công.";
         return RedirectToPage();
     }
+
 }

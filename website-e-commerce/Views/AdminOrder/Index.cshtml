@@ -1,4 +1,5 @@
-﻿@model IEnumerable<website_e_commerce.Models.Order>
+﻿@using System.Linq
+@model IEnumerable<website_e_commerce.Models.Order>
 
 @{
     ViewData["Title"] = "Quản lý đơn hàng";
@@ -126,10 +127,11 @@
                             <th></th>
                         </tr>
                     </thead>
+
                     <tbody class="text-center">
-                        @foreach (var order in Model)
+                        @foreach (var order in (Model ?? Enumerable.Empty<website_e_commerce.Models.Order>()).OrderBy(o => o.Id))
                         {
-                            var payment = order.Payments.FirstOrDefault();
+                            var payment = order.Payments?.FirstOrDefault();
 
                             string text;
                             string cls;
@@ -165,7 +167,7 @@
                                         break;
 
                                     default:
-                                        text = payment.Status;
+                                        text = payment.Status ?? "Chưa thanh toán";
                                         cls = "status-none";
                                         break;
                                 }
@@ -191,6 +193,7 @@
                             </tr>
                         }
                     </tbody>
+
                 </table>
             </div>
         </div>

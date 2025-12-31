@@ -428,6 +428,7 @@ namespace website_e_commerce.Controllers
         // ================================
         // ADD PRODUCT
         // ================================
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         public IActionResult Add()
         {
             ViewBag.Categories = new SelectList(_categoryRepository.GetAllCategories(), "Id", "Name");
@@ -627,6 +628,7 @@ namespace website_e_commerce.Controllers
         }
 
         // EDIT (GET)
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         public IActionResult Edit(int id)
         {
             var product = _context.Products
