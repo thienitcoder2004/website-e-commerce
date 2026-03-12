@@ -23,6 +23,7 @@ namespace website_e_commerce.Controllers
             _hub = hub;
         }
 
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         // ✅ Danh sách đơn hàng + Phân trang
         public async Task<IActionResult> Index(int page = 1, string statusFilter = "All")
         {
@@ -55,6 +56,7 @@ namespace website_e_commerce.Controllers
             return View(orders);
         }
 
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         // ✅ Chi tiết đơn hàng
         public async Task<IActionResult> Details(int id)
         {
@@ -127,6 +129,7 @@ namespace website_e_commerce.Controllers
             return View(orders); // Trả về View với danh sách đơn hàng
         }
 
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         // ✅ Xoá đơn hàng
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -175,6 +178,7 @@ namespace website_e_commerce.Controllers
             return File(pdfBytes, "application/pdf", $"Order_{id}.pdf");
         }
 
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         // ✅ Trang thống kê doanh thu
         public async Task<IActionResult> Dashboard(string filter = "month")
         {

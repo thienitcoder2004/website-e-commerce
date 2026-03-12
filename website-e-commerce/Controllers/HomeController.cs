@@ -25,51 +25,66 @@ namespace website_e_commerce.Controllers
             _flashRepo = flashRepo;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? newsId)
         {
             var now = DateTime.Now;
             var flashSales = _context.FlashSales
-      .Include(x => x.Product)
-      .Where(x => x.IsActive && x.EndTime > now)
-      .OrderBy(x => x.StartTime)
-      .ToList();
+                .Include(x => x.Product)
+                .Where(x => x.IsActive && x.EndTime > now)
+                .OrderBy(x => x.StartTime)
+                .ToList();
 
             // TẠO SLOT GIỜ CHUẨN
             var slots = flashSales
-      .Select(x => new DateTime(
-          x.StartTime.Year,
-          x.StartTime.Month,
-          x.StartTime.Day,
-          x.StartTime.Hour,
-          x.StartTime.Minute,
-          0))
-      .Distinct()
-      .OrderBy(t => t)
-      .Select(t => new { StartTime = t })
-      .ToList();
-
+                .Select(x => new DateTime(
+                    x.StartTime.Year,
+                    x.StartTime.Month,
+                    x.StartTime.Day,
+                    x.StartTime.Hour,
+                    x.StartTime.Minute,
+                    0))
+                .Distinct()
+                .OrderBy(t => t)
+                .Select(t => new { StartTime = t })
+                .ToList();
 
             ViewBag.FlashSales = flashSales;
             ViewBag.TimeSlots = slots;
 
             var latestProducts = _context.Products
-         .OrderByDescending(x => x.Id)
-         .Take(8)
-         .ToList();
+                .OrderByDescending(x => x.Id)
+                .Take(8)
+                .ToList();
 
             var latestNews = _newsRepo.GetAllNews()
                 .OrderByDescending(n => n.PublishedDate)
-                .Take(5)
+                .Take(4)
                 .ToList();
 
             ViewBag.LatestProducts = latestProducts;
             ViewBag.RecentNews = latestNews;
             ViewBag.NewsCount = latestNews.Count;
 
+            if (newsId.HasValue)
+            {
+                var selected = _newsRepo.GetNewsById(newsId.Value);
+
+                if (selected != null && selected.IsPublished)
+                {
+                    // tăng view
+                    selected.ViewCount += 1;
+                    selected.UpdatedDate = DateTime.Now;
+
+                    _context.News.Update(selected);
+                    _context.SaveChanges();
+
+                    // đưa ra view
+                    ViewBag.SelectedNews = selected;
+                }
+            }
+
             return View();
         }
-
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

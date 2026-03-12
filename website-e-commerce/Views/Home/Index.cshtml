@@ -16,6 +16,8 @@
     .Distinct()
     .OrderBy(t => t)
     .ToList();
+
+    var recentNews = ViewBag.RecentNews as List<website_e_commerce.Models.News>;
 }
 
 
@@ -232,11 +234,11 @@ else
                 <!-- Banner lớn (chiếm 8/12 cột) -->
                 <div class="col-md-8">
                     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel"
-                        data-bs-interval="2000">
+                         data-bs-interval="2000">
                         <!-- Dấu chấm điều hướng -->
                         <div class="carousel-indicators">
                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                                class="active" aria-current="true"></button>
+                                    class="active" aria-current="true"></button>
                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"></button>
@@ -254,7 +256,7 @@ else
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/thu_cu_doi_moi_banner_web_slider_800x400.png" class="d-block w-100"
-                                    alt="Slide 2">
+                                     alt="Slide 2">
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/gearvn-pc-gvn-t9-slider.png" class="d-block w-100" alt="Slide 3">
@@ -264,34 +266,34 @@ else
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/man_hinh_thang_04_banner_web_slider_800x400.png" class="d-block w-100"
-                                    alt="Slide 5">
+                                     alt="Slide 5">
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/gearvn-gaming-gear-deal-hoi-slider-t8-jpg.png" class="d-block w-100"
-                                    alt="Slide 6">
+                                     alt="Slide 6">
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/gearvn-laptop-nvidia-rtx-50-series-slider.png" class="d-block w-100"
-                                    alt="Slide 7">
+                                     alt="Slide 7">
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/gearvn-asus-sat-canh-nhe-ganh-hoc-choi-slider.png" class="d-block w-100"
-                                    alt="Slide 8">
+                                     alt="Slide 8">
                             </div>
                             <div class="carousel-item">
                                 <img src="~/images/gearvn-game-on-qua-ngon-back-to-school-2025-rog-x-tuf-gaming-slider.png"
-                                    class="d-block w-100" alt="Slide 9">
+                                     class="d-block w-100" alt="Slide 9">
                             </div>
                         </div>
 
                         <!-- Nút điều hướng -->
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide="prev">
+                                data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
                         <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide="next">
+                                data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </button>
@@ -301,9 +303,9 @@ else
                 <!-- 2 banner nhỏ bên phải (chiếm 4/12 cột) -->
                 <div class="col-md-4 d-flex flex-column justify-content-between">
                     <img src="~/images/gearvn-ban-phim-slider-right-t8.png" class="img-fluid rounded shadow mb-2"
-                        alt="Banner nhỏ 1">
+                         alt="Banner nhỏ 1">
                     <img src="~/images/gearvn-build-pc-slider-right-t8.png" class="img-fluid rounded shadow"
-                        alt="Banner nhỏ 2">
+                         alt="Banner nhỏ 2">
                 </div>
             </div>
 
@@ -311,11 +313,11 @@ else
             <div class="row mt-3">
                 <div class="col-md-4 col-6 mb-2">
                     <img src="~/images/gearvn-laptop-gaming-slider-bot-t8.png" class="img-fluid rounded shadow"
-                        alt="Promo 1">
+                         alt="Promo 1">
                 </div>
                 <div class="col-md-4 col-6 mb-2">
                     <img src="~/images/gearvn-laptop-van-phong-slider-bot-t8.png" class="img-fluid rounded shadow"
-                        alt="Promo 2">
+                         alt="Promo 2">
                 </div>
                 <div class="col-md-4 col-6 mb-2">
                     <img src="~/images/gearvn-pc-gvn-rtx-5060-t9-bottom.png" class="img-fluid rounded shadow" alt="Promo 3">
@@ -323,6 +325,159 @@ else
             </div>
         </div>
     </section>
+
+    <section class="oppo-zone">
+        <div class="container">
+
+            <!-- ===== Title 1 ===== -->
+            <div class="oppo-title">
+                <span class="oppo-star">⭐</span>
+                <h3 class="oppo-text">Tuần Lễ OPPO</h3>
+            </div>
+
+            <!-- ===== Big Banner ===== -->
+            <a href="#" class="oppo-banner">
+                <img src="/images/oppo-week.png" alt="Tuần lễ OPPO" />
+            </a>
+
+            <!-- ===== Title 2 ===== -->
+            <div class="oppo-title mt-4">
+                <span class="oppo-star">⭐</span>
+                <h3 class="oppo-text">Gian Hàng Ưu Đãi</h3>
+            </div>
+
+            <!-- ===== Promo Grid 4 items ===== -->
+            <div class="oppo-grid">
+                <a class="oppo-card" href="#">
+                    <img src="/images/promo-1.png" alt="Promo 1" />
+                </a>
+
+                <a class="oppo-card" href="#">
+                    <img src="/images/promo-2.png" alt="Promo 2" />
+                </a>
+
+                <a class="oppo-card" href="#">
+                    <img src="/images/promo-3.png" alt="Promo 3" />
+                </a>
+
+                <a class="oppo-card" href="#">
+                    <img src="/images/promo-4.png" alt="Promo 4" />
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <style>
+        /* =========================
+                       OPPO ZONE WRAPPER
+                       ========================= */
+        .oppo-zone {
+            background: linear-gradient(180deg, #8b0000 0%, #b00000 40%, #8b0000 100%);
+            padding: 22px 0 28px;
+        }
+
+        /* =========================
+                       TITLES
+                       ========================= */
+        .oppo-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .oppo-star {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .oppo-text {
+            margin: 0;
+            font-weight: 900;
+            font-size: 20px;
+            letter-spacing: .2px;
+        }
+
+        /* =========================
+                       BIG BANNER
+                       ========================= */
+        .oppo-banner {
+            display: block;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 28px rgba(0,0,0,.25);
+            border: 1px solid rgba(255,255,255,.10);
+        }
+
+            .oppo-banner img {
+                width: 100%;
+                height: auto;
+                display: block;
+                object-fit: cover;
+            }
+
+        /* =========================
+                       GRID 4 PROMO CARDS
+                       ========================= */
+        .oppo-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .oppo-card {
+            display: block;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 10px 24px rgba(0,0,0,.22);
+            border: 1px solid rgba(255,255,255,.12);
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+
+            .oppo-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 16px 34px rgba(0,0,0,.28);
+            }
+
+            .oppo-card img {
+                width: 100%;
+                height: 100%;
+                display: block;
+                object-fit: cover; /* ✅ ảnh poster dọc sẽ fill đẹp */
+                aspect-ratio: 3 / 4; /* ✅ đúng kiểu poster dọc như hình */
+                background: #f3f4f6;
+            }
+
+        /* =========================
+                       RESPONSIVE
+                       ========================= */
+        @@media (max-width: 1200px) {
+            .oppo-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @@media (max-width: 992px) {
+            .oppo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .oppo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .oppo-text {
+                font-size: 18px;
+            }
+        }
+    </style>
 
     <section class="section_category section3 mt-5 mb-5">
         <div class="container">
@@ -341,10 +496,10 @@ else
 
                             <picture>
                                 <source media="(max-width: 567px)"
-                                    srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-1.png?v=1741763279500">
+                                        srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-1.png?v=1741763279500">
                                 <img width="310" height="290"
-                                    src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-1.png?v=1741763279500"
-                                    alt="Bàn phím gaming">
+                                     src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-1.png?v=1741763279500"
+                                     alt="Bàn phím gaming">
                             </picture>
 
                             <h4 class="line-clamp line-clamp-1">Bàn phím gaming</h4>
@@ -357,10 +512,10 @@ else
 
                             <picture>
                                 <source media="(max-width: 567px)"
-                                    srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-2.png?v=1741763376460">
+                                        srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-2.png?v=1741763376460">
                                 <img width="310" height="290"
-                                    src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-2.png?v=1741763376460"
-                                    alt="Chuột gaming">
+                                     src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-2.png?v=1741763376460"
+                                     alt="Chuột gaming">
                             </picture>
 
                             <h4 class="line-clamp line-clamp-1">Chuột gaming</h4>
@@ -373,10 +528,10 @@ else
 
                             <picture>
                                 <source media="(max-width: 567px)"
-                                    srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-3.png?v=1741763478570">
+                                        srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-3.png?v=1741763478570">
                                 <img width="310" height="290"
-                                    src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-3.png?v=1741763478570"
-                                    alt="Tai nghe gaming">
+                                     src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-3.png?v=1741763478570"
+                                     alt="Tai nghe gaming">
                             </picture>
 
                             <h4 class="line-clamp line-clamp-1">Tai nghe gaming</h4>
@@ -389,20 +544,16 @@ else
 
                             <picture>
                                 <source media="(max-width: 567px)"
-                                    srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-4.png?v=1741763500397">
+                                        srcset="//bizweb.dktcdn.net/thumb/medium/100/558/309/collections/img-2-4.png?v=1741763500397">
                                 <img width="310" height="290"
-                                    src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-4.png?v=1741763500397"
-                                    alt="Điều khiển gaming">
+                                     src="//bizweb.dktcdn.net/thumb/large/100/558/309/collections/img-2-4.png?v=1741763500397"
+                                     alt="Điều khiển gaming">
                             </picture>
 
                             <h4 class="line-clamp line-clamp-1">Điều khiển gaming</h4>
                         </a>
                     </div>
 
-                </div>
-                <div class="swiper-button-next swiper-button-disabled">
-                </div>
-                <div class="swiper-button-prev swiper-button-disabled">
                 </div>
             </div>
 
@@ -593,14 +744,61 @@ else
                     }
 
                 </div>
-
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
             </div>
 
         </div>
     </section>
 
+    <section class="section-product-flashsale mb-5 mt-5">
+        <div class="container">
+            <h3 class="title-index">
+                <span class="title-name">Tin Tức Liên Quan</span>
+            </h3>
+            <div class="row g-3">
+                @foreach (var n in recentNews)
+                {
+                    <div class="col-md-3">
+                        <a class="text-decoration-none"
+                           asp-controller="News"
+                           asp-action="Details"
+                           asp-route-id="@n.Id">
+
+                            <div class="card h-100 shadow-sm" style="border-radius:14px; overflow:hidden;">
+                                <img src="@(string.IsNullOrWhiteSpace(n.ImageUrl) ? "/images/no-image.png" : n.ImageUrl)"
+                                     class="card-img-top"
+                                     style="height:160px; object-fit:cover;" />
+
+                                <div class="card-body">
+                                    <div class="fw-bold text-dark" style="min-height:44px;">
+                                        @n.Title
+                                    </div>
+
+                                    <div class="text-muted small">
+                                        @n.PublishedDate.ToString("dd/MM/yyyy") • @n.ViewCount lượt xem
+                                    </div>
+
+                                    @if (!string.IsNullOrWhiteSpace(n.Summary))
+                                    {
+                                        <div class="text-muted small mt-2">
+                                            @(n.Summary.Length > 90 ? n.Summary.Substring(0, 90) + "..." : n.Summary)
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                        </a>
+                    </div>
+                }
+            </div>
+            <div class="d-flex" style="justify-content: center; align-content: center; text-align: center; margin-top: 40px;">
+                <a class="text-decoration-none"
+                   asp-controller="News"
+                   asp-action="Index" style="padding: 15px 30px; background-color: orange; border-radius: 15px; color: black;">
+                    Xem tất cả
+                </a>
+            </div>
+        </div>
+    </section>
 }
 
 <style>
@@ -621,15 +819,15 @@ else
         border: 2px solid transparent;
     }
 
-    .flash-slot:hover {
-        transform: translateY(-3px);
-        border-color: #ff5722;
-    }
+        .flash-slot:hover {
+            transform: translateY(-3px);
+            border-color: #ff5722;
+        }
 
-    .flash-slot.active {
-        background: #ffdecf;
-        border-color: #ff5722;
-    }
+        .flash-slot.active {
+            background: #ffdecf;
+            border-color: #ff5722;
+        }
 
     .slot-hour {
         font-size: 20px;
@@ -653,10 +851,10 @@ else
         border: 1px solid #eee;
     }
 
-    .flash-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 10px 25px rgba(255, 79, 0, 0.25);
-    }
+        .flash-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(255, 79, 0, 0.25);
+        }
 
     .flash-img-wrap {
         width: 100%;
@@ -734,10 +932,10 @@ else
         padding: 25px;
     }
 
-    .swiper-button-next:hover,
-    .swiper-button-prev:hover {
-        color: #d84315 !important;
-    }
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            color: #d84315 !important;
+        }
 </style>
 
 <script>

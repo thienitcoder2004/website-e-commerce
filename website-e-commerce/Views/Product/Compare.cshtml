@@ -1,89 +1,328 @@
 ﻿@model IEnumerable<website_e_commerce.Models.Product>
+@using System.Text.RegularExpressions
 
 @{
     ViewData["Title"] = "So sánh sản phẩm";
-    var products = Model.ToList();
+    var products = Model?.ToList() ?? new List<website_e_commerce.Models.Product>();
+
+    // ==============================
+    // PARSE: "key=value;feature=...;..."
+    // ==============================
+    (Dictionary<string, string> dict, List<string> features) ParseSpecs(string? specs)
+    {
+        var d = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var feats = new List<string>();
+
+        if (string.IsNullOrWhiteSpace(specs)) return (d, feats);
+
+        var parts = specs.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        foreach (var p in parts)
+        {
+            if (string.IsNullOrWhiteSpace(p)) continue;
+            var idx = p.IndexOf('=');
+            if (idx > 0)
+            {
+                var k = p.Substring(0, idx).Trim();
+                var v = p.Substring(idx + 1).Trim();
+
+                if (k.Equals("feature", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!string.IsNullOrWhiteSpace(v)) feats.Add(v);
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(k) && !string.IsNullOrWhiteSpace(v))
+                        d[k] = v;
+                }
+            }
+            else
+            {
+                feats.Add(p.Trim());
+            }
+        }
+
+        return (d, feats);
+    }
+
+    // cache specs per product
+    var specCache = new Dictionary<int, (Dictionary<string, string> dict, List<string> features)>();
+    foreach (var p in products)
+    {
+        specCache[p.Id] = ParseSpecs(p.Specifications);
+    }
+
+    // collect all keys across compared products (excluding feature)
+    var allKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    foreach (var p in products)
+    {
+        var pack = specCache[p.Id];
+        foreach (var k in pack.dict.Keys)
+            allKeys.Add(k);
+    }
+
+    // ==============================
+    // DISPLAY LABELS (đủ nhiều loại)
+    // ==============================
+    var labelMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        // common
+        ["type"] = "Loại sản phẩm",
+        ["os"] = "Hệ điều hành",
+        ["ui"] = "Giao diện",
+        ["cpu"] = "CPU / Chip",
+        ["gpu"] = "GPU / Đồ hoạ",
+        ["ram"] = "RAM",
+        ["rom"] = "Bộ nhớ trong",
+        ["ssd"] = "Ổ cứng (SSD)",
+        ["storage"] = "Lưu trữ",
+        ["need"] = "Nhu cầu",
+        ["weight"] = "Khối lượng",
+
+        // screen / tv / watch
+        ["screen"] = "Màn hình",
+        ["subScreen"] = "Màn hình phụ",
+        ["coverScreen"] = "Màn hình ngoài",
+        ["size"] = "Kích thước",
+        ["resolution"] = "Độ phân giải",
+        ["tech"] = "Công nghệ hiển thị",
+        ["screenTech"] = "Công nghệ màn hình",
+        ["hdr"] = "HDR",
+        ["refresh"] = "Tần số quét",
+
+        // camera
+        ["camera"] = "Camera",
+        ["cameraRear"] = "Camera sau",
+        ["cameraFront"] = "Camera trước",
+        ["underDisplayCam"] = "Camera ẩn dưới màn",
+        ["nightvision"] = "Nhìn đêm",
+
+        // battery & charge
+        ["battery"] = "Pin",
+        ["charge"] = "Sạc",
+        ["wireless"] = "Sạc không dây",
+
+        // connectivity
+        ["network"] = "Mạng",
+        ["sim"] = "SIM",
+        ["connect"] = "Kết nối",
+        ["band"] = "Băng tần",
+        ["speed"] = "Tốc độ",
+        ["port"] = "Cổng kết nối",
+        ["codec"] = "Codec",
+        ["mic"] = "Micro",
+
+        // durability
+        ["water"] = "Kháng nước/bụi",
+        ["anc"] = "Chống ồn",
+
+        // audio
+        ["audio"] = "Âm thanh",
+        ["power"] = "Công suất",
+
+        // home appliances
+        ["capacity"] = "Dung tích/Tải trọng",
+        ["temp"] = "Nhiệt độ",
+        ["timer"] = "Hẹn giờ",
+        ["stage"] = "Số lõi / cấp lọc",
+        ["speedrpm"] = "Tốc độ quay",
+        ["speed"] = "Tốc độ"
+    };
+
+    string Label(string key)
+        => labelMap.TryGetValue(key, out var lb) ? lb : key;
+
+    // ==============================
+    // GROUPING: tự động theo key
+    // ==============================
+    var def = new Dictionary<string, (string group, int order)>(StringComparer.OrdinalIgnoreCase)
+    {
+        // Cấu hình & bộ nhớ
+        ["os"] = ("Cấu hình & Bộ nhớ", 10),
+        ["ui"] = ("Cấu hình & Bộ nhớ", 11),
+        ["cpu"] = ("Cấu hình & Bộ nhớ", 20),
+        ["gpu"] = ("Cấu hình & Bộ nhớ", 21),
+        ["ram"] = ("Cấu hình & Bộ nhớ", 30),
+        ["rom"] = ("Cấu hình & Bộ nhớ", 31),
+        ["ssd"] = ("Cấu hình & Bộ nhớ", 32),
+        ["need"] = ("Cấu hình & Bộ nhớ", 40),
+        ["weight"] = ("Cấu hình & Bộ nhớ", 90),
+
+        // Màn hình
+        ["screen"] = ("Màn hình", 10),
+        ["subScreen"] = ("Màn hình", 11),
+        ["coverScreen"] = ("Màn hình", 12),
+        ["size"] = ("Màn hình", 13),
+        ["resolution"] = ("Màn hình", 20),
+        ["tech"] = ("Màn hình", 21),
+        ["screenTech"] = ("Màn hình", 22),
+        ["hdr"] = ("Màn hình", 30),
+        ["refresh"] = ("Màn hình", 40),
+
+        // Camera
+        ["camera"] = ("Camera", 10),
+        ["cameraRear"] = ("Camera", 11),
+        ["cameraFront"] = ("Camera", 12),
+        ["underDisplayCam"] = ("Camera", 13),
+        ["nightvision"] = ("Camera", 30),
+
+        // Pin & sạc
+        ["battery"] = ("Pin & Sạc", 10),
+        ["charge"] = ("Pin & Sạc", 20),
+        ["wireless"] = ("Pin & Sạc", 21),
+
+        // Kết nối
+        ["network"] = ("Kết nối", 10),
+        ["sim"] = ("Kết nối", 11),
+        ["connect"] = ("Kết nối", 20),
+        ["band"] = ("Kết nối", 21),
+        ["speed"] = ("Kết nối", 22),
+        ["port"] = ("Kết nối", 30),
+        ["storage"] = ("Kết nối", 50),
+
+        // Âm thanh
+        ["audio"] = ("Âm thanh", 10),
+        ["power"] = ("Âm thanh", 11),
+        ["codec"] = ("Âm thanh", 20),
+        ["mic"] = ("Âm thanh", 21),
+        ["anc"] = ("Âm thanh", 30),
+
+        // Độ bền
+        ["water"] = ("Độ bền", 10),
+
+        // Gia dụng / thiết bị
+        ["type"] = ("Thiết bị", 10),
+        ["capacity"] = ("Thiết bị", 20),
+        ["temp"] = ("Thiết bị", 21),
+        ["timer"] = ("Thiết bị", 22),
+        ["stage"] = ("Thiết bị", 23),
+    };
+
+    int GroupOrder(string group) => group switch
+    {
+        "Cấu hình & Bộ nhớ" => 1,
+        "Màn hình" => 2,
+        "Camera" => 3,
+        "Pin & Sạc" => 4,
+        "Kết nối" => 5,
+        "Âm thanh" => 6,
+        "Độ bền" => 7,
+        "Thiết bị" => 8,
+        _ => 99
+    };
+
+    string GroupOf(string key)
+        => def.TryGetValue(key, out var x) ? x.group : "Khác";
+
+    int KeyOrder(string key)
+        => def.TryGetValue(key, out var x) ? x.order : 999;
+
+    // ==============================
+    // VALUE FORMAT (đừng cho “lỏ”)
+    // ==============================
+    bool IsNumberOnly(string s) => Regex.IsMatch(s ?? "", @"^\d+(\.\d+)?$");
+
+    // detect if compare contains tv or watch (để size có unit hợp lý)
+    bool hasTV = products.Any(p => p.CategoryId == 7);
+    bool hasWatch = products.Any(p => p.CategoryId == 8);
+
+    string Pretty(string key, string val)
+    {
+        if (string.IsNullOrWhiteSpace(val)) return "—";
+        var k = key.Trim();
+        var v = val.Trim();
+
+        // normalize common enums
+        if (k.Equals("charge", StringComparison.OrdinalIgnoreCase))
+        {
+            if (v.Equals("fastcharge", StringComparison.OrdinalIgnoreCase)) v = "Sạc nhanh";
+        }
+        if (k.Equals("wireless", StringComparison.OrdinalIgnoreCase))
+        {
+            if (v.Equals("magsafe", StringComparison.OrdinalIgnoreCase)) v = "MagSafe";
+            if (v.Equals("yes", StringComparison.OrdinalIgnoreCase)) v = "Có";
+        }
+        if (k.Equals("anc", StringComparison.OrdinalIgnoreCase))
+        {
+            if (v.Equals("yes", StringComparison.OrdinalIgnoreCase)) v = "Có";
+            if (v.Equals("no", StringComparison.OrdinalIgnoreCase)) v = "Không";
+        }
+
+        // add units (only if pure number & missing unit)
+        if (k.Equals("ram", StringComparison.OrdinalIgnoreCase) && IsNumberOnly(v)) v += " GB";
+        if (k.Equals("rom", StringComparison.OrdinalIgnoreCase) && IsNumberOnly(v)) v += " GB";
+        if (k.Equals("ssd", StringComparison.OrdinalIgnoreCase) && IsNumberOnly(v)) v += " GB";
+        if (k.Equals("battery", StringComparison.OrdinalIgnoreCase) && IsNumberOnly(v)) v += " mAh";
+        if (k.Equals("refresh", StringComparison.OrdinalIgnoreCase) && IsNumberOnly(v)) v += " Hz";
+        if (k.Equals("power", StringComparison.OrdinalIgnoreCase) && IsNumberOnly(v)) v += " W";
+
+        // size (TV inch / Watch mm) nếu là số thuần
+        if (k.Equals("size", StringComparison.OrdinalIgnoreCase) && IsNumberOnly(v))
+        {
+            if (hasTV && !hasWatch) v += " inch";
+            else if (hasWatch && !hasTV) v += " mm";
+            else v += ""; // mix category -> giữ nguyên
+        }
+
+        // connect / port: giữ nguyên
+        return v;
+    }
+
+    // read value
+    string GetSpecValue(website_e_commerce.Models.Product p, string key)
+    {
+        if (!specCache.TryGetValue(p.Id, out var pack)) return "—";
+        if (pack.dict.TryGetValue(key, out var v)) return v;
+
+        // fallback: một số seed của bạn dùng key khác nhau
+        if (key.Equals("tech", StringComparison.OrdinalIgnoreCase) && pack.dict.TryGetValue("screenTech", out var v2)) return v2;
+        return "—";
+    }
+
+    // ==============================
+    // HIGHLIGHT: ưu tiên các key phổ biến (nếu có)
+    // ==============================
+    var highlightCandidates = new List<string>
+    {
+        "cpu","gpu","ram","rom","ssd",
+        "screen","size","resolution","tech","hdr","refresh",
+        "cameraRear","cameraFront","camera",
+        "battery","charge","wireless",
+        "network","connect","port",
+        "power","audio","anc",
+        "capacity","stage","type","water"
+    };
+
+    var highlightKeys = highlightCandidates
+        .Where(k => allKeys.Contains(k))
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .Take(12)
+        .ToList();
+
+    // build groups from allKeys
+    var grouped = allKeys
+        .GroupBy(k => GroupOf(k), StringComparer.OrdinalIgnoreCase)
+        .OrderBy(g => GroupOrder(g.Key))
+        .ThenBy(g => g.Key)
+        .Select(g => new
+        {
+            Group = g.Key,
+            Keys = g.OrderBy(k => KeyOrder(k)).ThenBy(k => Label(k)).ToList()
+        })
+        .ToList();
 }
 
-<style>
-    .compare-top-card {
-        border-radius: 16px;
-        background-color: #fff;
-    }
-
-    .compare-product-card {
-        border-right: 1px solid #eee;
-    }
-
-        .compare-product-card:last-child {
-            border-right: none;
-        }
-
-    .compare-price-current {
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: #d70018;
-    }
-
-    .compare-price-old {
-        font-size: 0.9rem;
-        text-decoration: line-through;
-        color: #999;
-    }
-
-    .compare-tab-header {
-        border-bottom: none;
-        background-color: #fff;
-        border-radius: 12px 12px 0 0;
-    }
-
-        .compare-tab-header .nav-link {
-            border: none;
-            border-radius: 0;
-            padding: 0.75rem 1.5rem;
-            font-weight: 500;
-            color: #555;
-        }
-
-            .compare-tab-header .nav-link.active {
-                color: #d70018;
-                border-bottom: 3px solid #d70018;
-            }
-
-    .compare-table-wrapper {
-        border-radius: 16px;
-        overflow: hidden;
-    }
-
-    .compare-table-title {
-        background-color: #d70018;
-        color: #fff;
-        padding: 0.75rem 1rem;
-        font-weight: 600;
-    }
-
-    .compare-table tbody tr td,
-    .compare-table tbody tr th {
-        padding: 0.75rem 1rem;
-        vertical-align: top;
-    }
-
-    .compare-table tbody tr:nth-child(even) {
-        background-color: #fafafa;
-    }
-</style>
-
-<div class="container my-4">
-
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
+<div class="container my-4 compare-page">
+    <nav aria-label="breadcrumb" class="mb-2">
+        <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
             <li class="breadcrumb-item active" aria-current="page">So sánh sản phẩm</li>
         </ol>
     </nav>
 
-    <h2 class="text-center fw-bold mb-4">So sánh sản phẩm</h2>
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <h2 class="fw-bold mb-0">So sánh sản phẩm</h2>
+        <div class="compare-hint text-muted">So sánh theo thông số <b>tự động</b> từ Specifications</div>
+    </div>
 
     @if (!products.Any())
     {
@@ -94,194 +333,598 @@
     }
     else
     {
-        <!-- 🔼 Vùng card sản phẩm ở trên -->
-        <div class="compare-top-card shadow-sm p-3 mb-4">
-            <div class="row g-3 align-items-stretch">
+        <!-- TOP PRODUCTS -->
+        <div class="compare-top shadow-sm">
+            <div class="row g-0">
                 @foreach (var p in products)
                 {
-                    <div class="col-md-4">
-                        <div class="h-100 px-3 compare-product-card position-relative">
-
-                            <!-- nút X xoá -->
-                            <form asp-controller="Product" asp-action="RemoveFromCompare" method="post"
-                                  class="position-absolute top-0 end-0 mt-2 me-2">
+                    <div class="col-12 col-md-4">
+                        <div class="compare-item h-100">
+                            <form asp-controller="Product" asp-action="RemoveFromCompare" method="post" class="compare-remove">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@p.Id" />
-                                <button type="submit" class="btn btn-sm btn-light border-0">
+                                <button type="submit" class="btn btn-light btn-sm" title="Xoá khỏi so sánh">
                                     <i class="fa-solid fa-xmark"></i>
                                 </button>
                             </form>
 
-                            <div class="text-center mt-3 mb-2">
-                                <img src="@p.ImageUrl" alt="@p.Name" style="max-height: 120px;" class="img-fluid" />
-                            </div>
-
-                            <div class="text-center mb-2">
-                                <div class="compare-price-current">
-                                    @p.NewPrice.ToString("N0") ₫
+                            <a asp-controller="Product" asp-action="Details" asp-route-id="@p.Id" class="compare-link">
+                                <div class="compare-img">
+                                    <img src="@p.ImageUrl" alt="@p.Name"
+                                         onerror="this.onerror=null;this.src='/images/no-image.png';" />
                                 </div>
-                                @if (p.OldPrice > p.NewPrice)
-                                {
-                                    <div class="compare-price-old">
-                                        @p.OldPrice.ToString("N0") ₫
-                                    </div>
-                                }
-                            </div>
 
-                            <div class="text-center mb-3">
-                                <div class="fw-semibold">@p.Name</div>
-                            </div>
+                                <div class="compare-name">@p.Name</div>
 
-                            <div class="d-grid mb-3">
-                                <a asp-controller="Product" asp-action="Details" asp-route-id="@p.Id"
-                                   class="btn btn-danger">
-                                    Mua ngay
-                                </a>
-                            </div>
+                                <div class="compare-price">
+                                    <div class="new">@p.NewPrice.ToString("N0") ₫</div>
+                                    @if (p.OldPrice > p.NewPrice)
+                                    {
+                                        <div class="old">@p.OldPrice.ToString("N0") ₫</div>
+                                    }
+                                </div>
+
+                                <div class="compare-actions">
+                                    <span class="btn-buy">Mua ngay</span>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 }
             </div>
         </div>
 
-        <!-- 🔽 Tabs + checkbox -->
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <ul class="nav nav-tabs compare-tab-header" id="compareTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="tab-highlight-tab" data-bs-toggle="tab"
-                            data-bs-target="#tab-highlight" type="button" role="tab">
-                        Thông số nổi bật
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="tab-detail-tab" data-bs-toggle="tab"
-                            data-bs-target="#tab-detail" type="button" role="tab">
-                        Thông tin chi tiết
-                    </button>
-                </li>
-            </ul>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="onlyDifferent" checked />
-                <label class="form-check-label" for="onlyDifferent">
-                    Chỉ xem điểm khác biệt
-                </label>
+        <!-- TABS + ONLY DIFFERENT -->
+        <div class="compare-tools mt-3">
+            <div class="compare-tabs">
+                <button class="c-tab active" data-tab="highlight" type="button">
+                    <i class="fa-solid fa-bolt me-1"></i> Thông số nổi bật
+                </button>
+                <button class="c-tab" data-tab="detail" type="button">
+                    <i class="fa-solid fa-list-check me-1"></i> Thông tin chi tiết
+                </button>
             </div>
+
+            <label class="compare-onlydiff">
+                <input type="checkbox" id="onlyDifferent" checked />
+                <span>Chỉ xem điểm khác biệt</span>
+            </label>
         </div>
 
-        <div class="tab-content compare-table-wrapper shadow-sm">
-            <!-- TAB 1: Thông số nổi bật -->
-            <div class="tab-pane fade show active" id="tab-highlight" role="tabpanel">
+        <!-- CONTENT -->
+        <div class="compare-content shadow-sm mt-2">
 
-                <div class="compare-table-title">
-                    ✨ Thông số nổi bật
+            <!-- TAB: HIGHLIGHT -->
+            <div id="tab-highlight" class="c-pane active">
+                <div class="c-title">✨ Thông số nổi bật</div>
+
+                <div class="c-table-wrap">
+                    <table class="c-table">
+                        <tbody>
+                            <tr class="compare-row">
+                                <th>Danh mục</th>
+                                @foreach (var p in products)
+                                {
+                                    <td class="text-center">@(p.Category?.Name ?? "—")</td>
+                                }
+                            </tr>
+                            <tr class="compare-row">
+                                <th>Thương hiệu</th>
+                                @foreach (var p in products)
+                                {
+                                    <td class="text-center">@(p.Brand?.Name ?? "—")</td>
+                                }
+                            </tr>
+
+                            @foreach (var k in highlightKeys)
+                            {
+                                <tr class="compare-row">
+                                    <th>@Label(k)</th>
+                                    @foreach (var p in products)
+                                    {
+                                        var raw = GetSpecValue(p, k);
+                                        <td class="text-center spec-cell">@Pretty(k, raw)</td>
+                                    }
+                                </tr>
+                            }
+
+                            <!-- highlight: feature tags -->
+                            <tr class="compare-row">
+                                <th>Tính năng</th>
+                                @foreach (var p in products)
+                                {
+                                    var feats = specCache[p.Id].features;
+                                    <td class="text-start">
+                                        @if (feats.Any())
+                                        {
+                                            <div class="c-tags">
+                                                @foreach (var f in feats.Distinct(StringComparer.OrdinalIgnoreCase).Take(10))
+                                                {
+                                                    <span class="tag">@f</span>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">—</span>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-                <table class="table mb-0 compare-table">
-                    <tbody>
-                        <tr class="compare-row">
-                            <th style="width:220px;">Danh mục</th>
-                            @foreach (var p in products)
-                            {
-                                <td class="text-center">
-                                    @(p.Category != null ? p.Category.Name : "—")
-                                </td>
-                            }
-                        </tr>
-
-                        <tr class="compare-row">
-                            <th>Thương hiệu</th>
-                            @foreach (var p in products)
-                            {
-                                <td class="text-center">
-                                    @(p.Brand != null ? p.Brand.Name : "—")
-                                </td>
-                            }
-                        </tr>
-                    </tbody>
-                </table>
             </div>
 
-            <!-- TAB 2: Thông tin chi tiết -->
-            <div class="tab-pane fade" id="tab-detail" role="tabpanel">
+            <!-- TAB: DETAIL -->
+            <div id="tab-detail" class="c-pane">
+                <div class="c-title">📋 Thông tin chi tiết</div>
 
-                <div class="compare-table-title">
-                    📋 Thông tin chi tiết
+                <!-- Description -->
+                <div class="c-block">
+                    <div class="c-block-head"><span>📝 Mô tả sản phẩm</span></div>
+                    <div class="c-table-wrap">
+                        <table class="c-table">
+                            <tbody>
+                                <tr class="compare-row">
+                                    <th>Mô tả</th>
+                                    @foreach (var p in products)
+                                    {
+                                        <td class="text-start">
+                                            @if (string.IsNullOrWhiteSpace(p.Description))
+                                            {
+                                                <span class="text-muted">Chưa có mô tả</span>
+                                            }
+                                            else
+                                            {
+                                                <div class="c-desc">@Html.Raw(p.Description.Replace("\n", "<br/>"))</div>
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <table class="table mb-0 compare-table">
-                    <tbody>
-                        <tr class="compare-row">
-                            <th style="width:220px;">Mô tả sản phẩm</th>
-                            @foreach (var p in products)
-                            {
-                                <td class="text-start">
-                                    @if (string.IsNullOrWhiteSpace(p.Description))
-                                    {
-                                        <span class="text-muted">Chưa có mô tả</span>
-                                    }
-                                    else
-                                    {
-                                        @Html.Raw(p.Description.Replace("\n", "<br />"))
-                                    }
-                                </td>
-                            }
-                        </tr>
+                <!-- Dynamic groups from Specifications -->
+                <div class="c-block mt-3">
+                    <div class="c-block-head"><span>🧾 Thông số kỹ thuật (tự động)</span></div>
 
-                        <tr class="compare-row">
-                            <th>Thông số kỹ thuật</th>
-                            @foreach (var p in products)
-                            {
-                                <td class="text-start">
-                                    @if (string.IsNullOrWhiteSpace(p.Specifications))
-                                    {
-                                        <span class="text-muted">Chưa cập nhật</span>
-                                    }
-                                    else
-                                    {
-                                        @Html.Raw(p.Specifications.Replace("\n", "<br />"))
-                                    }
-                                </td>
-                            }
-                        </tr>
-                    </tbody>
-                </table>
+                    @foreach (var g in grouped)
+                    {
+                        <div class="c-group">
+                            <button class="c-group-head" type="button">
+                                <span>@g.Group</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="c-group-body">
+                                <div class="c-table-wrap">
+                                    <table class="c-table">
+                                        <tbody>
+                                            @foreach (var k in g.Keys)
+                                            {
+                                                <tr class="compare-row">
+                                                    <th>@Label(k)</th>
+                                                    @foreach (var p in products)
+                                                    {
+                                                        var raw = GetSpecValue(p, k);
+                                                        <td class="text-start spec-cell">@Pretty(k, raw)</td>
+                                                    }
+                                                </tr>
+                                            }
+
+                                            @* show feature tags only once inside “Chi tiết” *@
+                                            @if (g.Group.Equals("Khác", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <tr class="compare-row">
+                                                    <th>Tính năng</th>
+                                                    @foreach (var p in products)
+                                                    {
+                                                        var feats = specCache[p.Id].features;
+                                                        <td class="text-start">
+                                                            @if (feats.Any())
+                                                            {
+                                                                <div class="c-tags">
+                                                                    @foreach (var f in feats.Distinct(StringComparer.OrdinalIgnoreCase).Take(16))
+                                                                    {
+                                                                        <span class="tag">@f</span>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="text-muted">—</span>
+                                                            }
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="c-note">
+                        <i class="fa-regular fa-circle-check"></i>
+                        Thông số hiển thị được lấy trực tiếp từ trường <b>Specifications</b> trong DB.
+                    </div>
+                </div>
             </div>
         </div>
     }
 </div>
 
+<style>
+    .compare-page {
+        max-width: 1180px;
+    }
+
+    .compare-hint {
+        font-size: 13px;
+    }
+
+    .compare-top {
+        background: #fff;
+        border: 1px solid #eef0f4;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 10px 22px rgba(15,23,42,.06);
+    }
+
+    .compare-item {
+        position: relative;
+        padding: 16px;
+        border-right: 1px solid #f1f5f9;
+    }
+
+        .compare-item:last-child {
+            border-right: none;
+        }
+
+    .compare-remove {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 2;
+    }
+
+        .compare-remove .btn {
+            border-radius: 999px;
+            border: 1px solid #eef0f4;
+            box-shadow: 0 8px 16px rgba(15,23,42,.08);
+        }
+
+    .compare-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        height: 100%;
+    }
+
+    .compare-img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #eef0f4;
+        border-radius: 16px;
+        padding: 12px;
+        height: 180px;
+        margin-bottom: 10px;
+    }
+
+        .compare-img img {
+            max-height: 150px;
+            width: 100%;
+            object-fit: contain;
+        }
+
+    .compare-name {
+        font-weight: 900;
+        color: #111827;
+        font-size: 14px;
+        min-height: 40px;
+        line-height: 1.2;
+        margin-bottom: 8px;
+    }
+
+    .compare-price .new {
+        color: #e11d48;
+        font-weight: 900;
+        font-size: 20px;
+        line-height: 1.1;
+    }
+
+    .compare-price .old {
+        color: #6b7280;
+        text-decoration: line-through;
+        font-weight: 700;
+        font-size: 13px;
+        margin-top: 2px;
+    }
+
+    .btn-buy {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        padding: 10px 12px;
+        border-radius: 14px;
+        font-weight: 900;
+        background: #ff4d4f;
+        color: #fff;
+        box-shadow: 0 12px 18px rgba(255,77,79,.20);
+        margin-top: 12px;
+    }
+
+    .compare-tools {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .compare-tabs {
+        display: flex;
+        gap: 10px;
+        border-bottom: 1px solid #eef0f4;
+        padding-bottom: 8px;
+        flex-wrap: wrap;
+    }
+
+    .c-tab {
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #111827;
+        font-weight: 900;
+        padding: 10px 14px;
+        border-radius: 14px;
+        transition: .15s ease;
+    }
+
+        .c-tab:hover {
+            background: #f9fafb;
+        }
+
+        .c-tab.active {
+            background: #ff4d4f;
+            border-color: #ff4d4f;
+            color: #fff;
+            box-shadow: 0 10px 18px rgba(255,77,79,.25);
+        }
+
+    .compare-onlydiff {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 800;
+        color: #111827;
+        font-size: 13px;
+        background: #fff;
+        border: 1px solid #eef0f4;
+        padding: 10px 12px;
+        border-radius: 14px;
+        box-shadow: 0 10px 18px rgba(15,23,42,.06);
+        user-select: none;
+    }
+
+        .compare-onlydiff input {
+            width: 16px;
+            height: 16px;
+        }
+
+    .compare-content {
+        background: #fff;
+        border: 1px solid #eef0f4;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 10px 22px rgba(15,23,42,.06);
+    }
+
+    .c-title {
+        background: linear-gradient(90deg, #ff4d4f, #ff7a00);
+        color: #fff;
+        padding: 12px 14px;
+        font-weight: 900;
+        font-size: 14px;
+    }
+
+    .c-pane {
+        display: none;
+    }
+
+        .c-pane.active {
+            display: block;
+            animation: cFade .2s ease;
+        }
+    @@keyframes cFade {
+        from
+
+    {
+        opacity: .6;
+        transform: translateY(2px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+
+    }
+
+    .c-table-wrap {
+        overflow: auto;
+    }
+
+    .c-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 760px;
+    }
+
+        .c-table th, .c-table td {
+            padding: 12px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
+        }
+
+        .c-table th {
+            width: 220px;
+            background: #fcfcff;
+            color: #6b7280;
+            font-weight: 900;
+        }
+
+        .c-table tbody tr:nth-child(even) td {
+            background: #fafafa;
+        }
+
+    .spec-cell {
+        font-weight: 800;
+        color: #111827;
+    }
+
+    .c-block {
+        padding: 14px;
+    }
+
+    .c-block-head {
+        font-weight: 900;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .c-desc {
+        font-size: 14px;
+        line-height: 1.5;
+        color: #111827;
+    }
+
+    .c-group {
+        border: 1px solid #eef0f4;
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        background: #fff;
+    }
+
+    .c-group-head {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: none;
+        background: #f9fafb;
+        padding: 12px 14px;
+        font-weight: 900;
+        cursor: pointer;
+    }
+
+        .c-group-head i {
+            transition: .15s ease;
+        }
+
+    .c-group.open .c-group-head i {
+        transform: rotate(180deg);
+    }
+
+    .c-group-body {
+        display: none;
+    }
+
+    .c-group.open .c-group-body {
+        display: block;
+    }
+
+    .c-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .tag {
+        font-size: 12px;
+        padding: 6px 10px;
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        border-radius: 999px;
+        font-weight: 800;
+        color: #111827;
+        display: inline-block;
+        margin: 2px 2px 0 0;
+    }
+
+    .c-note {
+        margin-top: 10px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: #6b7280;
+        font-size: 13px;
+        font-weight: 800;
+    }
+</style>
+
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+
+            // Tabs
+            const tabs = document.querySelectorAll(".c-tab");
+            const panes = {
+                highlight: document.getElementById("tab-highlight"),
+                detail: document.getElementById("tab-detail"),
+            };
+
+            function activateTab(key){
+                tabs.forEach(x => x.classList.remove("active"));
+                tabs.forEach(x => { if(x.getAttribute("data-tab") === key) x.classList.add("active"); });
+                Object.values(panes).forEach(p => p.classList.remove("active"));
+                panes[key].classList.add("active");
+                updateRows();
+            }
+
+            tabs.forEach(t => {
+                t.addEventListener("click", () => activateTab(t.getAttribute("data-tab")));
+            });
+
+            // Accordion
+            document.querySelectorAll(".c-group").forEach((g, idx) => {
+                const head = g.querySelector(".c-group-head");
+                if (!head) return;
+                if (idx === 0) g.classList.add("open");
+                head.addEventListener("click", () => g.classList.toggle("open"));
+            });
+
+            // Only Different
             const chk = document.getElementById("onlyDifferent");
+            function normalizeText(s) { return (s || "").trim().toLowerCase().replace(/\s+/g, " "); }
 
             function updateRows() {
+                if (!chk) return;
                 const onlyDiff = chk.checked;
 
                 document.querySelectorAll(".compare-row").forEach(row => {
                     const tds = row.querySelectorAll("td");
-                    if (tds.length === 0) return;
+                    if (!tds || tds.length === 0) return;
 
-                    // Lấy text từng ô, chuẩn hoá (lowercase + bỏ khoảng trắng 2 đầu)
-                    const values = Array.from(tds).map(td =>
-                        td.innerText.trim().toLowerCase()
-                    );
-
+                    const values = Array.from(tds).map(td => normalizeText(td.innerText));
                     const first = values[0];
                     const allSame = values.every(v => v === first);
 
-                    // Nếu “chỉ xem điểm khác biệt” và tất cả cột giống nhau → ẩn hàng
-                    if (onlyDiff && allSame) {
-                        row.style.display = "none";
-                    } else {
-                        row.style.display = "";
-                    }
+                    row.style.display = (onlyDiff && allSame) ? "none" : "";
                 });
             }
 
-            chk.addEventListener("change", updateRows);
-            updateRows(); // chạy 1 lần khi load trang
+            if (chk) {
+                chk.addEventListener("change", updateRows);
+                updateRows();
+            }
         });
     </script>
 }

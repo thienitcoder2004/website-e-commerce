@@ -88,27 +88,59 @@
                         <h5 class="fw-bold mb-3">Thông tin thanh toán</h5>
 
                         <!-- MÃ GIẢM GIÁ -->
-                        <form asp-action="ApplyCoupon" method="post" class="input-group mb-3">
+                        <form asp-action="ApplyCoupon" method="post" class="input-group mb-2">
+                            <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
                             <input type="text" name="code" class="form-control border-danger"
-                                   placeholder="Nhập mã giảm giá..." required />
+                                   placeholder="Nhập mã giảm giá..." />
                             <button class="btn btn-danger fw-bold">Áp dụng</button>
                         </form>
 
+                        @if (ViewBag.AppliedCode != null)
+                        {
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="small">
+                                    Đang dùng mã:
+                                    <b class="text-danger">@ViewBag.AppliedCode</b>
+                                </div>
+
+                                <form asp-action="RemoveCoupon" method="post" class="m-0">
+                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                    <button class="btn btn-sm btn-outline-secondary">Bỏ mã</button>
+                                </form>
+                            </div>
+                        }
+
                         @if (TempData["Success"] != null)
                         {
-                            <div class="alert alert-success">@TempData["Success"]</div>
+                            <div class="alert alert-success py-2">@TempData["Success"]</div>
                         }
                         else if (TempData["Error"] != null)
                         {
-                            <div class="alert alert-danger">@TempData["Error"]</div>
+                            <div class="alert alert-danger py-2">@TempData["Error"]</div>
                         }
 
                         <hr />
 
                         <!-- TỔNG TIỀN -->
-                        <div class="d-flex justify-content-between mb-3">
+                        <div class="d-flex justify-content-between mb-2">
                             <span class="fw-semibold">Tạm tính:</span>
-                            <span class="fw-bold" id="cart-total">@String.Format("{0:N0} đ", Model.GetTotal())</span>
+                            <span class="fw-bold" id="cart-original">
+                                @String.Format("{0:N0} đ", (decimal)ViewBag.OriginalTotal)
+                            </span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-semibold">Giảm giá:</span>
+                            <span class="fw-bold text-success" id="cart-discount">
+                                -@String.Format("{0:N0} đ", (decimal)ViewBag.DiscountAmount)
+                            </span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="fw-semibold">Tổng thanh toán:</span>
+                            <span class="fw-bold text-danger" id="cart-total">
+                                @String.Format("{0:N0} đ", (decimal)ViewBag.FinalTotal)
+                            </span>
                         </div>
 
                         <a asp-action="Checkout"
@@ -151,6 +183,12 @@
             setTimeout(() => toast.fadeOut(400), 2000);
         }
 
+        function setMoney(id, value) {
+            if ($(id).length) {
+                $(id).text(value.toLocaleString('vi-VN') + " đ");
+            }
+        }
+
         $(document).ready(function () {
 
             $(".increase-btn").click(function () {
@@ -161,7 +199,12 @@
                     if (res.success) {
                         row.find(".quantity").text(res.quantity);
                         row.find(".item-total").text(res.itemTotal.toLocaleString('vi-VN') + " đ");
-                        $("#cart-total").text(res.total.toLocaleString('vi-VN') + " đ");
+
+                        // ✅ cập nhật bill sau giảm
+                        setMoney("#cart-original", res.originalTotal);
+                        $("#cart-discount").text("-" + res.discount.toLocaleString('vi-VN') + " đ");
+                        setMoney("#cart-total", res.total);
+
                         showToast();
                     }
                 });
@@ -180,7 +223,11 @@
                             row.fadeOut(200, function () { $(this).remove(); });
                         }
 
-                        $("#cart-total").text(res.total.toLocaleString('vi-VN') + " đ");
+                        // ✅ cập nhật bill sau giảm
+                        setMoney("#cart-original", res.originalTotal);
+                        $("#cart-discount").text("-" + res.discount.toLocaleString('vi-VN') + " đ");
+                        setMoney("#cart-total", res.total);
+
                         showToast();
                     }
                 });
@@ -241,19 +288,15 @@
         }
 
         @@keyframes toastSlideIn {
-            from
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
 
-        {
-            opacity: 0;
-            transform: translateX(40px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
     </style>
 }
-

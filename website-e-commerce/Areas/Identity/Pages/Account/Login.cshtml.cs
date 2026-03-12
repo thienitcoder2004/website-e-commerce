@@ -134,7 +134,7 @@ namespace website_e_commerce.Areas.Identity.Pages.Account
             // User thường: áp dụng rule 5 lần & 10 lần
             user.AccessFailedCount += 1;
 
-            if (user.AccessFailedCount >= 10)
+            if (user.AccessFailedCount >= 5)
             {
                 // Khóa dài (coi như vĩnh viễn)
                 user.LockoutEnd = DateTimeOffset.UtcNow.AddYears(100);
@@ -145,7 +145,7 @@ namespace website_e_commerce.Areas.Identity.Pages.Account
 
                 return RedirectToPage("./Lockout");
             }
-            else if (user.AccessFailedCount >= 5)
+            else if (user.AccessFailedCount >= 3)
             {
                 // Khóa tạm thời 1 phút
                 user.LockoutEnd = DateTimeOffset.UtcNow.AddMinutes(1);

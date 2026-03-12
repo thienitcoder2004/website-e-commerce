@@ -134,15 +134,10 @@
             background: #d73211;
         }
 
-    @@media(max - width: 900px)
-
-    {
-        .checkout-grid
-
-    {
-        grid-template-columns: 1fr;
-    }
-
+    @@media(max - width: 900px) {
+        .checkout-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 
@@ -198,6 +193,7 @@
                 <div class="section">
                     <div class="section-title">💳 Phương thức thanh toán</div>
                     <select name="paymentMethod" required>
+                        <option value="#">Vui lòng chọn thanh toán</option>
                         <option value="COD">Thanh toán khi nhận hàng</option>
                         <option value="Momo">Ví MoMo</option>
                         <option value="VNPay">VNPay</option>
@@ -219,10 +215,58 @@
 
                 <hr />
 
+                <!-- ✅ ÁP MÃ GIẢM GIÁ NGAY TRÊN CHECKOUT -->
+                <form asp-action="ApplyCoupon" method="post" class="mb-2">
+                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" name="code"
+                               placeholder="Nhập mã khuyến mãi..."
+                               style="flex:1; padding:10px; border:1px solid #d1d5db; border-radius:4px;" />
+                        <button type="submit"
+                                style="padding:10px 14px; background:#ee4d2d; color:#fff; border:none; border-radius:4px;">
+                            Áp dụng
+                        </button>
+                    </div>
+                </form>
+
+                @if (ViewBag.AppliedCode != null)
+                {
+                    <div class="summary-item" style="margin-bottom:6px;">
+                        <span>Mã đang dùng: <b style="color:#ee4d2d">@ViewBag.AppliedCode</b></span>
+
+                        <form asp-action="RemoveCoupon" method="post" style="margin:0;">
+                            <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                            <button type="submit" class="link" style="border:none;background:none;cursor:pointer;">
+                                Bỏ mã
+                            </button>
+                        </form>
+                    </div>
+                }
+
+                @if (TempData["Success"] != null)
+                {
+                    <div style="color:green; font-size:14px; margin-bottom:6px;">@TempData["Success"]</div>
+                }
+                else if (TempData["Error"] != null)
+                {
+                    <div style="color:red; font-size:14px; margin-bottom:6px;">@TempData["Error"]</div>
+                }
+
+                <!-- ✅ HIỂN THỊ TỔNG SAU GIẢM -->
                 <div class="summary-item">
-                    <span>Tổng cộng</span>
+                    <span>Tạm tính</span>
+                    <span>@String.Format("{0:N0} đ", (decimal)ViewBag.OriginalTotal)</span>
+                </div>
+
+                <div class="summary-item">
+                    <span>Giảm giá</span>
+                    <span style="color:green;">-@String.Format("{0:N0} đ", (decimal)ViewBag.DiscountAmount)</span>
+                </div>
+
+                <div class="summary-item">
+                    <span><b>Tổng thanh toán</b></span>
                     <span class="summary-total">
-                        @String.Format("{0:N0} đ", Model.GetTotal())
+                        @String.Format("{0:N0} đ", (decimal)ViewBag.FinalTotal)
                     </span>
                 </div>
 

@@ -37,6 +37,7 @@ namespace website_e_commerce.Controllers.Admin
 
 
         // ➕ Hiển thị form thêm
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         public IActionResult Add() => View();
 
         // ✅ Xử lý thêm mới
@@ -56,6 +57,7 @@ namespace website_e_commerce.Controllers.Admin
             return View(promo);
         }
 
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         // ✏️ Sửa
         public async Task<IActionResult> Edit(int id)
         {
@@ -81,6 +83,7 @@ namespace website_e_commerce.Controllers.Admin
             return View(promo);
         }
 
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         // 🗑️ Xóa
         [HttpPost]
         public async Task<IActionResult> Delete(int id)

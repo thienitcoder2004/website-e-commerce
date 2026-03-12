@@ -42,10 +42,10 @@
 
             @if (!a.IsDefault)
             {
-                <form method="post" asp-page-handler="Delete">
-                    <input type="hidden" name="id" value="@a.Id" />
-                    <button class="btn btn-link text-danger p-0">Xóa</button>
-                </form>
+                <button type="button" class="btn btn-link text-danger p-0"
+                        onclick="openDeleteModal(@a.Id)">
+                    Xóa
+                </button>
             }
         </div>
     </div>
@@ -103,6 +103,27 @@
 
                 <div class="text-end mt-3">
                     <button class="btn btn-danger">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ================= DELETE MODAL ================= -->
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-4">
+            <h5 class="mb-2 text-danger">Xác nhận xóa địa chỉ</h5>
+            <p class="mb-3">Bạn có chắc chắn muốn xóa địa chỉ này không?</p>
+
+            <form method="post" asp-page-handler="Delete">
+                <input type="hidden" name="id" id="deleteId" />
+
+                <div class="text-end mt-3">
+                    <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">
+                        Hủy
+                    </button>
+                    <button class="btn btn-danger">Xóa</button>
                 </div>
             </form>
         </div>
@@ -169,5 +190,10 @@
             editQuan.value = editDistrict.options[editDistrict.selectedIndex].text;
             editPhuong.value = editWard.options[editWard.selectedIndex].text;
         };
+
+        function openDeleteModal(id) {
+            document.getElementById("deleteId").value = id;
+            new bootstrap.Modal(document.getElementById("deleteModal")).show();
+        }
     </script>
 }

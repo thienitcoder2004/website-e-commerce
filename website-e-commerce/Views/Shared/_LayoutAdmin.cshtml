@@ -239,11 +239,10 @@
                     <a class="nav-link position-relative" href="javascript:void(0);" id="newsToggle">
                         <i class="fa-solid fa-bell" id="bellIcon"></i>
                         <span class="badge bg-danger position-absolute" id="newsCount"
-                              style="top:-6px; right:-12px; font-size:.7rem;">0</span>
+                            style="top:-6px; right:-12px; font-size:.7rem;">0</span>
                     </a>
-                    <div id="newsPopup"
-                         class="shadow bg-white border rounded position-absolute end-0 mt-2"
-                         style="display:none; width:340px; max-height:420px; overflow-y:auto;">
+                    <div id="newsPopup" class="shadow bg-white border rounded position-absolute end-0 mt-2"
+                        style="display:none; width:340px; max-height:420px; overflow-y:auto;">
                         <ul id="newsList" class="list-group list-group-flush"></ul>
                     </div>
 
@@ -387,6 +386,38 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/orderHub") // Đảm bảo URL này chính xác
+            .build();
+
+        connection.on("NewOrderNotification", function (orderId) {
+            // Cập nhật số lượng thông báo mới
+            var newsCount = document.getElementById("newsCount");
+            var currentCount = parseInt(newsCount.innerText) || 0;
+            newsCount.innerText = currentCount + 1;
+
+            // Thêm thông báo vào danh sách thông báo
+            var newsList = document.getElementById("newsList");
+            var listItem = document.createElement("li");
+            listItem.textContent = "Đơn hàng #" + orderId + " cần xử lý.";
+
+            // Khi nhấn vào thông báo, chuyển đến trang chi tiết đơn hàng
+            listItem.onclick = function () {
+                window.location.href = "/AdminOrder/Details/" + orderId;
+            };
+
+            newsList.appendChild(listItem);
+        });
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        document.getElementById("newsToggle").onclick = function () {
+            var popup = document.getElementById("newsPopup");
+            popup.style.display = (popup.style.display === "none" || popup.style.display === "") ? "block" : "none";
+        };
+
         const sidebar = document.getElementById('sidebar');
         const main = document.getElementById('mainContent');
         const btn = document.getElementById('btnCollapseGhost');

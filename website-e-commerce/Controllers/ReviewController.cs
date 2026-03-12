@@ -23,6 +23,7 @@ namespace website_e_commerce.Controllers
         }
 
         // ✅ Trang xem tất cả đánh giá (Admin)
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         public IActionResult Index(int? productId)
         {
             IEnumerable<Reviews> reviews;
@@ -74,6 +75,7 @@ namespace website_e_commerce.Controllers
         }
 
         // ✅ API xóa đánh giá
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         [HttpPost]
         public IActionResult Delete(int id)
         {
